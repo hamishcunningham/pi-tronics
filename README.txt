@@ -1,0 +1,3 @@
+PiFi
+
+This a git repo for assorted Raspberry Pi projects...
