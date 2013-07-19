@@ -1,4 +1,11 @@
 #! /bin/sh
+#
+# simbamond -- init interface to SimBaMon, a simple battery monitor
+#
+# Author: Hamish Cunningham <hamish@gate.ac.uk>
+# This code is copyright Hamish Cunningham and the University of Sheffield
+# and is licenced under GPL 3 or any later version.
+#
 ### BEGIN INIT INFO
 # Provides:          simbamond
 # Required-Start:    $remote_fs $syslog
@@ -10,7 +17,6 @@
 # Description:       This script is the init interface to SimBaMon
 #                    (a simple battery monitor daemon)
 ### END INIT INFO
-# Author: Hamish Cunningham <hamish@gate.ac.uk>
 
 # Defaults
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
