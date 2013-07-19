@@ -18,16 +18,13 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="SimBaMon: a simple battery monitor daemon"
 NAME=simbamon
 DAEMON=/usr/sbin/$NAME
-#DAEMON_ARGS="--options args"
 DAEMON_ARGS=""
+#DAEMON_ARGS="--options args"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
-
-# Define LSB log_* functions.
-. /lib/lsb/init-functions
 
 # Pretty date/time function
 pdate() { date +%b-%d-%Y-%T; }
