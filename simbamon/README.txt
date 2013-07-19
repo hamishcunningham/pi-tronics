@@ -1,7 +1,7 @@
 SimBaMon: a Simple Battery Monitor daemon
 
 This tree contains the code for a simple battery monitor daemon for projects
-like Mobile Pi (MoPi) -- http://pi.gate.ac.uk/mopi.html
+like Mobile Pi (MoPi) -- http://pi.gate.ac.uk/pages/mopi.html
 
 The daemon is implemented in three chunks:
 
