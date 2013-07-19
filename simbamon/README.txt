@@ -19,4 +19,4 @@ The intial target operating system is the Raspian distribution of Debian, for
 the Raspberry Pi. It is intended to be compatible with other *nixes.
 
 This code is copyright Hamish Cunningham and the University of Sheffield and
-is licenced under GPL 3 or any later version.
+is licenced under GPL 3 or any later version. Project started July 2013.

@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/usr/bin/env bash
 #
 # simbamon -- a simple battery monitor
 #
@@ -23,15 +23,38 @@ DAEMON_ARGS=""
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
-# Exit if the package is not installed
-[ -x "$DAEMON" ] || exit 0
-
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
-
-# Load the VERBOSE setting and other rcS variables
-. /lib/init/vars.sh
 
 # Define LSB log_* functions.
 . /lib/lsb/init-functions
 
+# Pretty date/time function
+pdate() { date +%b-%d-%Y-%T; }
+
+# Tell the world
+logger "$0: running at `pdate`"
+logger "${NAME}: monitor frequency is ${MONITOR_FREQUENCY} seconds"
+
+# Length of time to wait between routine log messages
+i=0
+LOG_INTERVAL=20
+# TODO for production should be much higher
+
+# Current level; -1 means unset
+BAT_LEVEL=-1
+
+# Do the work
+while :
+do
+  # check the level
+  # TODO
+
+  # routine log messages
+  i=`expr ${i} + 1`
+  [ ${i} -eq ${LOG_INTERVAL} ] && i=0 && \
+    logger "${NAME}: battery level is ${BAT_LEVEL} at `pdate`"
+
+  # take a break
+  sleep ${MONITOR_FREQUENCY}
+done

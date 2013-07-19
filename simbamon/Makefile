@@ -26,7 +26,7 @@ install:
           $$SD cp simbamond             /etc/init.d                   && \
           $$SD ln -fs /etc/simbamon.conf /etc/default/simbamon        && \
           cd /etc/init.d && $$SD update-rc.d simbamond defaults
-	@echo -n 'SimBaMod installed: '
+	@echo 'SimBaMod installed: '
 	@ls -l $(INSTALLED_FILES)
 
 # uninstall ##################################################################
