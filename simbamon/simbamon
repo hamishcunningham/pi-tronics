@@ -1,0 +1,31 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          simbamon
+# Short-Description: SimBaMon: a simple battery monitor daemon
+# Description:       This script is implements the daemon for
+#                    SimBaMon (a simple battery monitor)
+### END INIT INFO
+# Author: Hamish Cunningham <hamish@gate.ac.uk>
+
+# Defaults
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DESC="SimBaMon: a simple battery monitor daemon"
+NAME=simbamon
+DAEMON=/usr/sbin/$NAME
+#DAEMON_ARGS="--options args"
+DAEMON_ARGS=""
+PIDFILE=/var/run/$NAME.pid
+SCRIPTNAME=/etc/init.d/$NAME
+
+# Exit if the package is not installed
+[ -x "$DAEMON" ] || exit 0
+
+# Read configuration variable file if it is present
+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
+
+# Define LSB log_* functions.
+. /lib/lsb/init-functions
+
