@@ -33,24 +33,22 @@ pdate() { date +%b-%d-%Y-%T; }
 logger "$0: running at `pdate`"
 logger "${NAME}: monitor frequency is ${MONITOR_FREQUENCY} seconds"
 
-# Length of time to wait between routine log messages
-i=0
-LOG_INTERVAL=20
-# TODO for production should be much higher
-
 # Current level; -1 means unset
 BAT_LEVEL=-1
 
-# Do the work
+# Do the work; i and j index loop iterations for e.g. logging
+i=0; j=0
 while :
 do
+  i=`expr ${i} + 1`
+  j=`expr ${j} + 1`
+
   # check the level
   # TODO
 
   # routine log messages
-  i=`expr ${i} + 1`
-  [ ${i} -eq ${LOG_INTERVAL} ] && i=0 && \
-    logger "${NAME}: battery level is ${BAT_LEVEL} at `pdate`"
+  [ ${j} -eq ${LOG_INTERVAL} ] && \
+    logger "${NAME}: battery level is ${BAT_LEVEL} at `pdate` (i=${i})" && j=0
 
   # take a break
   sleep ${MONITOR_FREQUENCY}
