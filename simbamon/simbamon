@@ -22,6 +22,7 @@ DAEMON_ARGS=""
 #DAEMON_ARGS="--options args"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
+LMESS='battery level'
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
@@ -33,6 +34,15 @@ pdate() { date +%b-%d-%Y-%T; }
 logger "$0: running at `pdate`"
 logger "${NAME}: monitor frequency is ${MONITOR_FREQUENCY} seconds"
 
+# Check for gpio command
+GPIO=`which gpio`
+if [ -z "${GPIO}" ! -x "$GPIO" ]
+then
+  echo   "${NAME}: cannot find gpio command: failing"
+  logger "${NAME}: cannot find gpio command: failing"
+  exit 1
+fi
+
 # Current level; -1 means unset
 BAT_LEVEL=-1
 
@@ -43,12 +53,26 @@ do
   i=`expr ${i} + 1`
   j=`expr ${j} + 1`
 
-  # check the level
-  # TODO
+  # check the level and act if necessary
+  BAT_LEVEL_BASE2=`gpio read ${IO_A}``gpio read ${IO_B}``gpio read ${IO_C}`
+  BAT_LEVEL=`echo "ibase=2;${LEVEL_BASE2}" |bc`
+  if [ $BAT_LEVEL == $BAT_SHUTDOWN ]
+  then
+    wall "${NAME}: shutting down now!"
+    shutdown -h now
+  elif [ $BAT_LEVEL -le $BAT_CRITICAL ]
+  then
+    wall "${NAME}: ${LMESS} critical! shutting down in ${SHUT_DELAY} seconds!"
+    sleep $SHUT_DELAY
+    shutdown -h now
+  elif [ $BAT_LEVEL == $BAT_WARNING ]
+  then
+    wall "${NAME}: ${LMESS} is low! connect new battery or shut down"
+  fi
 
   # routine log messages
   [ ${j} -eq ${LOG_INTERVAL} ] && \
-    logger "${NAME}: battery level is ${BAT_LEVEL} at `pdate` (i=${i})" && j=0
+    logger "${NAME}: ${LMESS} is ${BAT_LEVEL} at `pdate` (i=${i})" && j=0
 
   # take a break
   sleep ${MONITOR_FREQUENCY}
