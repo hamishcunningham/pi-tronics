@@ -38,7 +38,7 @@ logger "${NAME}: monitor frequency is ${MONITOR_FREQUENCY} seconds"
 GPIO=`which gpio`
 if [ -z "${GPIO}" ! -x "$GPIO" ]
 then
-  echo   "${NAME}: cannot find gpio command: failing"
+  echo   "${NAME}: cannot find gpio command: failing" >&2
   logger "${NAME}: cannot find gpio command: failing"
   exit 1
 fi
