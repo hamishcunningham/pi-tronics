@@ -14,7 +14,7 @@
 ### END INIT INFO
 
 # Defaults
-PATH=/sbin:/usr/sbin:/bin:/usr/bin
+PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin
 DESC="SimBaMon: a simple battery monitor daemon"
 NAME=simbamon
 DAEMON=/usr/sbin/$NAME
@@ -25,7 +25,13 @@ SCRIPTNAME=/etc/init.d/$NAME
 LMESS='battery level'
 
 # Read configuration variable file if it is present
-[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+if [ -r /etc/default/$NAME ] 
+then
+  . /etc/default/$NAME
+else
+  logger "$0: no config data found - fatal error"
+  exit 1
+fi
 
 # Pretty date/time function
 pdate() { date +%b-%d-%Y-%T; }
@@ -43,6 +49,11 @@ then
   exit 1
 fi
 
+# Put the relevant pins into read mode
+gpio mode $IO_A in
+gpio mode $IO_B in
+gpio mode $IO_C in
+
 # Current level; -1 means unset
 BAT_LEVEL=-1
 
@@ -55,19 +66,20 @@ do
 
   # check the level and act if necessary
   BAT_LEVEL_BASE2=`gpio read ${IO_A}``gpio read ${IO_B}``gpio read ${IO_C}`
-  BAT_LEVEL=`echo "ibase=2;${LEVEL_BASE2}" |bc`
-  if [ $BAT_LEVEL == $BAT_SHUTDOWN ]
+  BAT_LEVEL=`echo "ibase=2;${BAT_LEVEL_BASE2}" |bc`
+  if [ $BAT_LEVEL -eq $BAT_SHUTDOWN ]
   then
     wall "${NAME}: shutting down now!"
     shutdown -h now
   elif [ $BAT_LEVEL -le $BAT_CRITICAL ]
   then
-    wall "${NAME}: ${LMESS} critical! shutting down in ${SHUT_DELAY} seconds!"
+    wall <<< \
+      "${NAME}: ${LMESS} critical! shutting down in ${SHUT_DELAY} seconds!"
     sleep $SHUT_DELAY
-    shutdown -h now
-  elif [ $BAT_LEVEL == $BAT_WARNING ]
+    shutdown -h now >&2
+  elif [ $BAT_LEVEL -eq $BAT_WARNING ]
   then
-    wall "${NAME}: ${LMESS} is low! connect new battery or shut down"
+    wall <<< "${NAME}: ${LMESS} is low! connect new battery or shut down"
   fi
 
   # routine log messages
