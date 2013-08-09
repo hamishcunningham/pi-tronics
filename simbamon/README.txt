@@ -15,6 +15,14 @@ There are also:
 - a link to /etc/simbamon.conf from /etc/default/simbamon
 - (when running) a process ID file in /var/run/simbamon.pid
 
+To test and debug, first set DEBUG=on in simbamon.conf and reinstall/restart
+the service; then the utils directory contains these scripts:
+
+- monitor-log.sh: greps the most recent simbamon entries from syslog
+- set-simulation-level.sh: continually reads a simulation number (3 bit
+  binary) from the terminal and writes it into the /tmp file where the debug
+  rig will read it
+
 The intial target operating system is the Raspian distribution of Debian, for
 the Raspberry Pi. It is intended to be compatible with other *nixes.
 
