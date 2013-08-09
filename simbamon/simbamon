@@ -23,6 +23,7 @@ DAEMON_ARGS=""
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 LMESS='battery level'
+SHUTDOWN=shutdown
 
 # Read configuration variable file if it is present
 if [ -r /etc/default/$NAME ] 
@@ -37,7 +38,7 @@ fi
 pdate() { date +%b-%d-%Y-%T; }
 
 # Tell the world
-logger "$0: running at `pdate`"
+logger "=========== $0: running at `pdate` ==========="
 logger "${NAME}: monitor frequency is ${MONITOR_FREQUENCY} seconds"
 
 # Check for gpio command (which may be a function defined in config)
@@ -73,23 +74,30 @@ do
   # check the level and act if necessary
   BAT_LEVEL_BASE2=`gpio read ${IO_A}``gpio read ${IO_B}``gpio read ${IO_C}`
   BAT_LEVEL=`echo "ibase=2;${BAT_LEVEL_BASE2}" |bc`
+  [ $BAT_LEVEL -le $BAT_WARNING ] && \
+    logger "${NAME}: ${LMESS} is at or below warning level (${BAT_LEVEL})"
   if   [ $BAT_LEVEL -eq $POWER_OFF ]
   then
-    wall "${NAME}: power off requested: shutting down now!"
-    echo shutdown -h now
+    wall <<< "${NAME}: power off requested: shutting down now!"
+    logger "${NAME}: shutting down (POWER_OFF)"
+    $SHUTDOWN -h now
   elif [ $BAT_LEVEL -eq $BAT_SHUTDOWN ]
   then
-    wall "${NAME}: battery empty: shutting down now!!!"
-    echo shutdown -h now
+    wall <<< "${NAME}: battery empty: shutting down now!!!"
+    logger "${NAME}: shutting down (BAT_SHUTDOWN)"
+    $SHUTDOWN -h now
   elif [ $BAT_LEVEL -eq $BAT_CRITICAL ]
   then
     wall <<< \
       "${NAME}: ${LMESS} critical! shutting down in ${SHUT_DELAY} seconds!"
+    logger "${NAME}: shutting down (BAT_CRITICAL, SHUT_DELAY=${SHUT_DELAY})"
     sleep $SHUT_DELAY
-    echo shutdown -h now
+    $SHUTDOWN -h now
   elif [ $BAT_LEVEL -eq $BAT_WARNING ]
   then
     wall <<< "${NAME}: ${LMESS} is low! connect new battery or shut down"
+    logger "${NAME}: BAT_WARNING; sleeping ${WARNING_INTERVAL}..."
+    sleep $WARNING_INTERVAL
   fi
 
   # routine log messages
