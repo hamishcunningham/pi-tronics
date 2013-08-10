@@ -32,7 +32,7 @@ DAEMON=/usr/sbin/$NAME
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 LMESS='battery level'
-SHUTDOWN=shutdown
+SHUTDOWN='shutdown -h now'
 
 # options defaults
 DEBUG=off
@@ -114,19 +114,19 @@ do
   then
     wall <<< "${NAME}: power off requested: shutting down now!"
     logger "${NAME}: shutting down (POWER_OFF)"
-    $SHUTDOWN -h now
+    bash -c "$SHUTDOWN"
   elif [ $BAT_LEVEL -eq $BAT_SHUTDOWN ]
   then
     wall <<< "${NAME}: battery empty: shutting down now!!!"
     logger "${NAME}: shutting down (BAT_SHUTDOWN)"
-    $SHUTDOWN -h now
+    bash -c "$SHUTDOWN"
   elif [ $BAT_LEVEL -eq $BAT_CRITICAL ]
   then
     wall <<< \
       "${NAME}: ${LMESS} critical! shutting down in ${SHUT_DELAY} seconds!"
     logger "${NAME}: shutting down (BAT_CRITICAL, SHUT_DELAY=${SHUT_DELAY})"
     sleep $SHUT_DELAY
-    $SHUTDOWN -h now
+    bash -c "$SHUTDOWN"
   elif [ $BAT_LEVEL -eq $BAT_WARNING ]
   then
     wall <<< "${NAME}: ${LMESS} is low! connect new battery or shut down"
