@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 #
 # simbamond -- init interface to SimBaMon, a simple battery monitor
 #
@@ -23,8 +23,6 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="SimBaMon: a simple battery monitor daemon"
 NAME=simbamon
 DAEMON=/usr/sbin/$NAME
-#DAEMON_ARGS="--options args"
-DAEMON_ARGS=""
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
@@ -39,6 +37,10 @@ SCRIPTNAME=/etc/init.d/$NAME
 
 # Define LSB log_* functions.
 . /lib/lsb/init-functions
+
+# Pass on command options
+get-daemon-args() { shift; DAEMON_ARGS=$*; }
+get-daemon-args $*
 
 # Function that starts the daemon/service
 do_start()

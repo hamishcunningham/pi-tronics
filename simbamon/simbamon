@@ -13,19 +13,45 @@
 #                    SimBaMon (a simple battery monitor)
 ### END INIT INFO
 
-# Defaults
+# standard locals
+P="$0"
+USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-s(imulate)]"
+OPTIONSTRING=hds
+
+# define LSB log_* functions.
+. /lib/lsb/init-functions
+
+# message & exit if exit num present
+usage() { log_failure_msg Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
+
+# defaults
 PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin
 DESC="SimBaMon: a simple battery monitor daemon"
 NAME=simbamon
 DAEMON=/usr/sbin/$NAME
-DAEMON_ARGS=""
-#DAEMON_ARGS="--options args"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 LMESS='battery level'
 SHUTDOWN=shutdown
 
-# Read configuration variable file if it is present
+# options defaults
+DEBUG=off
+SIMUL=off
+
+# process options
+[ ! -z "$*" ] && log_daemon_msg ${NAME} options: $*
+while getopts $OPTIONSTRING OPTION
+do
+  case $OPTION in
+    h)	usage 0 ;;
+    d)	DEBUG=on ;;
+    s)	SIMUL=on ;;
+    *)	usage 1 ;;
+  esac
+done 
+shift `expr $OPTIND - 1`
+
+# read configuration variable file if it is present
 if [ -r /etc/default/$NAME ] 
 then
   . /etc/default/$NAME
@@ -34,14 +60,14 @@ else
   exit 1
 fi
 
-# Pretty date/time function
+# pretty date/time function
 pdate() { date +%b-%d-%Y-%T; }
 
-# Tell the world
+# tell the world
 logger "=========== $0: running at `pdate` ==========="
 logger "${NAME}: monitor frequency is ${MONITOR_FREQUENCY} seconds"
 
-# Check for gpio command (which may be a function defined in config)
+# check for gpio command (which may be a function defined in config)
 GPIO=
 if [ "`type -t gpio`" = "function" ]
 then
@@ -51,25 +77,33 @@ else
 fi
 if [ -z "${GPIO}" ]
 then
-  echo   "${NAME}: cannot find gpio command: failing" >&2
-  logger "${NAME}: cannot find gpio command: failing"
+  log_failure_msg "${NAME}: cannot find gpio command: failing" >&2
+  logger          "${NAME}: cannot find gpio command: failing"
   exit 1
 fi
 
-# Put the relevant pins into read mode
+# put the relevant pins into read mode
 gpio mode $IO_A in
 gpio mode $IO_B in
 gpio mode $IO_C in
 
-# Current level; -1 means unset
+# current level; -1 means unset
 BAT_LEVEL=-1
 
-# Do the work; i and j index loop iterations for e.g. logging
+# do the work; i and j index loop iterations for e.g. logging
 i=0; j=0
 while :
 do
   i=`expr ${i} + 1`
   j=`expr ${j} + 1`
+
+  # on first boot we delay work a little, in case the user wants to tell us 
+  # not to shutdown on critical battery, for example
+  [ ! -f "$PREVIOUSLY_RUN_INDICATOR" ] && {
+    date > $PREVIOUSLY_RUN_INDICATOR 
+    logger "${NAME}: first run after boot, sleeping for $BOOT_DELAY"
+    sleep $BOOT_DELAY
+  }
 
   # check the level and act if necessary
   BAT_LEVEL_BASE2=`gpio read ${IO_A}``gpio read ${IO_B}``gpio read ${IO_C}`
@@ -108,5 +142,5 @@ do
   sleep ${MONITOR_FREQUENCY}
 done &
 
-# Create PIDFILE
+# create PIDFILE
 echo $! >${PIDFILE}
