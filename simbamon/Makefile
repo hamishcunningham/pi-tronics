@@ -5,7 +5,7 @@
 # vars #######################################################################
 INSTALLED_FILES=\
 /etc/simbamon.conf /usr/sbin/simbamon /etc/init.d/simbamond \
-/etc/default/simbamon /etc/rc?.d/*simbamond
+/etc/default/simbamon /etc/rc?.d/*simbamond /usr/share/man/man8/simbamon.8.gz
 SUDO=/usr/bin/sudo
 
 # help #######################################################################
@@ -21,10 +21,11 @@ help:
 # install ####################################################################
 install:
 	SD=`which sudo` && \
-          $$SD cp simbamon.conf         /etc                          && \
-          $$SD cp simbamon              /usr/sbin                     && \
-          $$SD cp simbamond             /etc/init.d                   && \
+          $$SD cp simbamon.conf          /etc                         && \
+          $$SD cp simbamon               /usr/sbin                    && \
+          $$SD cp simbamond              /etc/init.d                  && \
           $$SD ln -fs /etc/simbamon.conf /etc/default/simbamon        && \
+          $$SD cp simbamon.8.gz          /usr/share/man/man8          && \
           cd /etc/init.d && $$SD update-rc.d simbamond defaults
 	@echo 'SimBaMod installed: '
 	@ls -l $(INSTALLED_FILES)
@@ -35,6 +36,13 @@ uninstall:
 	@ls $(INSTALLED_FILES) || :
 	sudo rm -f $(INSTALLED_FILES)
 	@echo done
+
+# manpage ####################################################################
+simbamon.8: manpage.txt
+	utils/txt2man -v "System Manager's Manual" -s 8 \
+          -t 'simbamon' manpage.txt >simbamon.8
+simbamon.8.gz: simbamon.8
+	cat simbamon.8 |gzip >simbamon.8.gz
 
 # list #######################################################################
 list:
