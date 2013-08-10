@@ -4,8 +4,9 @@
 
 # vars #######################################################################
 INSTALLED_FILES=\
-/etc/simbamon.conf /usr/sbin/simbamon /etc/init.d/simbamond \
-/etc/default/simbamon /etc/rc?.d/*simbamond /usr/share/man/man8/simbamon.8.gz
+$(DESTDIR)/etc/simbamon.conf    $(DESTDIR)/usr/sbin/simbamon \
+$(DESTDIR)/etc/init.d/simbamond $(DESTDIR)/etc/default/simbamon \
+$(DESTDIR)/etc/rc?.d/*simbamond $(DESTDIR)/usr/share/man/man8/simbamon.8.gz
 SUDO=/usr/bin/sudo
 
 # help #######################################################################
@@ -21,11 +22,11 @@ help:
 # install ####################################################################
 install:
 	SD=`which sudo` && \
-          $$SD cp simbamon.conf          /etc                         && \
-          $$SD cp simbamon               /usr/sbin                    && \
-          $$SD cp simbamond              /etc/init.d                  && \
-          $$SD ln -fs /etc/simbamon.conf /etc/default/simbamon        && \
-          $$SD cp simbamon.8.gz          /usr/share/man/man8          && \
+          $$SD cp simbamon.conf          $(DESTDIR)/etc                  && \
+          $$SD cp simbamon               $(DESTDIR)/usr/sbin             && \
+          $$SD cp simbamond              $(DESTDIR)/etc/init.d           && \
+          $$SD ln -fs /etc/simbamon.conf $(DESTDIR)/etc/default/simbamon && \
+          $$SD cp simbamon.8.gz          $(DESTDIR)/usr/share/man/man8   && \
           cd /etc/init.d && $$SD update-rc.d simbamond defaults
 	@echo 'SimBaMod installed: '
 	@ls -l $(INSTALLED_FILES)
