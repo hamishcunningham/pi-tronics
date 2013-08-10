@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #
 # simbamon -- a simple battery monitor
 #
@@ -43,10 +43,10 @@ SIMUL=off
 while getopts $OPTIONSTRING OPTION
 do
   case $OPTION in
-    h)	usage 0 ;;
+    h)	usage 1 ;;
     d)	DEBUG=on ;;
     s)	SIMUL=on ;;
-    *)	usage 1 ;;
+    *)	usage 2 ;;
   esac
 done 
 shift `expr $OPTIND - 1`
