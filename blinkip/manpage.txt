@@ -1,0 +1,47 @@
+NAME
+  simbamon - a Simple Battery Monitor daemon
+SYNOPSIS
+  simbamon [-d] [-h] [-s]
+  service simbamond [{start [-d][-h][-s]|stop|status|restart [-d][-h][-s]}]
+DESCRIPTION
+  Battery monitoring for the Raspberry Pi...
+
+  SimBaMon is an open source Linux daemon for
+
+    - monitoring battery levels
+    - sending warning messages to the user if the battery is low
+    - shutting down cleanly at critical battery levels
+    - managing a power supply on/off switch
+    - writing relevant data to the system logs
+
+  You can find the source code on GitHub:
+
+    https://github.com/hamishcunningham/pi-tronics/tree/master/simbamon
+
+  The core of the daemon is defined in three files:
+    - /etc/simbamon.conf - configuration data
+    - /usr/sbin/simbamon - the daemon itself
+    - /etc/init.d/simbamond - an interface to the init subsystem that
+      Linux uses to manage daemons (amongst other things)
+
+  The last of these, simbamond, is used by the operating system to start and
+  stop SimBaMon at boot or shutdown time, and can be used to control the daemon
+  manually when required. For example this command will stop the daemon:
+
+    sudo service simbamon stop
+
+  For more details see http://pi.gate.ac.uk/pages/mopi.html#simbamon
+OPTIONS
+  -d          Turn on debug mode.
+  -h          The option -h displays help.
+  -s          Turn on simulation mode.
+EXAMPLE
+  Restart the daemon with debugging and simulation on:
+
+    $ sudo service simbamond restart -ds
+SEE ALSO
+  service(8)
+BUGS
+  Almost certainly!
+AUTHOR
+  Hamish Cunningham <http://pi.gate.ac.uk/>
