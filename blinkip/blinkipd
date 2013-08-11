@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# simbamond -- init interface to SimBaMon, a simple battery monitor
+# blinkipd -- init interface to BlinkIP, an IP notification daemon for the Pi
 #
 # Author: Hamish Cunningham <hamish@gate.ac.uk>
 # Derived from Ubuntu 12.04 /etc/init.d/skeleton, July 2013.
@@ -8,20 +8,20 @@
 # and is licenced under GPL 3 or any later version.
 #
 ### BEGIN INIT INFO
-# Provides:    simbamond
+# Provides:          blinkipd
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: SimBaMon: a simple battery monitor daemon
-# Description:       This script is the init interface to SimBaMon
-#                    (a simple battery monitor daemon)
+# Short-Description: BlinkIP: an IP notification daemon
+# Description:       This script is the init interface to BlinkIP
+#                    (an IP notification daemon)
 ### END INIT INFO
 
 # Defaults
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-DESC="SimBaMon: a simple battery monitor daemon"
-NAME=simbamon
+DESC="BlinkIP: an IP notification daemon"
+NAME=blinkip
 DAEMON=/usr/sbin/$NAME
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME

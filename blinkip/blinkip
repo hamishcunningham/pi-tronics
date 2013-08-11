@@ -1,22 +1,27 @@
 #!/bin/bash
 #
-# simbamon -- a simple battery monitor
+# blinkip -- blink my IP
 #
 # Author: Hamish Cunningham <hamish@gate.ac.uk>
 # This code is copyright Hamish Cunningham and the University of Sheffield
 # and is licenced under GPL 3 or any later version.
 #
+# The LED blink code was derived from Chris Meyers' perl script described here --
+# http://chrismeyers.org/2012/06/02/raspberry-pi-no-hdmi-cable-or-no-hdmi-display-blink-ip-address-to-ok-led/
+# -- and here -- https://gist.github.com/chrismeyersfsu/2858824
+# (thanks Chris!).
+#
 ### BEGIN INIT INFO
-# Provides:          simbamon
-# Short-Description: SimBaMon: a simple battery monitor daemon
+# Provides:          blinkip
+# Short-Description: BlinkIP: blink my IP daemon
 # Description:       This script is implements the daemon for
-#                    SimBaMon (a simple battery monitor)
+#                    BlinkIP (blink my IP)
 ### END INIT INFO
 
 # standard locals
 P="$0"
-USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-s(imulate)]"
-OPTIONSTRING=hds
+USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-n(o blink)]"
+OPTIONSTRING=hdn
 
 # define LSB log_* functions.
 . /lib/lsb/init-functions
@@ -26,17 +31,15 @@ usage() { log_failure_msg Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
 
 # defaults
 PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin
-DESC="SimBaMon: a simple battery monitor daemon"
-NAME=simbamon
+DESC="BlinkIP: blink my IP daemon"
+NAME=blinkip
 DAEMON=/usr/sbin/$NAME
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
-LMESS='battery level'
-SHUTDOWN='shutdown -h now'
 
 # options defaults
 DEBUG=off
-SIMUL=off
+BLINK=on
 
 # process options
 [ ! -z "$*" ] && log_daemon_msg ${NAME} options: $*
@@ -45,7 +48,7 @@ do
   case $OPTION in
     h)	usage 1 ;;
     d)	DEBUG=on ;;
-    s)	SIMUL=on ;;
+    n)	BLINK=off ;;
     *)	usage 2 ;;
   esac
 done 
@@ -65,30 +68,6 @@ pdate() { date +%b-%d-%Y-%T; }
 
 # tell the world
 logger "=========== $0: running at `pdate` ==========="
-logger "${NAME}: monitor frequency is ${MONITOR_FREQUENCY} seconds"
-
-# check for gpio command (which may be a function defined in config)
-GPIO=
-if [ "`type -t gpio`" = "function" ]
-then
-  GPIO=gpio
-else
-  GPIO=`which gpio`
-fi
-if [ -z "${GPIO}" ]
-then
-  log_failure_msg "${NAME}: cannot find gpio command: failing" >&2
-  logger          "${NAME}: cannot find gpio command: failing"
-  exit 1
-fi
-
-# put the relevant pins into read mode
-gpio mode $IO_A in
-gpio mode $IO_B in
-gpio mode $IO_C in
-
-# current level; -1 means unset
-BAT_LEVEL=-1
 
 # do the work; i and j index loop iterations for e.g. logging
 i=0; j=0
@@ -97,46 +76,12 @@ do
   i=`expr ${i} + 1`
   j=`expr ${j} + 1`
 
-  # on first boot we delay work a little, in case the user wants to tell us 
-  # not to shutdown on critical battery, for example
-  [ ! -f "$PREVIOUSLY_RUN_INDICATOR" ] && {
-    date > $PREVIOUSLY_RUN_INDICATOR 
-    logger "${NAME}: first run after boot, sleeping for $BOOT_DELAY"
-    sleep $BOOT_DELAY
+  # write IP to file; routine log message
+  [ ${j} -eq ${LOG_INTERVAL} ] && {
+    logger "${NAME}: blink is ${BLINK} at `pdate` (i=${i})" && j=0
+    echo -e "${NAME}: network data at `pdate`:\n" >${IP_FILE}
+    ifconfig >>${IP_FILE}
   }
-
-  # check the level and act if necessary
-  BAT_LEVEL_BASE2=`gpio read ${IO_A}``gpio read ${IO_B}``gpio read ${IO_C}`
-  BAT_LEVEL=`echo "ibase=2;${BAT_LEVEL_BASE2}" |bc`
-  [ $BAT_LEVEL -le $BAT_WARNING ] && \
-    logger "${NAME}: ${LMESS} is at or below warning level (${BAT_LEVEL})"
-  if   [ $BAT_LEVEL -eq $POWER_OFF ]
-  then
-    wall <<< "${NAME}: power off requested: shutting down now!"
-    logger "${NAME}: shutting down (POWER_OFF)"
-    bash -c "$SHUTDOWN"
-  elif [ $BAT_LEVEL -eq $BAT_SHUTDOWN ]
-  then
-    wall <<< "${NAME}: battery empty: shutting down now!!!"
-    logger "${NAME}: shutting down (BAT_SHUTDOWN)"
-    bash -c "$SHUTDOWN"
-  elif [ $BAT_LEVEL -eq $BAT_CRITICAL ]
-  then
-    wall <<< \
-      "${NAME}: ${LMESS} critical! shutting down in ${SHUT_DELAY} seconds!"
-    logger "${NAME}: shutting down (BAT_CRITICAL, SHUT_DELAY=${SHUT_DELAY})"
-    sleep $SHUT_DELAY
-    bash -c "$SHUTDOWN"
-  elif [ $BAT_LEVEL -eq $BAT_WARNING ]
-  then
-    wall <<< "${NAME}: ${LMESS} is low! connect new battery or shut down"
-    logger "${NAME}: BAT_WARNING; sleeping ${WARNING_INTERVAL}..."
-    sleep $WARNING_INTERVAL
-  fi
-
-  # routine log messages
-  [ ${j} -eq ${LOG_INTERVAL} ] && \
-    logger "${NAME}: ${LMESS} is ${BAT_LEVEL} at `pdate` (i=${i})" && j=0
 
   # take a break
   sleep ${MONITOR_FREQUENCY}
