@@ -6,11 +6,6 @@
 # This code is copyright Hamish Cunningham and the University of Sheffield
 # and is licenced under GPL 3 or any later version.
 #
-# The LED blink code was derived from Chris Meyers' perl script described here --
-# http://chrismeyers.org/2012/06/02/raspberry-pi-no-hdmi-cable-or-no-hdmi-display-blink-ip-address-to-ok-led/
-# -- and here -- https://gist.github.com/chrismeyersfsu/2858824
-# (thanks Chris!).
-#
 ### BEGIN INIT INFO
 # Provides:          blinkip
 # Short-Description: BlinkIP: blink my IP daemon

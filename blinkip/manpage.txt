@@ -31,7 +31,7 @@ DESCRIPTION
 
   For more details see http://pi.gate.ac.uk/pages/blinkip.html
 
-  The LED blink code was derived from Chris Meyers' perl script described here --
+  The LED blink code was inspired from Chris Meyers' perl script described here --
   http://chrismeyers.org/2012/06/02/raspberry-pi-no-hdmi-cable-or-no-hdmi-display-blink-ip-address-to-ok-led/
   -- and here -- https://gist.github.com/chrismeyersfsu/2858824
   (thanks Chris!).

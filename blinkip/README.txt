@@ -1,11 +1,6 @@
 BlinkIP: an IP notification daemon for the Raspberry Pi.
 
-This tree contains the code for a simple IP notification daemon derived from
-Chris Meyers' perl script described here --
-http://chrismeyers.org/2012/06/02/raspberry-pi-no-hdmi-cable-or-no-hdmi-display-blink-ip-address-to-ok-led/
--- and here -- https://gist.github.com/chrismeyersfsu/2858824
-(thanks Chris!).
-
+This tree contains the code for a simple IP notification daemon.
 See also http://pi.gate.ac.uk/pages/blinkip.html
 
 The daemon is implemented in three chunks:
@@ -25,6 +20,10 @@ There are also:
 To test and debug, first set DEBUG=on in blinkip.conf and reinstall/restart
 the service; then the utils directory contains a monitor-log.sh script which
 greps the most recent blinkip entries from syslog.
+
+The LED blink code was inspired by Chris Meyers' perl script described here --
+http://chrismeyers.org/2012/06/02/raspberry-pi-no-hdmi-cable-or-no-hdmi-display-blink-ip-address-to-ok-led/
+-- and here -- https://gist.github.com/chrismeyersfsu/2858824 (thanks Chris!).
 
 (The utils directory also contains a great script called txt2man from
 http://mvertes.free.fr/ that we use to maintain the manpage.)
