@@ -22,14 +22,18 @@ help:
 # install ####################################################################
 install:
 	SD=`which sudo` && \
-          $$SD cp simbamon.conf          $(DESTDIR)/etc                  && \
-          $$SD cp simbamon               $(DESTDIR)/usr/sbin             && \
-          $$SD cp simbamond              $(DESTDIR)/etc/init.d           && \
-          $$SD ln -fs /etc/simbamon.conf $(DESTDIR)/etc/default/simbamon && \
-          $$SD cp simbamon.8.gz          $(DESTDIR)/usr/share/man/man8   && \
-          cd /etc/init.d && $$SD update-rc.d simbamond defaults
+          $$SD mkdir -p                    $(DESTDIR)/usr/sbin             && \
+          $$SD mkdir -p                    $(DESTDIR)/etc/init.d           && \
+          $$SD mkdir -p                    $(DESTDIR)/etc/default          && \
+          $$SD mkdir -p                    $(DESTDIR)/usr/share/man/man8   && \
+          $$SD install simbamon.conf       $(DESTDIR)/etc                  && \
+          $$SD install -m 755 simbamon     $(DESTDIR)/usr/sbin             && \
+          $$SD install -m 755 simbamond    $(DESTDIR)/etc/init.d           && \
+          $$SD ln -fs $(DESTDIR)/etc/simbamon.conf $(DESTDIR)/etc/default/simbamon && \
+          $$SD install -D simbamon.8.gz    $(DESTDIR)/usr/share/man/man8   && \
+          cd $(DESTDIR)/etc/init.d && $$SD update-rc.d simbamond defaults
 	@echo 'SimBaMod installed: '
-	@ls -l $(INSTALLED_FILES)
+	@ls -l $(INSTALLED_FILES) || :
 
 # uninstall ##################################################################
 uninstall:
