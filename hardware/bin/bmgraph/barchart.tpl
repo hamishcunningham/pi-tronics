@@ -5,7 +5,7 @@ set boxwidth 1
 set style histogram errorbars linewidth 1 gap 1.5
 set style data histogram
 set style fill solid 0.3
-set autoscale y
+set yrange [0:*]
 set xrange [-0.5:%xmax%]
 set boxwidth 1.3
 set xtics rotate out

@@ -48,8 +48,8 @@ do
 done
 
 echo "Compiling benchmarks..." | tee -a "$LOGFILE"
-gcc dhry_1.c dhry_2.c cpuidc.c -lm -lrt -O3 "$CFLAGS" -o dhry 2>>"$LOGFILE" 1>>"$LOGFILE"
-gcc  whets.c cpuidc.c -lm -lrt -O3  -o whet 2>>"$LOGFILE" 1>>"$LOGFILE"
+gcc dhry_1.c dhry_2.c cpuidc.c -lm -lrt -O3 $CFLAGS -o dhry 2>>"$LOGFILE" 1>>"$LOGFILE"
+gcc  whets.c cpuidc.c -lm -lrt -O3 $CFLAGS -o whet 2>>"$LOGFILE" 1>>"$LOGFILE"
 
 if [ ! -x dhry ] || [ ! -x whet ]
 then
