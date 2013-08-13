@@ -15,3 +15,4 @@ done
 
 UNITS="minutes"
 LABEL="Time ($UNITS)"
+TITLE="MP3 Encoding"

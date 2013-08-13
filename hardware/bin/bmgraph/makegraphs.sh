@@ -5,7 +5,14 @@
 
 # benchmark log files for comparison, one run of dobm.sh per log file
 LOGFILES=(
-    '../bm/bm.log'
+    'logs/apc.log'
+    'logs/beaglebone.log'
+    'logs/cubieboard.log'
+    'logs/dreamplug.log'
+    'logs/miniand.log'
+    'logs/modelb.log'
+    'logs/modela.log'
+    'logs/tonidoplug.log'
 )
 
 # the different graph types to plot
@@ -20,8 +27,8 @@ GRAPHS=(
 )
 
 # graph dimensions
-WIDTH=600
-HEIGHT=300
+WIDTH=520
+HEIGHT=290
 
 # destination folder for graphs
 OUTDIR='graphs'
@@ -47,7 +54,7 @@ do
 
     XMAX=`minus ${#LOGFILES[@]} 0.5`
     cat barchart.tpl | sed -e "s/%xmax%/$XMAX/" | sed -e "s/%label%/$LABEL/" | sed -e "s/%data%/bm.dat/" | \
-        sed -e "s/%width%/$WIDTH/" | sed -e "s/%height%/$HEIGHT/" > graph.gpl
+        sed -e "s/%width%/$WIDTH/" | sed -e "s/%height%/$HEIGHT/" | sed -e "s/%title%/$TITLE/" > graph.gpl
     gnuplot graph.gpl
     sed "5 s/width=\"$HEIGHT\" height=\"$WIDTH\"/width=\"$WIDTH\" height=\"$HEIGHT\"/" graph.svg | \
         sed -e "s/0 0 $HEIGHT $WIDTH/-$WIDTH 0 $WIDTH $HEIGHT/" | sed -e 's/vas"/vas" transform="rotate(90 0 0)" /' > t.svg
