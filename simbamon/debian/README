@@ -1,0 +1,9 @@
+The Debian Package simbamon
+----------------------------
+
+Comments regarding the package:
+
+- seeded using dh_make --native
+- adapted using instructions at in the maint-guide package
+
+-- Hamish Cunningham <hamish@gate.ac.uk>  Sat, 10 Aug 2013 18:51:23 +0300

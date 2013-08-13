@@ -1,0 +1,27 @@
+Source: simbamon
+Section: admin
+Priority: optional
+Maintainer: Hamish Cunningham <hamish@gate.ac.uk>
+Build-Depends: debhelper (>= 8.0.0), gawk
+Standards-Version: 3.9.2
+Homepage: http://pi.gate.ac.uk/pages/mopi.html#simbamon
+Vcs-Git: git://github.com/hamishcunningham/pi-tronics.git
+Vcs-Browser: https://github.com/hamishcunningham/pi-tronics/tree/master/simbamon
+
+Package: simbamon
+Architecture: all
+Depends: bc
+Recommends: gpio
+Description: SimBaMon, a Simple Battery Monitor
+  SimBaMon is an open source Linux daemon for monitoring battery levels; sending
+  warning messages to the user if the battery is low; shutting down cleanly at
+  critical battery levels; managing a power supply on/off switch; writing
+  relevant data to the system logs. See http://pi.gate.ac.uk/pages/mopi.html#simbamon
+
+Package: simbamon-doc
+Architecture: all
+Description: documentation for simbamon
+  SimBaMon is an open source Linux daemon for monitoring battery levels; sending
+  warning messages to the user if the battery is low; shutting down cleanly at
+  critical battery levels; managing a power supply on/off switch; writing
+  relevant data to the system logs. See http://pi.gate.ac.uk/pages/mopi.html#simbamon
