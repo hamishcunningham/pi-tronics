@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # needs Raspberry_Pi_Benchmarks.zip from http://www.raspberrypi.org/phpBB3/viewtopic.php?t=44080&p=374054
 # specifically dhry.h dhry_2.c cpuidh.h cpuidc.c whets.c dhry_1.c
@@ -14,7 +14,7 @@ CFLAGS="-march=native"
 #CFLAGS="-march=armv6"
 #CFLAGS="-march=armv6 -mfloat-abi=hard -mfpu=vfp"
 
-# har disk to benchmark
+# hard disk to benchmark
 DRIVE="/dev/sdi"
 
 # remote host running iperf -s for network benchmarking
@@ -40,8 +40,7 @@ done
 echo "Checking for datafiles..." | tee -a "$LOGFILE"
 for fil in audiodump.wav dhry.h dhry_2.c cpuidh.h cpuidc.c whets.c dhry_1.c
 do
-    which $fil 2>>"$LOGFILE" 1>>"$LOGFILE"
-    if [ $? -ne 0 ]
+    if [ ! -e $fil ]
     then
         echo "$fil not found!" | tee -a "$LOGFILE"
         exit 1
