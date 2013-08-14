@@ -70,12 +70,12 @@ do_stop()
   PID=`cat $PIDFILE`
   kill ${PID}
   RETVAL="$?"
-  ps ax |grep -q ${PID} && \
+  ps ax |grep -q ${PID} && rm -f $PIDFILE \
     log_success_msg ${NAME} stopped && return "$RETVAL"
   sleep 2
   kill -9 ${PID}
   RETVAL="$?"
-  ps ax |grep -q ${PID} && \
+  ps ax |grep -q ${PID} && rm -f $PIDFILE \
     log_success_msg ${NAME} stopped && return "$RETVAL"
   # TODO killall $DAEMON
   log_daemon_msg failed to kill ${NAME}, trying default method...
@@ -89,6 +89,7 @@ do_stop()
     --name $NAME
   RETVAL="$?"
   [ "$RETVAL" = 2 ] && return 2
+
   # Wait for children to finish too if this is a daemon that forks
   # and if the daemon is only ever run from this initscript.
   # If the above conditions are not satisfied then add some other code
@@ -97,6 +98,7 @@ do_stop()
   # sleep for some time.
   start-stop-daemon --stop --quiet --oknodo --retry=0/30/KILL/5 --exec $DAEMON
   [ "$?" = 2 ] && return 2
+
   # Many daemons don't delete their pidfiles when they exit.
   rm -f $PIDFILE
 
