@@ -5,9 +5,10 @@ like Mobile Pi (MoPi) -- http://pi.gate.ac.uk/pages/mopi.html
 
 The daemon is implemented in three chunks:
 
-- /etc/default/simbamon -- a set of config variables
-- /usr/sbin/simbamon    -- the daemon itself
-- /etc/init.d/simbamond -- init interface to start/stop/etc. the daemon
+- /etc/default/simbamond -- a set of config variables; see ./simbamond.default
+- /usr/sbin/simbamon     -- the daemon itself
+- /etc/init.d/simbamond  -- init interface to start/stop/etc. the daemon; see
+  ./simbamond.init
 
 There are also:
 

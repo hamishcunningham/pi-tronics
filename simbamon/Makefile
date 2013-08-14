@@ -38,15 +38,15 @@ help:
 # (if DESTDIR is set we assume this is a packaging run, not an install, and so
 # don't run update-rc.d)
 install:
-	install -d -m 755                $(DESTDIR)/usr/sbin              && \
-          install -d -m 755              $(DESTDIR)/etc/init.d            && \
-          install -d -m 755              $(DESTDIR)/etc/default           && \
-          install -d -m 755              $(DESTDIR)/usr/share/man/man8    && \
-          install simbamond.default      $(DESTDIR)/etc/default/simbamond && \
-          install -m 755 simbamon        $(DESTDIR)/usr/sbin              && \
-          install -m 755 simbamond.init  $(DESTDIR)/etc/init.d/simbamond  && \
-          install simbamond.8.gz         $(DESTDIR)/usr/share/man/man8    && \
-          install simbamon.8.gz          $(DESTDIR)/usr/share/man/man8
+	install -d -m 755              $(DESTDIR)/usr/sbin
+	install -d -m 755              $(DESTDIR)/etc/init.d
+	install -d -m 755              $(DESTDIR)/etc/default
+	install -d -m 755              $(DESTDIR)/usr/share/man/man8
+	install simbamond.default      $(DESTDIR)/etc/default/simbamond
+	install -m 755 simbamon        $(DESTDIR)/usr/sbin
+	install -m 755 simbamond.init  $(DESTDIR)/etc/init.d/simbamond
+	install simbamond.8.gz         $(DESTDIR)/usr/share/man/man8
+	install simbamon.8.gz          $(DESTDIR)/usr/share/man/man8
 	[ -z "$(DESTDIR)" ] && update-rc.d simbamond defaults || :
 	@echo 'SimBaMod installed: '
 	@$(do-listing)
@@ -70,7 +70,6 @@ simbamond.8.gz: simbamond.8
 # package ####################################################################
 package:
 	@echo 'packaging SimBaMod...'
-	@#dpkg-buildpackage -us -uc
 	debuild -us -uc
 	@echo ""
 	cd .. && mv $(PACKAGE_FILES) simbamon/package
@@ -87,4 +86,4 @@ list:
 	@$(do-listing)
 
 # phonies ####################################################################
-.PHONY: install uninstall package package-clean
+.PHONY: install uninstall package package-clean list
