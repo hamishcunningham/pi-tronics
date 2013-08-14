@@ -20,7 +20,7 @@ PACKAGE_FILES=\
 
 # functions ##################################################################
 do-listing=\
-  ls -lh $(INSTALLED_FILES) `[ -z "$(DESTDIR)" ] && echo $(INIT_LINKS)` || :
+  ls $(INSTALLED_FILES) `[ -z "$(DESTDIR)" ] && echo $(INIT_LINKS)` || :
 
 # help #######################################################################
 help:
@@ -53,7 +53,7 @@ install:
 
 # uninstall ##################################################################
 uninstall:
-	@echo -n 'removing SimBaMod files: '
+	@echo 'removing SimBaMod files: '
 	@$(do-listing)
 	[ -z "$(DESTDIR)" ] && update-rc.d -f simbamond remove || :
 	sudo rm -f $(INSTALLED_FILES)

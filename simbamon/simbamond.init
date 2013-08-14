@@ -22,15 +22,16 @@
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="SimBaMon: a simple battery monitor daemon"
 NAME=simbamon
+DNAME=simbamond
 DAEMON=/usr/sbin/$NAME
-PIDFILE=/var/run/$NAME.pid
-SCRIPTNAME=/etc/init.d/$NAME
+PIDFILE=/var/run/$DNAME.pid
+SCRIPTNAME=/etc/init.d/$DNAME
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
 
 # Read configuration variable file if it is present
-[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+[ -r /etc/default/$DNAME ] && . /etc/default/$DNAME
 
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh

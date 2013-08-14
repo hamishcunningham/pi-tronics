@@ -28,9 +28,9 @@ usage() { log_failure_msg Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
 PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin
 DESC="SimBaMon: a simple battery monitor daemon"
 NAME=simbamon
+DNAME=simbamond
 DAEMON=/usr/sbin/$NAME
-PIDFILE=/var/run/$NAME.pid
-SCRIPTNAME=/etc/init.d/$NAME
+PIDFILE=/var/run/$DNAME.pid
 LMESS='battery level'
 SHUTDOWN='shutdown -h now'
 
@@ -52,9 +52,9 @@ done
 shift `expr $OPTIND - 1`
 
 # read configuration variable file if it is present
-if [ -r /etc/default/$NAME ] 
+if [ -r /etc/default/$DNAME ] 
 then
-  . /etc/default/$NAME
+  . /etc/default/$DNAME
 else
   logger "$0: no config data found - fatal error"
   exit 1
