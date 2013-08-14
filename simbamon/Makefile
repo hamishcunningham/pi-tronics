@@ -10,7 +10,8 @@ INIT_LINKS=\
   $(DESTDIR)/etc/rc?.d/*simbamond
 PACKAGE_FILES=\
   simbamond_1.0_all.deb simbamond_1.0_amd64.changes \
-  simbamond_1.0.dsc simbamond_1.0.tar.gz simbamond-doc_1.0_all.deb
+  simbamond_1.0.dsc simbamond_1.0.tar.gz simbamond-doc_1.0_all.deb \
+  simbamond_1.0_amd64.build
 
 # functions ##################################################################
 do-listing=\
