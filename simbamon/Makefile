@@ -61,8 +61,9 @@ simbamond.8.gz: simbamond.8
 
 # package ####################################################################
 package:
-	@echo -n 'packaging SimBaMod...'
-	dpkg-buildpackage -us -uc
+	@echo 'packaging SimBaMod...'
+	@#dpkg-buildpackage -us -uc
+	debuild -us -uc
 	@echo ""
 	cd .. && mv $(PACKAGE_FILES) simbamon/package
 	@echo ""
