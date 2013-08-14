@@ -4,10 +4,17 @@
 
 # vars #######################################################################
 INSTALLED_FILES=\
-$(DESTDIR)/etc/simbamon.conf    $(DESTDIR)/usr/sbin/simbamon \
-$(DESTDIR)/etc/init.d/simbamond $(DESTDIR)/etc/default/simbamon \
-$(DESTDIR)/etc/rc?.d/*simbamond $(DESTDIR)/usr/share/man/man8/simbamon.8.gz
-SUDO=/usr/bin/sudo
+  $(DESTDIR)/usr/sbin/simbamon     $(DESTDIR)/etc/init.d/simbamond \
+  $(DESTDIR)/etc/default/simbamond $(DESTDIR)/usr/share/man/man8/simbamond.8.gz
+INIT_LINKS=\
+  $(DESTDIR)/etc/rc?.d/*simbamond
+PACKAGE_FILES=\
+  simbamond_1.0_all.deb simbamond_1.0_amd64.changes \
+  simbamond_1.0.dsc simbamond_1.0.tar.gz simbamond-doc_1.0_all.deb
+
+# functions ##################################################################
+do-listing=\
+  ls -lh $(INSTALLED_FILES) `[ -z "$(DESTDIR)" ] && echo $(INIT_LINKS)` || :
 
 # help #######################################################################
 help:
@@ -17,41 +24,58 @@ help:
 	@echo '   make install                   installs the SimBaMon daemon'
 	@echo '   make uninstall                 removes the daemon          '
 	@echo '   make list                      list installed files        '
+	@echo '   make package                   create .deb packaging       '
+	@echo '   make package-clean             delete packaging files      '
 	@echo '                                                              '
 
 # install ####################################################################
+# (if DESTDIR is set we assume this is a packaging run, not an install, and so
+# don't run update-rc.d)
 install:
-	SD=`which sudo` && \
-          $$SD mkdir -p                    $(DESTDIR)/usr/sbin             && \
-          $$SD mkdir -p                    $(DESTDIR)/etc/init.d           && \
-          $$SD mkdir -p                    $(DESTDIR)/etc/default          && \
-          $$SD mkdir -p                    $(DESTDIR)/usr/share/man/man8   && \
-          $$SD install simbamon.conf       $(DESTDIR)/etc                  && \
-          $$SD install -m 755 simbamon     $(DESTDIR)/usr/sbin             && \
-          $$SD install -m 755 simbamond    $(DESTDIR)/etc/init.d           && \
-          $$SD ln -fs $(DESTDIR)/etc/simbamon.conf $(DESTDIR)/etc/default/simbamon && \
-          $$SD install -D simbamon.8.gz    $(DESTDIR)/usr/share/man/man8   && \
-          cd $(DESTDIR)/etc/init.d && $$SD update-rc.d simbamond defaults
+	install -d -m 755                $(DESTDIR)/usr/sbin              && \
+          install -d -m 755              $(DESTDIR)/etc/init.d            && \
+          install -d -m 755              $(DESTDIR)/etc/default           && \
+          install -d -m 755              $(DESTDIR)/usr/share/man/man8    && \
+          install simbamond.default      $(DESTDIR)/etc/default/simbamond && \
+          install -m 755 simbamon        $(DESTDIR)/usr/sbin              && \
+          install -m 755 simbamond.init  $(DESTDIR)/etc/init.d/simbamond  && \
+          install simbamond.8.gz         $(DESTDIR)/usr/share/man/man8
+	[ -z "$(DESTDIR)" ] && update-rc.d simbamond defaults || :
 	@echo 'SimBaMod installed: '
-	@ls -l $(INSTALLED_FILES) || :
+	@$(do-listing)
 
 # uninstall ##################################################################
 uninstall:
 	@echo -n 'removing SimBaMod files: '
-	@ls $(INSTALLED_FILES) || :
+	@$(do-listing)
+	[ -z "$(DESTDIR)" ] && update-rc.d -f simbamond remove || :
 	sudo rm -f $(INSTALLED_FILES)
 	@echo done
 
 # manpage ####################################################################
-simbamon.8: manpage.txt
+simbamond.8: simbamond-manual.txt
 	utils/txt2man -v "System Manager's Manual" -s 8 \
-          -t 'simbamon' manpage.txt >simbamon.8
-simbamon.8.gz: simbamon.8
-	cat simbamon.8 |gzip >simbamon.8.gz
+          -t 'simbamon' simbamond-manual.txt >simbamond.8
+simbamond.8.gz: simbamond.8
+	cat simbamond.8 |gzip >simbamond.8.gz
+
+# package ####################################################################
+package:
+	@echo -n 'packaging SimBaMod...'
+	dpkg-buildpackage -us -uc
+	@echo ""
+	cd .. && mv $(PACKAGE_FILES) simbamon/package
+	@echo ""
+	@ls -lh package
+
+# package-clean ##############################################################
+package-clean:
+	rm -f package/*
+	dh_clean
 
 # list #######################################################################
 list:
-	@ls -l $(INSTALLED_FILES) || :
+	@$(do-listing)
 
 # phonies ####################################################################
-.PHONY: install uninstall
+.PHONY: install uninstall package package-clean

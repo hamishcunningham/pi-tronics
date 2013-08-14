@@ -5,20 +5,19 @@ like Mobile Pi (MoPi) -- http://pi.gate.ac.uk/pages/mopi.html
 
 The daemon is implemented in three chunks:
 
-- /etc/simbamon.conf    -- a set of config variables
+- /etc/default/simbamon -- a set of config variables
 - /usr/sbin/simbamon    -- the daemon itself
 - /etc/init.d/simbamond -- init interface to start/stop/etc. the daemon
 
 There are also:
 
 - links to the init interface from /etc/rc?.d which is managed by update-rc.d
-- a link to /etc/simbamon.conf from /etc/default/simbamon
 - (when running) a process ID file in /var/run/simbamon.pid
-- a source file for the man page (manpage.txt) and the man page itself
-  (simbamon.8)
+- a source file for the man page (simbamond-manual.txt) and the man page
+  itself (simbamon.8)
 
-To test and debug, first set DEBUG=on in simbamon.conf and reinstall/restart
-the service; then the utils directory contains these scripts:
+To test and debug, first restart the service with the -d (debug) and/or -s
+(simulation) flags; then the utils directory contains these scripts:
 
 - monitor-log.sh: greps the most recent simbamon entries from syslog
 - set-simulation-level.sh: continually reads a simulation number (3 bit
