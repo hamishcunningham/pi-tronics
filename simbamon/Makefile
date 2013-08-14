@@ -4,14 +4,17 @@
 
 # vars #######################################################################
 INSTALLED_FILES=\
-  $(DESTDIR)/usr/sbin/simbamon     $(DESTDIR)/etc/init.d/simbamond \
-  $(DESTDIR)/etc/default/simbamond $(DESTDIR)/usr/share/man/man8/simbamond.8.gz
+  $(DESTDIR)/usr/sbin/simbamon \
+  $(DESTDIR)/etc/init.d/simbamond \
+  $(DESTDIR)/etc/default/simbamond \
+  $(DESTDIR)/usr/share/man/man8/simbamon.8.gz \
+  $(DESTDIR)/usr/share/man/man8/simbamond.8.gz
 INIT_LINKS=\
   $(DESTDIR)/etc/rc?.d/*simbamond
 PACKAGE_FILES=\
-  simbamond_1.0_all.deb simbamond_1.0_amd64.changes \
+  simbamond_1.0_all.deb simbamond_1.0_*.changes \
   simbamond_1.0.dsc simbamond_1.0.tar.gz simbamond-doc_1.0_all.deb \
-  simbamond_1.0_amd64.build
+  simbamond_1.0_*.build
 
 # functions ##################################################################
 do-listing=\
@@ -40,7 +43,8 @@ install:
           install simbamond.default      $(DESTDIR)/etc/default/simbamond && \
           install -m 755 simbamon        $(DESTDIR)/usr/sbin              && \
           install -m 755 simbamond.init  $(DESTDIR)/etc/init.d/simbamond  && \
-          install simbamond.8.gz         $(DESTDIR)/usr/share/man/man8
+          install simbamond.8.gz         $(DESTDIR)/usr/share/man/man8    && \
+          install simbamon.8.gz          $(DESTDIR)/usr/share/man/man8
 	[ -z "$(DESTDIR)" ] && update-rc.d simbamond defaults || :
 	@echo 'SimBaMod installed: '
 	@$(do-listing)
@@ -59,6 +63,7 @@ simbamond.8: simbamond-manual.txt
           -t 'simbamon' simbamond-manual.txt >simbamond.8
 simbamond.8.gz: simbamond.8
 	cat simbamond.8 |gzip >simbamond.8.gz
+	cp simbamond.8.gz simbamon.8.gz
 
 # package ####################################################################
 package:
