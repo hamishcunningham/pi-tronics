@@ -108,7 +108,7 @@ do
   # check the level and act if necessary
   BAT_LEVEL_BASE2=`gpio read ${IO_A}``gpio read ${IO_B}``gpio read ${IO_C}`
   BAT_LEVEL=`echo "ibase=2;${BAT_LEVEL_BASE2}" |bc`
-  [ $BAT_LEVEL -le $BAT_WARNING ] && \
+  [ $BAT_LEVEL != 0 -a $BAT_LEVEL -le $BAT_WARNING ] && \
     logger "${NAME}: ${LMESS} is at or below warning level (${BAT_LEVEL})"
   if   [ $BAT_LEVEL -eq $POWER_OFF ]
   then
