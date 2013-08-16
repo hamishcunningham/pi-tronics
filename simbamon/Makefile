@@ -70,7 +70,7 @@ simbamond.8.gz: simbamond.8
 # package ####################################################################
 package:
 	@echo 'packaging SimBaMod...'
-	debuild -us -uc
+	debuild -k6D011DF1
 	@echo ""
 	cd .. && mv $(PACKAGE_FILES) simbamon/package
 	@echo ""
