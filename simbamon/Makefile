@@ -31,6 +31,7 @@ help:
 	@echo '   make uninstall                 removes the daemon          '
 	@echo '   make list                      list installed files        '
 	@echo '   make package                   create .deb packaging       '
+	@echo '   make package-upload            upload to PPA repository    '
 	@echo '   make package-clean             delete packaging files      '
 	@echo '                                                              '
 
@@ -76,13 +77,18 @@ package:
 	@echo ""
 	@ls -lh package
 
+# package-upload #############################################################
+package-upload:
+	cd package && dput ppa:hamish-dcs/pi-gate simbamond_1.0_amd64.changes
+
 # package-clean ##############################################################
 package-clean:
 	dh_clean
+	cd package && rm simbamond_1.0_amd64.ppa.upload
 
 # list #######################################################################
 list:
 	@$(do-listing)
 
 # phonies ####################################################################
-.PHONY: install uninstall package package-clean list
+.PHONY: install uninstall package package-upload package-clean list
