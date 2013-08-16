@@ -1,7 +1,7 @@
 Source: simbamond
 Section: admin
 Priority: optional
-Maintainer: Hamish Cunningham <hamish@gate.ac.uk>
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
 Build-Depends: debhelper (>= 8.0.0), devscripts, gawk
 Standards-Version: 3.9.3
 Homepage: http://pi.gate.ac.uk/pages/mopi.html#simbamon
