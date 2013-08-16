@@ -3,20 +3,22 @@
 # and is licenced under GPL 3 or any later version.
 
 # vars #######################################################################
+VERSION=1.0
+P=simbamond
 INSTALLED_FILES=\
   $(DESTDIR)/usr/sbin/simbamon \
-  $(DESTDIR)/etc/init.d/simbamond \
-  $(DESTDIR)/etc/default/simbamond \
+  $(DESTDIR)/etc/init.d/$(P) \
+  $(DESTDIR)/etc/default/$(P) \
   $(DESTDIR)/usr/share/man/man8/simbamon.8.gz \
-  $(DESTDIR)/usr/share/man/man8/simbamond.8.gz
+  $(DESTDIR)/usr/share/man/man8/$(P).8.gz
 INIT_LINKS=\
-  $(DESTDIR)/etc/rc?.d/*simbamond
+  $(DESTDIR)/etc/rc?.d/*$(P)
 PACKAGE_FILES=\
-  simbamond_1.0_all.deb \
-  simbamond_1.0.dsc \
-  simbamond_1.0.tar.gz \
-  simbamond_1.0_*.changes \
-  simbamond_1.0_*.build
+  $(P)_$(VERSION)*.deb \
+  $(P)_$(VERSION)*.dsc \
+  $(P)_$(VERSION)*.tar.gz \
+  $(P)_$(VERSION)*.changes \
+  $(P)_$(VERSION)*.build
 
 # functions ##################################################################
 do-listing=\
@@ -30,9 +32,9 @@ help:
 	@echo '   make install                   installs the SimBaMon daemon'
 	@echo '   make uninstall                 removes the daemon          '
 	@echo '   make list                      list installed files        '
-	@echo '   make package                   create .deb packaging       '
+	@echo '   make package                   create .deb/.dcs packagings '
 	@echo '   make package-upload            upload to PPA repository    '
-	@echo '   make package-clean             delete packaging files      '
+	@echo '   make package-clean             delete tmp packaging files  '
 	@echo '                                                              '
 
 # install ####################################################################
@@ -56,7 +58,7 @@ install:
 uninstall:
 	@echo 'removing SimBaMod files: '
 	@$(do-listing)
-	[ -z "$(DESTDIR)" ] && update-rc.d -f simbamond remove || :
+	[ -z "$(DESTDIR)" ] && update-rc.d -f $(P) remove || :
 	sudo rm -f $(INSTALLED_FILES)
 	@echo done
 
@@ -64,31 +66,51 @@ uninstall:
 simbamond.8: simbamond-manual.txt
 	utils/txt2man -v "System Manager's Manual" -s 8 \
           -t 'simbamon' simbamond-manual.txt >simbamond.8
-simbamond.8.gz: simbamond.8
+	sed -i 1d simbamond.8  # fix error from lintian about ." macro
 	cat simbamond.8 |gzip >simbamond.8.gz
 	cp simbamond.8.gz simbamon.8.gz
 
 # package ####################################################################
-package:
-	@echo 'packaging SimBaMod...'
+package: package-unstable package-precise
+	@echo "\nunstable:"
+	@ls -lh package/unstable
+	@echo "\nprecise:"
+	@ls -lh package/precise
+package-unstable:
+	@echo 'packaging SimBaMod for Debian unstable...'
+	rm -f package/unstable/*
+	sed -i \
+          's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1unstable!' debian/changelog
 	debuild
 	@echo ""
-	cd .. && mv $(PACKAGE_FILES) simbamon/package
+	cd .. && for f in $(PACKAGE_FILES); do \
+          [ -f $$f ] && mv $$f simbamon/package/unstable; done
+package-precise:
+	@echo 'packaging SimBaMod for Ubuntu precise...'
+	rm -f package/precise/*
+	sed -i \
+          's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1precise!' debian/changelog
+	debuild -S
+	sed -i \
+          's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1unstable!' debian/changelog
 	@echo ""
-	@ls -lh package
+	cd .. && for f in $(PACKAGE_FILES); do \
+          [ -f $$f ] && mv $$f simbamon/package/precise; done
 
 # package-upload #############################################################
 package-upload:
-	cd package && dput ppa:hamish-dcs/pi-gate simbamond_1.0_amd64.changes
+	cd package/precise && dput ppa:hamish-dcs/pi-gate \
+          $(P)_$(VERSION)_source.changes
+	cd package/precise && mv $(P)_$(VERSION)*.ppa.upload /tmp || :
 
 # package-clean ##############################################################
 package-clean:
 	dh_clean
-	cd package && rm simbamond_1.0_amd64.ppa.upload
 
 # list #######################################################################
 list:
 	@$(do-listing)
 
 # phonies ####################################################################
-.PHONY: install uninstall package package-upload package-clean list
+.PHONY: install uninstall package package-unstable package-precise
+.PHONY: package-upload package-clean list

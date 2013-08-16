@@ -1,0 +1,49 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Wed, 14 Aug 2013 10:25:02 +0300
+Source: simbamond
+Binary: simbamond
+Architecture: source all
+Version: 1.0
+Distribution: unstable
+Urgency: low
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Changed-By: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Description: 
+ simbamond  - SimBaMon, a Simple Battery Monitor
+Changes: 
+ simbamond (1.0) unstable; urgency=low
+ .
+   * Initial Release.
+Checksums-Sha1: 
+ ed87357aacec4c047c221002229a76d745e9b7be 1636 simbamond_1.0.dsc
+ c65c58662e985957b31a30278372dfaa35f19031 99586 simbamond_1.0.tar.gz
+ 45fbcac14e2e7a2a3309cdf5abbea27308578453 9462 simbamond_1.0_all.deb
+Checksums-Sha256: 
+ 0d8f30888f9138ef06d2717d157ffdca582e6e1506c780204f89f20cb3bc8b61 1636 simbamond_1.0.dsc
+ bf74e78ec514d2b75152031af65de7c31ce1b29e36fb6ef90e339b9495ebe00c 99586 simbamond_1.0.tar.gz
+ bc51b4d5dac84d2cb8e562ae0d1a68fd8609832eb7861f5b2ae2c32c258390dc 9462 simbamond_1.0_all.deb
+Files: 
+ 7a817dc483568319d06600f025afaf5c 1636 admin optional simbamond_1.0.dsc
+ fb6d0c085d0b171b24412fc3f1887960 99586 admin optional simbamond_1.0.tar.gz
+ ef697d7f12a4ee0c414c959d0fd6d9a9 9462 admin optional simbamond_1.0_all.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+iQIcBAEBAgAGBQJSDn/eAAoJEK3gE8dtAR3x5SAP/3Sr5Jmu2UTU24a8lc9EcdrE
+8ECzobvKH5+ga5tYMc+9hTlZxHBspIB7tBc6DZYHFka8nbJClWUnGzixbsPYVFLm
+r/hgJlsYiX6fttW37tociABn+AFfIa8bZhqkDDFd/FszsG1RsY/osH6XmImt/G+a
+thxoRRMLVYC/D9L0qtO0cHVp6P068JP/AIISbBNBQrEYVXKHOFdN+9rvdwjkIfF8
+snnKUUjclIW/mfCF5e4hG924xCnzCFfzVzByth24f1AaGMTAci30LQrnBZITyqNR
+l6M+pghe2J2hdBf5+RZs2Ksu9DJwZ9iAOl1HcJOlr+m5l0nS7mbMLT0kKAKvrGVC
+xiEONE3ynTacID5Etu7wzhXGvgK9i8dmBgdUSAUEXuJjVnKBcQBDuuK+/rlJaWVV
+lRmwoPsajjCChUbMTo8DXRxz/5ctO3bWf9ht7v+bsH1ynAhDbCpAK4e2dJKLwLD7
+meELBJ8Koe+z/zFGbAx29gBpmZFMI7WSTDgFkZKH1zkGrCRirjuyf5VMGo6Wt8qB
+m4v9jEphkj4kk8EtaFkXSDB2tojSrE3+Twrz2wqY7JhnXbWGCe23Fo611IJH0to8
+etGpbtfyWtz7L0vNDAS3RM43bHsUNzJhZNWQ6Sjb6Q0rIRKBuImistiQEcUuS8sO
+VdE2L9m9nQsJyPB1Ew8H
+=7PdJ
+-----END PGP SIGNATURE-----

@@ -45,6 +45,7 @@ Usage:
    make uninstall                 removes the daemon          
    make list                      list installed files        
    make package                   create .deb packaging       
+   make package-upload            upload to PPA repository    
    make package-clean             delete packaging files      
                                                               
 make[1]: Leaving directory `/home/hamish/pi-tronics/simbamon'
@@ -189,10 +190,6 @@ dpkg-genchanges: including full source code in upload
  dpkg-source --after-build simbamon
 dpkg-buildpackage: full upload; Debian-native package (full source is included)
 Now running lintian...
-W: simbamond source: changelog-should-mention-nmu
-W: simbamond source: source-nmu-has-incorrect-version-number 1.0
-W: simbamond: manpage-has-errors-from-man usr/share/man/man8/simbamon.8.gz 1: warning: macro `"' not defined
-W: simbamond: manpage-has-errors-from-man usr/share/man/man8/simbamond.8.gz 1: warning: macro `"' not defined
 Finished running lintian.
 Now signing changes and any dsc files...
  signfile simbamond_1.0.dsc Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
