@@ -3,7 +3,9 @@
 # and is licenced under GPL 3 or any later version.
 
 # vars #######################################################################
-VERSION=1.1
+MINORVERSION=1
+VERSION=1.$(MINORVERSION)
+SNAPSHOT=$(VERSION)+`expr $(MINORVERSION) + 1`-SNAPSHOT-`date "+%Y-%m-%d-%T"`
 P=simbamond
 PD=package/$(VERSION)
 INSTALLED_FILES=\
