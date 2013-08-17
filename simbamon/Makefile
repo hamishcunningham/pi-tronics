@@ -96,6 +96,8 @@ package-precise:
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
           [ -f $$f ] && mv $$f simbamon/package/precise; done
+package-info:
+	apt-cache showpkg simbamond
 
 # package-upload #############################################################
 package-upload:

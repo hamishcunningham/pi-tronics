@@ -62,10 +62,21 @@ do_start()
 }
 
 # Function that stops the daemon/service
+# Returns:
+#   0 if daemon has been stopped
+#   1 if daemon was already stopped
+#   2 if daemon could not be stopped
+#   other if a failure occurred
 do_stop()
 {
   logger ${NAME}: stopping...
-  log_daemon_msh ${NAME}: stopping...
+  log_daemon_msg ${NAME}: stopping...
+
+  # If there's no PIDFILE we give up... could try killall but perhaps overkill
+  [ -f $PIDFILE ] || {
+    log_failure_msg "${NAME}: PID file ${PIDFILE} doesn't exist, cannot stop"
+    return 2
+  }
 
   # Hmmm... can't get start-stop-daemon to kill the bugger...
   # so added this code which does a manual kill
@@ -81,11 +92,7 @@ do_stop()
     log_success_msg ${NAME} stopped && return "$RETVAL"
   log_daemon_msg failed to kill ${NAME}, trying default method...
 
-  # Return
-  #   0 if daemon has been stopped
-  #   1 if daemon was already stopped
-  #   2 if daemon could not be stopped
-  #   other if a failure occurred
+  # The default method (which didn't work for me)
   start-stop-daemon --stop --retry=TERM/30/KILL/5 --pidfile $PIDFILE \
     --name $NAME
   RETVAL="$?"
