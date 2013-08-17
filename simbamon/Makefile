@@ -35,6 +35,8 @@ help:
 	@echo '   make package                   create .deb/.dcs packagings '
 	@echo '   make package-upload            upload to PPA repository    '
 	@echo '   make package-clean             delete tmp packaging files  '
+	@echo '   make package-info              apt-cache showpkg           '
+	@echo '   make package-purge             apt-get purge               '
 	@echo '                                                              '
 
 # install ####################################################################
@@ -96,8 +98,6 @@ package-precise:
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
           [ -f $$f ] && mv $$f simbamon/package/precise; done
-package-info:
-	apt-cache showpkg simbamond
 
 # package-upload #############################################################
 package-upload:
@@ -105,7 +105,11 @@ package-upload:
           $(P)_$(VERSION)_source.changes
 	cd package/precise && mv $(P)_$(VERSION)*.ppa.upload /tmp || :
 
-# package-clean ##############################################################
+# package utilities
+package-info:
+	apt-cache showpkg simbamond
+package-purge:
+	apt-get purge simbamond
 package-clean:
 	dh_clean
 
