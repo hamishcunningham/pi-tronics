@@ -5,6 +5,7 @@
 # vars #######################################################################
 VERSION=1.0
 P=simbamond
+PD=package/$(VERSION)
 INSTALLED_FILES=\
   $(DESTDIR)/usr/sbin/simbamon \
   $(DESTDIR)/etc/init.d/$(P) \
@@ -43,16 +44,16 @@ help:
 # (if DESTDIR is set we assume this is a packaging run, not an install, and so
 # don't run update-rc.d)
 install:
-	install -d -m 755              $(DESTDIR)/usr/sbin
-	install -d -m 755              $(DESTDIR)/etc/init.d
-	install -d -m 755              $(DESTDIR)/etc/default
-	install -d -m 755              $(DESTDIR)/usr/share/man/man8
-	install simbamond.default      $(DESTDIR)/etc/default/simbamond
-	install -m 755 simbamon        $(DESTDIR)/usr/sbin
-	install -m 755 simbamond.init  $(DESTDIR)/etc/init.d/simbamond
-	install simbamond.8.gz         $(DESTDIR)/usr/share/man/man8
-	install simbamon.8.gz          $(DESTDIR)/usr/share/man/man8
-	[ -z "$(DESTDIR)" ] && update-rc.d simbamond defaults || :
+	install -d -m 755         $(DESTDIR)/usr/sbin
+	install -d -m 755         $(DESTDIR)/etc/init.d
+	install -d -m 755         $(DESTDIR)/etc/default
+	install -d -m 755         $(DESTDIR)/usr/share/man/man8
+	install $(P).default      $(DESTDIR)/etc/default/$(P)
+	install -m 755 simbamon   $(DESTDIR)/usr/sbin
+	install -m 755 $(P).init  $(DESTDIR)/etc/init.d/$(P)
+	install $(P).8.gz         $(DESTDIR)/usr/share/man/man8
+	install simbamon.8.gz     $(DESTDIR)/usr/share/man/man8
+	[ -z "$(DESTDIR)" ] && update-rc.d $(P) defaults || :
 	@echo 'SimBaMod installed: '
 	@$(do-listing)
 
@@ -65,31 +66,31 @@ uninstall:
 	@echo done
 
 # manpage ####################################################################
-simbamond.8: simbamond-manual.txt
+$(P).8: $(P)-manual.txt
 	utils/txt2man -v "System Manager's Manual" -s 8 \
-          -t 'simbamon' simbamond-manual.txt >simbamond.8
-	sed -i 1d simbamond.8  # fix error from lintian about ." macro
-	cat simbamond.8 |gzip >simbamond.8.gz
-	cp simbamond.8.gz simbamon.8.gz
+          -t 'simbamon' $(P)-manual.txt >$(P).8
+	sed -i 1d $(P).8  # fix error from lintian about ." macro
+	cat $(P).8 |gzip >$(P).8.gz
+	cp $(P).8.gz simbamon.8.gz
 
 # package ####################################################################
 package: package-unstable package-precise
 	@echo "\nunstable:"
-	@ls -lh package/unstable
+	@ls -lh $(PD)/unstable
 	@echo "\nprecise:"
-	@ls -lh package/precise
+	@ls -lh $(PD)/precise
 package-unstable:
 	@echo 'packaging SimBaMod for Debian unstable...'
-	rm -f package/unstable/*
+	rm -f $(PD)/unstable/*
 	sed -i \
           's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1unstable!' debian/changelog
 	debuild
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
-          [ -f $$f ] && mv $$f simbamon/package/unstable; done
+          [ -f $$f ] && mv $$f simbamon/$(PD)/unstable; done
 package-precise:
 	@echo 'packaging SimBaMod for Ubuntu precise...'
-	rm -f package/precise/*
+	rm -f $(PD)/precise/*
 	sed -i \
           's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1precise!' debian/changelog
 	debuild -S
@@ -97,19 +98,19 @@ package-precise:
           's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1unstable!' debian/changelog
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
-          [ -f $$f ] && mv $$f simbamon/package/precise; done
+          [ -f $$f ] && mv $$f simbamon/$(PD)/precise; done
 
 # package-upload #############################################################
 package-upload:
-	cd package/precise && dput ppa:hamish-dcs/pi-gate \
+	cd $(PD)/precise && dput ppa:hamish-dcs/pi-gate \
           $(P)_$(VERSION)_source.changes
-	cd package/precise && mv $(P)_$(VERSION)*.ppa.upload /tmp || :
+	cd $(PD)/precise && mv $(P)_$(VERSION)*.ppa.upload /tmp || :
 
 # package utilities
 package-info:
-	apt-cache showpkg simbamond
+	apt-cache showpkg $(P)
 package-purge:
-	apt-get purge simbamond
+	apt-get purge $(P)
 package-clean:
 	dh_clean
 
