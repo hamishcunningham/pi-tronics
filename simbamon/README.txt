@@ -17,6 +17,17 @@ There are also:
 - a source file for the man page (simbamond-manual.txt) and the man pages
   themselves (simbamon.8 and simbamond.8 and their compressed versions)
 
+To install:
+
+- on Raspbian
+  - TODO
+- on Ubuntu (for testing and debugging:
+  - sudo add-apt-repository ppa:hamish-dcs/pi-gate
+  - sudo apt-get update
+  - sudo apt-get install simbamond
+  - this will generate a failure message as Ubuntu lacks the gpio command --
+    use simulation mode as described below
+
 To test and debug, first restart the service with the -d (debug) and/or -s
 (simulation) flags; then the utils directory contains these scripts:
 
