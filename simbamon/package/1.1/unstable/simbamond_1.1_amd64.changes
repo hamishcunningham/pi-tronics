@@ -1,0 +1,50 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Sat, 17 Aug 2013 10:49:15 +0300
+Source: simbamond
+Binary: simbamond
+Architecture: source all
+Version: 1.1
+Distribution: unstable
+Urgency: low
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Changed-By: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Description: 
+ simbamond  - SimBaMon, a Simple Battery Monitor
+Changes: 
+ simbamond (1.1) unstable; urgency=low
+ .
+   * Maintenance Release -- see github for details:
+     https://github.com/hamishcunningham/pi-tronics/tree/master/simbamon
+Checksums-Sha1: 
+ 221fc8cf105170f0072b0d476327cd2d18a16c71 1639 simbamond_1.1.dsc
+ 691e7c1211b027111cd5986cbfc7c7e0f7029a09 259246 simbamond_1.1.tar.gz
+ 1e00ca54f54038400345730f6b6ce8d0a420b403 9792 simbamond_1.1_all.deb
+Checksums-Sha256: 
+ 3e1714e9737b340d4bfcc6350fc7a59d7857b32ee52e3b6ecfaec33cf016af7e 1639 simbamond_1.1.dsc
+ c9cb9bd3e436240de05d897f1684726ecf68339ac6056d1b4a9620b4b3038785 259246 simbamond_1.1.tar.gz
+ 958dd59a5d92b4eaa9be9b18865b9d6bc6dadf2087829fcdb5aa1f608157a7d6 9792 simbamond_1.1_all.deb
+Files: 
+ 2ec5f95b913f3626e47d381e82c19a51 1639 admin optional simbamond_1.1.dsc
+ 841db3c92192317bccd9eda0b4f5d29b 259246 admin optional simbamond_1.1.tar.gz
+ f2fd85be19e063a49293879c8c5ed057 9792 admin optional simbamond_1.1_all.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+iQIcBAEBAgAGBQJSDyzvAAoJEK3gE8dtAR3xH/0P/3WFo79jGUkJSvdvdH7ExBzb
+DqALUXh2AizZEFGmN5pPscD4ndoCCG22jf7elJ+ezsEm3KK7GToTj9IAgVtablB2
+VNkD/6PmnqptkEpnqsA8cQSQI9edo9GF90nXD/f++sAcgjm1vDzVtMDjzYQuYCQT
+K62yHdsc0SMQKrp73Wx4SWtXOFm8RSLVSQOO5/y3ATGUG5iRUROD5BRESH9DaRmr
+ztwWUZPnxhaWJWs0bmoAEuQAn919IGFfedWjZmb19xjXpOWmQXTiKazl8VIFUSfh
+0rGWuffMjSL/DQafoUJfWF872UjEOt9ffGD8o12ghuebriQaU62LSVXsPcL5A9ho
+ijYcoiFn4ag4pDNqBIS3fMrrL/5td59bRLYQdzMUMnZFR9LZoF915+uMcXCiFVSB
+eQegLePUAxfwSNkOE+QxYVTnqlr+nFKNdVEzwY0dutI9Cqd4jKCum8mOFha8Rt3h
+cZ92wAgTdmq8WK0+WCxSUtHAYbJwasC+JOHFF8+y7ThW3pEe5cahofiAEX8MLo7b
+P93wTJ+F72j278XODIaryWwMYmaMLlSvVWmHoZYz/xrq8y4IYv8xNnG4VwAKBqK9
+D8OkcayygKX004lx0TirrO1GzG4QIBK1YFo65BZg3lSD4lMadD5BLjEg6kJv5NPC
+ukHG1KsoL2iyFCoPg8IX
+=/11o
+-----END PGP SIGNATURE-----

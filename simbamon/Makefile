@@ -3,7 +3,7 @@
 # and is licenced under GPL 3 or any later version.
 
 # vars #######################################################################
-VERSION=1.0
+VERSION=1.1
 P=simbamond
 PD=package/$(VERSION)
 INSTALLED_FILES=\
@@ -38,6 +38,7 @@ help:
 	@echo '   make package-clean             delete tmp packaging files  '
 	@echo '   make package-info              apt-cache showpkg           '
 	@echo '   make package-purge             apt-get purge               '
+	@echo '   make package-version           update the changelog        '
 	@echo '                                                              '
 
 # install ####################################################################
@@ -81,19 +82,21 @@ package: package-unstable package-precise
 	@ls -lh $(PD)/precise
 package-unstable:
 	@echo 'packaging SimBaMod for Debian unstable...'
+	mkdir -p $(PD)/unstable
 	rm -f $(PD)/unstable/*
 	sed -i \
           's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1unstable!' debian/changelog
-	debuild
+	debuild -Ipackage
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
           [ -f $$f ] && mv $$f simbamon/$(PD)/unstable; done
 package-precise:
 	@echo 'packaging SimBaMod for Ubuntu precise...'
+	mkdir -p $(PD)/precise
 	rm -f $(PD)/precise/*
 	sed -i \
           's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1precise!' debian/changelog
-	debuild -S
+	debuild -S -Ipackage
 	sed -i \
           's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1unstable!' debian/changelog
 	@echo ""
@@ -113,6 +116,9 @@ package-purge:
 	apt-get purge $(P)
 package-clean:
 	dh_clean
+package-version:
+	dch -i
+	@echo 'remember to change VERSION in the Makefile!'
 
 # list #######################################################################
 list:
