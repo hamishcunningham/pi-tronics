@@ -5,7 +5,7 @@
 # vars #######################################################################
 MINORVERSION=1
 VERSION=1.$(MINORVERSION)
-SNAPSHOT=$(VERSION)+`expr $(MINORVERSION) + 1`-SNAPSHOT-`date "+%Y-%m-%d-%T"`
+SNAPSHOT=$(VERSION)+`expr $(MINORVERSION) + 1`-SNAPSHOT-`date "+%Y-%m-%d"`
 P=simbamond
 PD=package/$(VERSION)
 INSTALLED_FILES=\
