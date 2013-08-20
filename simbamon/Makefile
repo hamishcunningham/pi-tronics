@@ -3,9 +3,7 @@
 # and is licenced under GPL 3 or any later version.
 
 # vars #######################################################################
-MINORVERSION=1
-VERSION=1.$(MINORVERSION)
-SNAPSHOT=$(VERSION)+`expr $(MINORVERSION) + 1`-SNAPSHOT-`date "+%Y-%m-%d"`
+VERSION=1.1
 P=simbamond
 PD=package/$(VERSION)
 INSTALLED_FILES=\
@@ -22,6 +20,10 @@ PACKAGE_FILES=\
   $(P)_$(VERSION)*.tar.gz \
   $(P)_$(VERSION)*.changes \
   $(P)_$(VERSION)*.build
+MAJOR_VERSION:=$(shell echo $(VERSION) |sed 's,\([0-9]*\)\..*,\1,')
+MINOR_VERSION:=$(shell echo $(VERSION) |sed 's,.*\.,,')
+SNAPSHOT_VERSION:=$(shell echo $(VERSION)+`expr $(MINOR_VERSION) + 1`)
+SNAPSHOT:=$(shell echo $(SNAPSHOT_VERSION)-SNAPSHOT-`date "+%Y-%m-%d-%R"`)
 
 # functions ##################################################################
 do-listing=\
@@ -95,20 +97,41 @@ package-precise:
 	@echo 'packaging SimBaMod for Ubuntu precise...'
 	mkdir -p $(PD)/precise
 	rm -f $(PD)/precise/*
-	sed -i \
-          's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1precise!' debian/changelog
+	sed -i 's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1precise!' debian/changelog
 	debuild -S -Ipackage
-	sed -i \
-          's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1unstable!' debian/changelog
+	sed -i 's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1unstable!' \
+          debian/changelog
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
           [ -f $$f ] && mv $$f simbamon/$(PD)/precise; done
+snapshot:
+	@echo "packaging SimBaMod SNAPSHOT $(SNAPSHOT)..."
+	mkdir -p $(PD)/$(SNAPSHOT)
+	rm -f $(PD)/$(SNAPSHOT)/*
+	sed -i -e 's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1precise!' \
+	       -e 's!^$(P) ($(VERSION)!$(P) ($(SNAPSHOT_VERSION)!' \
+          debian/changelog
+	@head -1 debian/changelog
+	debuild -S -Ipackage
+	sed -i -e 's!^$(P) ($(SNAPSHOT_VERSION)!$(P) ($(VERSION)!' \
+               -e 's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1unstable!' \
+          debian/changelog
+	@head -1 debian/changelog
+	@echo ""
+	cd .. && for f in $(PACKAGE_FILES); do \
+          [ -f $$f ] && mv $$f simbamon/$(PD)/$(SNAPSHOT); done
+	@echo "\nsnapshot:"
+	@ls -lhR $(PD)/$(SNAPSHOT)
 
 # package-upload #############################################################
 package-upload:
 	cd $(PD)/precise && dput ppa:hamish-dcs/pi-gate \
           $(P)_$(VERSION)_source.changes
 	cd $(PD)/precise && mv $(P)_$(VERSION)*.ppa.upload /tmp || :
+snapshot-upload:
+	cd $(PD)/snapshot && dput ppa:hamish-dcs/pi-gate-snapshots \
+          $(P)_$(VERSION)_source.changes
+	cd $(PD)/snapshot && mv $(P)_$(VERSION)*.ppa.upload /tmp || :
 
 # package utilities
 package-info:

@@ -1,5 +1,6 @@
 SimBaMon: a Simple Battery Monitor daemon
 
+-----------------------------------------------------------------------------
 This tree contains the code for a simple battery monitor daemon for projects
 like Mobile Pi (MoPi) -- http://pi.gate.ac.uk/pages/mopi.html
 
@@ -17,6 +18,7 @@ There are also:
 - a source file for the man page (man/simbamond.txt) and the man pages
   themselves (man/simbamon[d].8 and their compressed versions)
 
+-----------------------------------------------------------------------------
 To install:
 
 - on Raspbian
@@ -28,6 +30,7 @@ To install:
   - this will generate a failure message as Ubuntu lacks the gpio command --
     use simulation mode as described below
 
+-----------------------------------------------------------------------------
 To test and debug, first restart the service with the -d (debug) and/or -s
 (simulation) flags; then the utils directory contains these scripts:
 
@@ -39,8 +42,20 @@ To test and debug, first restart the service with the -d (debug) and/or -s
 (The utils directory also contains a great script called txt2man from
 http://mvertes.free.fr/ that we use to maintain the manpage.)
 
+-----------------------------------------------------------------------------
+To package:
+
+- before a release, update the version in the Makefile and do
+  "make package-version" to add a changelog entry for the release
+- to release, "make package" and "make package-upload"
+- after a release, do "make package-version" and add a changelog entry to note
+  the move to snapshots
+- to do a snapshot release, "make snapshot" and "make snapshot-upload"
+
+-----------------------------------------------------------------------------
 The intial target operating system is the Raspian distribution of Debian, for
 the Raspberry Pi. It is intended to be compatible with other *nixes.
 
 This code is copyright Hamish Cunningham and the University of Sheffield and
 is licenced under GPL 3 or any later version. Project started July 2013.
+-----------------------------------------------------------------------------
