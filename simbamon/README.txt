@@ -14,8 +14,8 @@ There are also:
 
 - links to the init interface from /etc/rc?.d which is managed by update-rc.d
 - (when running) a process ID file in /var/run/simbamon.pid
-- a source file for the man page (simbamond-manual.txt) and the man pages
-  themselves (simbamon.8 and simbamond.8 and their compressed versions)
+- a source file for the man page (man/simbamond.txt) and the man pages
+  themselves (man/simbamon[d].8 and their compressed versions)
 
 To install:
 

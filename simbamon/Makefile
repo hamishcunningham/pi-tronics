@@ -54,8 +54,8 @@ install:
 	install $(P).default      $(DESTDIR)/etc/default/$(P)
 	install -m 755 simbamon   $(DESTDIR)/usr/sbin
 	install -m 755 $(P).init  $(DESTDIR)/etc/init.d/$(P)
-	install $(P).8.gz         $(DESTDIR)/usr/share/man/man8
-	install simbamon.8.gz     $(DESTDIR)/usr/share/man/man8
+	install man/$(P).8.gz     $(DESTDIR)/usr/share/man/man8
+	install man/simbamon.8.gz $(DESTDIR)/usr/share/man/man8
 	[ -z "$(DESTDIR)" ] && update-rc.d $(P) defaults || :
 	@echo 'SimBaMod installed: '
 	@$(do-listing)
@@ -69,12 +69,11 @@ uninstall:
 	@echo done
 
 # manpage ####################################################################
-$(P).8: $(P)-manual.txt
-	utils/txt2man -v "System Manager's Manual" -s 8 \
-          -t 'simbamon' $(P)-manual.txt >$(P).8
-	sed -i 1d $(P).8  # fix error from lintian about ." macro
-	cat $(P).8 |gzip >$(P).8.gz
-	cp $(P).8.gz simbamon.8.gz
+man: man/$(P).txt
+	cd man; ../utils/txt2man -v "System Manager's Manual" -s 8 \
+          -t 'simbamon' $(P).txt >$(P).8; \
+	sed -i 1d $(P).8;  # fix error from lintian about ." macro \
+	cat $(P).8 |gzip >$(P).8.gz; cp $(P).8.gz simbamon.8.gz
 
 # package ####################################################################
 package: package-unstable package-precise
