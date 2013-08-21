@@ -1,6 +1,6 @@
 #!/bin/bash
 
-T=`cat $LOGFILE | grep "real"`
+T=`cat "$LOGFILE" | grep "real"`
 VALUES2=`echo $T | sed -e 's/real \([0-9ms\.]*\)/\1 /g'`
 IFS=' ' read -a VALUES2 <<< "$VALUES2"
 VALUES=''

@@ -5,14 +5,14 @@
 
 # benchmark log files for comparison, one run of dobm.sh per log file
 LOGFILES=(
-    'logs/apc.log'
-    'logs/beaglebone.log'
-    'logs/cubieboard.log'
-    'logs/dreamplug.log'
-    'logs/miniand.log'
-    'logs/modelb.log'
-    'logs/modela.log'
-    'logs/tonidoplug.log'
+    'logs/APC.log'
+    'logs/BeagleBone.log'
+    'logs/Cubieboard.log'
+    'logs/DreamPlug.log'
+    'logs/MK802.log'
+    'logs/Model B.log'
+    'logs/Model A.log'
+    'logs/TonidoPlug.log'
 )
 
 # the different graph types to plot
@@ -27,8 +27,8 @@ GRAPHS=(
 )
 
 # graph dimensions
-WIDTH=520
-HEIGHT=290
+WIDTH=600
+HEIGHT=320
 
 # destination folder for graphs
 OUTDIR='graphs'
@@ -39,7 +39,7 @@ for GRAPH in ${GRAPHS[@]}
 do
     GRAPHFILE=`echo $GRAPH | sed -e 's/\..*//'`
     echo -n "" > bm.dat
-    for LOGFILE in ${LOGFILES[@]}
+    for LOGFILE in "${LOGFILES[@]}"
     do
         SLF=`echo $LOGFILE | sed -e 's/[^\/]*\///'`
         SLF=`echo $SLF | sed -e 's/\..*//'`
@@ -49,7 +49,7 @@ do
         Me=`mean $VALUES`
         Mi=`min $VALUES`
         Ma=`max $VALUES`
-        echo "$SLF $Me $Mi $Ma" >> bm.dat
+        echo "\"$SLF\" $Me $Mi $Ma" >> bm.dat
     done
 
     XMAX=`minus ${#LOGFILES[@]} 0.5`
