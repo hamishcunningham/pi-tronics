@@ -26,9 +26,6 @@ MINOR_VERSION:=$(shell echo $(VERSION) |sed 's,.*\.,,')
 SNAPSHOT_VERSION:=$(VERSION)+$(shell expr $(MINOR_VERSION) + 1)
 SNAPSHOT:=$(SNAPSHOT_VERSION)-SNAPSHOT-$(NOW)
 
-thing:
-	echo $(SNAPSHOT) '$(SNAPSHOT)' $(SNAPSHOT_VERSION)
-
 # functions ##################################################################
 do-listing=\
   ls $(INSTALLED_FILES) `[ -z "$(DESTDIR)" ] && echo $(INIT_LINKS)` || :
