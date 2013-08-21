@@ -130,10 +130,16 @@ package-upload:
 	cd $(PD)/precise && dput ppa:hamish-dcs/pi-gate \
           $(P)_$(VERSION)_source.changes
 	cd $(PD)/precise && mv $(P)_$(VERSION)*.ppa.upload /tmp || :
+
+# snapshot-upload ############################################################
+# relies on lexical ordering of snapshot names to pick the latest one
+# (apt also relies on this ordering)
 snapshot-upload:
-	echo "cd $(SNAPD)/snapshot && dput ppa:hamish-dcs/pi-gate-snapshots \
-          $(P)_$(VERSION)_source.changes"
-	echo "cd $(SNAPD)/snapshot && mv $(P)_$(VERSION)*.ppa.upload /tmp || :"
+	cd package/$(VERSION)/snapshots; \
+	LAST_SNAP=`ls -r |head -1`; \
+        cd $$LAST_SNAP && \
+          dput ppa:hamish-dcs/pi-gate-snapshots $(P)*_source.changes; \
+	mv $(P)_*.ppa.upload /tmp || :
 
 # package utilities
 package-info:
