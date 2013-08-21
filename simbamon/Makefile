@@ -25,6 +25,7 @@ MAJOR_VERSION:=$(shell echo $(VERSION) |sed 's,\([0-9]*\)\..*,\1,')
 MINOR_VERSION:=$(shell echo $(VERSION) |sed 's,.*\.,,')
 SNAPSHOT_VERSION:=$(VERSION)+$(shell expr $(MINOR_VERSION) + 1)
 SNAPSHOT:=$(SNAPSHOT_VERSION)-SNAPSHOT-$(NOW)
+SNAPD:=$(PD)/snapshots/$(SNAPSHOT)
 
 # functions ##################################################################
 do-listing=\
@@ -89,7 +90,7 @@ package-unstable:
 	mkdir -p $(PD)/unstable
 	rm -f $(PD)/unstable/*
 	sed -i \
-          's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1unstable!' debian/changelog
+          's,\(^$(P) ('$(VERSION)') \)[a-z]*,\1unstable,' debian/changelog
 	debuild -Ipackage
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
@@ -98,31 +99,31 @@ package-precise:
 	@echo 'packaging SimBaMod for Ubuntu precise...'
 	mkdir -p $(PD)/precise
 	rm -f $(PD)/precise/*
-	sed -i 's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1precise!' debian/changelog
+	sed -i 's,\(^$(P) ('$(VERSION)') \)[a-z]*,\1precise,' debian/changelog
 	debuild -S -Ipackage
-	sed -i 's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1unstable!' \
+	sed -i 's,\(^$(P) ('$(VERSION)') \)[a-z]*,\1unstable,' \
           debian/changelog
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
           [ -f $$f ] && mv $$f simbamon/$(PD)/precise; done
 snapshot:
 	@echo "packaging SimBaMod SNAPSHOT $(SNAPSHOT)..."
-	mkdir -p $(PD)/$(SNAPSHOT)
-	rm -f $(PD)/$(SNAPSHOT)/*
-	sed -i -e 's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1precise!' \
-	       -e 's!^$(P) ($(VERSION)!$(P) ($(SNAPSHOT_VERSION)!' \
+	mkdir -p $(SNAPD)
+	rm -rf $(SNAPD)/*
+	sed -i -e 's,\(^$(P) ('$(VERSION)') \)[a-z]*,\1precise,' \
+	       -e 's,^$(P) ($(VERSION),$(P) ($(SNAPSHOT_VERSION),' \
           debian/changelog
 	@head -1 debian/changelog
 	debuild -S -Ipackage
-	sed -i -e 's!^$(P) ($(SNAPSHOT_VERSION)!$(P) ($(VERSION)!' \
-               -e 's!\(^$(P) ('$(VERSION)') \)[a-z]*!\1unstable!' \
+	sed -i -e 's,^$(P) ($(SNAPSHOT_VERSION),$(P) ($(VERSION),' \
+               -e 's,\(^$(P) ('$(VERSION)') \)[a-z]*,\1unstable,' \
           debian/changelog
 	@head -1 debian/changelog
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
-          [ -f $$f ] && mv $$f simbamon/$(PD)/$(SNAPSHOT); done
+          [ -f $$f ] && mv $$f simbamon/$(SNAPD); done
 	@echo "\nsnapshot:"
-	@ls -lhR $(PD)/$(SNAPSHOT)
+	@ls -lhR $(SNAPD)
 
 # package-upload #############################################################
 package-upload:
@@ -130,9 +131,9 @@ package-upload:
           $(P)_$(VERSION)_source.changes
 	cd $(PD)/precise && mv $(P)_$(VERSION)*.ppa.upload /tmp || :
 snapshot-upload:
-	cd $(PD)/snapshot && dput ppa:hamish-dcs/pi-gate-snapshots \
-          $(P)_$(VERSION)_source.changes
-	cd $(PD)/snapshot && mv $(P)_$(VERSION)*.ppa.upload /tmp || :
+	echo "cd $(SNAPD)/snapshot && dput ppa:hamish-dcs/pi-gate-snapshots \
+          $(P)_$(VERSION)_source.changes"
+	echo "cd $(SNAPD)/snapshot && mv $(P)_$(VERSION)*.ppa.upload /tmp || :"
 
 # package utilities
 package-info:
