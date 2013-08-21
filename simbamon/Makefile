@@ -20,10 +20,14 @@ PACKAGE_FILES=\
   $(P)_$(VERSION)*.tar.gz \
   $(P)_$(VERSION)*.changes \
   $(P)_$(VERSION)*.build
+NOW:=$(shell date "+%Y-%m-%d-%R" |sed 's,:,,')
 MAJOR_VERSION:=$(shell echo $(VERSION) |sed 's,\([0-9]*\)\..*,\1,')
 MINOR_VERSION:=$(shell echo $(VERSION) |sed 's,.*\.,,')
-SNAPSHOT_VERSION:=$(shell echo $(VERSION)+`expr $(MINOR_VERSION) + 1`)
-SNAPSHOT:=$(shell echo $(SNAPSHOT_VERSION)-SNAPSHOT-`date "+%Y-%m-%d-%R"`)
+SNAPSHOT_VERSION:=$(VERSION)+$(shell expr $(MINOR_VERSION) + 1)
+SNAPSHOT:=$(SNAPSHOT_VERSION)-SNAPSHOT-$(NOW)
+
+thing:
+	echo $(SNAPSHOT) '$(SNAPSHOT)' $(SNAPSHOT_VERSION)
 
 # functions ##################################################################
 do-listing=\

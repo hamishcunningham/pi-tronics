@@ -43,7 +43,7 @@ To test and debug, first restart the service with the -d (debug) and/or -s
 http://mvertes.free.fr/ that we use to maintain the manpage.)
 
 -----------------------------------------------------------------------------
-To package:
+To release:
 
 - before a release, update the version in the Makefile and do
   "make package-version" to add a changelog entry for the release
