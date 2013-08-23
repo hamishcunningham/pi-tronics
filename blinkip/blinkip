@@ -77,6 +77,12 @@ do
     echo -e "${NAME}: network data at `pdate`:\n" >${IP_FILE}
     ifconfig >>${IP_FILE}
   }
+# TODO
+sleep 20
+echo -e "${NAME}: network data at `pdate`:\n" >${IP_FILE}
+ifconfig >>${IP_FILE}
+/home/pi/pi-tronics/blinkip/blinkip.sh
+sleep 10
 
   # take a break
   sleep ${MONITOR_FREQUENCY}
