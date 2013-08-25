@@ -8,9 +8,15 @@ MYIP=`ifconfig |grep -v 127.0.0.1 |grep 'addr:' | \
 LOG=:
 NAME=$0
 
+if [ -z "$MYIP" ]
+then
+  echo $0: failed to find my IP address, giving up
+  exit 1
+fi
+
 bright() { echo 1 >$LED; }
 dark()   { echo 0 >$LED; }
-pause() { dark; sleep 2; }
+pause() { dark; sleep 2.5; }
 shortpause() { dark; sleep 1; }
 rapid()  {
   i=0

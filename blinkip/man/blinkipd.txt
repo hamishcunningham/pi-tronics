@@ -1,8 +1,8 @@
 NAME
   blinkip - an IP notification daemon for the Raspberry Pi
 SYNOPSIS
-  blinkip [-d] [-h] [-s]
-  service blinkipd [{start [-d][-h][-s]|stop|status|restart [-d][-h][-s]}]
+  blinkip [-d] [-h] [-n]
+  service blinkipd [{start [-d][-h][-n]|stop|status|restart [-d][-h][-n]}]
 DESCRIPTION
   An IP notification daemon for the Raspberry Pi.
 
@@ -18,9 +18,9 @@ DESCRIPTION
     https://github.com/hamishcunningham/pi-tronics/tree/master/blinkip
 
   The core of the daemon is defined in three files:
-    - /etc/blinkip.conf - configuration data
-    - /usr/sbin/blinkip - the daemon itself
-    - /etc/init.d/blinkipd - an interface to the init subsystem that
+    - /etc/blinkipd.default - configuration data
+    - /usr/sbin/blinkip     - the daemon itself
+    - /etc/init.d/blinkipd  - an interface to the init subsystem that
       Linux uses to manage daemons (amongst other things)
 
   The last of these, blinkipd, is used by the operating system to start and
@@ -31,10 +31,6 @@ DESCRIPTION
 
   For more details see http://pi.gate.ac.uk/pages/blinkip.html
 
-  The LED blink code was inspired from Chris Meyers' perl script described here --
-  http://chrismeyers.org/2012/06/02/raspberry-pi-no-hdmi-cable-or-no-hdmi-display-blink-ip-address-to-ok-led/
-  -- and here -- https://gist.github.com/chrismeyersfsu/2858824
-  (thanks Chris!).
 OPTIONS
   -d          Turn on debug mode.
   -h          The option -h displays help.

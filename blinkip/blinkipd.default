@@ -1,15 +1,18 @@
-# blinkip.conf
+# blinkip.default
 #
 # Configuration variables for the BlinkIP IP address notification daemon.
 # This code is copyright Hamish Cunningham and the University of Sheffield
 # and is licenced under GPL 3 or any later version.
 
-# how often should we check the IP? (in seconds, approximately)
-MONITOR_FREQUENCY=60
+# how often should we blink the IP? (in seconds, approximately)
+MONITOR_FREQUENCY=30
 
-# how often should we write the IP to file (and log a routine message)?
+# how often should we log a routine message?
 # (in multiples of MONITOR_FREQUENCY)
-LOG_INTERVAL=1000
+LOG_INTERVAL=5
+
+# how many times should we blink before quiting?
+BLINK_ITERATIONS=10
 
 # where to write the IP to file (create it if it doesn't exist; put in /tmp if
 # we can't create it)
@@ -22,6 +25,6 @@ IP_FILE=/home/pi/${FILE_BASE}
 # debug mode: set logging and delay levels short
 if [ "$DEBUG" = on ]
 then
-  MONITOR_FREQUENCY=10
+  MONITOR_FREQUENCY=2
   LOG_INTERVAL=3
 fi

@@ -22,15 +22,16 @@
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="BlinkIP: an IP notification daemon"
 NAME=blinkip
+DNAME=blinkipd
 DAEMON=/usr/sbin/$NAME
-PIDFILE=/var/run/$NAME.pid
-SCRIPTNAME=/etc/init.d/$NAME
+PIDFILE=/var/run/$DNAME.pid
+SCRIPTNAME=/etc/init.d/$DNAME
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
 
 # Read configuration variable file if it is present
-[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+[ -r /etc/default/$DNAME ] && . /etc/default/$DNAME
 
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh
@@ -61,33 +62,42 @@ do_start()
 }
 
 # Function that stops the daemon/service
+# Returns:
+#   0 if daemon has been stopped
+#   1 if daemon was already stopped
+#   2 if daemon could not be stopped
+#   other if a failure occurred
 do_stop()
 {
   logger ${NAME}: stopping...
+  log_daemon_msg ${NAME}: stopping...
+
+  # If there's no PIDFILE we give up... could try killall but perhaps overkill
+  [ -f $PIDFILE ] || {
+    log_failure_msg "${NAME}: PID file ${PIDFILE} doesn't exist, cannot stop"
+    return 2
+  }
 
   # Hmmm... can't get start-stop-daemon to kill the bugger...
+  # so added this code which does a manual kill
   PID=`cat $PIDFILE`
   kill ${PID}
   RETVAL="$?"
-  ps ax |grep -q ${PID} && \
+  ps ax |grep -q ${PID} && rm -f $PIDFILE \
     log_success_msg ${NAME} stopped && return "$RETVAL"
   sleep 2
   kill -9 ${PID}
   RETVAL="$?"
-  ps ax |grep -q ${PID} && \
+  ps ax |grep -q ${PID} && rm -f $PIDFILE \
     log_success_msg ${NAME} stopped && return "$RETVAL"
-  # TODO killall $DAEMON
-  log_success_msg failed to kill ${NAME}, trying default method...
+  log_daemon_msg failed to kill ${NAME}, trying default method...
 
-  # Return
-  #   0 if daemon has been stopped
-  #   1 if daemon was already stopped
-  #   2 if daemon could not be stopped
-  #   other if a failure occurred
+  # The default method (which didn't work for me)
   start-stop-daemon --stop --retry=TERM/30/KILL/5 --pidfile $PIDFILE \
     --name $NAME
   RETVAL="$?"
   [ "$RETVAL" = 2 ] && return 2
+
   # Wait for children to finish too if this is a daemon that forks
   # and if the daemon is only ever run from this initscript.
   # If the above conditions are not satisfied then add some other code
@@ -96,6 +106,7 @@ do_stop()
   # sleep for some time.
   start-stop-daemon --stop --quiet --oknodo --retry=0/30/KILL/5 --exec $DAEMON
   [ "$?" = 2 ] && return 2
+
   # Many daemons don't delete their pidfiles when they exit.
   rm -f $PIDFILE
 

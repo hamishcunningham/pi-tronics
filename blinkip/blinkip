@@ -32,6 +32,9 @@ DAEMON=/usr/sbin/$NAME
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
+# specifics
+LED=/sys/class/leds/led0/brightness
+
 # options defaults
 DEBUG=off
 BLINK=on
@@ -58,31 +61,97 @@ else
   exit 1
 fi
 
+# blink functions
+bright() { echo 1 >$LED; }
+dark()   { echo 0 >$LED; }
+pause() { dark; sleep 2.5; }
+shortpause() { dark; sleep 1; }
+rapid()  {
+  i=0
+  while [ $i -lt 15 ]
+  do
+    bright; sleep 0.05; dark; sleep 0.05
+    i=`expr $i + 1`
+  done
+}
+showdigit() {
+  d=$1
+  [ $d = 0 ] && d=10
+  for((b=0; b<$d; b++))
+  do
+    [ $DEBUG = "on" ] && logger $NAME: showing digit $d
+    bright; sleep 0.3; dark; sleep 0.4
+  done
+}
+blink() {
+  # blink rapidly to start with
+  [ $DEBUG = on ] && $NAME: preparing to blink $MYIP
+  rapid; rapid
+
+  # cycle through each address block
+  for block in $1 $2 $3 $4
+  do
+    [ $DEBUG = on ] && $NAME: doing block $block
+
+    numdigits=${#block}
+    for ((i=0; i < $numdigits; i++))
+    do
+      pause
+      showdigit ${block:$i:1}
+    done
+
+    shortpause; rapid
+    shift
+  done
+
+  [ $DEBUG = on ] && $NAME: done $MYIP
+}
+
 # pretty date/time function
 pdate() { date +%b-%d-%Y-%T; }
 
 # tell the world
 logger "=========== $0: running at `pdate` ==========="
 
-# do the work; i and j index loop iterations for e.g. logging
+# after starting wait a little while so e.g. the IP can settle down after boot
+sleep 20
+
+# do the work; i and j index loop iterations
 i=0; j=0
 while :
 do
+  # find the IP address or go round again
+  MYIP=`ifconfig |grep -v 127.0.0.1 |grep 'addr:' | \
+    sed -e 's,.*addr:,,' -e 's, .*,,' |sed 's,\., ,g'`
+  if [ -z "$MYIP" ]
+  then
+    echo $0: failed to find my IP address, giving up
+    sleep ${MONITOR_FREQUENCY}
+    continue
+  fi
+
+  # increment the loop indices
   i=`expr ${i} + 1`
   j=`expr ${j} + 1`
 
-  # write IP to file; routine log message
-  [ ${j} -eq ${LOG_INTERVAL} ] && {
+  # routine log message
+  [ ${j} -eq ${LOG_INTERVAL} ] && \
     logger "${NAME}: blink is ${BLINK} at `pdate` (i=${i})" && j=0
-    echo -e "${NAME}: network data at `pdate`:\n" >${IP_FILE}
-    ifconfig >>${IP_FILE}
-  }
-# TODO
-sleep 20
-echo -e "${NAME}: network data at `pdate`:\n" >${IP_FILE}
-ifconfig >>${IP_FILE}
-/home/pi/pi-tronics/blinkip/blinkip.sh
-sleep 10
+
+  # write IP to file
+  echo -e "${NAME}: network data at `pdate`:\n" >${IP_FILE}
+  ifconfig >>${IP_FILE}
+
+  # wink at me
+  [ $BLINK = on ] && blink $MYIP
+
+  # if we've done it 10 times, exit
+  if [ $i = ${BLINK_ITERATIONS} ]
+  then
+    logger "${NAME}: finished at `pdate` - exiting"
+    rm -f ${PIDFILE}
+    break
+  fi
 
   # take a break
   sleep ${MONITOR_FREQUENCY}
