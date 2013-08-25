@@ -3,7 +3,7 @@
 # and is licenced under GPL 3 or any later version.
 
 # vars #######################################################################
-VERSION=1.1
+VERSION=1.2
 P=simbamond
 D=simbamon
 PD=package/$(VERSION)
@@ -95,7 +95,7 @@ package-unstable:
 	debuild -Ipackage
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
-          [ -f $$f ] && mv $$f $(D)/$(PD)/unstable; done
+          [ -f $$f ] && mv $$f $(D)/$(PD)/unstable || :; done
 package-precise:
 	@echo 'packaging SimBaMod for Ubuntu precise...'
 	mkdir -p $(PD)/precise
@@ -106,7 +106,7 @@ package-precise:
           debian/changelog
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
-          [ -f $$f ] && mv $$f $(D)/$(PD)/precise; done
+          [ -f $$f ] && mv $$f $(D)/$(PD)/precise || :; done
 snapshot:
 	@echo "packaging SimBaMod SNAPSHOT $(SNAPSHOT)..."
 	mkdir -p $(SNAPD)

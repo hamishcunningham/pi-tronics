@@ -1,0 +1,49 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Sun, 25 Aug 2013 18:49:27 +0300
+Source: simbamond
+Binary: simbamond
+Architecture: source all
+Version: 1.2
+Distribution: unstable
+Urgency: low
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Changed-By: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Description: 
+ simbamond  - SimBaMon, a Simple Battery Monitor
+Changes: 
+ simbamond (1.2) unstable; urgency=low
+ .
+   * Second iteration of prototype MoPi boards.
+Checksums-Sha1: 
+ 2405ca5a9a6594dc996ca34d90eead092f8c9dc3 1636 simbamond_1.2.dsc
+ edd9733cddeeaed2d1e583785f10a5a13c245429 16291 simbamond_1.2.tar.gz
+ 698b2036a2a6525db017f8e12c39416366ec4e2d 10590 simbamond_1.2_all.deb
+Checksums-Sha256: 
+ 738a903a98394e321fcbeb4e7bdad7f68a0ce69cd4f6532f079d105ab74e28c0 1636 simbamond_1.2.dsc
+ f49797a73c235f78d5ae41d2109243234fc4e0e956f56183cc17553b188ea26c 16291 simbamond_1.2.tar.gz
+ 859b8c53d170d89d7c11d383ed31a084e49ca2cb41ea5b97c17ec5557fa62afc 10590 simbamond_1.2_all.deb
+Files: 
+ eacfbe32dad89f9e58ab27116904cb03 1636 admin optional simbamond_1.2.dsc
+ 7a093990c7f733a435abd145d14882b0 16291 admin optional simbamond_1.2.tar.gz
+ 4db292a2655505d89ed964da09ad475c 10590 admin optional simbamond_1.2_all.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+iQIcBAEBAgAGBQJSGiiFAAoJEK3gE8dtAR3xN+8QANVEj7Ic61B1CLNTfLbVAS0m
+3eI5Gxy5WdPPyLAYJ/91o6YMYKn9Y5DBhJxRzrvkLzBayboxqi49XBtFQA4V8Rfj
+zTkxnJwqKRO6XpTmX98flMa0qLFofzGqjhyCWrwjoXFADu7ahOzGXk7CVzV7+SY8
+MovN5uY5/SLUUC4TmuCb2EwtJ1Si8W5JQPUec1Z/40uiL3Nv/UaE5h+qIY6MiZB2
+6ab1XW2e000pT82h9Om6Ot3hHhrX0HyIr3s9bXgNLQuLrhLmRl/sYxPa6bHv50oX
+PCKRGVBjEHT/qnmJGQJRrwGKJSTfmn/XD9/H2u0L2sVmYFdkkaxPZnRKbxk3gwq7
+hrAZHvOjQBc0N3is34XDMEQZ2r5Ao3VbqLf3xraLErvstzcd/AnCWMD1OiEMPrMS
+5HTK02qgAXyf1aMNzqn3CE8j4G4EG1u+ajaH69vX/aPHWMrCCUI63nmN2f5LHrA3
+PUVXBwu7bCwgkzGrTTTR3FRZMf/AwydkWjm4dquNqiGrto7e+wBvN0+xhZGJXnGQ
+sXGxTvdbTwDHdA6TQWntzH0EesPbSaJGNomfpbuddMIO9fC6MDQNu0FXzs2qH3mt
+nXGiux+9DyJteHRndt68koZgSDZMPC1ezDeqT8SdqyQEOoqGArwHTg/IaQedfAcI
+7qfHPBi4t2GkKM3xNrLp
+=DWJn
+-----END PGP SIGNATURE-----
