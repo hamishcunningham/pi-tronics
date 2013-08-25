@@ -122,7 +122,7 @@ snapshot:
 	@head -1 debian/changelog
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
-          [ -f $$f ] && mv $$f $(D)/$(SNAPD); done
+          [ -f $$f ] && mv $$f $(D)/$(SNAPD) || :; done
 	@echo "\nsnapshot:"
 	@ls -lhR $(SNAPD)
 
