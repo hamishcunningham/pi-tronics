@@ -5,12 +5,13 @@
 # vars #######################################################################
 VERSION=1.1
 P=simbamond
+D=simbamon
 PD=package/$(VERSION)
 INSTALLED_FILES=\
-  $(DESTDIR)/usr/sbin/simbamon \
+  $(DESTDIR)/usr/sbin/$(D) \
   $(DESTDIR)/etc/init.d/$(P) \
   $(DESTDIR)/etc/default/$(P) \
-  $(DESTDIR)/usr/share/man/man8/simbamon.8.gz \
+  $(DESTDIR)/usr/share/man/man8/$(D).8.gz \
   $(DESTDIR)/usr/share/man/man8/$(P).8.gz
 INIT_LINKS=\
   $(DESTDIR)/etc/rc?.d/*$(P)
@@ -56,10 +57,10 @@ install:
 	install -d -m 755         $(DESTDIR)/etc/default
 	install -d -m 755         $(DESTDIR)/usr/share/man/man8
 	install $(P).default      $(DESTDIR)/etc/default/$(P)
-	install -m 755 simbamon   $(DESTDIR)/usr/sbin
+	install -m 755 $(D)       $(DESTDIR)/usr/sbin
 	install -m 755 $(P).init  $(DESTDIR)/etc/init.d/$(P)
 	install man/$(P).8.gz     $(DESTDIR)/usr/share/man/man8
-	install man/simbamon.8.gz $(DESTDIR)/usr/share/man/man8
+	install man/$(D).8.gz     $(DESTDIR)/usr/share/man/man8
 	[ -z "$(DESTDIR)" ] && update-rc.d $(P) defaults || :
 	@echo 'SimBaMod installed: '
 	@$(do-listing)
@@ -75,9 +76,9 @@ uninstall:
 # manpage ####################################################################
 man: man/$(P).txt
 	cd man; ../utils/txt2man -v "System Manager's Manual" -s 8 \
-          -t 'simbamon' $(P).txt >$(P).8; \
+          -t '$(D)' $(P).txt >$(P).8; \
 	sed -i 1d $(P).8;  # fix error from lintian about ." macro \
-	cat $(P).8 |gzip >$(P).8.gz; cp $(P).8.gz simbamon.8.gz
+	cat $(P).8 |gzip >$(P).8.gz; cp $(P).8.gz $(D).8.gz
 
 # package ####################################################################
 package: package-unstable package-precise
@@ -94,7 +95,7 @@ package-unstable:
 	debuild -Ipackage
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
-          [ -f $$f ] && mv $$f simbamon/$(PD)/unstable; done
+          [ -f $$f ] && mv $$f $(D)/$(PD)/unstable; done
 package-precise:
 	@echo 'packaging SimBaMod for Ubuntu precise...'
 	mkdir -p $(PD)/precise
@@ -105,7 +106,7 @@ package-precise:
           debian/changelog
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
-          [ -f $$f ] && mv $$f simbamon/$(PD)/precise; done
+          [ -f $$f ] && mv $$f $(D)/$(PD)/precise; done
 snapshot:
 	@echo "packaging SimBaMod SNAPSHOT $(SNAPSHOT)..."
 	mkdir -p $(SNAPD)
@@ -121,7 +122,7 @@ snapshot:
 	@head -1 debian/changelog
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
-          [ -f $$f ] && mv $$f simbamon/$(SNAPD); done
+          [ -f $$f ] && mv $$f $(D)/$(SNAPD); done
 	@echo "\nsnapshot:"
 	@ls -lhR $(SNAPD)
 
