@@ -1,0 +1,18 @@
+Source: blinkipd
+Section: admin
+Priority: optional
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Build-Depends: debhelper (>= 8.0.0), devscripts, gawk
+Standards-Version: 3.9.3
+Homepage: http://pi.gate.ac.uk/pages/blinkip.html
+Vcs-Git: git://github.com/hamishcunningham/pi-tronics.git
+Vcs-Browser: https://github.com/hamishcunningham/pi-tronics/tree/master/blinkip
+
+Package: blinkipd
+Architecture: all
+Depends: ${misc:Depends}
+Recommends: gpio
+Description: BlinkIP: an IP notification daemon for the Raspberry Pi.
+ The daemon will pause around 30 seconds after startup, then 
+ blink the IP address 10 times, pausing 30 secs between each, 
+ then exit. See http://pi.gate.ac.uk/pages/blinkip.html
