@@ -1,0 +1,46 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Sun, 25 Aug 2013 18:41:35 +0300
+Source: blinkipd
+Binary: blinkipd
+Architecture: source
+Version: 0.3
+Distribution: precise
+Urgency: low
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Changed-By: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Description: 
+ blinkipd   - BlinkIP: an IP notification daemon for the Raspberry Pi.
+Changes: 
+ blinkipd (0.3) precise; urgency=low
+ .
+   * Maintenance Release.
+Checksums-Sha1: 
+ 5d24d5c8f0d22a460451a6497d5b5381048776ac 1623 blinkipd_0.3.dsc
+ 51a72e7767977d810b43c0618dd9a87041b8df6d 15761 blinkipd_0.3.tar.gz
+Checksums-Sha256: 
+ a8d43b9b0fd2ec5b1378053732326ae10c8e391cdba2e0ec4b5706a36f688b1e 1623 blinkipd_0.3.dsc
+ 5adf10e8965e9d15ddd8dfbc3213a54b5c482ecafd446602c280a93564343eb6 15761 blinkipd_0.3.tar.gz
+Files: 
+ cc9e02713392c334f5bc49df05eee580 1623 admin optional blinkipd_0.3.dsc
+ 7d6ce4e520512d5dcc76a70c7f1d908c 15761 admin optional blinkipd_0.3.tar.gz
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+iQIcBAEBAgAGBQJSGikGAAoJEK3gE8dtAR3x5xAP/jFZ9NcUEWThL3NYPRBjdRAK
+AflCmOvncUA55FUJfmGzHoNsfX0Qqdm5OD+oOBgtbDjm1atcSBqx1k82INiDIBkR
+xlQK5+az2Tp6FbBjPJXKPFY5Rdvx1UmrBVX3l0YFYW6RQziMqfiUl2ZxQRvGRZlV
++d/CYmVWiZyLQzpFHVKGY5q9xmv+RaNT4/erQIMNHvdU01PmUglZt3O5TFtK9983
+MVp+U3YQyd38KmHouZV9NhFLZqWRaSQCiygRX4pn6mAPYhWraD2ue7dw8dvZT64H
+Q5H/BZop4PeeWJr051W0I5c7LCqLwkgP52pcBMVJIWZJN8yA+jZI+yzi5D7oyV1K
+pMPtDzhdZuKEaMLV8Apw9uVJ8h+gL9G0UlBupfiM6jOPY6LJf6muYvL6rnVuG3Wx
+oL840uGMxhSR43q6adOZhG9o8iCKdc+OS8lOBcyfEm1iyi4xfeCCorm3ibjuXWwM
+/KtL9PV+B/+3Liu8xtItpsIQeBz/4OdJrpLayPs/U6Fc4F5lSkg9hMxvjZrsdf1P
+jExbGlHrp7BlHRsIY6vdqyBXpqunnZJxxKyVwH2hLCurJbjV/GSYyz1xEP+M7Y5Y
+ATs6CdGjni6svY3ZftZNZvXipXnSaBiOxXjN29eWwKccOj+Igul38uQ5AG4FQ8YU
+LZ3YmwfRmglGmvo4yhZC
+=kZ8m
+-----END PGP SIGNATURE-----

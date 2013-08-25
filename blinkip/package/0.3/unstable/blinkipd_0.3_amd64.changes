@@ -1,0 +1,49 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Sun, 25 Aug 2013 18:41:35 +0300
+Source: blinkipd
+Binary: blinkipd
+Architecture: source all
+Version: 0.3
+Distribution: unstable
+Urgency: low
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Changed-By: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Description: 
+ blinkipd   - BlinkIP: an IP notification daemon for the Raspberry Pi.
+Changes: 
+ blinkipd (0.3) unstable; urgency=low
+ .
+   * Maintenance Release.
+Checksums-Sha1: 
+ 6c80d902f4b23dc49672bc08c8f8c52ad465fac9 1623 blinkipd_0.3.dsc
+ 75e0ec7438e1fab30f165b541f22daae112bc84e 15797 blinkipd_0.3.tar.gz
+ 4bb0c5c73100a6d1195d88429a5b15ff6fb84b67 10298 blinkipd_0.3_all.deb
+Checksums-Sha256: 
+ babc27797f688e81f1f3f314e24d253cfd465bde16277806fc60ec40faa8af98 1623 blinkipd_0.3.dsc
+ 119beee91b4e8a459e96c09a4076993544cb80f7c2225ea8ffc9118280aaf91e 15797 blinkipd_0.3.tar.gz
+ d5ff029ea097c4c3769c98a99e04e124e6c13982ed0fd3c040b883541519d3fb 10298 blinkipd_0.3_all.deb
+Files: 
+ 67ac1d846a764c9e2bb9fe8a7097d75c 1623 admin optional blinkipd_0.3.dsc
+ 8d3335f29cd2e8a3f73fc9f29fb6e73d 15797 admin optional blinkipd_0.3.tar.gz
+ 95dff1c47740a6cc0031684dcadc387a 10298 admin optional blinkipd_0.3_all.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+iQIcBAEBAgAGBQJSGikBAAoJEK3gE8dtAR3xIxcQAK2eBBtJdm+uh6JMPPOT2vBV
+Jm943rsZ/AKv+CZz3EDXmMAfflYxwFkVkdetTUbcQgWHViTXdI1zUmHXY93hd/rn
+aZFnDnPPgV0nqdZa2dva+wUqdwFhufnF2637Qr45oXSsij5wSg05yMtaNqGYmJv5
+ApsM56+wxrPuJzJR4wmuI+3m/hr6efPhNWWynt8u64G4+qPzleOszSNw30XmTx90
+sdDYAc/ODlb27GqU1NK22s9w6UhO15HfLS+pyBRIsevtIXxhTi7NdCABuMbD4HRt
+P2Dy2WmpdVa6ReWzW1XndB51wdjW5YkTAAYDuECRJKaZ5vjuyeaezuWaMM90Zrio
+U5EoyPoIT8cgd39+D8DZoDe2p0rw3mKx13gLJ+g60BRdvNEJPKPF4xTBTpaudmiM
+E+KGqEO0fLaSh9SLmjqkbrVzO5ujo0HNUl4yQGmnLADcJr6o6EfA+wWFpUcnlD0R
+G4iVhUbIXJ1gf5wbhX94aaXTyuMg8Z4Hd6dhOhhf/kZID6+4d2RL/UTz3vnONhjL
+5cBCPexhk0XG6gu3WisgbUtGLdRMNibGRTYgTETUEsHQnJHhRcmREy4rOoFJFRD+
++YmApVqaC91fY7Bsz4kApIBeEBnx8rXv7EQgAPFUKhqPdtAxAkGRP+V8ZMPHufhV
+dFPqO3xem7Xh41dPlPIq
+=5O0V
+-----END PGP SIGNATURE-----

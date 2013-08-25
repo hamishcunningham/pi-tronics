@@ -3,7 +3,7 @@
 # and is licenced under GPL 3 or any later version.
 
 # vars #######################################################################
-VERSION=0.2
+VERSION=0.3
 P=blinkipd
 D=blinkip
 PD=package/$(VERSION)
@@ -95,7 +95,7 @@ package-unstable:
 	debuild -Ipackage
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
-          [ -f $$f ] && mv $$f $(D)/$(PD)/unstable; done
+          [ -f $$f ] && mv $$f $(D)/$(PD)/unstable || :; done
 package-precise:
 	@echo 'packaging BlinkIP for Ubuntu precise...'
 	mkdir -p $(PD)/precise
@@ -106,7 +106,7 @@ package-precise:
           debian/changelog
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
-          [ -f $$f ] && mv $$f $(D)/$(PD)/precise; done
+          [ -f $$f ] && mv $$f $(D)/$(PD)/precise || :; done
 snapshot:
 	@echo "packaging BlinkIP SNAPSHOT $(SNAPSHOT)..."
 	mkdir -p $(SNAPD)
@@ -122,7 +122,7 @@ snapshot:
 	@head -1 debian/changelog
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
-          [ -f $$f ] && mv $$f $(D)/$(SNAPD); done
+          [ -f $$f ] && mv $$f $(D)/$(SNAPD) || :; done
 	@echo "\nsnapshot:"
 	@ls -lhR $(SNAPD)
 
