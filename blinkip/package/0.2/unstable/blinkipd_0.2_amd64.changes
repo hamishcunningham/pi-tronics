@@ -1,0 +1,49 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Sun, 25 Aug 2013 08:52:05 +0300
+Source: blinkipd
+Binary: blinkipd
+Architecture: source all
+Version: 0.2
+Distribution: unstable
+Urgency: low
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Changed-By: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Description: 
+ blinkipd   - BlinkIP: an IP notification daemon for the Raspberry Pi.
+Changes: 
+ blinkipd (0.2) unstable; urgency=low
+ .
+   * Testing Release.
+Checksums-Sha1: 
+ b258ba43348d12c5ded657f80d6ca6211731f18a 1623 blinkipd_0.2.dsc
+ d5beffee61bbe08a3ef5fc34ad055abb9c53e105 15724 blinkipd_0.2.tar.gz
+ f8908f611c1e6cac857a31cdcf9f75c68d673cad 10270 blinkipd_0.2_all.deb
+Checksums-Sha256: 
+ 5e0d61f1934a77086774ff516a075aac4d32a9263352a90fe811acd50ee38b00 1623 blinkipd_0.2.dsc
+ ad1a495548695865a46ab5e4b6a1bb3e05c02055b40e3fb2f03a8028a29f3520 15724 blinkipd_0.2.tar.gz
+ 9ce4fd8fd9a1a214652337cae1f79e5fae9b86120f027bb7db57029b24a6dc34 10270 blinkipd_0.2_all.deb
+Files: 
+ 2feac90df2e8e4758344950f467ee759 1623 admin optional blinkipd_0.2.dsc
+ 5efaf94bddc83b0dcbd1848f28598ce5 15724 admin optional blinkipd_0.2.tar.gz
+ b28800f45065a4c53a28ffc2ca4d0440 10270 admin optional blinkipd_0.2_all.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+iQIcBAEBAgAGBQJSGZ6PAAoJEK3gE8dtAR3x2TYP/jV6hDnUI/Z5+fKySb+9sr1I
+T9mAHjCQcFoFz6t835uCLLrWps8kryMNYy6UgcCn4bWOLOvuTO1hHkfRlCAqk1YI
+69FptYjNzRROzOKtBghlWwFLjo2pJ47N2R5DiVSeZWB+fba3Cxz1vb7xMsS3ls7k
+fvv5TW91ixl1FKrwQOIg4MkvH/6FBD3B66TqkEaa8QEA9FBgWJy1kCUWk7Run1Te
+gVLdBXquHqrJyQDRz6H32FGXpeMOmHuBi6zIcG4ebpB16LKOEdBsValCUwC/Hhnx
+Bx9GfNHpDnZM5EDBA7ZAFGQyJJqhmCHIu4q0ZhuAGPVFZZ9X6vpzvOTWynhjASSr
+ZhsuEY1gR2tXUhKeJXGQ0zdEzbj1Xj2F2jkPPtIUL8Z2LVhccrX4PYGn96hfISdV
+kSweMimPg7xoQS3IyNy2C5czMYr5ia4Xsa3m03g9EryQ7zWba+Qn7kNhIO5pgqnE
+fAKtO6vBe/KxVag0M19F8UmE+/BR3G0ykZfMap5GmFeCEwzbtXfDtWrWWoWHKS3t
+Q2kpYceGGmd7mTmf9Xk42JRrHntlSR0GauopfMGf8kWD9rqQpG0CquCCM1f2cGi+
+przKjVeLY5lWBg6JNH3njoJInsh7FN9WcIixNNQQmaAJIGT2fJO/IiU8uq/FHhBh
+jTogNWxoVrT9rZ1DOodk
+=XHZI
+-----END PGP SIGNATURE-----

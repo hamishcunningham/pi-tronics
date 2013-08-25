@@ -3,7 +3,7 @@
 # and is licenced under GPL 3 or any later version.
 
 # vars #######################################################################
-VERSION=1.1
+VERSION=0.2
 P=blinkipd
 D=blinkip
 PD=package/$(VERSION)
@@ -62,12 +62,12 @@ install:
 	install man/$(P).8.gz     $(DESTDIR)/usr/share/man/man8
 	install man/$(D).8.gz     $(DESTDIR)/usr/share/man/man8
 	[ -z "$(DESTDIR)" ] && update-rc.d $(P) defaults || :
-	@echo 'SimBaMod installed: '
+	@echo 'BlinkIP installed: '
 	@$(do-listing)
 
 # uninstall ##################################################################
 uninstall:
-	@echo 'removing SimBaMod files: '
+	@echo 'removing BlinkIP files: '
 	@$(do-listing)
 	[ -z "$(DESTDIR)" ] && update-rc.d -f $(P) remove || :
 	sudo rm -f $(INSTALLED_FILES)
@@ -81,13 +81,13 @@ man: man/$(P).txt
 	cat $(P).8 |gzip >$(P).8.gz; cp $(P).8.gz $(D).8.gz
 
 # package ####################################################################
-package: package-unstable package-precise
+package: man package-unstable package-precise
 	@echo "\nunstable:"
 	@ls -lh $(PD)/unstable
 	@echo "\nprecise:"
 	@ls -lh $(PD)/precise
 package-unstable:
-	@echo 'packaging SimBaMod for Debian unstable...'
+	@echo 'packaging BlinkIP for Debian unstable...'
 	mkdir -p $(PD)/unstable
 	rm -f $(PD)/unstable/*
 	sed -i \
@@ -97,7 +97,7 @@ package-unstable:
 	cd .. && for f in $(PACKAGE_FILES); do \
           [ -f $$f ] && mv $$f $(D)/$(PD)/unstable; done
 package-precise:
-	@echo 'packaging SimBaMod for Ubuntu precise...'
+	@echo 'packaging BlinkIP for Ubuntu precise...'
 	mkdir -p $(PD)/precise
 	rm -f $(PD)/precise/*
 	sed -i 's,\(^$(P) ('$(VERSION)') \)[a-z]*,\1precise,' debian/changelog
@@ -108,7 +108,7 @@ package-precise:
 	cd .. && for f in $(PACKAGE_FILES); do \
           [ -f $$f ] && mv $$f $(D)/$(PD)/precise; done
 snapshot:
-	@echo "packaging SimBaMod SNAPSHOT $(SNAPSHOT)..."
+	@echo "packaging BlinkIP SNAPSHOT $(SNAPSHOT)..."
 	mkdir -p $(SNAPD)
 	rm -rf $(SNAPD)/*
 	sed -i -e 's,\(^$(P) ('$(VERSION)') \)[a-z]*,\1precise,' \

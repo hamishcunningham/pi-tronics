@@ -81,7 +81,7 @@ man: man/$(P).txt
 	cat $(P).8 |gzip >$(P).8.gz; cp $(P).8.gz $(D).8.gz
 
 # package ####################################################################
-package: package-unstable package-precise
+package: man package-unstable package-precise
 	@echo "\nunstable:"
 	@ls -lh $(PD)/unstable
 	@echo "\nprecise:"

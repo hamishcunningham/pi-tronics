@@ -1,0 +1,84 @@
+.TH blinkip 8 "August 25, 2013" "" "System Manager's Manual"
+.SH NAME
+\fBblinkip \fP- an IP notification daemon for the Raspberry Pi
+.SH SYNOPSIS
+.nf
+.fam C
+\fBblinkip\fP [\fB-d\fP] [\fB-h\fP] [\fB-n\fP]
+\fBservice\fP \fIblinkipd\fP [{start [\fB-d\fP][\fB-h\fP][\fB-n\fP]|stop|status|restart [\fB-d\fP][\fB-h\fP][\fB-n\fP]}]
+.fam T
+.fi
+.SH DESCRIPTION
+An IP notification daemon for the Raspberry Pi.
+.PP
+BlinkIP is an open source Linux daemon for
+.RS
+.IP \(bu 3
+blinking one of the Raspberry Pi's on-board LEDs with the current
+IP address
+.IP \(bu 3
+writing the current network config data (including the IP address) to a
+convenient place to read it (e.g. ~/.blink-ip.txt)
+.RE
+.PP
+You can find the source code on GitHub:
+.PP
+.nf
+.fam C
+    https://github.com/hamishcunningham/pi-tronics/tree/master/blinkip
+
+.fam T
+.fi
+The core of the daemon is defined in three files:
+.RS
+.IP \(bu 3
+/etc/blinkipd.default - configuration data
+.TP
+.B
+- /usr/sbin/\fBblinkip\fP
+- the daemon itself
+.TP
+.B
+- /etc/init.d/\fIblinkipd\fP
+- an interface to the init subsystem that
+Linux uses to manage daemons (amongst other things)
+.RE
+.PP
+The last of these, \fIblinkipd\fP, is used by the operating system to start and
+stop BlinkIP at boot or shutdown time, and can be used to control the daemon
+manually when required. For example this command will stop the daemon:
+.PP
+.nf
+.fam C
+    sudo service blinkip stop
+
+.fam T
+.fi
+For more details see http://pi.gate.ac.uk/pages/blinkip.html
+.SH OPTIONS
+.TP
+.B
+\fB-d\fP
+Turn on debug mode.
+.TP
+.B
+\fB-h\fP
+The option \fB-h\fP displays help.
+.TP
+.B
+\fB-n\fP
+Turn off blink mode.
+.SH EXAMPLE
+Restart the daemon with debugging on and blinking off:
+.PP
+.nf
+.fam C
+    $ sudo service blinkipd restart -dn
+.fam T
+.fi
+.SH SEE ALSO
+\fBservice\fP(8)
+.SH BUGS
+No, you're halicunating.
+.SH AUTHOR
+Hamish Cunningham <http://pi.gate.ac.uk/>
