@@ -43,9 +43,9 @@ PREVIOUSLY_RUN_INDICATOR=/tmp/${NAME}-previously-run.txt
 SHUT_DELAY=30
 
 # which GPIO pins we're using to get levels from the board
-IO_A=0
+IO_A=2
 IO_B=1
-IO_C=2
+IO_C=0
 
 # debug and simulation modes: 
 # don't actually call shutdown;
