@@ -57,7 +57,7 @@ else
 fi
 
 # pretty date/time function
-pdate() { date "+%Y-%m-%d-%T" |sed 's,:,,'; }
+pdate() { date "+%Y-%m-%d-%T" |sed 's,:,,g'; }
 
 # tell the world
 logger "=========== $0: running at `pdate` ==========="
@@ -82,6 +82,11 @@ gpio mode $IO_A in
 gpio mode $IO_B in
 TAKE_PIC_STATE=`gpio read $IO_A`
 POWER_SWITCH_STATE=`gpio read $IO_B`
+
+#TODO
+# power button (not statefull)
+# pagekite
+# check the help file
 
 # do the work; i and j index loop iterations for e.g. logging
 i=0; j=0

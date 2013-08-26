@@ -22,6 +22,7 @@ fi
 # where files live on the web server
 WEB_HOME=/var/www
 INDEX=${WEB_HOME}/index.html
+HELP=${WEB_HOME}/help.html
 THUMBS=${WEB_HOME}/thumbs
 mkdir -p ${THUMBS}
 [ -f ${INDEX} ] || cat <<EOF >${INDEX}
@@ -31,7 +32,46 @@ mkdir -p ${THUMBS}
 <body>
 <!-- NEW PIC GOES HERE -->
 
-<a href="http://pi.gate.ac.uk">Pi.GATE.ac.uk</a>
+<a href="help.html">Help</a>.
+<a href="http://pi.gate.ac.uk">Pi.GATE.ac.uk</a>.
+</body>
+</html>
+EOF
+
+# help file
+[ -f ${HELP} ] || cat <<EOF >${HELP}
+<html><head>
+<title>How to use your shiny Pi-Cam</title>
+</head>
+<body>
+<h1>The Pi-Cam: a legend in its own lunchtime!</h1>
+<p>
+<ul>
+<li>
+<b>To turn on</b>, first connect the purple and orange wires, then press the
+button on the battery (the big black square thing). Booting takes a minute or
+so.
+<li>
+<b>To take a picture</b>, click the big red button. In a minute or two it
+will show up on the webserver. Click on the thumbnail to get the full-size
+image.
+<li>
+<b>To turn off</b>, first disconnect the purple and orange wires, then wait
+for 20 seconds or so, then press the button on the battery.
+<li>
+<b>To charge the battery</b>, connect a micro-usb 5 volt charger to the
+battery.
+<li>
+<b>To log in</b>, do <tt>ssh -l pi the.ip.address</tt>. You can use the same 
+IP address as the webserver, or <b>to find the local IP address</b>, reboot 
+and watch the blinking light, or <a
+href="http://pi.gate.ac.uk/pages/blinkip.html">see here</a>.
+</ul>
+</p>
+<hr/>
+<p>
+<a href="http://pi.gate.ac.uk">Pi.GATE.ac.uk</a>.
+</p>
 </body>
 </html>
 EOF
