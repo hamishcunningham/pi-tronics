@@ -1,5 +1,11 @@
 blinkipd (0.3) unstable; urgency=low
 
+  * Snapshot releases in the 0.3+4 series. 
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Mon, 26 Aug 2013 14:50:52 +0300
+
+blinkipd (0.3) unstable; urgency=low
+
   * Maintenance Release.
 
  -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Sun, 25 Aug 2013 18:41:35 +0300
