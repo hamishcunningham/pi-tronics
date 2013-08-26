@@ -1,5 +1,11 @@
 simbamond (1.2) unstable; urgency=low
 
+  * Snapshot releases in the 1.2+3 series.
+
+ -- Hamish Cunningham <hamish@gate.ac.uk>  Mon, 26 Aug 2013 14:49:57 +0300
+
+simbamond (1.2) unstable; urgency=low
+
   * Second iteration of prototype MoPi boards.
 
  -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Sun, 25 Aug 2013 18:49:27 +0300
