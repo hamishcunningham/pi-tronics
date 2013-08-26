@@ -77,16 +77,12 @@ then
   exit 1
 fi
 
-# put the relevant pins into read mode and take their current state`
+# put the relevant pins into read mode and take the current state of the
+# picture switch (we sleep a bit to avoid settling down picture triggers)
 gpio mode $IO_A in
 gpio mode $IO_B in
+sleep 5
 TAKE_PIC_STATE=`gpio read $IO_A`
-POWER_SWITCH_STATE=`gpio read $IO_B`
-
-#TODO
-# power button (not statefull)
-# pagekite
-# check the help file
 
 # do the work; i and j index loop iterations for e.g. logging
 i=0; j=0
@@ -96,8 +92,9 @@ do
   i=`expr ${i} + 1`; j=`expr ${j} + 1`
 
   # check the "please shutdown" switch
-  CURR_POWER_SWITCH_STATE=`gpio read ${IO_B}`
-  if [ $CURR_POWER_SWITCH_STATE != $POWER_SWITCH_STATE ]
+  POWER_OFF_REQUESTED=0
+  POWER_OFF_REQUESTED=`gpio read ${IO_B}`
+  if [ $POWER_OFF_REQUESTED = 1 ]
   then
     wall <<< "${NAME}: power off requested: shutting down now!"
     logger "${NAME}: shutting down (POWER_OFF)"
@@ -115,7 +112,7 @@ do
     NOW=`pdate`
     IMAGE_FILE=${NOW}.jpg
     IMAGE_PATH=${WEB_HOME}/${IMAGE_FILE}
-    logger "${NAME} taking a picture to ${IMAGE_PATH}"
+    logger "${NAME} taking picture ${PICS_TAKEN} to ${IMAGE_PATH}"
     CAM_OUTPUT="`raspistill -n -t 1 -o $IMAGE_PATH 2>&1`"
     PICS_TAKEN=`expr $PICS_TAKEN + 1`
     [ $DEBUG = on ] && logger "${NAME}: cam output is \n${CAM_OUTPUT}\n"
