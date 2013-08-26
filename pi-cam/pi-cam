@@ -77,37 +77,40 @@ then
   exit 1
 fi
 
-# put the relevant pins into read mode
+# put the relevant pins into read mode and take their current state`
 gpio mode $IO_A in
 gpio mode $IO_B in
+TAKE_PIC_STATE=`gpio read $IO_A`
+POWER_SWITCH_STATE=`gpio read $IO_B`
 
 # do the work; i and j index loop iterations for e.g. logging
 i=0; j=0
 PICS_TAKEN=0
 while :
 do
-  i=`expr ${i} + 1`
-  j=`expr ${j} + 1`
+  i=`expr ${i} + 1`; j=`expr ${j} + 1`
 
   # check the "please shutdown" switch
-  SHUTDOWN_REQUESTED=0
-  SHUTDOWN_REQUESTED=`gpio read ${IO_A}`
-  if [ SHUTDOWN_REQUESTED = 1 ]
+  CURR_POWER_SWITCH_STATE=`gpio read ${IO_B}`
+  if [ $CURR_POWER_SWITCH_STATE != $POWER_SWITCH_STATE ]
   then
     wall <<< "${NAME}: power off requested: shutting down now!"
     logger "${NAME}: shutting down (POWER_OFF)"
     sleep 1
     shutdown -h now
+    exit 0
   fi
 
   # check the "please take a pic" switch"
-  PIC_REQUESTED=0
-  PIC_REQUESTED=`gpio read ${IO_A}`
-  if [ PIC_REQUESTED = 1 ]
+  CURR_TAKE_PIC_STATE==`gpio read ${IO_A}`
+  if [ $CURR_TAKE_PIC_STATE != $TAKE_PIC_STATE ]
   then
+    TAKE_PIC_STATE=$CURR_TAKE_PIC_STATE
+
     IMAGE_FILE=${WEB_HOME}/`pdate`.jpg
     #CAM_OUTPUT="`raspistill -v -q 25 -t 1 -o $IMAGE_FILE 2>&1`"
     CAM_OUTPUT="`raspistill -v -t 1 -o $IMAGE_FILE 2>&1`"
+    PICS_TAKEN=`expr $PICS_TAKEN + 1`
     [ $DEBUG = on ] && logger "${NAME}: cam output is \n${CAM_OUTPUT}\n"
 
     convert -thumbnail 75 ${IMAGE_FILE} ${THUMBS}/075-${IMAGE_FILE} &
