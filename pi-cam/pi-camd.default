@@ -52,9 +52,9 @@ EOF
 button on the battery (the big black square thing). Booting takes a minute or
 so.
 <li>
-<b>To take a picture</b>, click the big red button. In a minute or two it
-will show up on the webserver. Click on the thumbnail to get the full-size
-image.
+<b>To take a picture</b>, click the big red button. A red light comes on next
+to the camera lens for a couple of seconds. In a minute or two it will show up
+on the webserver. Click on the thumbnail to get the full-size image.
 <li>
 <b>To turn off</b>, first disconnect the purple and orange wires, then wait
 for 20 seconds or so, then press the button on the battery.

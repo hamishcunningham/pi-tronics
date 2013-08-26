@@ -94,7 +94,7 @@ do
   # check the "please shutdown" switch
   POWER_OFF_REQUESTED=0
   POWER_OFF_REQUESTED=`gpio read ${IO_B}`
-  if [ $POWER_OFF_REQUESTED = 1 ]
+  if [ $POWER_OFF_REQUESTED != 1 ]
   then
     wall <<< "${NAME}: power off requested: shutting down now!"
     logger "${NAME}: shutting down (POWER_OFF)"
@@ -114,8 +114,9 @@ do
     IMAGE_PATH=${WEB_HOME}/${IMAGE_FILE}
     logger "${NAME} taking picture ${PICS_TAKEN} to ${IMAGE_PATH}"
     CAM_OUTPUT="`raspistill -n -t 1 -o $IMAGE_PATH 2>&1`"
+    [ $? != 0 -o $DEBUG = on ] && \
+      logger "${NAME}: cam output is \n${CAM_OUTPUT}\n"
     PICS_TAKEN=`expr $PICS_TAKEN + 1`
-    [ $DEBUG = on ] && logger "${NAME}: cam output is \n${CAM_OUTPUT}\n"
 
     convert -thumbnail 75  ${IMAGE_PATH} ${THUMBS}/075-${IMAGE_FILE} &
     convert -thumbnail 500 ${IMAGE_PATH} ${THUMBS}/500-${IMAGE_FILE} &
