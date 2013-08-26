@@ -62,12 +62,12 @@ install:
 	install man/$(P).8.gz     $(DESTDIR)/usr/share/man/man8
 	install man/$(D).8.gz     $(DESTDIR)/usr/share/man/man8
 	[ -z "$(DESTDIR)" ] && update-rc.d $(P) defaults || :
-	@echo 'SimBaMod installed: '
+	@echo 'SimBaMon installed: '
 	@$(do-listing)
 
 # uninstall ##################################################################
 uninstall:
-	@echo 'removing SimBaMod files: '
+	@echo 'removing SimBaMon files: '
 	@$(do-listing)
 	[ -z "$(DESTDIR)" ] && update-rc.d -f $(P) remove || :
 	sudo rm -f $(INSTALLED_FILES)
@@ -87,7 +87,7 @@ package: man package-unstable package-precise
 	@echo "\nprecise:"
 	@ls -lh $(PD)/precise
 package-unstable:
-	@echo 'packaging SimBaMod for Debian unstable...'
+	@echo 'packaging SimBaMon for Debian unstable...'
 	mkdir -p $(PD)/unstable
 	rm -f $(PD)/unstable/*
 	sed -i \
@@ -97,7 +97,7 @@ package-unstable:
 	cd .. && for f in $(PACKAGE_FILES); do \
           [ -f $$f ] && mv $$f $(D)/$(PD)/unstable || :; done
 package-precise:
-	@echo 'packaging SimBaMod for Ubuntu precise...'
+	@echo 'packaging SimBaMon for Ubuntu precise...'
 	mkdir -p $(PD)/precise
 	rm -f $(PD)/precise/*
 	sed -i 's,\(^$(P) ('$(VERSION)') \)[a-z]*,\1precise,' debian/changelog
@@ -108,7 +108,7 @@ package-precise:
 	cd .. && for f in $(PACKAGE_FILES); do \
           [ -f $$f ] && mv $$f $(D)/$(PD)/precise || :; done
 snapshot:
-	@echo "packaging SimBaMod SNAPSHOT $(SNAPSHOT)..."
+	@echo "packaging SimBaMon SNAPSHOT $(SNAPSHOT)..."
 	mkdir -p $(SNAPD)
 	rm -rf $(SNAPD)/*
 	sed -i -e 's,\(^$(P) ('$(VERSION)') \)[a-z]*,\1precise,' \
