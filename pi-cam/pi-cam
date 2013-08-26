@@ -102,23 +102,26 @@ do
   fi
 
   # check the "please take a pic" switch"
-  CURR_TAKE_PIC_STATE==`gpio read ${IO_A}`
+  CURR_TAKE_PIC_STATE=`gpio read ${IO_A}`
   if [ $CURR_TAKE_PIC_STATE != $TAKE_PIC_STATE ]
   then
     TAKE_PIC_STATE=$CURR_TAKE_PIC_STATE
 
-    IMAGE_FILE=${WEB_HOME}/`pdate`.jpg
-    #CAM_OUTPUT="`raspistill -v -q 25 -t 1 -o $IMAGE_FILE 2>&1`"
-    CAM_OUTPUT="`raspistill -v -t 1 -o $IMAGE_FILE 2>&1`"
+    IMAGE_FILE=`pdate`.jpg
+    IMAGE_PATH=${WEB_HOME}/${IMAGE_FILE}
+    logger "${NAME} taking a picture to ${IMAGE_PATH}"
+    CAM_OUTPUT="`raspistill -n -t 1 -o $IMAGE_PATH 2>&1`"
     PICS_TAKEN=`expr $PICS_TAKEN + 1`
     [ $DEBUG = on ] && logger "${NAME}: cam output is \n${CAM_OUTPUT}\n"
 
-    convert -thumbnail 75 ${IMAGE_FILE} ${THUMBS}/075-${IMAGE_FILE} &
-    convert -thumbnail 75 ${IMAGE_FILE} ${THUMBS}/300-${IMAGE_FILE} &
-    sed -i "/NEW PIC GOES HERE/a \
-      <p><a href=\"${IMAGE_FILE}\" alt=\"${IMAGE_FILE}\"><img
-             src=\"${THUMBS}/300-${IMAGE_FILE}\"></a></p>
-      " ${INDEX}
+    convert -thumbnail 75 ${IMAGE_PATH} ${THUMBS}/075-${IMAGE_FILE} &
+    convert -thumbnail 75 ${IMAGE_PATH} ${THUMBS}/300-${IMAGE_FILE} &
+
+    MARKUP="<p><a href=\"${IMAGE_FILE}\" alt=\"${IMAGE_FILE}\"><img"
+    MARKUP="${MARKUP} src=\"${THUMBS}/300-${IMAGE_FILE}\"></a></p>"
+    echo "${MARKUP}" >/tmp/${NAME}-$$.txt
+    sed -i "/NEW PIC GOES HERE/ r /tmp/${NAME}-$$.txt" ${INDEX}
+    rm /tmp/${NAME}-$$.txt
   fi
 
   # routine log messages

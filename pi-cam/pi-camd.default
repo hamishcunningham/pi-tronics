@@ -24,8 +24,7 @@ WEB_HOME=/var/www
 INDEX=${WEB_HOME}/index.html
 THUMBS=${WEB_HOME}/thumbs
 mkdir -p ${THUMBS}
-[ -f ${INDEX} ] || \
-cat <<EOF >${INDEX}
+[ -f ${INDEX} ] || cat <<EOF >${INDEX}
 <html><head>
 <title>Naso's Pi-Cam: the future of photography?</title>
 </head>
