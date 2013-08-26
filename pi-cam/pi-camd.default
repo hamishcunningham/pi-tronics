@@ -66,6 +66,19 @@ battery.
 IP address as the webserver, or <b>to find the local IP address</b>, reboot 
 and watch the blinking light, or <a
 href="http://pi.gate.ac.uk/pages/blinkip.html">see here</a>.
+<li>
+<b>Troubleshooting</b>
+  <ul>
+  <li>
+  The camera has to be enabled on the Pi for things to work (surprise!). It
+  seems that when using the SD card on another machine and then booting the
+  Pi again it is possible for the camera to become disabled. (Symptom: no pics
+  taken; error messages in <tt>/var/log/syslog</tt>. Cure: run <tt>sudo
+  raspi-config</tt> and re-enable the camera.)
+  <li>
+  Webserver unavailable: perhaps you're not on a network? The server runs
+  direct from the cam.
+  </ul>
 </ul>
 </p>
 <hr/>
