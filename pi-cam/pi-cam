@@ -97,8 +97,8 @@ do
   if [ $POWER_OFF_REQUESTED != 1 ]
   then
     wall <<< "${NAME}: power off requested: shutting down now!"
-    logger "${NAME}: shutting down (POWER_OFF)"
-    sleep 1
+    logger "${NAME}: shutting down in 5 seconds(POWER_OFF)"
+    sleep 4
     shutdown -h now
     exit 0
   fi
