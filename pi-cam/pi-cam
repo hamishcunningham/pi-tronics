@@ -57,7 +57,7 @@ else
 fi
 
 # pretty date/time function
-pdate() { date "+%Y-%m-%d-%R" |sed 's,:,,'; }
+pdate() { date "+%Y-%m-%d-%T" |sed 's,:,,'; }
 
 # tell the world
 logger "=========== $0: running at `pdate` ==========="
@@ -107,18 +107,19 @@ do
   then
     TAKE_PIC_STATE=$CURR_TAKE_PIC_STATE
 
-    IMAGE_FILE=`pdate`.jpg
+    NOW=`pdate`
+    IMAGE_FILE=${NOW}.jpg
     IMAGE_PATH=${WEB_HOME}/${IMAGE_FILE}
     logger "${NAME} taking a picture to ${IMAGE_PATH}"
     CAM_OUTPUT="`raspistill -n -t 1 -o $IMAGE_PATH 2>&1`"
     PICS_TAKEN=`expr $PICS_TAKEN + 1`
     [ $DEBUG = on ] && logger "${NAME}: cam output is \n${CAM_OUTPUT}\n"
 
-    convert -thumbnail 75 ${IMAGE_PATH} ${THUMBS}/075-${IMAGE_FILE} &
-    convert -thumbnail 75 ${IMAGE_PATH} ${THUMBS}/300-${IMAGE_FILE} &
+    convert -thumbnail 75  ${IMAGE_PATH} ${THUMBS}/075-${IMAGE_FILE} &
+    convert -thumbnail 500 ${IMAGE_PATH} ${THUMBS}/500-${IMAGE_FILE} &
 
-    MARKUP="<p><a href=\"${IMAGE_FILE}\" alt=\"${IMAGE_FILE}\"><img"
-    MARKUP="${MARKUP} src=\"${THUMBS}/300-${IMAGE_FILE}\"></a></p>"
+    MARKUP="<p>${NOW}<br/><a href=\"${IMAGE_FILE}\" alt=\"${IMAGE_FILE}\"><img"
+    MARKUP="${MARKUP} src=\"thumbs/500-${IMAGE_FILE}\"></a><br/></p><hr/>"
     echo "${MARKUP}" >/tmp/${NAME}-$$.txt
     sed -i "/NEW PIC GOES HERE/ r /tmp/${NAME}-$$.txt" ${INDEX}
     rm /tmp/${NAME}-$$.txt

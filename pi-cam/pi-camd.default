@@ -30,6 +30,8 @@ mkdir -p ${THUMBS}
 </head>
 <body>
 <!-- NEW PIC GOES HERE -->
+
+<a href="http://pi.gate.ac.uk">Pi.GATE.ac.uk</a>
 </body>
 </html>
 EOF
