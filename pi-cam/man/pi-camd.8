@@ -1,0 +1,69 @@
+.TH pi-cam 8 "August 26, 2013" "" "System Manager's Manual"
+.SH NAME
+\fBpi-cam \fP- a simple camera daemon for the Raspberry Pi
+.SH SYNOPSIS
+.nf
+.fam C
+\fBpi-cam\fP [\fB-d\fP] [\fB-h\fP]
+\fBservice\fP \fIpi-camd\fP [{start [\fB-d\fP][\fB-h\fP]|stop|status|restart [\fB-d\fP][\fB-h\fP]}]
+.fam T
+.fi
+.SH DESCRIPTION
+Battery monitoring for the Raspberry Pi\.\.\.
+.PP
+Pi-Cam is an open source Linux daemon for switch-based picture taking on the
+Pi's camera module.
+.PP
+You can find the source code on GitHub:
+.PP
+.nf
+.fam C
+    https://github.com/hamishcunningham/pi-tronics/tree/master/pi-cam
+
+.fam T
+.fi
+The core of the daemon is defined in three files:
+.RS
+.IP \(bu 3
+/etc/pi-cam.conf - configuration data
+.IP \(bu 3
+/usr/sbin/\fBpi-cam\fP - the daemon itself
+.IP \(bu 3
+/etc/init.d/\fIpi-camd\fP - an interface to the init subsystem that
+Linux uses to manage daemons (amongst other things)
+.RE
+.PP
+The last of these, \fIpi-camd\fP, is used by the operating system to start and
+stop Pi-Cam at boot or shutdown time, and can be used to control the daemon
+manually when required. For example this command will stop the daemon:
+.PP
+.nf
+.fam C
+    sudo service pi-cam stop
+
+.fam T
+.fi
+For more details see http://pi.gate.ac.uk/
+.SH OPTIONS
+.TP
+.B
+\fB-d\fP
+Turn on debug mode.
+.TP
+.B
+\fB-h\fP
+The option \fB-h\fP displays help.
+.SH EXAMPLE
+Restart the daemon with debugging on:
+.PP
+.nf
+.fam C
+    $ sudo service pi-camd restart -d
+.fam T
+.fi
+.SH SEE ALSO
+\fBservice\fP(8)
+.SH BUGS
+Almost certainly!
+.SH AUTHOR
+Hamish Cunningham <http://pi.gate.ac.uk/>

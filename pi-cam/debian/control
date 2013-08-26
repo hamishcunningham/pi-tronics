@@ -1,0 +1,17 @@
+Source: pi-camd
+Section: admin
+Priority: optional
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Build-Depends: debhelper (>= 8.0.0), devscripts, gawk
+Standards-Version: 3.9.3
+Homepage: http://pi.gate.ac.uk/
+Vcs-Git: git://github.com/hamishcunningham/pi-tronics.git
+Vcs-Browser: https://github.com/hamishcunningham/pi-tronics/tree/master/pi-cam
+
+Package: pi-camd
+Architecture: all
+Depends: ${misc:Depends}
+Recommends: gpio, imagemagick, apache2
+Description: Pi-Cam, a Simple Camera Monitor
+ Pi-Cam is an open source Linux daemon for the Raspberry Pi camera.
+ See http://pi.gate.ac.uk/

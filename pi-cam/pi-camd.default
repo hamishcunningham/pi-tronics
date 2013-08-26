@@ -1,0 +1,36 @@
+# pi-cam.conf
+#
+# Configuration variables for the Pi-Cam daemon.
+# This code is copyright Hamish Cunningham and the University of Sheffield
+# and is licenced under GPL 3 or any later version.
+
+# how often should we log a routine message? (in multiples of
+# MONITOR_FREQUENCY)
+LOG_INTERVAL=1000
+
+# which GPIO pins we're using to get switch indicators
+IO_A=0
+IO_B=1
+
+# debug and simulation modes: 
+# sets logging and delay levels short
+if [ "$DEBUG" = on ]
+then
+  LOG_INTERVAL=3
+fi
+
+# where files live on the web server
+WEB_HOME=/var/www
+INDEX=${WEB_HOME}/index.html
+THUMBS=${WEB_HOME}/thumbs
+mkdir -p ${THUMBS}
+[ -f ${INDEX} ] || \
+cat <<EOF >${INDEX}
+<html><head>
+<title>Naso's Pi-Cam: the future of photography?</title>
+</head>
+<body>
+<!-- NEW PIC GOES HERE -->
+</body>
+</html>
+EOF

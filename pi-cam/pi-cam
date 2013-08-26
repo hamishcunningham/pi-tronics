@@ -1,0 +1,130 @@
+#!/bin/bash
+#
+# pi-cam -- a simple camera monitor
+#
+# Author: Hamish Cunningham <hamish@gate.ac.uk>
+# This code is copyright Hamish Cunningham and the University of Sheffield
+# and is licenced under GPL 3 or any later version.
+#
+### BEGIN INIT INFO
+# Provides:          pi-cam
+# Short-Description: Pi-Cam: a simple camera monitor daemon
+# Description:       This script is implements the daemon for
+#                    Pi-Cam (a simple camera monitor)
+### END INIT INFO
+
+# standard locals
+P="$0"
+USAGE="`basename ${P}` [-h(elp)] [-d(ebug)]"
+OPTIONSTRING=hd
+
+# define LSB log_* functions.
+. /lib/lsb/init-functions
+
+# message & exit if exit num present
+usage() { log_failure_msg Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
+
+# defaults
+PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin
+DESC="Pi-Cam: a simple camera monitor daemon"
+NAME=pi-cam
+DNAME=pi-camd
+DAEMON=/usr/sbin/$NAME
+PIDFILE=/var/run/$DNAME.pid
+
+# options defaults
+DEBUG=off
+
+# process options
+[ ! -z "$*" ] && log_daemon_msg ${NAME} options: $*
+while getopts $OPTIONSTRING OPTION
+do
+  case $OPTION in
+    h)	usage 1 ;;
+    d)	DEBUG=on ;;
+    *)	usage 2 ;;
+  esac
+done 
+shift `expr $OPTIND - 1`
+
+# read configuration variable file if it is present
+if [ -r /etc/default/$DNAME ] 
+then
+  . /etc/default/$DNAME
+else
+  logger "$0: no config data found - fatal error"
+  exit 1
+fi
+
+# pretty date/time function
+pdate() { date "+%Y-%m-%d-%R" |sed 's,:,,'; }
+
+# tell the world
+logger "=========== $0: running at `pdate` ==========="
+
+# check for gpio command (which may be a function defined in config)
+GPIO=
+if [ "`type -t gpio`" = "function" ]
+then
+  GPIO=gpio
+else
+  GPIO=`which gpio`
+fi
+if [ -z "${GPIO}" ]
+then
+  log_failure_msg "${NAME}: cannot find gpio command: failing" >&2
+  logger          "${NAME}: cannot find gpio command: failing"
+  exit 1
+fi
+
+# put the relevant pins into read mode
+gpio mode $IO_A in
+gpio mode $IO_B in
+
+# do the work; i and j index loop iterations for e.g. logging
+i=0; j=0
+PICS_TAKEN=0
+while :
+do
+  i=`expr ${i} + 1`
+  j=`expr ${j} + 1`
+
+  # check the "please shutdown" switch
+  SHUTDOWN_REQUESTED=0
+  SHUTDOWN_REQUESTED=`gpio read ${IO_A}`
+  if [ SHUTDOWN_REQUESTED = 1 ]
+  then
+    wall <<< "${NAME}: power off requested: shutting down now!"
+    logger "${NAME}: shutting down (POWER_OFF)"
+    sleep 1
+    shutdown -h now
+  fi
+
+  # check the "please take a pic" switch"
+  PIC_REQUESTED=0
+  PIC_REQUESTED=`gpio read ${IO_A}`
+  if [ PIC_REQUESTED = 1 ]
+  then
+    IMAGE_FILE=${WEB_HOME}/`pdate`.jpg
+    #CAM_OUTPUT="`raspistill -v -q 25 -t 1 -o $IMAGE_FILE 2>&1`"
+    CAM_OUTPUT="`raspistill -v -t 1 -o $IMAGE_FILE 2>&1`"
+    [ $DEBUG = on ] && logger "${NAME}: cam output is \n${CAM_OUTPUT}\n"
+
+    convert -thumbnail 75 ${IMAGE_FILE} ${THUMBS}/075-${IMAGE_FILE} &
+    convert -thumbnail 75 ${IMAGE_FILE} ${THUMBS}/300-${IMAGE_FILE} &
+    sed -i "/NEW PIC GOES HERE/a \
+      <p><a href=\"${IMAGE_FILE}\" alt=\"${IMAGE_FILE}\"><img
+             src=\"${THUMBS}/300-${IMAGE_FILE}\"></a></p>
+      " ${INDEX}
+  fi
+
+  # routine log messages
+  [ ${j} -eq ${LOG_INTERVAL} ] && \
+    logger "${NAME}: ${PICS_TAKEN} taken by `pdate` (i=${i})" && j=0
+
+  # let the poor beast rest for tenth of a second...
+  sleep 0.1
+done &
+
+# create PIDFILE
+echo $! >${PIDFILE}
