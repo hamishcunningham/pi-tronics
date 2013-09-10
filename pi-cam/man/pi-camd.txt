@@ -1,7 +1,7 @@
 NAME
   pi-cam - a simple camera daemon for the Raspberry Pi
 SYNOPSIS
-  pi-cam [-d] [-h]
+  pi-cam [-d] [-h] [-c]
   service pi-camd [{start [-d][-h]|stop|status|restart [-d][-h]}]
 DESCRIPTION
   Battery monitoring for the Raspberry Pi...
@@ -29,6 +29,7 @@ DESCRIPTION
 OPTIONS
   -d          Turn on debug mode.
   -h          The option -h displays help.
+  -c          Command-line mode: for running the pi-cam script standalone.
 EXAMPLE
   Restart the daemon with debugging on:
 

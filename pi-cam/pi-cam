@@ -15,8 +15,8 @@
 
 # standard locals
 P="$0"
-USAGE="`basename ${P}` [-h(elp)] [-d(ebug)]"
-OPTIONSTRING=hd
+USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-c(li mode)]"
+OPTIONSTRING=hdc
 
 # define LSB log_* functions.
 . /lib/lsb/init-functions
@@ -34,6 +34,7 @@ PIDFILE=/var/run/$DNAME.pid
 
 # options defaults
 DEBUG=off
+CLI=off
 
 # process options
 [ ! -z "$*" ] && log_daemon_msg ${NAME} options: $*
@@ -42,17 +43,30 @@ do
   case $OPTION in
     h)	usage 1 ;;
     d)	DEBUG=on ;;
+    c)	CLI=on ;;
     *)	usage 2 ;;
   esac
 done 
 shift `expr $OPTIND - 1`
 
+# command-line mode
+if [ $CLI == on ]
+then
+  logger=echo
+  log_failure_msg=echo
+  log_daemon_msg=echo
+  logger "${NAME}: running in command-line mode"
+fi
+
 # read configuration variable file if it is present
-if [ -r /etc/default/$DNAME ] 
+if [ $CLI == on ]
+then
+  . ./${DNAME}.default
+elif [ -r /etc/default/$DNAME ] 
 then
   . /etc/default/$DNAME
 else
-  logger "$0: no config data found - fatal error"
+  logger "${NAME}: no config data found - fatal error"
   exit 1
 fi
 
@@ -60,7 +74,7 @@ fi
 pdate() { date "+%Y-%m-%d-%T" |sed 's,:,,g'; }
 
 # tell the world
-logger "=========== $0: running at `pdate` ==========="
+logger "=========== ${NAME}: running at `pdate` ==========="
 
 # check for gpio command (which may be a function defined in config)
 GPIO=

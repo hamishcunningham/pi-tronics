@@ -1,4 +1,4 @@
-# pi-cam.conf
+# pi-cam.default
 #
 # Configuration variables for the Pi-Cam daemon.
 # This code is copyright Hamish Cunningham and the University of Sheffield
@@ -13,10 +13,30 @@ IO_A=0
 IO_B=1
 
 # debug and simulation modes: 
-# sets logging and delay levels short
+# don't actually call shutdown;
+# redefine gpio to take input from a simulation file
+# (which is expected to have a single line of the form nnn, in binary);
+# also sets logging and delay levels short
 if [ "$DEBUG" = on ]
 then
+  SHUT_DELAY=5
   LOG_INTERVAL=3
+  WARNING_INTERVAL=10
+  SHUTDOWN='echo "would call _shutdown -h now_ !!!"; sleep 5'
+fi
+if [ "$SIMUL" = on ]
+then
+  SIMULATION_DATA=/tmp/pi-cam-simulation.txt
+  gpio() {
+    [ "$1" = "read" ] || return 0
+    if [ -r "$SIMULATION_DATA" ] 
+    then
+      CUT_INDEX=`expr $2 + 1` # cut indexes from 1, gpio from 0
+      cut -c $CUT_INDEX $SIMULATION_DATA
+    else
+      echo 0 # default gpio return value
+    fi
+  }
 fi
 
 # where files live on the web server
