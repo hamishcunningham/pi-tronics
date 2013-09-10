@@ -4,13 +4,24 @@
 # This code is copyright Hamish Cunningham and the University of Sheffield
 # and is licenced under GPL 3 or any later version.
 
-# how often should we log a routine message? (in multiples of
-# MONITOR_FREQUENCY)
-LOG_INTERVAL=1000
+# pre-image timeout period for raspistill (milliseconds)
+TIMEOUT=100
+
+# how long to wait before shutting down on power off switch?
+SHUT_DELAY=3
 
 # which GPIO pins we're using to get switch indicators
-IO_A=0
-IO_B=1
+GVID=0
+GPIC=2
+GPWR=3
+
+# which state the GVID pin corresponds to video mode
+GVID_VIDEO=0
+
+# state 
+
+# how often should we log a routine message?
+LOG_INTERVAL=100
 
 # debug and simulation modes: 
 # don't actually call shutdown;
@@ -28,13 +39,18 @@ if [ "$SIMUL" = on ]
 then
   SIMULATION_DATA=/tmp/pi-cam-simulation.txt
   gpio() {
-    [ "$1" = "read" ] || return 0
-    if [ -r "$SIMULATION_DATA" ] 
+    if [ "$1" = "read" ]
     then
-      CUT_INDEX=`expr $2 + 1` # cut indexes from 1, gpio from 0
-      cut -c $CUT_INDEX $SIMULATION_DATA
-    else
-      echo 0 # default gpio return value
+      if [ -r "$SIMULATION_DATA" ] 
+      then
+        CUT_INDEX=`expr $2 + 1` # cut indexes from 1, gpio from 0
+        cut -c $CUT_INDEX $SIMULATION_DATA
+      else
+        echo 0 # default gpio return value
+      fi
+    elif [ "$1" = wfi ]
+    then
+      echo ho hum not implemented yet :-( >&2
     fi
   }
 fi
@@ -45,9 +61,17 @@ INDEX=${WEB_HOME}/index.html
 HELP=${WEB_HOME}/help.html
 THUMBS=${WEB_HOME}/thumbs
 mkdir -p ${THUMBS}
+
+# initialise main landing page on the webserver
 [ -f ${INDEX} ] || cat <<EOF >${INDEX}
 <html><head>
-<title>Naso's Pi-Cam: the future of photography?</title>
+<title>Pi-Cam: the future of photography?!</title>
+<style type="text/css"> /*<![CDATA[*/
+<!--
+html, body { background: #fff; color: #000; font-family: sans-serif; }
+h1,h2,h3,h4,h5,p,ul,ol { font-family: sans-serif; }
+pre { font-family: monospace; }
+--> /*]]>*/ </style>
 </head>
 <body>
 <!-- NEW PIC GOES HERE -->
@@ -58,10 +82,17 @@ mkdir -p ${THUMBS}
 </html>
 EOF
 
-# help file
+# initialise help file
 [ -f ${HELP} ] || cat <<EOF >${HELP}
 <html><head>
 <title>How to use your shiny Pi-Cam</title>
+<style type="text/css"> /*<![CDATA[*/
+<!--
+html, body { background: #fff; color: #000; font-family: sans-serif; }
+h1,h2,h3,h4,h5,p,ul,ol { font-family: sans-serif; }
+pre { font-family: monospace; }
+--> /*]]>*/ </style>
+</head>
 </head>
 <body>
 <h1>The Pi-Cam: a legend in its own lunchtime!</h1>

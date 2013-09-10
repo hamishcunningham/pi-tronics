@@ -31,6 +31,7 @@ NAME=pi-cam
 DNAME=pi-camd
 DAEMON=/usr/sbin/$NAME
 PIDFILE=/var/run/$DNAME.pid
+SHUTDOWN='shutdown -h now'
 
 # options defaults
 DEBUG=off
@@ -91,12 +92,57 @@ then
   exit 1
 fi
 
-# put the relevant pins into read mode and take the current state of the
-# picture switch (we sleep a bit to avoid settling down picture triggers)
-gpio mode $IO_A in
-gpio mode $IO_B in
-sleep 5
-TAKE_PIC_STATE=`gpio read $IO_A`
+# put the relevant pins into pull-up mode
+gpio mode $GVID up
+gpio mode $GPIC up
+gpio mode $GPWR up
+
+# handler for power off switch events
+handle-gpwr() {
+  logger "${NAME}: shutting down in $SHUTDELAY seconds (POWER_OFF)"
+  sleep $SHUTDELAY
+  bash -c "$SHUTDOWN"
+  exit 0
+}
+
+# handler for take-a-pic switch events
+handle-gpic() {
+  gpio wfi $GVID both
+  GVID_STATE=`gpio read $GVID`
+
+  if [ $GVID_STATE == $GVID_VIDEO ]
+  then
+    # TODO take a video
+    logger "${NAME}: oops, video not implemented yet :-("
+  else
+    take-a-still-picture
+  fi
+
+# # wait for the next state change
+# handle-gpic &
+}
+
+# function to take a still
+take-a-still-picture() {
+  NOW=`pdate`
+  IMAGE_FILE=${NOW}.jpg
+  IMAGE_PATH=${WEB_HOME}/${IMAGE_FILE}
+  logger "${NAME} taking picture ${PICS_TAKEN} to ${IMAGE_PATH}"
+  CAM_OUTPUT="`raspistill -t ${TIMEOUT} -o $IMAGE_PATH 2>&1`"
+  [ $? != 0 -o $DEBUG = on ] && \
+    logger "${NAME}: cam output is \n${CAM_OUTPUT}\n"
+  PICS_TAKEN=`expr $PICS_TAKEN + 1`
+
+# TODO convert in.jpg -interpolate average16 -interpolative-resize 25% out.jpg
+  convert -thumbnail 75  ${IMAGE_PATH} ${THUMBS}/075-${IMAGE_FILE} &
+  convert -thumbnail 500 ${IMAGE_PATH} ${THUMBS}/500-${IMAGE_FILE} &
+
+  MARKUP="<p>${NOW}<br/><a href=\"${IMAGE_FILE}\" alt=\"${IMAGE_FILE}\"><img"
+  MARKUP="${MARKUP} src=\"thumbs/500-${IMAGE_FILE}\"></a><br/></p><hr/>"
+  echo "${MARKUP}" >/tmp/${NAME}-$$.txt
+  sed -i "/NEW PIC GOES HERE/ r /tmp/${NAME}-$$.txt" ${INDEX}
+  rm /tmp/${NAME}-$$.txt
+}
 
 # do the work; i and j index loop iterations for e.g. logging
 i=0; j=0
@@ -105,48 +151,15 @@ while :
 do
   i=`expr ${i} + 1`; j=`expr ${j} + 1`
 
-  # check the "please shutdown" switch
-  POWER_OFF_REQUESTED=0
-  POWER_OFF_REQUESTED=`gpio read ${IO_B}`
-  if [ $POWER_OFF_REQUESTED != 1 ]
-  then
-    wall <<< "${NAME}: power off requested: shutting down now!"
-    logger "${NAME}: shutting down in 5 seconds(POWER_OFF)"
-    sleep 4
-    shutdown -h now
-    exit 0
-  fi
-
-  # check the "please take a pic" switch"
-  CURR_TAKE_PIC_STATE=`gpio read ${IO_A}`
-  if [ $CURR_TAKE_PIC_STATE != $TAKE_PIC_STATE ]
-  then
-    TAKE_PIC_STATE=$CURR_TAKE_PIC_STATE
-
-    NOW=`pdate`
-    IMAGE_FILE=${NOW}.jpg
-    IMAGE_PATH=${WEB_HOME}/${IMAGE_FILE}
-    logger "${NAME} taking picture ${PICS_TAKEN} to ${IMAGE_PATH}"
-    CAM_OUTPUT="`raspistill -n -t 1 -o $IMAGE_PATH 2>&1`"
-    [ $? != 0 -o $DEBUG = on ] && \
-      logger "${NAME}: cam output is \n${CAM_OUTPUT}\n"
-    PICS_TAKEN=`expr $PICS_TAKEN + 1`
-
-    convert -thumbnail 75  ${IMAGE_PATH} ${THUMBS}/075-${IMAGE_FILE} &
-    convert -thumbnail 500 ${IMAGE_PATH} ${THUMBS}/500-${IMAGE_FILE} &
-
-    MARKUP="<p>${NOW}<br/><a href=\"${IMAGE_FILE}\" alt=\"${IMAGE_FILE}\"><img"
-    MARKUP="${MARKUP} src=\"thumbs/500-${IMAGE_FILE}\"></a><br/></p><hr/>"
-    echo "${MARKUP}" >/tmp/${NAME}-$$.txt
-    sed -i "/NEW PIC GOES HERE/ r /tmp/${NAME}-$$.txt" ${INDEX}
-    rm /tmp/${NAME}-$$.txt
-  fi
+  # run the handlers that wait for user input
+  handle-gpwr &
+  handle-gpic
 
   # routine log messages
   [ ${j} -eq ${LOG_INTERVAL} ] && \
     logger "${NAME}: ${PICS_TAKEN} taken by `pdate` (i=${i})" && j=0
 
-  # let the poor beast rest for tenth of a second...
+  # let the poor beast rest... for tenth of a second
   sleep 0.1
 done &
 
