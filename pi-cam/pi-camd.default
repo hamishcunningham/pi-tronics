@@ -18,8 +18,6 @@ GPWR=3
 # which state the GVID pin corresponds to video mode
 GVID_VIDEO=0
 
-# state 
-
 # how often should we log a routine message?
 LOG_INTERVAL=100
 
@@ -30,7 +28,7 @@ LOG_INTERVAL=100
 # also sets logging and delay levels short
 if [ "$DEBUG" = on ]
 then
-  SHUT_DELAY=5
+  SHUT_DELAY=0.1
   LOG_INTERVAL=3
   WARNING_INTERVAL=10
   SHUTDOWN='echo "would call _shutdown -h now_ !!!"; sleep 5'
@@ -50,13 +48,14 @@ then
       fi
     elif [ "$1" = wfi ]
     then
-      echo ho hum not implemented yet :-( >&2
+      echo ho hum not implemented yet >&2
     fi
   }
 fi
 
 # where files live on the web server
 WEB_HOME=/var/www
+[ $CLI == on ] && WEB_HOME=`pwd`/www
 INDEX=${WEB_HOME}/index.html
 HELP=${WEB_HOME}/help.html
 THUMBS=${WEB_HOME}/thumbs

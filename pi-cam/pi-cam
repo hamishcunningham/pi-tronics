@@ -15,8 +15,8 @@
 
 # standard locals
 P="$0"
-USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-c(li mode)]"
-OPTIONSTRING=hdc
+USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-c(li mode)] [-s(imulation)]"
+OPTIONSTRING=hdcs
 
 # define LSB log_* functions.
 . /lib/lsb/init-functions
@@ -36,15 +36,17 @@ SHUTDOWN='shutdown -h now'
 # options defaults
 DEBUG=off
 CLI=off
+SIMUL=off
 
 # process options
-[ ! -z "$*" ] && log_daemon_msg ${NAME} options: $*
+ARGS="$*"
 while getopts $OPTIONSTRING OPTION
 do
   case $OPTION in
     h)	usage 1 ;;
     d)	DEBUG=on ;;
     c)	CLI=on ;;
+    s)	SIMUL=on ;;
     *)	usage 2 ;;
   esac
 done 
@@ -54,10 +56,13 @@ shift `expr $OPTIND - 1`
 if [ $CLI == on ]
 then
   logger=echo
-  log_failure_msg=echo
-  log_daemon_msg=echo
+  log_failure_msg() { echo $*; }
+  log_daemon_msg() { echo $*; }
   logger "${NAME}: running in command-line mode"
 fi
+
+# log the options we got
+[ ! -z "${ARGS}" ] && log_daemon_msg "${NAME} options: ${ARGS}"
 
 # read configuration variable file if it is present
 if [ $CLI == on ]
@@ -93,33 +98,54 @@ then
 fi
 
 # put the relevant pins into pull-up mode
-gpio mode $GVID up
-gpio mode $GPIC up
-gpio mode $GPWR up
+init-gpio-pins() {
+  gpio mode $GVID up
+  gpio mode $GPIC up
+  gpio mode $GPWR up
+}
 
 # handler for power off switch events
 handle-gpwr() {
-  logger "${NAME}: shutting down in $SHUTDELAY seconds (POWER_OFF)"
-  sleep $SHUTDELAY
+  gpio wfi $GPWR falling
+  logger "${NAME}: shutting down in $SHUT_DELAY seconds (POWER_OFF)"
+
+  # kill the preview UI if it is running
+  preview-ui stop
+
+  # kill our parent if it is around...
+echo 'ps xl, and $$, and $PPID'
+ps xl
+echo $$ and $PPID
+echo
+  [ $CLI == on ] && logger ${NAME}: killing $$ && kill $$
+
+  # goodbye, cruel world
+  sleep $SHUT_DELAY
   bash -c "$SHUTDOWN"
   exit 0
 }
 
 # handler for take-a-pic switch events
 handle-gpic() {
+  # wait for the request
   gpio wfi $GVID both
+
+  # are we doing video or still?
   GVID_STATE=`gpio read $GVID`
+
+  # kill the preview UI if it is running
+  preview-ui stop
 
   if [ $GVID_STATE == $GVID_VIDEO ]
   then
     # TODO take a video
-    logger "${NAME}: oops, video not implemented yet :-("
+    logger "${NAME}: oops, video not implemented yet"
   else
     take-a-still-picture
   fi
 
-# # wait for the next state change
-# handle-gpic &
+  # fire up the preview UI again
+  preview-ui start
 }
 
 # function to take a still
@@ -128,8 +154,8 @@ take-a-still-picture() {
   IMAGE_FILE=${NOW}.jpg
   IMAGE_PATH=${WEB_HOME}/${IMAGE_FILE}
   logger "${NAME} taking picture ${PICS_TAKEN} to ${IMAGE_PATH}"
-  CAM_OUTPUT="`raspistill -t ${TIMEOUT} -o $IMAGE_PATH 2>&1`"
-  [ $? != 0 -o $DEBUG = on ] && \
+  CAM_OUTPUT="`raspistill -fp -t ${TIMEOUT} -o $IMAGE_PATH 2>&1`"
+  [ $? != 0 -o $DEBUG == on ] && \
     logger "${NAME}: cam output is \n${CAM_OUTPUT}\n"
   PICS_TAKEN=`expr $PICS_TAKEN + 1`
 
@@ -144,26 +170,62 @@ take-a-still-picture() {
   rm /tmp/${NAME}-$$.txt
 }
 
+# set raspivid running to put preview is on (output to /dev/null)
+unset PREVIEW_UI_PID
+preview-ui() {
+  if [ $1 == stop ]
+  then
+    [ ! -z "$PREVIEW_UI_PID" ] && kill -9 $PREVIEW_UI_PID
+  else
+    raspivid -o - -t 0 >/dev/null &
+    PREVIEW_UI_PID=$!
+# TODO
+echo PREVIEW_UI_PID= $PREVIEW_UI_PID
+  fi
+}
+
+# the main loop that waits for picture requests, runs the UI, etc.
+pi-cam-event-loop() {
+  # i and j index loop iterations for e.g. logging
+  i=0; j=0
+  PICS_TAKEN=0
+
+  # loop forever waiting for picture requests;
+  while :
+  do
+    i=`expr ${i} + 1`; j=`expr ${j} + 1`
+
+    # run the handler that's wait for user "take a pic" request
+    handle-gpic
+
+    # routine log messages
+    [ ${j} -eq ${LOG_INTERVAL} ] && \
+      logger "${NAME}: ${PICS_TAKEN} taken by `pdate` (i=${i})" && j=0
+
+    # let the poor beast rest... for tenth of a second
+    sleep 0.1
+  done
+}
+
+# initialise the GPIO pins
+init-gpio-pins
+
 # run a handler for the power off switch in the background
 handle-gpwr &
+PWR_HANDLER_PID=$!
+# TODO
+echo PWR_HANDLER_PID= $PWR_HANDLER_PID
+echo parent PID = $$
 
-# do the work; i and j index loop iterations for e.g. logging
-i=0; j=0
-PICS_TAKEN=0
-while :
-do
-  i=`expr ${i} + 1`; j=`expr ${j} + 1`
+# fire up the preview UI
+preview-ui start
 
-  # run the handler that's wait for user "take a pic" request
-  handle-gpic
-
-  # routine log messages
-  [ ${j} -eq ${LOG_INTERVAL} ] && \
-    logger "${NAME}: ${PICS_TAKEN} taken by `pdate` (i=${i})" && j=0
-
-  # let the poor beast rest... for tenth of a second
-  sleep 0.1
-done &
-
-# create PIDFILE
-echo $! >${PIDFILE}
+# now run the main event loop; if we're standalone we stay with it, but if
+# we're in daemon mode then we background it and record the PID
+if [ $CLI == on ]
+then
+  pi-cam-event-loop
+else
+  pi-cam-event-loop &
+  echo $! >${PIDFILE}
+fi

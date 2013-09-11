@@ -6,9 +6,6 @@ Ideas Bazaar Bizarre Ideas
   - add a display on/off
 3. box
 4. camera UI
-  - run raspivid in /dev/null mode
-  - when a pic is requested for kill; raspistill -t 1; then fire up raspivid
-    again
 5. finalise bazaar exhibit
 6. cam for music or icoss (timelapse onto the SD card)
 7. writeups, and contrib to comments here:
