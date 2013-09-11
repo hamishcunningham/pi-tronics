@@ -55,7 +55,7 @@ shift `expr $OPTIND - 1`
 # command-line mode
 if [ $CLI == on ]
 then
-  logger=echo
+  logger() { echo $*; }
   log_failure_msg() { echo $*; }
   log_daemon_msg() { echo $*; }
   logger "${NAME}: running in command-line mode"
@@ -106,7 +106,7 @@ init-gpio-pins() {
 
 # handler for power off switch events
 handle-gpwr() {
-  gpio wfi $GPWR falling
+  gpio wfi $GPWR rising
   logger "${NAME}: shutting down in $SHUT_DELAY seconds (POWER_OFF)"
 
   # kill the preview UI if it is running
@@ -154,7 +154,8 @@ take-a-still-picture() {
   IMAGE_FILE=${NOW}.jpg
   IMAGE_PATH=${WEB_HOME}/${IMAGE_FILE}
   logger "${NAME} taking picture ${PICS_TAKEN} to ${IMAGE_PATH}"
-  CAM_OUTPUT="`raspistill -fp -t ${TIMEOUT} -o $IMAGE_PATH 2>&1`"
+  # CAM_OUTPUT="`raspistill -fp -t ${TIMEOUT} -o $IMAGE_PATH 2>&1`"
+  CAM_OUTPUT="`raspistill -t ${TIMEOUT} -o $IMAGE_PATH 2>&1`"
   [ $? != 0 -o $DEBUG == on ] && \
     logger "${NAME}: cam output is \n${CAM_OUTPUT}\n"
   PICS_TAKEN=`expr $PICS_TAKEN + 1`
