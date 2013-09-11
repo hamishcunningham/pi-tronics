@@ -175,7 +175,10 @@ unset PREVIEW_UI_PID
 preview-ui() {
   if [ $1 == stop ]
   then
-    [ ! -z "$PREVIEW_UI_PID" ] && kill -9 $PREVIEW_UI_PID
+    [ ! -z "$PREVIEW_UI_PID" ] && {
+      logger "${NAME}: kill -9 $PREVIEW_UI_PID"
+      kill -9 $PREVIEW_UI_PID
+    }
   else
     raspivid -o - -t 0 >/dev/null &
     PREVIEW_UI_PID=$!
@@ -183,6 +186,16 @@ preview-ui() {
 echo PREVIEW_UI_PID= $PREVIEW_UI_PID
   fi
 }
+
+# cleanup function to run on termination, and a trap to trigger it
+clean-up() {
+  # kill any child processes (the list includes the ps process, so we discard
+  # the "no such process" message)
+  CHILDREN=`ps -T -o pid --no-headers --ppid $$`
+  logger "${NAME}: clean-up, killing ${CHILDREN}"
+  [ ! -z "$CHILDREN" ] && kill -9 $CHILDREN 2>/dev/null
+}
+trap clean-up EXIT
 
 # the main loop that waits for picture requests, runs the UI, etc.
 pi-cam-event-loop() {
