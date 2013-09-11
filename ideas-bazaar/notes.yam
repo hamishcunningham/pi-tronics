@@ -1,4 +1,4 @@
-
+Ideas Bazaar Bizarre Ideas
 
 
 1. rewire the screen for 5v                     [DONE]
@@ -16,33 +16,86 @@
   - http://www.wisegai.com/2012/11/29/raspberry-pi-using-a-3-5-tft-car-monitor-optional-powered-using-usb/
 
 
+- bazaar TODOs
+  - check re. poster boards
+  - paper for flow diagrams
+  - A4 of Pi alikes plus pile of hardware
+
+- Ideas Bazaar, Festival of the Mind
+  - The Raspberry Pi as a meeting point for DIY electronics, open
+    computing and music tech, partly as a means of outreach to schools and
+    potential undergrads.
+  - The Raspberry Pi -- http://www.sheffield.ac.uk/ideasbazaar -- is a
+    small cheap computer which is very easy to cobble together with other
+    devices. It has a large community behind it and is one of the drivers
+    behind proposed changes in the schools ICT curriculum. As part of a
+    trend to open hardware and maker culture the Pi is also a vehicle for
+    localist responses to climate change and peak oil: the more we
+    manufacture locally the more secure we are (the Pi is made in Wales);
+    the less energy we use the less carbon we pump into the atmosphere
+    (the Pi is a low power device).
+  - The exhibit will try to give a taster of these broad areas, and
+    motivate our proposal for a larger affair for The Festival of the Mind
+    and beyond.
+
+- incoming
+  - all your email is bcc. spotty-young-spies@nsa.gov
+  - all your Facebooking likes NoSenseOfHumour@gchq.gov.uk
 
 
+Future Maker -- an exploration of engineered art with the
+Raspberry Pi
 
-                check re. poster boards
+This will be a rolling event with 6 or 10 exhibits plus an
+hourly short stage show. The target audience is the young and
+the young at heart. The performers will be musicians,
+engineers, hackers and artists.
 
-                paper for flow diagrams
+There is a new conjunction emerging around open hardware,
+maker culture, art and music. There are parallels with the
+explosive change in pop culture pressaged punk in the late
+1970s: from Iain M. Banks' legacy of utopian technofutures
+blending electro-augmented humanity with benevolent AI, to the
+wearable electronics kits from Adafruit.com (echoing Lady Ada
+Lovelace, inventor of the computer bug); from the latest
+rounds of sampling and remix to a stack of projects based on
+the new schools computing board the Raspberry Pi --
+http://www.raspberrypi.org/archives/tag/music -- my personal
+favourite being the use of capacitive sensing wired up to a
+bunch of root vegetables as an instrument -- there would be no
+problem selling the novelty of this invention, even to a jaded
+REF panel!
 
-                A4 of Pi alikes
-                plus pile of hardware
+Other stuff we discussed:
+
+- tweeting and texting with the Pi
+- from analogue to digital...
+
+TODOs from Bo
+- performers from Sheffield's arts-minded, hacker-oriented, community
+- Sheffield was well-known for electro-pop in the early 80s) details will
+  change, eg was talking to a ballerina last night about the possibility of
+  projecting choreographic notation (featuring a flowchart with highlighted
+  subroutines, etc) and having her dance the piece that emerges (somehow?)
+  from an RPi for ten minutes every hour
+- the Brick Pi notion would involve, as I see it, building a sculpture that
+  moved according to analogue user inputs
 
 
-
-    - SnowdenCam
-    - Ideas Bazaar, Festival of the Mind
-      - The Raspberry Pi as a meeting point for DIY electronics, open
-        computing and music tech, partly as a means of outreach to schools and
-        potential undergrads.
-      - The Raspberry Pi -- http://www.sheffield.ac.uk/ideasbazaar -- is a
-        small cheap computer which is very easy to cobble together with other
-        devices. It has a large community behind it and is one of the drivers
-        behind proposed changes in the schools ICT curriculum. As part of a
-        trend to open hardware and maker culture the Pi is also a vehicle for
-        localist responses to climate change and peak oil: the more we
-        manufacture locally the more secure we are (the Pi is made in Wales);
-        the less energy we use the less carbon we pump into the atmosphere
-        (the Pi is a low power device).
-      - The exhibit will try to give a taster of these broad areas, and
-        motivate our proposal for a larger affair for The Festival of the Mind
-        and beyond.
-
+Misc 
+- Nick currently uses a laptop to loop audio (despite the hardware list on his
+  web pages) but has explored the use of a reprogrammable set of pedals via
+  arduino and might be interested.
+  http://www.youtube.com/watch?feature=player_embedded&v=5yv1yya9T78 for an
+  example of Nick's work with Meson on the Tarana100 project a few years ago.
+- Mark (very busy most of the year as a sound engineer) is very much into
+  analogue/digital sound making (generally uses supercollider -
+  http://supercollider.sourceforge.net/ ) but might be interestable - I'm
+  happy to contact him.
+- The people I know actively VJing at present use Macs (I experimented with
+  LiVeS a while back but reverted to using prepared vids for backdrops) but
+  something like http://ftp.dyne.org/freej/ might be used with a small RPi
+  cluster - possibly (linked to supercollider as a trigger) a small CompSci
+  student project?
+- BrickPi might be worth watching -
+  http://www.kickstarter.com/projects/john-cole/brickpi-lego-bricks-with-a-raspberry-pi-brain
