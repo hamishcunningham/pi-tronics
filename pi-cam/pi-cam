@@ -144,6 +144,9 @@ take-a-still-picture() {
   rm /tmp/${NAME}-$$.txt
 }
 
+# run a handler for the power off switch in the background
+handle-gpwr &
+
 # do the work; i and j index loop iterations for e.g. logging
 i=0; j=0
 PICS_TAKEN=0
@@ -151,8 +154,7 @@ while :
 do
   i=`expr ${i} + 1`; j=`expr ${j} + 1`
 
-  # run the handlers that wait for user input
-  handle-gpwr &
+  # run the handler that's wait for user "take a pic" request
   handle-gpic
 
   # routine log messages
