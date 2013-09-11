@@ -1,0 +1,48 @@
+
+
+
+1. rewire the screen for 5v                     [DONE]
+2. control circuit, switches                    [DONE]
+  - add a display on/off
+3. box
+4. camera UI
+  - run raspivid in /dev/null mode
+  - when a pic is requested for kill; raspistill -t 1; then fire up raspivid
+    again
+5. finalise bazaar exhibit
+6. cam for music or icoss (timelapse onto the SD card)
+7. writeups, and contrib to comments here:
+  - http://www.raspberrypi.org/phpBB3/viewtopic.php?t=17651
+  - http://www.wisegai.com/2012/11/29/raspberry-pi-using-a-3-5-tft-car-monitor-optional-powered-using-usb/
+
+
+
+
+
+                check re. poster boards
+
+                paper for flow diagrams
+
+                A4 of Pi alikes
+                plus pile of hardware
+
+
+
+    - SnowdenCam
+    - Ideas Bazaar, Festival of the Mind
+      - The Raspberry Pi as a meeting point for DIY electronics, open
+        computing and music tech, partly as a means of outreach to schools and
+        potential undergrads.
+      - The Raspberry Pi -- http://www.sheffield.ac.uk/ideasbazaar -- is a
+        small cheap computer which is very easy to cobble together with other
+        devices. It has a large community behind it and is one of the drivers
+        behind proposed changes in the schools ICT curriculum. As part of a
+        trend to open hardware and maker culture the Pi is also a vehicle for
+        localist responses to climate change and peak oil: the more we
+        manufacture locally the more secure we are (the Pi is made in Wales);
+        the less energy we use the less carbon we pump into the atmosphere
+        (the Pi is a low power device).
+      - The exhibit will try to give a taster of these broad areas, and
+        motivate our proposal for a larger affair for The Festival of the Mind
+        and beyond.
+
