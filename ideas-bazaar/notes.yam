@@ -8,6 +8,8 @@ Ideas Bazaar Bizarre Ideas
    - works from cli
    - need to install and run as daemon
    - faster convert code
+   - clear the terminal -- e.g. "clear >/dev/pts/1" (get term by "tty")
+     - sudo bash -c "clear >/dev/tty1"
    - debug the process ids stuff
 5. finalise bazaar exhibit
 6. cam for music or icoss (timelapse onto the SD card)

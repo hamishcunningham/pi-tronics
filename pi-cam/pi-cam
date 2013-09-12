@@ -170,6 +170,16 @@ take-a-still-picture() {
   rm /tmp/${NAME}-$$.txt
 }
 
+# send a clear command to /dev/tty1
+clear-the-console() {
+  if [ "$CLI" == on ]
+  then
+    sudo bash -c "clear >/dev/tty1"
+  else
+    bash -c "clear >/dev/tty1"
+  fi
+}
+
 # set raspivid running to put preview is on (output to /dev/null)
 unset PREVIEW_UI_PID
 preview-ui() {
@@ -180,6 +190,7 @@ preview-ui() {
       kill -9 $PREVIEW_UI_PID
     }
   else
+    clear-the-console
     raspivid -o - -t 0 >/dev/null &
     PREVIEW_UI_PID=$!
     [ $DEBUG == on ] && logger "${NAME}: PREVIEW_UI_PID=${PREVIEW_UI_PID}"
