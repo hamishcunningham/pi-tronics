@@ -112,12 +112,11 @@ handle-gpwr() {
   # kill the preview UI if it is running
   preview-ui stop
 
-  # kill our parent if it is around...
-echo 'ps xl, and $$, and $PPID'
-ps xl
-echo $$ and $PPID
-echo
-  [ $CLI == on ] && logger ${NAME}: killing $$ && kill $$
+  # when in debug mode we don't actually shutdown, so kill our parent
+  [ $DEBUG == on ] && {
+    logger "${NAME}: \$\$=$$; PPID:${PPID}; ps xl: `ps xl`; killing $$"
+    kill $$
+  }
 
   # goodbye, cruel world
   sleep $SHUT_DELAY
@@ -183,8 +182,7 @@ preview-ui() {
   else
     raspivid -o - -t 0 >/dev/null &
     PREVIEW_UI_PID=$!
-# TODO
-echo PREVIEW_UI_PID= $PREVIEW_UI_PID
+    [ $DEBUG == on ] && logger "${NAME}: PREVIEW_UI_PID=${PREVIEW_UI_PID}"
   fi
 }
 
@@ -227,9 +225,7 @@ init-gpio-pins
 # run a handler for the power off switch in the background
 handle-gpwr &
 PWR_HANDLER_PID=$!
-# TODO
-echo PWR_HANDLER_PID= $PWR_HANDLER_PID
-echo parent PID = $$
+[ $DEBUG == on ] && logger "PWR_HANDLER_PID=${PWR_HANDLER_PID}; my PID = $$"
 
 # fire up the preview UI
 preview-ui start

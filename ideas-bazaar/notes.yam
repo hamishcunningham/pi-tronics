@@ -3,9 +3,12 @@ Ideas Bazaar Bizarre Ideas
 
 1. rewire the screen for 5v                     [DONE]
 2. control circuit, switches                    [DONE]
-  - add a display on/off
-3. box
-4. camera UI
+3. box                                          [DONE]
+4. camera UI                                    
+   - works from cli
+   - need to install and run as daemon
+   - faster convert code
+   - debug the process ids stuff
 5. finalise bazaar exhibit
 6. cam for music or icoss (timelapse onto the SD card)
 7. writeups, and contrib to comments here:
