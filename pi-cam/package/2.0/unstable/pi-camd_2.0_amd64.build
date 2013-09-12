@@ -1,0 +1,205 @@
+ dpkg-buildpackage -rfakeroot -D -us -uc -Ipackage
+dpkg-buildpackage: export CFLAGS from dpkg-buildflags (origin: vendor): -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Wformat-security
+dpkg-buildpackage: export CPPFLAGS from dpkg-buildflags (origin: vendor): -D_FORTIFY_SOURCE=2
+dpkg-buildpackage: export CXXFLAGS from dpkg-buildflags (origin: vendor): -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Wformat-security
+dpkg-buildpackage: export FFLAGS from dpkg-buildflags (origin: vendor): -g -O2
+dpkg-buildpackage: export LDFLAGS from dpkg-buildflags (origin: vendor): -Wl,-Bsymbolic-functions -Wl,-z,relro
+dpkg-buildpackage: source package pi-camd
+dpkg-buildpackage: source version 2.0
+dpkg-buildpackage: source changed by Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+ dpkg-source -Ipackage --before-build pi-cam
+dpkg-buildpackage: host architecture amd64
+ fakeroot debian/rules clean
+dh clean 
+   dh_testdir
+   dh_auto_clean
+   dh_clean
+	rm -f debian/pi-camd.substvars
+	rm -f debian/pi-camd.*.debhelper
+	rm -rf debian/pi-camd/
+	rm -f debian/*.debhelper.log
+	rm -f debian/files
+	find .  \( \( -type f -a \
+	        \( -name '#*#' -o -name '.*~' -o -name '*~' -o -name DEADJOE \
+		 -o -name '*.orig' -o -name '*.rej' -o -name '*.bak' \
+		 -o -name '.*.orig' -o -name .*.rej -o -name '.SUMS' \
+		 -o -name TAGS -o \( -path '*/.deps/*' -a -name '*.P' \) \
+		\) -exec rm -f {} \; \) -o \
+		\( -type d -a -name autom4te.cache -prune -exec rm -rf {} \; \) \)
+	rm -f *-stamp
+ dpkg-source -Ipackage -b pi-cam
+dpkg-source: info: using source format `3.0 (native)'
+dpkg-source: info: building pi-camd in pi-camd_2.0.tar.gz
+dpkg-source: info: building pi-camd in pi-camd_2.0.dsc
+ debian/rules build
+dh build 
+   dh_testdir
+   dh_auto_configure
+   dh_auto_build
+	make -j1
+make[1]: Entering directory `/home/hamish/pi-tronics/pi-cam'
+Makefile for Pi-Cam                                         
+                                                              
+Usage:                                                        
+   make install                   installs the Pi-Cam daemon
+   make uninstall                 removes the daemon          
+   make list                      list installed files        
+   make package                   create .deb/.dcs packagings 
+   make package-upload            upload to PPA repository    
+   make package-clean             delete tmp packaging files  
+   make package-info              apt-cache showpkg           
+   make package-purge             apt-get purge               
+   make package-version           update the changelog        
+                                                              
+make[1]: Leaving directory `/home/hamish/pi-tronics/pi-cam'
+   dh_auto_test
+ fakeroot debian/rules binary
+dh binary 
+   dh_testroot
+   dh_prep
+	rm -f debian/pi-camd.substvars
+	rm -f debian/pi-camd.*.debhelper
+	rm -rf debian/pi-camd/
+   dh_installdirs
+	install -d debian/pi-camd
+   dh_auto_install
+	make -j1 install DESTDIR=/home/hamish/pi-tronics/pi-cam/debian/pi-camd
+make[1]: Entering directory `/home/hamish/pi-tronics/pi-cam'
+install -d -m 755         /home/hamish/pi-tronics/pi-cam/debian/pi-camd/usr/sbin
+install -d -m 755         /home/hamish/pi-tronics/pi-cam/debian/pi-camd/etc/init.d
+install -d -m 755         /home/hamish/pi-tronics/pi-cam/debian/pi-camd/etc/default
+install -d -m 755         /home/hamish/pi-tronics/pi-cam/debian/pi-camd/usr/share/man/man8
+install pi-camd.default      /home/hamish/pi-tronics/pi-cam/debian/pi-camd/etc/default/pi-camd
+install -m 755 pi-cam       /home/hamish/pi-tronics/pi-cam/debian/pi-camd/usr/sbin
+install -m 755 pi-camd.init  /home/hamish/pi-tronics/pi-cam/debian/pi-camd/etc/init.d/pi-camd
+install man/pi-camd.8.gz     /home/hamish/pi-tronics/pi-cam/debian/pi-camd/usr/share/man/man8
+install man/pi-cam.8.gz     /home/hamish/pi-tronics/pi-cam/debian/pi-camd/usr/share/man/man8
+[ -z "/home/hamish/pi-tronics/pi-cam/debian/pi-camd" ] && update-rc.d pi-camd defaults || :
+Pi-Cam installed: 
+/home/hamish/pi-tronics/pi-cam/debian/pi-camd/etc/default/pi-camd
+/home/hamish/pi-tronics/pi-cam/debian/pi-camd/etc/init.d/pi-camd
+/home/hamish/pi-tronics/pi-cam/debian/pi-camd/usr/sbin/pi-cam
+/home/hamish/pi-tronics/pi-cam/debian/pi-camd/usr/share/man/man8/pi-cam.8.gz
+/home/hamish/pi-tronics/pi-cam/debian/pi-camd/usr/share/man/man8/pi-camd.8.gz
+make[1]: Leaving directory `/home/hamish/pi-tronics/pi-cam'
+   dh_install
+   dh_installdocs
+	install -g 0 -o 0 -d debian/pi-camd/usr/share/doc/pi-camd
+	cp -a man/pi-camd.txt debian/pi-camd/usr/share/doc/pi-camd
+	cp -a README.txt debian/pi-camd/usr/share/doc/pi-camd
+	chown -R 0:0 debian/pi-camd/usr/share/doc
+	chmod -R go=rX debian/pi-camd/usr/share/doc
+	chmod -R u\+rw debian/pi-camd/usr/share/doc
+	install -g 0 -o 0 -m 644 -p debian/copyright debian/pi-camd/usr/share/doc/pi-camd/copyright
+   dh_installchangelogs
+	install -o 0 -g 0 -p -m644 debian/changelog debian/pi-camd/usr/share/doc/pi-camd/changelog
+   dh_installexamples
+   dh_installman
+	man --recode UTF-8 ./pi\-camd\.8\.gz > pi\-camd\.8\.gz\.new
+	rm -f pi-camd.8.gz
+	chmod 644 pi-camd.8.gz.new
+	mv -f pi-camd.8.gz.new pi-camd.8
+	man --recode UTF-8 ./pi\-cam\.8\.gz > pi\-cam\.8\.gz\.new
+	rm -f pi-cam.8.gz
+	chmod 644 pi-cam.8.gz.new
+	mv -f pi-cam.8.gz.new pi-cam.8
+   dh_installcatalogs
+   dh_installcron
+   dh_installdebconf
+	install -o 0 -g 0 -d debian/pi-camd/DEBIAN
+   dh_installemacsen
+   dh_installifupdown
+   dh_installinfo
+   dh_pysupport
+dh_pysupport: This program is deprecated, you should use dh_python2 instead. Migration guide: http://deb.li/dhs2p
+	/usr/share/python-support/private/movemodules debian/pi-camd
+   dh_installinit
+	install -p -m644 debian/pi-camd.default debian/pi-camd/etc/default/pi-camd
+	install -p -m755 debian/pi-camd.init debian/pi-camd/etc/init.d/pi-camd
+	echo "# Automatically added by dh_installinit">> debian/pi-camd.postinst.debhelper
+	sed "s/#SCRIPT#/pi-camd/;s/#INITPARMS#/defaults/;s/#ERROR_HANDLER#/exit \$?/" /usr/share/debhelper/autoscripts/postinst-init >> debian/pi-camd.postinst.debhelper
+	echo '# End automatically added section' >> debian/pi-camd.postinst.debhelper
+	echo "# Automatically added by dh_installinit">> debian/pi-camd.prerm.debhelper
+	sed "s/#SCRIPT#/pi-camd/;s/#INITPARMS#/defaults/;s/#ERROR_HANDLER#/exit \$?/" /usr/share/debhelper/autoscripts/prerm-init >> debian/pi-camd.prerm.debhelper
+	echo '# End automatically added section' >> debian/pi-camd.prerm.debhelper
+	echo "# Automatically added by dh_installinit">> debian/pi-camd.postrm.debhelper
+	sed "s/#SCRIPT#/pi-camd/;s/#INITPARMS#/defaults/;s/#ERROR_HANDLER#/exit \$?/" /usr/share/debhelper/autoscripts/postrm-init >> debian/pi-camd.postrm.debhelper
+	echo '# End automatically added section' >> debian/pi-camd.postrm.debhelper
+   dh_installmenu
+   dh_installmime
+   dh_installmodules
+   dh_installlogcheck
+   dh_installlogrotate
+   dh_installpam
+   dh_installppp
+   dh_installudev
+   dh_installwm
+   dh_installxfonts
+   dh_installgsettings
+   dh_bugfiles
+   dh_ucf
+   dh_lintian
+   dh_gconf
+   dh_icons
+   dh_perl
+   dh_usrlocal
+   dh_link
+   dh_compress
+	cd debian/pi-camd
+	chmod a-x usr/share/man/man8/pi-cam.8 usr/share/man/man8/pi-camd.8 usr/share/doc/pi-camd/changelog
+	gzip -9nf usr/share/man/man8/pi-cam.8 usr/share/man/man8/pi-camd.8 usr/share/doc/pi-camd/changelog
+	cd '/home/hamish/pi-tronics/pi-cam'
+   dh_fixperms
+	find debian/pi-camd  -print0 2>/dev/null | xargs -0r chown --no-dereference 0:0
+	find debian/pi-camd ! -type l  -print0 2>/dev/null | xargs -0r chmod go=rX,u+rw,a-s
+	find debian/pi-camd/usr/share/doc -type f  ! -regex 'debian/pi-camd/usr/share/doc/[^/]*/examples/.*' -print0 2>/dev/null | xargs -0r chmod 644
+	find debian/pi-camd/usr/share/doc -type d  -print0 2>/dev/null | xargs -0r chmod 755
+	find debian/pi-camd/usr/share/man debian/pi-camd/usr/man/ debian/pi-camd/usr/X11*/man/ -type f  -print0 2>/dev/null | xargs -0r chmod 644
+	find debian/pi-camd -perm -5 -type f \( -name '*.so.*' -or -name '*.so' -or -name '*.la' -or -name '*.a' \)  -print0 2>/dev/null | xargs -0r chmod 644
+	find debian/pi-camd/usr/include -type f  -print0 2>/dev/null | xargs -0r chmod 644
+	find debian/pi-camd/usr/share/applications -type f  -print0 2>/dev/null | xargs -0r chmod 644
+	find debian/pi-camd -perm -5 -type f \( -name '*.cmxs' \)  -print0 2>/dev/null | xargs -0r chmod 644
+	find debian/pi-camd/usr/lib/perl5 debian/pi-camd/usr/share/perl5 -type f -perm -5 -name '*.pm'  -print0 2>/dev/null | xargs -0r chmod a-X
+	find debian/pi-camd/usr/sbin -type f  -print0 2>/dev/null | xargs -0r chmod a+x
+	find debian/pi-camd/etc/init.d -type f  -print0 2>/dev/null | xargs -0r chmod a+x
+	find debian/pi-camd/usr/lib -type f -name '*.ali'  -print0 2>/dev/null | xargs -0r chmod uga-w
+   dh_installdeb
+	perl -pe 's~#DEBHELPER#~qx{cat debian/pi-camd.postinst.debhelper}~eg' < debian/postinst > debian/pi-camd/DEBIAN/postinst
+	chown 0:0 debian/pi-camd/DEBIAN/postinst
+	chmod 755 debian/pi-camd/DEBIAN/postinst
+	printf '#!/bin/sh
+set -e
+' > debian/pi-camd/DEBIAN/prerm
+	cat debian/pi-camd.prerm.debhelper >> debian/pi-camd/DEBIAN/prerm
+	chown 0:0 debian/pi-camd/DEBIAN/prerm
+	chmod 755 debian/pi-camd/DEBIAN/prerm
+	perl -pe 's~#DEBHELPER#~qx{cat debian/pi-camd.postrm.debhelper}~eg' < debian/postrm > debian/pi-camd/DEBIAN/postrm
+	chown 0:0 debian/pi-camd/DEBIAN/postrm
+	chmod 755 debian/pi-camd/DEBIAN/postrm
+	find debian/pi-camd/etc -type f -printf '/etc/%P
+' >> debian/pi-camd/DEBIAN/conffiles
+	chmod 644 debian/pi-camd/DEBIAN/conffiles
+   dh_gencontrol
+	echo misc:Depends= >> debian/pi-camd.substvars
+	dpkg-gencontrol -ldebian/changelog -Tdebian/pi-camd.substvars -Pdebian/pi-camd
+	chmod 644 debian/pi-camd/DEBIAN/control
+	chown 0:0 debian/pi-camd/DEBIAN/control
+   dh_md5sums
+	(cd debian/pi-camd >/dev/null ; find . -type f ! -path "./etc/init.d/pi-camd" ! -path "./etc/default/pi-camd"  ! -regex '.*/DEBIAN/.*' -printf '%P\0' | LC_ALL=C sort -z | xargs -r0 md5sum > DEBIAN/md5sums) >/dev/null
+	chmod 644 debian/pi-camd/DEBIAN/md5sums
+	chown 0:0 debian/pi-camd/DEBIAN/md5sums
+   dh_builddeb
+	dpkg-deb --build debian/pi-camd ..
+dpkg-deb: building package `pi-camd' in `../pi-camd_2.0_all.deb'.
+ dpkg-genchanges  >../pi-camd_2.0_amd64.changes
+dpkg-genchanges: including full source code in upload
+ dpkg-source -Ipackage --after-build pi-cam
+dpkg-buildpackage: full upload; Debian-native package (full source is included)
+Now running lintian...
+Finished running lintian.
+Now signing changes and any dsc files...
+ signfile pi-camd_2.0.dsc Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+
+ signfile pi-camd_2.0_amd64.changes Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+
+Successfully signed dsc and changes files

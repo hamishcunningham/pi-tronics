@@ -1,0 +1,49 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Thu, 12 Sep 2013 20:38:31 +0100
+Source: pi-camd
+Binary: pi-camd
+Architecture: source all
+Version: 2.0
+Distribution: unstable
+Urgency: low
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Changed-By: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Description: 
+ pi-camd    - Pi-Cam, a Simple Camera Daemon
+Changes: 
+ pi-camd (2.0) unstable; urgency=low
+ .
+   * Second-generation cameras.
+Checksums-Sha1: 
+ 83f0be07685a054adf9afae3efbbf00b4ca172a4 1598 pi-camd_2.0.dsc
+ 76a718a1492c9900e11a0eb0c4c298f6c3936da8 16563 pi-camd_2.0.tar.gz
+ 288eba125184eb80ac29e2af81eee53969923e58 10582 pi-camd_2.0_all.deb
+Checksums-Sha256: 
+ 7c6b7f0faa663449c63f0c7f09f3839126d948180a98f6f5f99e76e6a62bfe63 1598 pi-camd_2.0.dsc
+ 051a99bcba9833ed101ff94f049ad08c7611188925adb3471b052fbd4af99f02 16563 pi-camd_2.0.tar.gz
+ 36b53b3018c02b91ac0f2d3a08baf5f2d63da0af87b2ef539c33def039be811c 10582 pi-camd_2.0_all.deb
+Files: 
+ bc696329e70c2c337dff997b6cf622b2 1598 admin optional pi-camd_2.0.dsc
+ 416db38e02d08c8bbcdb96eca0d78f07 16563 admin optional pi-camd_2.0.tar.gz
+ e982a6d3b73aa0e9d8b833454364f187 10582 admin optional pi-camd_2.0_all.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+iQIcBAEBAgAGBQJSMhnFAAoJEK3gE8dtAR3xyXcP/AurSLVbX/X0BiWC9V5OFppJ
+LxD+meyKwBluvE3+rS7oVn1Z/ch9itJ2bcLjLUxeOImrq4J0XlHVMrY7gdzoXYWx
+UtrWpeaenV19lvJh59zeUBNkRLFbr08OcZVxdFx7YS3l+FcZGX1ok8QFgo8fljDw
+ikAR8kNgEVaqMOHDIThx/ROUqizGVAAE36DpTU6LRMh9aGH4+IOBJWeUqrT1QWPU
+Bg6Rh3ZMznDT1bu1SWbOGaqvgUb6fyfJdLeRPD/qDlhXIJ6F4BydOVmVIk5UfOyv
+MWM+XscKGHQtmXOc1DCHTIM6dYd655qbIBIC81qR1bm1+SfWk5tB0R9CAPQ7E5ed
+1F74rf6bFTzkxxqRYRpSTQDZ1Ky4PwkZzsH04K0QbqIn/dSiLoPJ9Sfes+L4rMt2
+KSMUGSFL3Yvrdfygk2AjH/o/w/BDsfambm3spuXiJg8qpmMteQ+GBr0/iOMR+oca
+Jmu0U1In0bPR2j2MFA7ULF4jD1c+Sf59QfnUb62CEsqZr/fm5jj528eT4sbxPSY+
+w6h7v8SBAMZWCHtlV3R99cEgEUyxjT5sY1FohJ7G8SDbdj7F8SHIH1s8uw3M1ovN
+PnChVs0SOWH+ViHV6B2auLpz7LdKA+zkiHOgBirJRbiODv3Pj5TCks+b83z1Ta6R
+96moezajiSzfbbjm7cco
+=u/sV
+-----END PGP SIGNATURE-----

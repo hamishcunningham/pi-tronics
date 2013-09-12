@@ -1,3 +1,9 @@
+pi-camd (2.0) unstable; urgency=low
+
+  * Second-generation cameras.
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Thu, 12 Sep 2013 20:38:31 +0100
+
 pi-camd (1.0) unstable; urgency=low
 
   * Initial Release.

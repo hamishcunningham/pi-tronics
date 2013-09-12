@@ -12,6 +12,6 @@ Package: pi-camd
 Architecture: all
 Depends: ${misc:Depends}
 Recommends: gpio, imagemagick, apache2
-Description: Pi-Cam, a Simple Camera Monitor
+Description: Pi-Cam, a Simple Camera Daemon
  Pi-Cam is an open source Linux daemon for the Raspberry Pi camera.
- See http://pi.gate.ac.uk/
+ See http://pi.gate.ac.uk/pages/snowcam.html

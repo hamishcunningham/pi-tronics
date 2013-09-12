@@ -1,11 +1,11 @@
-.TH pi-cam 8 "August 26, 2013" "" "System Manager's Manual"
+.TH pi-cam 8 "September 12, 2013" "" "System Manager's Manual"
 .SH NAME
 \fBpi-cam \fP- a simple camera daemon for the Raspberry Pi
 .SH SYNOPSIS
 .nf
 .fam C
-\fBpi-cam\fP [\fB-d\fP] [\fB-h\fP]
-\fBservice\fP \fIpi-camd\fP [{start [\fB-d\fP][\fB-h\fP]|stop|status|restart [\fB-d\fP][\fB-h\fP]}]
+\fBpi-cam\fP [\fB-d\fP] [\fB-h\fP] [\fB-c\fP] [\fB-s\fP]
+\fBservice\fP \fIpi-camd\fP [{start [\fB-d\fP][\fB-h\fP][\fB-s\fP]|stop|status|restart [\fB-d\fP][\fB-h\fP][\fB-s\fP]}]
 .fam T
 .fi
 .SH DESCRIPTION
@@ -53,6 +53,14 @@ Turn on debug mode.
 .B
 \fB-h\fP
 The option \fB-h\fP displays help.
+.TP
+.B
+\fB-c\fP
+Command-line mode: for running the \fBpi-cam\fP script standalone.
+.TP
+.B
+\fB-s\fP
+Simulation mode: for testing etc. on non-Pi systems.
 .SH EXAMPLE
 Restart the daemon with debugging on:
 .PP
