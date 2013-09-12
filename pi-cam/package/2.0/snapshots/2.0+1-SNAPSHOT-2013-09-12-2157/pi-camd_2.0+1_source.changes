@@ -1,0 +1,46 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Thu, 12 Sep 2013 21:54:22 +0100
+Source: pi-camd
+Binary: pi-camd
+Architecture: source
+Version: 2.0+1
+Distribution: precise
+Urgency: low
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Changed-By: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Description: 
+ pi-camd    - Pi-Cam, a Simple Camera Daemon
+Changes: 
+ pi-camd (2.0+1) precise; urgency=low
+ .
+   * Snapshots in the 2.0+1 series.
+Checksums-Sha1: 
+ 3375ca1b91510dc4b7ae213484281c37f30307ef 1606 pi-camd_2.0+1.dsc
+ f8279bc13cea919d53140398bd04348c3fef8780 16774 pi-camd_2.0+1.tar.gz
+Checksums-Sha256: 
+ 9b503f17fdcfd882529db17af62ba05f869bbbd5cf737ad3df7f7b5e4b9ad7fc 1606 pi-camd_2.0+1.dsc
+ fe54228e1b3967c24cd61c952447f2c67e20b072e8be905e32682d46a944e771 16774 pi-camd_2.0+1.tar.gz
+Files: 
+ 3a70d59e5e26a454de7aab8f853f80e6 1606 admin optional pi-camd_2.0+1.dsc
+ e9bd8eeda78a8e891e314f859285d153 16774 admin optional pi-camd_2.0+1.tar.gz
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+iQIcBAEBAgAGBQJSMiqoAAoJEK3gE8dtAR3xZhQP/j4mV3VGjELbfnrYVZO0ydUB
+mhVB7KRAlHrJ/N7vJLSu4C6RXPE8zIEUnRI5+3craheE10PeQa6FB8NZrxYxD4JG
+Xok11W8wOALU5JwItJav8tGUVVF9m0nVERfz/VleUT8mZzkB4get/gbzFtUZsSNB
+vW6GNyIGK5/kWq6k+jnVN0/VkDKb/CpCjgwpTrtX+UCDSvDmJ17Qh04lyJTLxBfx
+2mSbRfBkkc1oYXRpEBv9woKubC8ozNsv0IqpvvnyaRmciDcnUzMYmb6J3epmpXLN
+UPvTYiTyw3c5FlHF1cV9gVdmGT5ceG4ivuMr9i2Pq2INCAI+lYf1oVw+Yaqjpm+y
+wOvK8HeSYAZ9kia9ZAubWiERqYr4e0caHSC5CzTTgIl9VciSYUKNoimDg6cXU8qg
+79RBY/sPd5EeafurokT4xYB6hL2yiJyXZvT4eiPrJImzIiJTY57Rn3JWMG9qvxa7
+byK2oKDL9vAq4uKCFXj1IwGVtrNfk5Qepf1KKA6Gw3IqiY2FJ4Pz5IBfoWOSITXe
+UJV1lekR1uVfcoBouVyqfK9l2WqWLQArSb5tMDJzZ9URMHez8PWFGefv8EKBGTdl
+p6lIajB3XtWhHAz/Sg8TeRhX/r86basB7U9yeCnMMK3XPulNsPvSI3xhW5YFGqKI
+2oVtWCHhgEVKw3se919p
+=Rr4i
+-----END PGP SIGNATURE-----
