@@ -128,7 +128,7 @@ echo
 # handler for take-a-pic switch events
 handle-gpic() {
   # wait for the request
-  gpio wfi $GVID both
+  gpio wfi $GPIC both
 
   # are we doing video or still?
   GVID_STATE=`gpio read $GVID`
