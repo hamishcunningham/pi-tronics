@@ -1,5 +1,11 @@
 pi-camd (2.0) unstable; urgency=low
 
+  * Snapshots in the 2.0+1 series.
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Thu, 12 Sep 2013 21:54:22 +0100
+
+pi-camd (2.0) unstable; urgency=low
+
   * Second-generation cameras.
 
  -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Thu, 12 Sep 2013 20:38:31 +0100
