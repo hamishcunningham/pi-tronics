@@ -5,7 +5,7 @@ Ideas Bazaar Bizarre Ideas
 2. control circuit, switches                    [DONE]
 3. box                                          [DONE]
 4. camera UI                                    
-   - works from cli
+   - add netthing wifi
    - need to install and run as daemon
    - faster convert code
    - clear the terminal -- e.g. "clear >/dev/pts/1" (get term by "tty")
