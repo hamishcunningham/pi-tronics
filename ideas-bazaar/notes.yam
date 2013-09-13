@@ -11,6 +11,7 @@ Ideas Bazaar Bizarre Ideas
    - clear the terminal -- e.g. "clear >/dev/pts/1" (get term by "tty")
      - sudo bash -c "clear >/dev/tty1"
    - debug the process ids stuff
+   - http://www.raspberrypi-spy.co.uk/2012/11/cheap-miniature-lcd-screen/
 5. finalise bazaar exhibit
 6. cam for music or icoss (timelapse onto the SD card)
 7. writeups, and contrib to comments here:
