@@ -55,7 +55,7 @@ fi
 
 # where files live on the web server
 WEB_HOME=/var/www
-[ $CLI == on ] && WEB_HOME=`pwd`/www
+[ "$CLI" == on ] && WEB_HOME=`pwd`/www
 INDEX=${WEB_HOME}/index.html
 HELP=${WEB_HOME}/help.html
 THUMBS=${WEB_HOME}/thumbs
