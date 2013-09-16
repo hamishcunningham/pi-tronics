@@ -6,6 +6,7 @@ import numpy
 import math
 import datetime
 
+# port to listen on
 port = 5005
 
 # setup networking
@@ -19,9 +20,12 @@ screen = pygame.display.set_mode((640, 400))
 screen.fill((255, 255, 255))
 myfont = pygame.font.SysFont("sans", 10)
 
+# length of moving average array
+AL = 80
+# length of moving average
+MAL = 20
+
 # accelerometer storage for moving average
-AL = 80 # length of moving average array
-MAL = 15 # length of moving average
 AXa = numpy.zeros((1, AL))
 AYa = numpy.zeros((1, AL))
 AZa = numpy.zeros((1, AL))
@@ -33,8 +37,13 @@ GZ = 1
 
 # polar gravity
 PGR = 0
-PGA = -math.pi
+PGA = -math.pi/2
 PGB = 0
+
+# screen gravity
+PSGR = 1
+PSGA = -math.pi/2
+PSGB = 0
 
 # compass storage for moving average
 CXa = numpy.zeros((1, AL))
@@ -46,15 +55,18 @@ AX = 0
 AY = 0
 AZ = 0
 
+# rotated for screen accelerometer values
+GAX = 0
+GAY = 0
+GAZ = 0
+
 # compass values
 CX = 0
 CY = 0
 CZ = 0
 
-# headings
+# compass heading
 HXY = 0
-HXZ = 0
-HYZ = 0
 
 # compass calibration
 MACX = -3000
@@ -63,6 +75,9 @@ MACY = -3000
 MICY = 3000
 MACZ = -3000
 MICZ = 3000
+
+# need a matrix to store splotches in
+
 
 # =========
 # functions
@@ -123,9 +138,6 @@ def heading(X, Y):
     return h
 
 
-# screen gravity
-(PSGR, PSGA, PSGB) = polar(0, 0, 1)
-
 # ============
 # main program
 # ============
@@ -158,6 +170,21 @@ while running:
 #        AY = round(AY * 10) / 10
 #        AZ = round(AZ * 10) / 10
 
+        # combined acceleration for working out resting gravity
+        A = math.fabs(numpy.linalg.norm([AX, AY, AZ]) - 1)
+
+        # in a slow moment store most recent direction of the gravitational field
+        if A < 0.02:
+            GX = AX
+            GY = AY
+            GZ = AZ
+            (PGR, PGA, PGB) = polar(GX, GY, GZ)
+
+        # rotate to screen coordinates and subtract gravity
+        (PAR, PAA, PAB) = polar(AX, AY, AZ)
+        (GAX, GAY, GAZ) = cartesian(PAR, PAA - PGA + PSGA, PAB - PGB + PSGB)
+        GAZ = GAZ - PGR
+
         # moving averages for compass
         (CX, CXa) = movingaverage(CXa, CX)
         (CY, CYa) = movingaverage(CYa, CY)
@@ -182,15 +209,17 @@ while running:
         CY = CY - (MACY + MICY) / 2
         CZ = CZ - (MACZ + MICZ) / 2
 
-        # headings
+        # compass heading
+        # need to correct CX, CY for tilt of compass...
+        # http://www.loveelectronics.co.uk/Tutorials/13/tilt-compensated-compass-arduino-tutorial
         HXY = heading(CX, CY)
-#        HXZ = heading(CX, CZ)
-#        HYZ = heading(CY, CZ)
+
 
     # check for a quit (or other events at some point I suppose)
     event = pygame.event.poll()
     if event.type == pygame.QUIT:
         running = 0
+
 
     # =======
     # drawing
@@ -219,46 +248,23 @@ while running:
     bartext(440, CY, 2000)
     bartext(515, CZ, 2000)
 
-#    text(555, 366, str(HXY / (2 * math.pi) * 360))
     text(555, 380, str(HXY / (2 * math.pi) * 360))
 
-    # combined acceleration for working out resting gravity
-    A = math.fabs(numpy.linalg.norm([AX, AY, AZ]) - 1)
-#    print "(%f, %f, %f) - (%f)" % (AX, AY, AZ, A)
-
-    # in a slow moment store most recent direction of the gravitational field
-    if A < 0.02:
-        GX = AX
-        GY = AY
-        GZ = AZ
-        (PGR, PGA, PGB) = polar(GX, GY, GZ)    
-
-    # acceleration detection for paint strokes (going up reduces gravity to less than one?)
-#    A = math.fabs(1 - numpy.sum(numpy.absolute([AX, AY, AZ])))
+    # acceleration detection for paint strokes
+    A = math.fabs(numpy.linalg.norm([GAY, GAZ]))
     text(10, 10, str(A))
 
-#    if A > 0.7 and fast != 1:
+    # splotches
     if A > 0.4 and fast != 1:
         fast = 1
-        print "fast!"
-        print datetime.datetime.now().time()
-    elif fast == 1 and A < 0.05:
+    elif fast == 1 and A < 0.1:
         fast = 0
-        print "slow!"
-        print datetime.datetime.now().time()
     elif fast == 1:
-#        print "slowing down..."
-        # subtract gravity to get direction vector
-#        GAX = AX - GX
-#        GAY = AY - GY
-#        GAZ = AZ - GZ
-        (PAR, PAA, PAB) = polar(AX, AY, AZ)
-#        print "gravity: %f, %f, %f" % (PGR, PGA, PGB)
-#        print "acceleration: %f, %f, %f" % (PAR, PAA, PAB)
-        (GAX, GAY, GAZ) = cartesian(PAR, PAA - PGA + PSGA, PAB - PGB + PSGB)
-        GAZ = GAZ - PGR # can only subtract proper gravity once it's been translated, other wise parts of the sideways coordinates are subtracted too
-#        print "screen gravity: %f, %f, %f" % (GAX, GAY, GAZ)
         pygame.draw.line(screen, (0, 255, 0), (320, 200), (320 + GAY / 2.5 * 200, 200 + GAZ / 2.5 * 200), 2)
+        # add a splot spacing relative to A
+
+    # draw the splotches 
+
 
     # push updates to the screen
     pygame.display.flip()
@@ -267,3 +273,4 @@ while running:
     time.sleep(0.005)
 
 pygame.quit()
+
