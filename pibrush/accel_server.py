@@ -31,6 +31,11 @@ GX = 0
 GY = 0
 GZ = 1
 
+# polar gravity
+PGR = 0
+PGA = -math.pi
+PGB = 0
+
 # compass storage for moving average
 CXa = numpy.zeros((1, AL))
 CYa = numpy.zeros((1, AL))
@@ -45,6 +50,19 @@ AZ = 0
 CX = 0
 CY = 0
 CZ = 0
+
+# headings
+HXY = 0
+HXZ = 0
+HYZ = 0
+
+# compass calibration
+MACX = -3000
+MICX = 3000
+MACY = -3000
+MICY = 3000
+MACZ = -3000
+MICZ = 3000
 
 # =========
 # functions
@@ -91,15 +109,22 @@ def cartesian(X, A, B):
     y = X * math.sin(B) * math.sin(A)
     z = X * math.cos(B)
     return (x, y, z)
-    
+
+def heading(X, Y):
+    # compass heading (2D planar)
+    # http://aeroquad.com/showthread.php?88-3-Axis-Magnetometer
+    h = 0
+    if X < 0:
+        h = math.pi - math.atan(Y/X)
+    elif X > 0 and Y < 0: 
+        h = -math.atan(Y/X);
+    elif X > 0 and Y > 0:
+        h = 2 * math.pi - math.atan(Y/X);
+    return h
 
 
 # screen gravity
-(SGX, SGA, SGB) = polar(0, 0, 1)
-#print cartesian(SGX, SGA, SGB)
-CGSA = 0
-CGSB = 0
-
+(PSGR, PSGA, PSGB) = polar(0, 0, 1)
 
 # ============
 # main program
@@ -119,9 +144,9 @@ while running:
         AX = float(a[0])
         AY = float(a[1])
         AZ = float(a[2])
-        CX = int(a[3])
-        CY = int(a[4])
-        CZ = int(a[5])
+        CX = float(a[3]) * 0.1
+        CY = float(a[4]) * 0.1
+        CZ = float(a[5]) * 0.1
 
         # moving averages for acceleration
         (AX, AXa) = movingaverage(AXa, AX)
@@ -137,7 +162,30 @@ while running:
         (CX, CXa) = movingaverage(CXa, CX)
         (CY, CYa) = movingaverage(CYa, CY)
         (CZ, CZa) = movingaverage(CZa, CZ)
-        
+
+        # compass calibration
+        if CX > MACX:
+            MACX = CX
+        if CX < MICX:
+            MICX = CX
+        if CY > MACY:
+            MACY = CY
+        if CY < MICY:
+            MICY = CY
+        if CZ > MACZ:
+            MACZ = CZ
+        if CZ < MICZ:
+            MICZ = CZ
+
+        # https://www.sparkfun.com/products/10619#comment-4f07fe86ce395f5a76000000
+        CX = CX - (MACX + MICX) / 2
+        CY = CY - (MACY + MICY) / 2
+        CZ = CZ - (MACZ + MICZ) / 2
+
+        # headings
+        HXY = heading(CX, CY)
+#        HXZ = heading(CX, CZ)
+#        HYZ = heading(CY, CZ)
 
     # check for a quit (or other events at some point I suppose)
     event = pygame.event.poll()
@@ -171,28 +219,29 @@ while running:
     bartext(440, CY, 2000)
     bartext(515, CZ, 2000)
 
-    # combined acceleration
-    Atotal = numpy.linalg.norm([AX, AY, AZ])
-    A = math.fabs(Atotal - 1)
+#    text(555, 366, str(HXY / (2 * math.pi) * 360))
+    text(555, 380, str(HXY / (2 * math.pi) * 360))
+
+    # combined acceleration for working out resting gravity
+    A = math.fabs(numpy.linalg.norm([AX, AY, AZ]) - 1)
+#    print "(%f, %f, %f) - (%f)" % (AX, AY, AZ, A)
+
+    # in a slow moment store most recent direction of the gravitational field
+    if A < 0.02:
+        GX = AX
+        GY = AY
+        GZ = AZ
+        (PGR, PGA, PGB) = polar(GX, GY, GZ)    
+
+    # acceleration detection for paint strokes (going up reduces gravity to less than one?)
+#    A = math.fabs(1 - numpy.sum(numpy.absolute([AX, AY, AZ])))
     text(10, 10, str(A))
+
 #    if A > 0.7 and fast != 1:
-    if A > 0.25 and fast != 1:
+    if A > 0.4 and fast != 1:
         fast = 1
         print "fast!"
         print datetime.datetime.now().time()
-        GX = gravity(AXa)
-        GY = gravity(AYa)
-        GZ = gravity(AZa)
-#        G = numpy.linalg.norm([GX, GY, GZ])
-#        if GZ != 0:
-#            (PX, PA, PB) = polar(GX, GY, GZ)
-#            CGSA = SGA - PA # current gravity screen rotation A
-#            CGSB = SGB - PB
-##            print "%f %f %f %f" % (SGA, PA, SGB, PB)
-##            print "%f %f" % (CGSA, CGSB)
-##            (GX, GY, GZ) = cartesian(PX, CGSA, CGSB)
-##            print "gravity: %f, %f, %f" % (GX, GY, GZ)
-##            print "%f %f" % (CGSA, CGSB)
     elif fast == 1 and A < 0.05:
         fast = 0
         print "slow!"
@@ -200,17 +249,15 @@ while running:
     elif fast == 1:
 #        print "slowing down..."
         # subtract gravity to get direction vector
-        GAX = AX - GX
-        GAY = AY - GY
-        GAZ = AZ - GZ
-##        (PGAX, PGAA, PGAB) = polar(GAX, GAY, GAZ)
-#        (PGAX, PGAA, PGAB) = polar(AX, AY, AZ)
-#        PGAA = PGAA + CGSA # correct for the screen
-#        PGAB = PGAB + CGSB
-#        (GAX, GAY, GAZ) = cartesian(PGAX, PGAA, PGAB)
-        GAY = GAY * -1
-#        GAZ = GAZ - 1
-##        print "slowing down... before: %f, %f, %f -- vector: %f, %f, %f" % (AX, AY, AZ, GAX, GAY, GAZ)
+#        GAX = AX - GX
+#        GAY = AY - GY
+#        GAZ = AZ - GZ
+        (PAR, PAA, PAB) = polar(AX, AY, AZ)
+#        print "gravity: %f, %f, %f" % (PGR, PGA, PGB)
+#        print "acceleration: %f, %f, %f" % (PAR, PAA, PAB)
+        (GAX, GAY, GAZ) = cartesian(PAR, PAA - PGA + PSGA, PAB - PGB + PSGB)
+        GAZ = GAZ - PGR # can only subtract proper gravity once it's been translated, other wise parts of the sideways coordinates are subtracted too
+#        print "screen gravity: %f, %f, %f" % (GAX, GAY, GAZ)
         pygame.draw.line(screen, (0, 255, 0), (320, 200), (320 + GAY / 2.5 * 200, 200 + GAZ / 2.5 * 200), 2)
 
     # push updates to the screen
