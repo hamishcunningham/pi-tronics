@@ -3,9 +3,15 @@ Bazaar Posters
 %contents
 
 -----------------------------------------------------------------------------
-%1 URL
+%1 Banner
 
 %(url.svg)  %(url.pdf)
+
+
+-----------------------------------------------------------------------------
+%1 TBC...
+
+%(your-project-here.svg)  %(your-project-here.pdf)
 
 
 -----------------------------------------------------------------------------
@@ -57,6 +63,19 @@ age-appropriate exploration of this topic  in the context of the international
 
 
 -----------------------------------------------------------------------------
+%1 SnowCam: DIY Programmable Camera and Spook-Free Device
+
+MIST
+
+- It's your data, but do you own it?!
+  - all your email is bcc. BoredYoungSpies@nsa.gov
+  - your're a Facebook friend of NoSenseOfHumour@gchq.gov.uk
+  - anything the NSA has,
+    %(http://www.theguardian.com/world/2013/sep/11/nsa-americans-personal-data-israel-documents,
+    Mossad has)
+
+
+-----------------------------------------------------------------------------
 %1 School's __*In*__
 
 - %(http://www.rushkoff.com/program-or-be-programmed/, Program or be
@@ -98,7 +117,6 @@ Google donated $1,000,000 for Pi hardware in schools
 
 %image(code-club-150x150.svg, code-club-150x150.svg, 150, 150)
 
------------------------------------------------------------------------------
 "At Boots science is for boys and pink pricess toys are for girls";
 %(http://minigirlgeek.wordpress.com/, Amy Mather) (14-year-old Pi hacker) at
 %(http://wutheringbytes.com/, Wuthering Bytes), September 14th 2013.
@@ -122,21 +140,6 @@ Games with a porpoise??
 - better opportunities
 - no discrimination (%(http://www.equalpayportal.co.uk/, equal pay for equal
   work)!)
-
-
------------------------------------------------------------------------------
-%1 SnowCam: DIY Programmable Camera and Spook-Free Device
-
-../program-or-be-programmed.odg
-
-MIST
-
-- It's your data, but do you own it?!
-  - all your email is bcc. BoredYoungSpies@nsa.gov
-  - your're a Facebook friend of NoSenseOfHumour@gchq.gov.uk
-  - anything the NSA has,
-    %(http://www.theguardian.com/world/2013/sep/11/nsa-americans-personal-data-israel-documents,
-    Mossad has)
 
 
 -----------------------------------------------------------------------------
