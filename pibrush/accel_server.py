@@ -6,6 +6,11 @@ import numpy
 import math
 import datetime
 
+
+# ==============
+# initialization
+# ==============
+
 # port to listen on
 port = 5005
 
@@ -25,7 +30,7 @@ AL = 20
 # accelerometer storage for moving average
 AXa = numpy.zeros((1, AL))
 AYa = numpy.zeros((1, AL))
-AZa = numpy.zeros((1, AL))
+AZa = numpy.ones((1, AL))
 
 # store gravity when fast is detected..
 GX = 0
@@ -42,11 +47,6 @@ PSGR = 1
 PSGA = -math.pi/2
 PSGB = 0
 
-# compass storage for moving average
-CXa = numpy.zeros((1, AL))
-CYa = numpy.zeros((1, AL))
-#CZa = numpy.zeros((1, AL))
-
 # accelerometer values
 AX = 0
 AY = 0
@@ -58,22 +58,6 @@ GAY = 0
 GAZ = 0
 last_G = 0
 
-# compass values
-CX = 0
-CY = 0
-#CZ = 0
-
-# compass heading
-HXY = 0
-
-# compass calibration
-MACX = -3000
-MICX = 3000
-MACY = -3000
-MICY = 3000
-#MACZ = -3000
-#MICZ = 3000
-
 # timing information
 last_time = time.time();
 
@@ -83,8 +67,10 @@ BY = 0
 VX = 0 # velocity
 VY = 0
 P = 0 # amount of paint on brush
+last_stroke = 0
 
 # need a matrix to store splotches in
+splotches = numpy.zeros((6, 1))
 
 
 # =========
@@ -123,23 +109,10 @@ def polar(X, Y, Z):
 
 # http://electron9.phys.utk.edu/vectors/3dcoordinates.htm
 def cartesian(X, A, B):
-#    x = X * math.sin(B) * math.cos(A)
     x = 0 # don't bother to do the math since we don't use it
     y = X * math.sin(B) * math.sin(A)
     z = X * math.cos(B)
     return (x, y, z)
-
-def heading(X, Y):
-    # compass heading (2D planar)
-    # http://aeroquad.com/showthread.php?88-3-Axis-Magnetometer
-    h = 0
-    if X < 0:
-        h = math.pi - math.atan(Y/X)
-    elif X > 0 and Y < 0: 
-        h = -math.atan(Y/X);
-    elif X > 0 and Y > 0:
-        h = 2 * math.pi - math.atan(Y/X);
-    return h
 
 
 # ============
@@ -151,10 +124,19 @@ notfast = 0
 running = 1
 while running:
 
+    # move time forward
     dt = time.time() - last_time
     last_time = time.time()
 
-    # do networking
+    # check for a quit (or other events at some point I suppose)
+    event = pygame.event.poll()
+    if event.type == pygame.QUIT:
+        running = 0
+
+    # ====================
+    # networking & sensors
+    # ====================
+
     result = select.select([sock], [], [], 0)
     if len(result[0]) > 0:
         # read in data
@@ -163,9 +145,6 @@ while running:
         AX = float(a[0])
         AY = float(a[1])
         AZ = float(a[2])
-        CX = float(a[3])
-        CY = float(a[4])
-#        CZ = float(a[5])
 
         # moving averages for acceleration
         (AX, AXa) = movingaverage(AXa, AX)
@@ -186,43 +165,44 @@ while running:
         # rotate to screen coordinates and subtract gravity
         (PAR, PAA, PAB) = polar(AX, AY, AZ)
         (GAX, GAY, GAZ) = cartesian(PAR, PAA - PGA + PSGA, PAB - PGB + PSGB)
-        GAY = -GAY
-        GAZ = -(GAZ - PGR)
-
-        # moving averages for compass
-        (CX, CXa) = movingaverage(CXa, CX)
-        (CY, CYa) = movingaverage(CYa, CY)
-#        (CZ, CZa) = movingaverage(CZa, CZ)
-
-        # compass calibration
-        if CX > MACX:
-            MACX = CX
-        if CX < MICX:
-            MICX = CX
-        if CY > MACY:
-            MACY = CY
-        if CY < MICY:
-            MICY = CY
-#        if CZ > MACZ:
-#            MACZ = CZ
-#        if CZ < MICZ:
-#            MICZ = CZ
-
-        # https://www.sparkfun.com/products/10619#comment-4f07fe86ce395f5a76000000
-        CX = CX - (MACX + MICX) / 2
-        CY = CY - (MACY + MICY) / 2
-#        CZ = CZ - (MACZ + MICZ) / 2
-
-        # compass heading
-        # need to correct CX, CY for tilt of compass...
-        # http://www.loveelectronics.co.uk/Tutorials/13/tilt-compensated-compass-arduino-tutorial
-        HXY = heading(CX, CY)
+        GAZ = GAZ - PGR
 
 
-    # check for a quit (or other events at some point I suppose)
-    event = pygame.event.poll()
-    if event.type == pygame.QUIT:
-        running = 0
+    # ==================
+    # paintbrush physics
+    # ==================
+
+    # acceleration detection for paint strokes
+    A = math.fabs(numpy.linalg.norm([GAY, GAZ]))
+
+    # detect moving quickly
+    if A > 0.4 and fast != 1 and last_time - last_stroke > 0.5:
+        fast = 1
+        notfast = 0
+        BX = 400 * GAY + 320
+        BY = 400 * GAZ + 200
+        VX = 0
+        VY = 0
+        P = 100
+
+    # detect stopping
+    if fast == 1 and (A < 0.1 or (BX > (640 + 200) or BX < -200) and (BY > (400 + 200) or BY < -200)) or P <= 0:
+        notfast = notfast + dt
+        if notfast >= 0.12:
+            fast = 0
+            BX = 0
+            BY = 0
+            last_stroke = last_time
+
+    if fast == 1:
+        # accelerate the paint brush
+        VX = VX - GAY * dt * 150
+        VY = VY - GAZ * dt * 150
+        BX = BX + VX * dt * 100
+        BY = BY + VY * dt * 100
+
+        # add splotches.... high velocity big splotches far apart, low small close
+        print splotches
 
 
     # =======
@@ -237,48 +217,28 @@ while running:
     pygame.draw.rect(screen, (255, 0, 0), (150, 200, 50, AY / 2.5 * 200))
     pygame.draw.rect(screen, (255, 0, 0), (225, 200, 50, AZ / 2.5 * 200))
 
-    # compass bars
-    pygame.draw.rect(screen, (0, 0, 255), (365, 200, 50, CX / 2000 * 200))
-    pygame.draw.rect(screen, (0, 0, 255), (440, 200, 50, CY / 2000 * 200))
-#    pygame.draw.rect(screen, (0, 0, 255), (515, 200, 50, CZ / 2000 * 200))
-
     # accelerometer text
     bartext(75, AX, 2.5)
     bartext(150, AY, 2.5)
     bartext(225, AZ, 2.5)
 
-    # compass text
-    bartext(365, CX, 2000)
-    bartext(440, CY, 2000)
-#    bartext(515, CZ, 2000)
+    # draw acceleration vector
+    pygame.draw.line(screen, (0, 255, 0), (320, 200), (320 - GAY / 2.5 * 200, 200 - GAZ / 2.5 * 200), 2)
 
-    text(555, 380, str(HXY / (2 * math.pi) * 360))
+    # draw the paintbrush
+    if BX != 0 and BY != 0:
+        pygame.draw.circle(screen, (0, 0, 0), (int(BX), int(BY)), 5)
 
-    # acceleration detection for paint strokes
-    A = math.fabs(numpy.linalg.norm([GAY, GAZ]))
-    text(10, 10, str(A))
 
-    # splotches
-    if A > 0.3 and fast != 1:
-        fast = 1
-        notfast = 0
 
-    if fast == 1:
-        if A < 0.08:
-            notfast = notfast + dt
-            if notfast >= 0.05:
-                fast = 0
-        pygame.draw.line(screen, (0, 255, 0), (320, 200), (320 + GAY / 2.5 * 200, 200 + GAZ / 2.5 * 200), 2)
-        # add a splot spacing relative to A
-
-    # draw the splotches 
+    # draw splotches
 
 
     # push updates to the screen
     pygame.display.flip()
 
     # wait some
-    time.sleep(0.005)
+    time.sleep(0.004)
 
 pygame.quit()
 

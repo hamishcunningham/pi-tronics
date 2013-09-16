@@ -13,10 +13,6 @@ XLoBorg.Init()
 # make the socket connection
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 while True:
-#    acceleration = 'X = %+01.4f G, Y = %+01.4f G, Z = %+01.4f G' % XLoBorg.ReadAccelerometer()
-    acceleration = '%+01.4f,%+01.4f,%+01.4f' % XLoBorg.ReadAccelerometer()
-#    compass = 'mX = %+06d, mY = %+06d, mZ = %+06d' % XLoBorg.ReadCompassRaw()
-    compass = '%+06d,%+06d,%+06d' % XLoBorg.ReadCompassRaw()
-    message = '%s, %s' %(acceleration, compass)
+    message = '%+01.4f,%+01.4f,%+01.4f' % XLoBorg.ReadAccelerometer()
     sock.sendto(message, (server, port))
     time.sleep(0.005)
