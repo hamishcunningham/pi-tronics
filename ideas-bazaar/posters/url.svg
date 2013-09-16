@@ -27,12 +27,12 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.70000001"
      inkscape:cx="884.77286"
-     inkscape:cy="542.11375"
+     inkscape:cy="520.68518"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1600"
-     inkscape:window-height="876"
+     inkscape:window-width="1920"
+     inkscape:window-height="1056"
      inkscape:window-x="0"
      inkscape:window-y="24"
      inkscape:window-maximized="1" />
@@ -44,7 +44,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -317,21 +317,16 @@
     <text
        xml:space="preserve"
        style="font-size:38.77885056px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;-inkscape-font-specification:Sans"
-       x="104.53727"
-       y="226.576"
+       x="82.512131"
+       y="188.43776"
        id="text2982"
        sodipodi:linespacing="125%"
-       transform="scale(0.90805373,1.1012564)"><tspan
+       transform="scale(0.90805374,1.1012564)"><tspan
          sodipodi:role="line"
          id="tspan2984"
-         x="104.53727"
-         y="226.576"><tspan
-           style="font-size:77.05808258px"
-           id="tspan4526">http://</tspan><tspan
-           style="font-size:173.38067627px"
-           id="tspan4514">Pi.GATE.ac.uk</tspan><tspan
-           style="font-size:77.05808258px"
-           id="tspan4528">/</tspan></tspan></text>
+         x="82.512131"
+         y="188.43776"
+         style="font-size:144px;font-weight:bold">Open Culture Tech</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3193"
@@ -360,7 +355,7 @@
            height="918.57141"
            x="395.71429"
            y="88.076485" /></flowRegion><flowPara
-         id="flowPara4504"></flowPara></flowRoot>    <flowRoot
+         id="flowPara4504" /></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot4506"
        style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Sans;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
@@ -370,7 +365,7 @@
            height="634.28571"
            x="100"
            y="392.36218" /></flowRegion><flowPara
-         id="flowPara4512"></flowPara></flowRoot>    <flowRoot
+         id="flowPara4512" /></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot4518"
        style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Sans;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
@@ -380,19 +375,37 @@
            height="130"
            x="1141.4286"
            y="-53.352089" /></flowRegion><flowPara
-         id="flowPara4524"></flowPara></flowRoot>    <image
-       y="329.005"
+         id="flowPara4524" /></flowRoot>    <image
+       y="309.005"
        x="944.28571"
        id="image4770"
        xlink:href="file:///home/hamish/pi-tronics/ideas-bazaar/posters/pi-gate-logo-500x500.jpg"
        height="459.57144"
        width="461.42856" />
     <image
-       y="328.93356"
+       y="308.93356"
        x="93.000008"
        id="image4851"
        xlink:href="file:///home/hamish/pi-tronics/ideas-bazaar/posters/piart.jpg"
        height="459.71429"
        width="791.14294" />
+    <text
+       xml:space="preserve"
+       style="font-size:38.77885056px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;-inkscape-font-specification:Sans"
+       x="97.008835"
+       y="894.10687"
+       id="text2982-2"
+       sodipodi:linespacing="125%"
+       transform="scale(0.90805374,1.1012564)"><tspan
+         sodipodi:role="line"
+         id="tspan2984-3"
+         x="97.008835"
+         y="894.10687"><tspan
+           style="font-size:77.05808258px"
+           id="tspan4526-7">http://</tspan><tspan
+           style="font-size:173.38067627px"
+           id="tspan4514-3">Pi.GATE.ac.uk</tspan><tspan
+           style="font-size:77.05808258px"
+           id="tspan4528-4">/</tspan></tspan></text>
   </g>
 </svg>
