@@ -2,11 +2,11 @@ Ideas Bazaar Bizarre Ideas
 
 TODO
 - posters
-  - finish future making thingy
+  - finish future making thingy (and link from blog post)
   - add snowcam pics to snowcam
 - rewire the parent alarm
 - post-its, pens, drawing pins
-- blog post (from %(posters/index.html))
+- undraft blog post
 - debug the camera daemon mode
   - rewire the screen for 5v                     [DONE]
   - control circuit, switches                    [DONE]
