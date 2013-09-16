@@ -25,6 +25,8 @@ sock.setblocking(0)
 #YRES = 720
 XRES = 1366
 YRES = 768
+#XRES = 640
+#YRES = 400
 
 # setup display
 pygame.init()
@@ -124,7 +126,7 @@ while running:
 
     # check for a quit (or other events at some point I suppose)
     event = pygame.event.poll()
-    if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == K_q):
+    if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
         running = 0
 
     # no changes made to the screen so far
@@ -179,8 +181,9 @@ while running:
     if A > 0.4 and fast != 1 and last_time - last_stroke > 0.5:
         fast = 1
         notfast = 0
-        BX = 500 * GAY + 320
-        BY = 400 * GAZ + 200
+        scale = random.random() * 0.5 + 0.5
+        BX = YRES * GAY * scale + XRES / 2 + random.randint(-XRES/4, XRES/4)
+        BY = YRES * GAZ * scale + YRES / 2 + random.randint(-YRES/7, YRES/7)
         VX = 0
         VY = 0
         P = 100
@@ -189,7 +192,7 @@ while running:
         COLB = random.randint(0, 255)
 
     # detect stopping
-    if fast == 1 and (A < 0.1 or ((BX > (640 + 200) or BX < -200) and (BY > (400 + 200) or BY < -200)) or P <= 0):
+    if fast == 1 and (A < 0.1 or ((BX > (XRES + 200) or BX < -200) and (BY > (YRES + 200) or BY < -200)) or P <= 0):
         notfast = notfast + dt
         if notfast >= 0.12:
             fast = 0
@@ -199,11 +202,11 @@ while running:
 
     if fast == 1:
         # accelerate the paint brush
-        VX = VX - GAY * dt * 150
-        VY = VY - GAZ * dt * 150
-        BX = BX + VX * dt * 100
-        BY = BY + VY * dt * 100
-        
+        VX = VX - GAY * dt * 170
+        VY = VY - GAZ * dt * 170
+        BX = BX + VX * dt * 120
+        BY = BY + VY * dt * 120
+
         # add splotches.... high velocity big splotches far apart, low small close
         if P > 0:
             V = numpy.linalg.norm([VX, VY])
@@ -212,7 +215,7 @@ while running:
             if S > d:
                 S = S - d
                 P = P - pow(A*4, 2) * math.pi
-                pygame.draw.circle(screen, (COLR, COLG, COLB), (int(BX), int(BY)), int(A*30))
+                pygame.draw.circle(screen, (COLR, COLG, COLB), (int(BX), int(BY)), int(A*45))
                 draw = 1
 
     # push updates to the screen
@@ -220,7 +223,7 @@ while running:
         pygame.display.flip()
 
     # wait some
-#    time.sleep(0.002)
+#    time.sleep(0.05)
 
 pygame.quit()
 
