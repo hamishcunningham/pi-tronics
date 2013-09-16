@@ -16,95 +16,45 @@ TODO
     - http://www.raspberrypi-spy.co.uk/2012/11/cheap-miniature-lcd-screen/
 
 -----------------------------------------------------------------------------
-Future-Making -- an exploration of engineered art and social science with
-open-source hard/soft-ware.
+Ideas Bazaar, Festival of the Mind
+[original proposal]
 
-This will be a rolling event over two days with around a dozen exhibits plus
-an hourly short stage show. The target audience is anyone curious, with
-secondary schools invited to attend if the timing of the event permits.  The
-performers are expected to be engineers, musicians, social scientists,
-dancers, hackers and visual artists.
-
-There is a new conjunction emerging around open hardware, maker culture, and
-art. Parallels exist with the explosive change in pop culture pressaged by
-punk in the late 1970s: from the Homebrew Computer Club trading circuits and
-information and Iain M. Banks' legacy of utopian technofutures, blending
-electro-augmented humanity with benevolent AI; from the wearable electronics
-kits (eg from Adafruit.com - echoing Lady Ada Lovelace, inventor of the
-computer algorithm) to the latest rounds of sampling and remix.
-
-Open-source hardware (eg
-http://en.wikipedia.org/wiki/List_of_open-source_hardware_projects) allows
-people to make their own robots, cameras, electrocardiagraph machines and even
-full computers by downloading schematics and building – incorporating any
-changes they envisage - and, typically, free open-source software is available
-to run these projects.  3D printers have helped this adoption of the
-open-everything ethos.
-
-There also exists a stack of DIY projects based on the new schools computing
-board - the Raspberry Pi (egs
-http://www.raspberrypi.org/phpBB3/viewforum.php?f=15 and
-http://www.raspberrypi.org/archives/tag/music )
-
-The cases of Edward Snowden and Chelsea Manning, however, attest readily to
-questions around ownership of data and 'patent-trolling' is slowing down the
-adoption of cheaper industrial processes --  we will engage in an
-age-appropriate exploration of this topic  in the context of the international
-'broadcast' nature of the internet.
+- The Raspberry Pi as a meeting point for DIY electronics, open computing and
+  music tech, partly as a means of outreach to schools and potential
+  undergrads.
+- The Raspberry Pi is a small cheap computer which is very easy to cobble
+  together with other devices. It has a large community behind it and is one
+  of the drivers behind proposed changes in the schools ICT curriculum.
+- As part of a trend to open hardware and maker culture the Pi is also a
+  vehicle for localist responses to climate change and peak oil: the more we
+  manufacture locally the more secure we are (the Pi is made in Wales); the
+  less energy we use the less carbon we pump into the atmosphere (the Pi is a
+  low power device).
+- This exhibit tries to give a taster of these broad areas, and motivate our
+  proposal for a larger affair for The Festival of the Mind and beyond.
 
 -----------------------------------------------------------------------------
-- Ideas Bazaar, Festival of the Mind
-  - The Raspberry Pi as a meeting point for DIY electronics, open
-    computing and music tech, partly as a means of outreach to schools and
-    potential undergrads.
-  - The Raspberry Pi -- http://www.sheffield.ac.uk/ideasbazaar -- is a
-    small cheap computer which is very easy to cobble together with other
-    devices. It has a large community behind it and is one of the drivers
-    behind proposed changes in the schools ICT curriculum. As part of a
-    trend to open hardware and maker culture the Pi is also a vehicle for
-    localist responses to climate change and peak oil: the more we
-    manufacture locally the more secure we are (the Pi is made in Wales);
-    the less energy we use the less carbon we pump into the atmosphere
-    (the Pi is a low power device).
-  - The exhibit will try to give a taster of these broad areas, and
-    motivate our proposal for a larger affair for The Festival of the Mind
-    and beyond.
+Future Maker -- an exploration of engineered art with the Raspberry Pi
+[original blurb]
 
------------------------------------------------------------------------------
-- It's your data, but do you own it?!
-  - all your email is bcc. BoredYoungSpies@nsa.gov
-  - your're a Facebook friend of NoSenseOfHumour@gchq.gov.uk
-  - anything the NSA has,
-    %(http://www.theguardian.com/world/2013/sep/11/nsa-americans-personal-data-israel-documents,
-    Mossad has)
+This will be a rolling event with 6 or 10 exhibits plus an hourly short stage
+show. The target audience is the young and the young at heart. The performers
+will be musicians, engineers, hackers and artists.
 
------------------------------------------------------------------------------
-Future Maker -- an exploration of engineered art with the
-Raspberry Pi
-
-This will be a rolling event with 6 or 10 exhibits plus an
-hourly short stage show. The target audience is the young and
-the young at heart. The performers will be musicians,
-engineers, hackers and artists.
-
-There is a new conjunction emerging around open hardware,
-maker culture, art and music. There are parallels with the
-explosive change in pop culture pressaged punk in the late
-1970s: from Iain M. Banks' legacy of utopian technofutures
-blending electro-augmented humanity with benevolent AI, to the
-wearable electronics kits from Adafruit.com (echoing Lady Ada
-Lovelace, inventor of the computer bug); from the latest
-rounds of sampling and remix to a stack of projects based on
-the new schools computing board the Raspberry Pi --
-http://www.raspberrypi.org/archives/tag/music -- my personal
-favourite being the use of capacitive sensing wired up to a
-bunch of root vegetables as an instrument -- there would be no
-problem selling the novelty of this invention, even to a jaded
-REF panel!
+There is a new conjunction emerging around open hardware, maker culture, art
+and music. There are parallels with the explosive change in pop culture
+pressaged punk in the late 1970s: from Iain M. Banks' legacy of utopian
+technofutures blending electro-augmented humanity with benevolent AI, to the
+wearable electronics kits from Adafruit.com (echoing Lady Ada Lovelace,
+inventor of the computer bug); from the latest rounds of sampling and remix to
+a stack of projects based on the new schools computing board the Raspberry Pi
+-- http://www.raspberrypi.org/archives/tag/music -- my personal favourite
+being the use of capacitive sensing wired up to a bunch of root vegetables as
+an instrument -- there would be no problem selling the novelty of this
+invention, even to a jaded REF panel!
 
 -----------------------------------------------------------------------------
 Other stuff we discussed:
-
 - tweeting and texting with the Pi
 - from analogue to digital...
 
@@ -112,7 +62,7 @@ Other stuff we discussed:
 TODOs from Bo
 - performers from Sheffield's arts-minded, hacker-oriented, community
 - Sheffield was well-known for electro-pop in the early 80s) details will
-  change, eg was talking to a ballerina last night about the possibility of
+  change, e.g. was talking to a ballerina last night about the possibility of
   projecting choreographic notation (featuring a flowchart with highlighted
   subroutines, etc) and having her dance the piece that emerges (somehow?)
   from an RPi for ten minutes every hour
@@ -127,13 +77,13 @@ Misc
   http://www.youtube.com/watch?feature=player_embedded&v=5yv1yya9T78 for an
   example of Nick's work with Meson on the Tarana100 project a few years ago.
 - Mark (very busy most of the year as a sound engineer) is very much into
-  analogue/digital sound making (generally uses supercollider -
-  http://supercollider.sourceforge.net/ ) but might be interestable - I'm
+  analogue/digital sound making (generally uses supercollider --
+  http://supercollider.sourceforge.net/ ) but might be interestable -- I'm
   happy to contact him.
 - The people I know actively VJing at present use Macs (I experimented with
   LiVeS a while back but reverted to using prepared vids for backdrops) but
   something like http://ftp.dyne.org/freej/ might be used with a small RPi
-  cluster - possibly (linked to supercollider as a trigger) a small CompSci
+  cluster -- possibly (linked to supercollider as a trigger) a small CompSci
   student project?
-- BrickPi might be worth watching -
+- BrickPi might be worth watching --
   http://www.kickstarter.com/projects/john-cole/brickpi-lego-bricks-with-a-raspberry-pi-brain
