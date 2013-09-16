@@ -2,28 +2,18 @@ Ideas Bazaar Bizarre Ideas
 
 TODO
 - posters
-- debug the camera daemon mode
 - rewire the parent alarm
 - post-its, pens, drawing pins
-
-1. rewire the screen for 5v                     [DONE]
-2. control circuit, switches                    [DONE]
-3. box                                          [DONE]
-4. camera UI                                    
-   - fix daemon (use "script"? better debug code)
-   - faster convert code
-   - debug the process ids stuff
-   - http://www.raspberrypi-spy.co.uk/2012/11/cheap-miniature-lcd-screen/
-5. finalise bazaar exhibit
-6. cam for music or icoss (timelapse onto the SD card)
-7. writeups, and contrib to comments here:
-  - http://www.raspberrypi.org/phpBB3/viewtopic.php?t=17651
-  - http://www.wisegai.com/2012/11/29/raspberry-pi-using-a-3-5-tft-car-monitor-optional-powered-using-usb/
-
-- posters
-  - Pi-Alikes -- entering the age of open electronics
-  - Future-Making Future Making
-  - Snowcam: spook-free devices
+- blog post (from %(posters/index.html))
+- debug the camera daemon mode
+  - rewire the screen for 5v                     [DONE]
+  - control circuit, switches                    [DONE]
+  - box                                          [DONE]
+  - camera UI                                    
+    - fix daemon (use "script"? better debug code)
+    - faster convert code
+    - debug the process ids stuff
+    - http://www.raspberrypi-spy.co.uk/2012/11/cheap-miniature-lcd-screen/
 
 -----------------------------------------------------------------------------
 Future-Making -- an exploration of engineered art and social science with
