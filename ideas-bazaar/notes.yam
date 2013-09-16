@@ -12,6 +12,12 @@ at %(http://wutheringbytes.com/, Wuthering Bytes).
 http://wutheringbytes.com/speakers.html#amymather
 
 
+TODO
+- posters
+- debug the camera daemon mode
+- rewire the parent alarm
+
+
 1. rewire the screen for 5v                     [DONE]
 2. control circuit, switches                    [DONE]
 3. box                                          [DONE]
