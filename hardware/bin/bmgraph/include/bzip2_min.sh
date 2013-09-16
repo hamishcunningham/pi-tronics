@@ -15,4 +15,4 @@ done
 
 UNITS="minutes"
 LABEL="Time ($UNITS)"
-TITLE="Bzip2 Compression"
+TITLE="bzip2 Compression"
