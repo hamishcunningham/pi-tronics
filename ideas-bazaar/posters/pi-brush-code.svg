@@ -317,13 +317,13 @@
     <text
        xml:space="preserve"
        style="font-size:32.20747757px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;-inkscape-font-specification:Sans"
-       x="468.32504"
+       x="854.32507"
        y="48.143166"
        id="text2982"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan2984"
-         x="468.32504"
+         x="854.32507"
          y="48.143166">Pi Brush: Python Source Code</tspan></text>
     <text
        sodipodi:linespacing="125%"
@@ -5003,5 +5003,20 @@
            id="flowPara14465-1">http://<flowSpan
    style="font-size:32px;font-weight:bold"
    id="flowSpan5952">Pi.GATE.ac.uk/</flowSpan></flowPara></flowRoot>    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:75.9794693px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="353.70389"
+       y="57.758842"
+       id="text3049"
+       sodipodi:linespacing="125%"
+       transform="scale(0.88856829,1.1254059)"><tspan
+         sodipodi:role="line"
+         x="353.70389"
+         y="57.758842"
+         id="tspan3157"
+         style="font-size:64px">Open <tspan
+   style="font-size:64px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Courier 10 Pitch;-inkscape-font-specification:Courier 10 Pitch"
+   id="tspan3106">{Art}</tspan> Tech</tspan></text>
   </g>
 </svg>
