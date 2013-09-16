@@ -15,10 +15,12 @@ Bazaar Posters
 
 
 -----------------------------------------------------------------------------
-%1 _Future Making_ -- an exploration of engineered art and social science with
-open-source hard/soft-ware
+%1 _Future Making_ --
 
 _Entering the Age of Open Tech_
+
+_(an exploration of engineered art and social science with open-source
+hard/soft/etc-ware)_
 
 *Future Making* will be a rolling event over two days with around a dozen
 exhibits plus an hourly short stage show. The target audience is anyone
@@ -31,7 +33,7 @@ art. Parallels exist with the explosive change in pop culture pressaged by
 punk in the late 1970s: from the Homebrew Computer Club trading circuits and
 information; from Iain M. Banks' legacy of utopian technofutures, blending
 electro-augmented humanity with benevolent AI; from the wearable electronics
-kits (e.g. from %(http://adafruit.com/, Adafruit.com) -- echoing Lady Ada
+kits (e.g. from %(http://Xwww.adafruit.com/, Adafruit.com) -- echoing Lady Ada
 Lovelace, inventor of the computer algorithm); to the latest rounds of
 sampling and remix.
 
@@ -42,11 +44,11 @@ and building -- incorporating any changes they need -- and, typically, free
 open-source software is available to run these projects. 3D printers have
 helped this adoption of the open-everything ethos.
 
-As http://raspberrypi.org/ and many other sites testify, there are stacks of
-DIY projects based on the Raspberry Pi, and the flood showns no sign of
-slowing. The Pi is a small cheap computer which is very easy to cobble
-together with other devices. It has a large community behind it and is one of
-the drivers behind proposed changes in the
+As %(http://Xwww.raspberrypi.org/, RaspberryPi.org) and many other sites
+testify, there are stacks of DIY projects based on the Raspberry Pi, and the
+flood showns no sign of slowing. The Pi is a small cheap computer which is
+very easy to cobble together with other devices. It has a large community
+behind it and is one of the drivers behind proposed changes in the
 %(http://pi.gate.ac.uk/pages/schools.html, schools ICT curriculum).
 
 As part of a trend to open hardware and maker culture the Pi is also a vehicle
