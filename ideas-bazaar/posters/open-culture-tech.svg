@@ -15,7 +15,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="open-culture-tech.svg">
+   sodipodi:docname="open-culture-tech.pdf">
   <defs
      id="defs4">
     <radialGradient
@@ -10291,7 +10291,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
      inkscape:cx="727.65237"
-     inkscape:cy="530.81798"
+     inkscape:cy="524.77029"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -10308,7 +10308,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -13743,7 +13743,7 @@
            width="502.15555"
            id="rect23514" /></flowRegion><flowPara
          style="font-size:14px"
-         id="flowPara23516">A hacker's board. More GPIO than you can shake a stick at. Really pretty flashing LEDs. Neither of which fix to the fundamental flaw. It's a hacker's board. You need the patience of a sage to get anywhere.</flowPara></flowRoot>    <flowRoot
+         id="flowPara23516">A hacker's board. More GPIO than you can shake a stick at. Really pretty flashing LEDs. Neither of which fix to the fundamental flaw. It's a hacker's board. You need the patience of a saint to get anywhere.</flowPara></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot23518"
        style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;-inkscape-font-specification:Sans"
@@ -13767,7 +13767,7 @@
            width="502.15555"
            id="rect23530" /></flowRegion><flowPara
          style="font-size:14px"
-         id="flowPara23532">So polished, and that's reflected in the price. Still, it's perfect for the next step up from a OpenWRT router. It's got dual-gigabit Ethernet. And eSATA. And audio. And Wi-fi. (It's a bit bigger too.)</flowPara></flowRoot>    <flowRoot
+         id="flowPara23532">So polished, and that's reflected in the price. Still, it's perfect for the next step up from an OpenWRT router. It's got dual-gigabit Ethernet. And eSATA. And audio. And Wi-fi. (It's a bit bigger too.)</flowPara></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot23534"
        style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;-inkscape-font-specification:Sans"
@@ -13791,7 +13791,7 @@
            width="502.15555"
            id="rect23546" /></flowRegion><flowPara
          style="font-size:14px"
-         id="flowPara23548">What to say about what's in my mind already a classic? The best bit of Raspberry Pi is community. Meet up with other locals interested at a Raspberry Jam. Walk down to Maplin and buy one. It's hard to beat.</flowPara></flowRoot>    <flowRoot
+         id="flowPara23548">What to say about what's already a classic? The best bit of Raspberry Pi is community. Meet up with other locals interested at a Raspberry Jam. Walk down to Maplin and buy one. It's hard to beat.</flowPara></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot23553"
        style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;-inkscape-font-specification:Sans"

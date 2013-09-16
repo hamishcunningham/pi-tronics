@@ -1,19 +1,88 @@
 Bazaar Posters
 
+%contents
+
 -----------------------------------------------------------------------------
-Open Culture Tech
+%1 Future Making
+
+
+-----------------------------------------------------------------------------
+%1 School's __*In*__
+
+- %(http://www.rushkoff.com/program-or-be-programmed/, Program or be
+  programmed):
+  - the world is saturated with computer code: everything from fridges to
+    singing birthday cards
+  - the people who write our code, create our world
+  - shouldn't everyone have the chance to create their own world, and not
+    simply wander through the creations of others?
+- Computers in the UK Curriculum
+  - %(http://academy.bcs.org/sites/academy.bcs.org/files/ICT%20POS%20Final%20Draft%2030%20Nov%202012_0.pdf,
+    draft curriculum for schools): programming is back!
+  - good news for other subject areas: thinking logically, finding patterns in
+    data can open our eyes to the world around us -- to how birds flock, or
+    populations grow, or economic crises play out
+  - develop our creativity, our concentration and our artistry
+  - asks schools to build '_a critical understanding of technology's impact on
+    the individual and society_'.
+- The Rasberry Pi
+  - a computer that schools don't need to worry about kids breaking, or
+    abusing, or using to endanger their safety -- providing they are careful
+    with the soldering iron
+  - designed to spend much of its life in pieces 
+  - runs a free, open source operating system (Linux)
+  - not a finished, out-of-the-box product -- it's a project, or a thousand
+    projects -- a robot remote control, a programmable camera, a
+    %(http://pi.gate.ac.uk/basics.html#parent-alarm, parent alarm), a media
+    center, an electronic paint brush
+
+%image(pi-logo-300x361.png, Raspberry Pi, 300, 361)
+
+Programming is back on the UK schools curriculum
+
+Google donated $1,000,000 for Pi hardware in schools
+
+%image(google-donation-1024x692.jpg, google-donation-1024x692.jpg, 1024, 692)
+
+%image(stemnet-339x115.gif, stemnet-339x115.gif, 339, 115)
+
+%image(code-club-150x150.svg, code-club-150x150.svg, 150, 150)
+
+-----------------------------------------------------------------------------
+"At Boots science is for boys and pink pricess toys are for girls";
+%(http://minigirlgeek.wordpress.com/, Amy Mather) (14-year-old Pi hacker) at
+%(http://wutheringbytes.com/, Wuthering Bytes), September 14th 2013.
+
+%image(amymather-300x300.jpg, Amy Mather)
+
+What to do?
+
+Barbie the programmer?! Princess Pi? Pink Electronics?
+
+%image(barbie-374x500.jpg, Barbie the programmer, 374, 500)
+
+(from the %(http://www.wisecampaign.org.uk/, WISE)
+%(http://www.wisecampaign.org.uk/blogs/getset-women/2010/05/barbie, blog)).
+
+- better role models
+- better opportunities
+- no discrimination (%(http://www.equalpayportal.co.uk/, equal pay for equal
+  work)!)
+
+
+-----------------------------------------------------------------------------
+%1 Program or be Programmed?
+
+../program-or-be-programmed.odg
+
+
+-----------------------------------------------------------------------------
+%1 Open Culture Tech
 
 %(open-culture-tech.pdf) %(open-culture-tech.svg)
 
 
 -----------------------------------------------------------------------------
-Pi Brush
+%1 Pi Brush
 
 %(pi-brush-code.pdf) %(pi-brush-code.svg)
-
-
------------------------------------------------------------------------------
-School's *In*
-
-
-
