@@ -16,17 +16,14 @@ import random
 port = 5005
 
 # setup networking
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
+sock = socket.socket(socket.AF_INET,
+        socket.SOCK_DGRAM) # UDP
 sock.bind(("0.0.0.0", port))
 sock.setblocking(0)
 
 # screen solution
-#XRES = 1280
-#YRES = 720
-XRES = 1366
-YRES = 768
-#XRES = 640
-#YRES = 400
+XRES = 1920
+YRES = 1080
 
 # setup display
 pygame.init()
@@ -92,7 +89,6 @@ random.seed(time.time())
 # functions
 # =========
 
-# http://www.processing.org/discourse/beta/num_1236393966.html
 def polar(X, Y, Z):
     x = numpy.linalg.norm([X, Y, Z])
     if (x > 0):
@@ -103,9 +99,8 @@ def polar(X, Y, Z):
         z = 0
     return (x, y, z)
 
-# http://electron9.phys.utk.edu/vectors/3dcoordinates.htm
 def cartesian(X, A, B):
-    x = 0 # don't bother to do the math since we don't use it
+    x = 0 # don't bother - isn't used
     y = X * math.sin(B) * math.sin(A)
     z = X * math.cos(B)
     return (x, y, z)
@@ -127,7 +122,7 @@ while running:
     # no changes made to the screen so far
     draw = 0
 
-    # check for a quit (or other events at some point I suppose)
+    # check for keyboard input
     event = pygame.event.poll()
     if event.type == pygame.QUIT:
         running = 0
@@ -142,9 +137,9 @@ while running:
             pygame.image.save(screen, filename)
 
 
-    # ====================
-    # networking & sensors
-    # ====================
+    # ===================
+    # networking & sensor
+    # ===================
 
     result = select.select([sock], [], [], 0)
     if len(result[0]) > 0:
@@ -163,10 +158,13 @@ while running:
         AY = numpy.sum(AYa) / AL
         AZ = numpy.sum(AZa) / AL
 
-        # combined acceleration for working out resting gravity
-        A = math.fabs(numpy.linalg.norm([AX, AY, AZ]) - 1)
+        # combined acceleration for
+        # working out resting gravity
+        A = math.fabs(numpy.linalg.norm([AX,
+                AY, AZ]) - 1)
 
-        # in a slow moment store most recent direction of the gravitational field
+        # in a slow moment store most recent 
+        # direction of the gravitational field
         if A < 0.02 and (last_time - last_G) > 0.12:
             GX = AX
             GY = AY
@@ -174,9 +172,11 @@ while running:
             (PGR, PGA, PGB) = polar(GX, GY, GZ)
             last_G = last_time
 
-        # rotate to screen coordinates and subtract gravity
+        # rotate to screen coordinates
+        # and subtract gravity
         (PAR, PAA, PAB) = polar(AX, AY, AZ)
-        (GAX, GAY, GAZ) = cartesian(PAR, PAA - PGA + PSGA, PAB - PGB + PSGB)
+        (GAX, GAY, GAZ) = cartesian(PAR,
+                PAA - PGA + PSGA, PAB - PGB + PSGB)
         GAZ = GAZ - PGR
 
 
@@ -188,12 +188,15 @@ while running:
     A = numpy.linalg.norm([GAY, GAZ])
 
     # detect moving quickly
-    if A > 0.4 and fast != 1 and last_time - last_stroke > 0.5:
+    if A > 0.4 and fast != 1 and \
+                last_time - last_stroke > 0.5:
         fast = 1
         notfast = 0
         scale = random.random() * 0.5 + 0.5
-        BX = YRES * GAY * scale + XRES / 2 + random.randint(-XRES/4, XRES/4)
-        BY = YRES * GAZ * scale + YRES / 2 + random.randint(-YRES/7, YRES/7)
+        BX = YRES * GAY * scale + XRES / 2 + \
+                random.randint(-XRES/4, XRES/4)
+        BY = YRES * GAZ * scale + YRES / 2 + \
+                random.randint(-YRES/7, YRES/7)
         VX = 0
         VY = 0
         P = 100
@@ -202,7 +205,9 @@ while running:
         COLB = random.randint(0, 255)
 
     # detect stopping
-    if fast == 1 and (A < 0.1 or ((BX > (XRES + 200) or BX < -200) and (BY > (YRES + 200) or BY < -200)) or P <= 0):
+    if fast == 1 and (A < 0.1 or ((BX > (XRES + 200) \
+                or BX < -200) and (BY > (YRES + 200) \
+                or BY < -200)) or P <= 0):
         notfast = notfast + dt
         if notfast >= 0.12:
             fast = 0
@@ -217,7 +222,8 @@ while running:
         BX = BX + VX * dt * 120
         BY = BY + VY * dt * 120
 
-        # add splotches.... high velocity big splotches far apart, low small close
+        # add splotches.... high velocity big 
+        # splotches far apart, low small close
         if P > 0:
             V = numpy.linalg.norm([VX, VY])
             S = S + V
@@ -225,15 +231,13 @@ while running:
             if S > d:
                 S = S - d
                 P = P - pow(A*4, 2) * math.pi
-                pygame.draw.circle(screen, (COLR, COLG, COLB), (int(BX), int(BY)), int(A*45))
+                pygame.draw.circle(screen, (COLR, COLG, 
+                        COLB), (int(BX), int(BY)), int(A*45))
                 draw = 1
 
     # push updates to the screen
     if draw == 1:
         pygame.display.flip()
-
-    # wait some
-#    time.sleep(0.05)
 
 pygame.quit()
 
