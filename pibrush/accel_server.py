@@ -20,18 +20,30 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
 sock.bind(("0.0.0.0", port))
 sock.setblocking(0)
 
+# screen solution
+#XRES = 1280
+#YRES = 720
+XRES = 1366
+YRES = 768
+
 # setup display
 pygame.init()
-screen = pygame.display.set_mode((640, 400))
-myfont = pygame.font.SysFont("sans", 10)
+screen = pygame.display.set_mode((XRES, YRES))
+# reset to white
+screen.fill((255, 255, 255))
+# push white
+pygame.display.flip()
 
 # length of moving average array
 AL = 20
 
 # accelerometer storage for moving average
-AXa = numpy.zeros((1, AL))
-AYa = numpy.zeros((1, AL))
-AZa = numpy.ones((1, AL))
+AXa = numpy.zeros((AL, 1))
+AYa = numpy.zeros((AL, 1))
+AZa = numpy.ones((AL, 1))
+
+# array index for accelerometer data
+Ai = 0
 
 # store gravity when fast is detected..
 GX = 0
@@ -71,33 +83,12 @@ P = 0 # amount of paint on brush
 S = 0 # distance brush has traveled
 last_stroke = 0
 
-# need a matrix to store splotches in
-splotches = numpy.zeros((0, 0))
-# x, y, R, r, g, b
+# seed random number generator
 random.seed(time.time())
 
 # =========
 # functions
 # =========
-
-def text(X, Y, TEXT):
-    label = myfont.render(TEXT, 1, (0, 0, 0))
-    screen.blit(label, (X, Y))
-
-def bartext(X, VAL, SCALE):
-    VAL = round(VAL * 1000) / 1000
-    if VAL > 0:
-        aoff = 0
-    else:
-        aoff = -12
-    text(X, 200 + VAL / SCALE * 200 + aoff, str(VAL))
-
-def movingaverage(ARRAY, VALUE):
-    ARRAY = numpy.append(ARRAY, [VALUE])
-    ARRAY = numpy.delete(ARRAY, 0)
-    l = numpy.shape(ARRAY)
-    return (numpy.sum(ARRAY) / l[0], ARRAY)
-
 
 # http://www.processing.org/discourse/beta/num_1236393966.html
 def polar(X, Y, Z):
@@ -133,8 +124,11 @@ while running:
 
     # check for a quit (or other events at some point I suppose)
     event = pygame.event.poll()
-    if event.type == pygame.QUIT:
+    if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == K_q):
         running = 0
+
+    # no changes made to the screen so far
+    draw = 0
 
     # ====================
     # networking & sensors
@@ -145,14 +139,17 @@ while running:
         # read in data
         data = result[0][0].recvfrom(1024)
         a = data[0].split(",")
-        AX = float(a[0])
-        AY = float(a[1])
-        AZ = float(a[2])
+        AXa[Ai] = float(a[0])
+        AYa[Ai] = float(a[1])
+        AZa[Ai] = float(a[2])
+        Ai = Ai + 1
+        if Ai == AL:
+            Ai = 0
 
         # moving averages for acceleration
-        (AX, AXa) = movingaverage(AXa, AX)
-        (AY, AYa) = movingaverage(AYa, AY)
-        (AZ, AZa) = movingaverage(AZa, AZ)
+        AX = numpy.sum(AXa) / AL
+        AY = numpy.sum(AYa) / AL
+        AZ = numpy.sum(AZa) / AL
 
         # combined acceleration for working out resting gravity
         A = math.fabs(numpy.linalg.norm([AX, AY, AZ]) - 1)
@@ -215,45 +212,15 @@ while running:
             if S > d:
                 S = S - d
                 P = P - pow(A*4, 2) * math.pi
-                splotches = numpy.append(splotches, [BX, BY, A*30, COLR, COLG, COLB])
-        
-
-    # =======
-    # drawing
-    # =======
-
-    # reset to white
-    screen.fill((255, 255, 255))
-
-    # accelerometer bars
-    pygame.draw.rect(screen, (255, 0, 0), (75, 200, 50, AX / 2.5 * 200))
-    pygame.draw.rect(screen, (255, 0, 0), (150, 200, 50, AY / 2.5 * 200))
-    pygame.draw.rect(screen, (255, 0, 0), (225, 200, 50, AZ / 2.5 * 200))
-
-    # accelerometer text
-    bartext(75, AX, 2.5)
-    bartext(150, AY, 2.5)
-    bartext(225, AZ, 2.5)
-
-    # draw acceleration vector
-    pygame.draw.line(screen, (0, 255, 0), (320, 200), (320 - GAY / 2.5 * 200, 200 - GAZ / 2.5 * 200), 2)
-
-    # draw the paintbrush
-    if BX != 0 and BY != 0:
-        pygame.draw.circle(screen, (0, 0, 0), (int(BX), int(BY)), 5)
-
-    # draw splotches
-    l = numpy.shape(splotches)
-    i = 0
-    while i < l[0]:
-        pygame.draw.circle(screen, (splotches[i+3], splotches[i+4], splotches[i+5]), (int(splotches[i]), int(splotches[i+1])), int(splotches[i+2]))
-        i = i + 6
+                pygame.draw.circle(screen, (COLR, COLG, COLB), (int(BX), int(BY)), int(A*30))
+                draw = 1
 
     # push updates to the screen
-    pygame.display.flip()
+    if draw == 1:
+        pygame.display.flip()
 
     # wait some
-    time.sleep(0.002)
+#    time.sleep(0.002)
 
 pygame.quit()
 
