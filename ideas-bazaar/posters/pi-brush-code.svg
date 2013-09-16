@@ -13,8 +13,8 @@
    height="1052.3622"
    id="svg3391"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="digital brush.svg">
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="pi-brush-code.svg">
   <defs
      id="defs3393" />
   <sodipodi:namedview
@@ -26,14 +26,14 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.70000001"
      inkscape:cx="837.43668"
-     inkscape:cy="451.96533"
+     inkscape:cy="597.41975"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1001"
+     inkscape:window-width="1600"
+     inkscape:window-height="876"
      inkscape:window-x="0"
-     inkscape:window-y="26"
+     inkscape:window-y="24"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata3396">
@@ -1398,7 +1398,7 @@
          sodipodi:role="line"
          id="tspan2984"
          x="468.32504"
-         y="48.143166">Digital Brush: Python Source Code</tspan></text>
+         y="48.143166">Pi Brush: Python Source Code</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3193"
