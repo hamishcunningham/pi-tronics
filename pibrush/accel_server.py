@@ -124,13 +124,23 @@ while running:
     dt = time.time() - last_time
     last_time = time.time()
 
-    # check for a quit (or other events at some point I suppose)
-    event = pygame.event.poll()
-    if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
-        running = 0
-
     # no changes made to the screen so far
     draw = 0
+
+    # check for a quit (or other events at some point I suppose)
+    event = pygame.event.poll()
+    if event.type == pygame.QUIT:
+        running = 0
+    elif event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_q:
+            running = 0
+        elif event.key == pygame.K_r:
+            screen.fill((255, 255, 255))
+            draw = 1
+        elif event.key == pygame.K_s:
+            filename = "%i.png" % time.time()
+            pygame.image.save(screen, filename)
+
 
     # ====================
     # networking & sensors
