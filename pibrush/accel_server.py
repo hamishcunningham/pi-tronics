@@ -5,6 +5,7 @@ import time
 import numpy
 import math
 import datetime
+import random
 
 
 # ==============
@@ -67,11 +68,13 @@ BY = 0
 VX = 0 # velocity
 VY = 0
 P = 0 # amount of paint on brush
+S = 0 # distance brush has traveled
 last_stroke = 0
 
 # need a matrix to store splotches in
-splotches = numpy.zeros((6, 1))
-
+splotches = numpy.zeros((0, 0))
+# x, y, R, r, g, b
+random.seed(time.time())
 
 # =========
 # functions
@@ -173,20 +176,23 @@ while running:
     # ==================
 
     # acceleration detection for paint strokes
-    A = math.fabs(numpy.linalg.norm([GAY, GAZ]))
+    A = numpy.linalg.norm([GAY, GAZ])
 
     # detect moving quickly
     if A > 0.4 and fast != 1 and last_time - last_stroke > 0.5:
         fast = 1
         notfast = 0
-        BX = 400 * GAY + 320
+        BX = 500 * GAY + 320
         BY = 400 * GAZ + 200
         VX = 0
         VY = 0
         P = 100
+        COLR = random.randint(0, 255)
+        COLG = random.randint(0, 255)
+        COLB = random.randint(0, 255)
 
     # detect stopping
-    if fast == 1 and (A < 0.1 or (BX > (640 + 200) or BX < -200) and (BY > (400 + 200) or BY < -200)) or P <= 0:
+    if fast == 1 and (A < 0.1 or ((BX > (640 + 200) or BX < -200) and (BY > (400 + 200) or BY < -200)) or P <= 0):
         notfast = notfast + dt
         if notfast >= 0.12:
             fast = 0
@@ -200,10 +206,17 @@ while running:
         VY = VY - GAZ * dt * 150
         BX = BX + VX * dt * 100
         BY = BY + VY * dt * 100
-
+        
         # add splotches.... high velocity big splotches far apart, low small close
-        print splotches
-
+        if P > 0:
+            V = numpy.linalg.norm([VX, VY])
+            S = S + V
+            d = A * random.randint(3, 5) * 25 + V
+            if S > d:
+                S = S - d
+                P = P - pow(A*4, 2) * math.pi
+                splotches = numpy.append(splotches, [BX, BY, A*30, COLR, COLG, COLB])
+        
 
     # =======
     # drawing
@@ -229,16 +242,18 @@ while running:
     if BX != 0 and BY != 0:
         pygame.draw.circle(screen, (0, 0, 0), (int(BX), int(BY)), 5)
 
-
-
     # draw splotches
-
+    l = numpy.shape(splotches)
+    i = 0
+    while i < l[0]:
+        pygame.draw.circle(screen, (splotches[i+3], splotches[i+4], splotches[i+5]), (int(splotches[i]), int(splotches[i+1])), int(splotches[i+2]))
+        i = i + 6
 
     # push updates to the screen
     pygame.display.flip()
 
     # wait some
-    time.sleep(0.004)
+    time.sleep(0.002)
 
 pygame.quit()
 
