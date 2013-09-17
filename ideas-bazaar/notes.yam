@@ -1,25 +1,5 @@
 Ideas Bazaar Bizarre Ideas
 
-TODO
-- posters
-  - finish future making thingy (and link from blog post)
-  - add snowcam pics to snowcam
-- rewire the parent alarm
-- post-its, pens, drawing pins
-- undraft blog post
-- debug the camera daemon mode
-  - rewire the screen for 5v                     [DONE]
-  - control circuit, switches                    [DONE]
-  - box                                          [DONE]
-  - camera UI                                    
-    - fix daemon (use "script"? better debug code)
-    - faster convert code
-    - debug the process ids stuff
-    - http://www.raspberrypi-spy.co.uk/2012/11/cheap-miniature-lcd-screen/
-
-shrinking the big PDF: 
-shrinkpdf.sh open-culture-tech.pdf 256  open-culture-tech-small.pdf 
-
 -----------------------------------------------------------------------------
 Ideas Bazaar, Festival of the Mind
 [original proposal]
