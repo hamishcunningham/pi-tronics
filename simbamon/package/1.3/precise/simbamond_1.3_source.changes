@@ -1,0 +1,46 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Tue, 17 Sep 2013 13:38:00 +0100
+Source: simbamond
+Binary: simbamond
+Architecture: source
+Version: 1.3
+Distribution: precise
+Urgency: low
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Changed-By: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Description: 
+ simbamond  - SimBaMon, a Simple Battery Monitor
+Changes: 
+ simbamond (1.3) precise; urgency=low
+ .
+   * Final testing of second proto. In state BAT_WARNING keep checking for changed levels.
+Checksums-Sha1: 
+ 7a1bb0e751520a10861e8b9876b5f1f0202f46b2 1636 simbamond_1.3.dsc
+ dc74b12b61c51abb753b808ec42e69d747543f7f 16639 simbamond_1.3.tar.gz
+Checksums-Sha256: 
+ 503dbbfbb00b5a187c3b87f8e60a4de03a3b9cbf51bd3633f3d84ec7b3109fbf 1636 simbamond_1.3.dsc
+ 6b139d2117e9f85d08253ee67525f2403f60751b2f18fe69f9c2ad9e259a7a99 16639 simbamond_1.3.tar.gz
+Files: 
+ b9e8df382d59b48977444a0416524875 1636 admin optional simbamond_1.3.dsc
+ 359ce814c5d53aba4525d0e5e045a518 16639 admin optional simbamond_1.3.tar.gz
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+iQIcBAEBAgAGBQJSOE5fAAoJEK3gE8dtAR3xTxYQAJQ+ha91DTZO8J0GH9B0gLbh
+vlkm/xcUtghfy/82qxplq9xx3zYnEEba2gsPDaB7kLRtDVp74d6t3RB+RI2JHtfp
+U8nSXB1vhskg2POjnFvwXzwB+cWOS8M3yplpwJCFCrpeURAPenrEryyiq77jq+LS
+yvHbjMbdSlFt+IW6+OGNTUHcGFoHD2Nk1tWC+o4M2iK74N7sltCmllKoGZb2oSOQ
+oFRSPRImmdq9O5Vab5xPP4OKysecAS+6qIZSH/1a5HNm0ONfJVa6V7z+ChMuDssP
+QuFawFMpeSRRCTRjcjvn10TodXr5YAPeqQL1/wBJpuEA8pQ0PDJZxsRdXPjgNs9h
+Y0O3wAX0U7V0AtmlISeZFd94dHeCQpcnL7dZB10ZJ7LgfJyyaRY8dACa/SFyBUWz
+kd87WLQdFRTriatzqTS+IlGglw+2Ont7FqbQXkyK4kroAzrwEbJOAK6xpRE5PDFk
+j5BBxUvPV3c649I+lVsUk0lHJsXI57zMqm498RgzI6heSIcwuk9O5ftH3jB4R1qd
+7qx5hhrhNZ1XGVwmnTDnhTusVOGIbjlX3ssDwt2//5YWWi67rj0waOlv8AxGcxpT
+yPY9ni1SU1eLmHPz/cxX9Qnmz7vWQstiaaDF3e0TikoWOKS/nPq+VlZLtkjS/VuE
+Bb63az+snToYneDTmwL1
+=1sDR
+-----END PGP SIGNATURE-----
