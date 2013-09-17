@@ -1,3 +1,9 @@
+simbamond (1.3) unstable; urgency=low
+
+  * Final testing of second proto. In state BAT_WARNING keep checking for changed levels.
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Tue, 17 Sep 2013 13:38:00 +0100
+
 simbamond (1.2) unstable; urgency=low
 
   * Snapshot releases in the 1.2+3 series.
