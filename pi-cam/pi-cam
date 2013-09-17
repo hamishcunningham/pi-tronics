@@ -164,7 +164,7 @@ take-a-still-picture() {
 
   # thumbnails
   convert -interpolate average16 -interpolative-resize  3% ${IMAGE_PATH} ${THUMBS}/078-${IMAGE_FILE} &
-  convert -interpolate average16 -interpolative-resize 10% ${IMAGE_PATH} ${THUMBS}/518-${IMAGE_FILE} &
+  convert -interpolate average16 -interpolative-resize 20% ${IMAGE_PATH} ${THUMBS}/518-${IMAGE_FILE} &
 
   MARKUP="<p>${NOW}<br/><a href=\"${IMAGE_FILE}\" alt=\"${IMAGE_FILE}\"><img"
   MARKUP="${MARKUP} src=\"thumbs/518-${IMAGE_FILE}\"></a><br/></p><hr/>"
