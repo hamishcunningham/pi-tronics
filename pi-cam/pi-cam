@@ -162,12 +162,12 @@ take-a-still-picture() {
     logger "${NAME}: cam output is \n${CAM_OUTPUT}\n"
   PICS_TAKEN=`expr $PICS_TAKEN + 1`
 
-# TODO convert in.jpg -interpolate average16 -interpolative-resize 25% out.jpg
-  convert -thumbnail 75  ${IMAGE_PATH} ${THUMBS}/075-${IMAGE_FILE} &
-  convert -thumbnail 500 ${IMAGE_PATH} ${THUMBS}/500-${IMAGE_FILE} &
+  # thumbnails
+  convert -interpolate average16 -interpolative-resize  3% ${IMAGE_PATH} ${THUMBS}/078-${IMAGE_FILE} &
+  convert -interpolate average16 -interpolative-resize 10% ${IMAGE_PATH} ${THUMBS}/518-${IMAGE_FILE} &
 
   MARKUP="<p>${NOW}<br/><a href=\"${IMAGE_FILE}\" alt=\"${IMAGE_FILE}\"><img"
-  MARKUP="${MARKUP} src=\"thumbs/500-${IMAGE_FILE}\"></a><br/></p><hr/>"
+  MARKUP="${MARKUP} src=\"thumbs/518-${IMAGE_FILE}\"></a><br/></p><hr/>"
   echo "${MARKUP}" >/tmp/${NAME}-$$.txt
   sed -i "/NEW PIC GOES HERE/ r /tmp/${NAME}-$$.txt" ${INDEX}
   rm /tmp/${NAME}-$$.txt
