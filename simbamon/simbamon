@@ -91,6 +91,13 @@ gpio mode $IO_C in
 # current level; -1 means unset
 BAT_LEVEL=-1
 
+# helper to check the level
+get-bat-level() {
+  BAT_LEVEL_BASE2=`gpio read ${IO_A}``gpio read ${IO_B}``gpio read ${IO_C}`
+  BAT_LEVEL=`echo "ibase=2;${BAT_LEVEL_BASE2}" |bc`
+  echo ${BAT_LEVEL}
+}
+
 # do the work; i and j index loop iterations for e.g. logging
 i=0; j=0
 while :
@@ -107,8 +114,7 @@ do
   }
 
   # check the level and act if necessary
-  BAT_LEVEL_BASE2=`gpio read ${IO_A}``gpio read ${IO_B}``gpio read ${IO_C}`
-  BAT_LEVEL=`echo "ibase=2;${BAT_LEVEL_BASE2}" |bc`
+  BAT_LEVEL=`get-bat-level`
   [ $BAT_LEVEL != 0 -a $BAT_LEVEL -le $BAT_WARNING ] && \
     logger "${NAME}: ${LMESS} is at or below warning level (${BAT_LEVEL})"
   if   [ $BAT_LEVEL -eq $POWER_OFF ]
@@ -132,7 +138,15 @@ do
   then
     wall <<< "${NAME}: ${LMESS} is low! connect new battery or shut down"
     logger "${NAME}: BAT_WARNING; sleeping ${WARNING_INTERVAL}..."
-    sleep $WARNING_INTERVAL
+
+    # sleep for WARNING_INTERVAL, unless something changes (check every 10)
+    ITERATIONS=`expr $WARNING_INTERVAL / 10`
+    for(( CURR_ITER=0; CURR_ITER < $ITERATIONS; CURR_ITER++ )) 
+    do
+      sleep 10
+      BAT_LEVEL=`get-bat-level`
+      [ ! $BAT_LEVEL -eq $BAT_WARNING ] && break
+    done
   fi
 
   # routine log messages
