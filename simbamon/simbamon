@@ -133,6 +133,14 @@ do
       "${NAME}: ${LMESS} critical! shutting down in ${SHUT_DELAY} seconds!"
     logger "${NAME}: shutting down (BAT_CRITICAL, SHUT_DELAY=${SHUT_DELAY})"
     sleep $SHUT_DELAY
+    
+    # check if things have improved (new battery pack for example)
+    BAT_LEVEL=`get-bat-level`
+    [ $BAT_LEVEL -gt $BAT_CRITICAL ] && {
+      wall <<< "${NAME}: battery levels have risen! cancelling shutdown"
+      logger   "${NAME}: battery levels have risen! cancelling shutdown"
+      continue
+    }
     bash -c "$SHUTDOWN"
   elif [ $BAT_LEVEL -eq $BAT_WARNING ]
   then
