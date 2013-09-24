@@ -13,6 +13,9 @@
 #                    Pi-Cam (a simple camera monitor)
 ### END INIT INFO
 
+# debug:
+#exec &>/tmp/pi-cam-log.txt
+
 # standard locals
 P="$0"
 USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-c(li mode)] [-s(imulation)]"
@@ -114,7 +117,7 @@ handle-gpwr() {
 
   # when in debug mode we don't actually shutdown, so kill our parent
   [ $DEBUG == on ] && {
-    logger "${NAME}: \$\$=$$; PPID:${PPID}; ps xl: `ps xl`; killing $$"
+    logger "${NAME}: \$\$=$$; PPID:${PPID}; ps l --ppid=\$\$: `ps l --ppid=\$\$`; killing $$"
     kill $$
   }
 
@@ -159,12 +162,12 @@ take-a-still-picture() {
     logger "${NAME}: cam output is \n${CAM_OUTPUT}\n"
   PICS_TAKEN=`expr $PICS_TAKEN + 1`
 
-# TODO convert in.jpg -interpolate average16 -interpolative-resize 25% out.jpg
-  convert -thumbnail 75  ${IMAGE_PATH} ${THUMBS}/075-${IMAGE_FILE} &
-  convert -thumbnail 500 ${IMAGE_PATH} ${THUMBS}/500-${IMAGE_FILE} &
+  # thumbnails
+  convert -interpolate average16 -interpolative-resize  3% ${IMAGE_PATH} ${THUMBS}/078-${IMAGE_FILE} &
+  convert -interpolate average16 -interpolative-resize 20% ${IMAGE_PATH} ${THUMBS}/518-${IMAGE_FILE} &
 
   MARKUP="<p>${NOW}<br/><a href=\"${IMAGE_FILE}\" alt=\"${IMAGE_FILE}\"><img"
-  MARKUP="${MARKUP} src=\"thumbs/500-${IMAGE_FILE}\"></a><br/></p><hr/>"
+  MARKUP="${MARKUP} src=\"thumbs/518-${IMAGE_FILE}\"></a><br/></p><hr/>"
   echo "${MARKUP}" >/tmp/${NAME}-$$.txt
   sed -i "/NEW PIC GOES HERE/ r /tmp/${NAME}-$$.txt" ${INDEX}
   rm /tmp/${NAME}-$$.txt
@@ -174,9 +177,9 @@ take-a-still-picture() {
 clear-the-console() {
   if [ "$CLI" == on ]
   then
-    sudo bash -c "clear >/dev/tty1"
+    sudo bash -c "clear >>/dev/tty1"
   else
-    bash -c "clear >/dev/tty1"
+    bash -c "clear >>/dev/tty1"
   fi
 }
 
@@ -186,13 +189,16 @@ preview-ui() {
   if [ $1 == stop ]
   then
     [ ! -z "$PREVIEW_UI_PID" ] && {
-      logger "${NAME}: kill -9 $PREVIEW_UI_PID"
-      kill -9 $PREVIEW_UI_PID
+      UI_CHILDREN=`ps -o pid --no-headers --ppid ${PREVIEW_UI_PID} |sort |uniq`
+      logger "${NAME}: kill $UI_CHILDREN"
+      [ ! -z "$UI_CHILDREN" ] && kill $UI_CHILDREN
     }
   else
     clear-the-console
-    raspivid -o - -t 0 >/dev/null &
-    PREVIEW_UI_PID=$!
+    bash -c "sleep 0.1; raspivid -o - -t 0 >/dev/null; sleep 0.1" &
+    RASPIVID_PPID=$!
+    PREVIEW_UI_PID=`ps -o pid --no-headers --pid ${RASPIVID_PPID}`
+    PREVIEW_UI_PID=`ps -o pid --no-headers --pid ${PREVIEW_UI_PID}`
     [ $DEBUG == on ] && logger "${NAME}: PREVIEW_UI_PID=${PREVIEW_UI_PID}"
   fi
 }
@@ -201,9 +207,14 @@ preview-ui() {
 clean-up() {
   # kill any child processes (the list includes the ps process, so we discard
   # the "no such process" message)
-  CHILDREN=`ps -T -o pid --no-headers --ppid $$`
-  logger "${NAME}: clean-up, killing ${CHILDREN}"
-  [ ! -z "$CHILDREN" ] && kill -9 $CHILDREN 2>/dev/null
+  CHILDREN=`ps -o pid --no-headers --ppid $$ |sort |uniq`
+  PWR_HANDLER_CHILDREN=`ps -o pid --no-headers --ppid ${PWR_HANDLER_PID}`
+  logger "${NAME}: clean-up, killing ${CHILDREN}, ${PWR_HANDLER_PID} ${PWR_HANDLER_CHILDREN}; ${PREVIEW_UI_PID}"
+  [ ! -z "$PREVIEW_UI_PID" ]       && kill $PREVIEW_UI_PID #2>/dev/null
+  [ ! -z "$PWR_HANDLER_CHILDREN" ] && kill $PWR_HANDLER_CHILDREN #2>/dev/null
+  [ ! -z "$CHILDREN" ]             && kill $CHILDREN #2>/dev/null
+  [ ! -z "$PWR_HANDLER_PID" ]      && kill $PWR_HANDLER_PID #2>/dev/null
+  preview-ui stop
 }
 trap clean-up EXIT
 
@@ -247,6 +258,7 @@ if [ "$CLI" == on ]
 then
   pi-cam-event-loop
 else
+  sleep 3; # give things a chance to settle after boot
   pi-cam-event-loop &
   echo $! >${PIDFILE}
 fi

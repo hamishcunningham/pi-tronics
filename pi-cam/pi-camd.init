@@ -18,6 +18,9 @@
 #                    (a simple camera daemon)
 ### END INIT INFO
 
+# debug:
+#exec &>/tmp/pi-camd-log.txt
+
 # Defaults
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="Pi-Cam: a simple camera daemon"

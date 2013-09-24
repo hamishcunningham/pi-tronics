@@ -1,0 +1,49 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Tue, 17 Sep 2013 13:38:00 +0100
+Source: simbamond
+Binary: simbamond
+Architecture: source all
+Version: 1.3
+Distribution: unstable
+Urgency: low
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Changed-By: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Description: 
+ simbamond  - SimBaMon, a Simple Battery Monitor
+Changes: 
+ simbamond (1.3) unstable; urgency=low
+ .
+   * Final testing of second proto. In state BAT_WARNING keep checking for changed levels.
+Checksums-Sha1: 
+ 0e82466240dc786babb6902faaed160cffc9ca3a 1636 simbamond_1.3.dsc
+ 78ef2cc83eb25678b90dee34631a5de6d3b6565d 16553 simbamond_1.3.tar.gz
+ 9e32c3630ad8bf425a18eafd9484d132e768e6d2 10874 simbamond_1.3_all.deb
+Checksums-Sha256: 
+ 32f2bf7abafd3040cd1bdae1db43d9630e5e8ae124bd03ca5a1992dcfed15e4b 1636 simbamond_1.3.dsc
+ 8a441586afcd881d5124b8f49a73f3de09a71c3d6411651a4b67185f3338a774 16553 simbamond_1.3.tar.gz
+ 6badb3212e74e96d44985c24dcd2904ce9ac9f67166b6538388c9c0ac03c3e92 10874 simbamond_1.3_all.deb
+Files: 
+ 4e47a9bc22f5167b31330f7735c5a9b3 1636 admin optional simbamond_1.3.dsc
+ 52c9adb15c1cba5bc1f6b5cd54fbf2a5 16553 admin optional simbamond_1.3.tar.gz
+ 95e00e8af4d93c614b7d0b0c6be0d63c 10874 admin optional simbamond_1.3_all.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+iQIcBAEBAgAGBQJSOE5aAAoJEK3gE8dtAR3xzY4P/iMYm6pD4QrAsgyWNvUsMaqL
+J6+gzeJIwQAtOW7Nd4iLVmCjR2t+BfQ5B9G3f2qwCnW5ZlJS0II9N4JgVNsQF/hc
+PqBQDOgU9Gm8G7u1fEavrFo3bgyJKm/f0qyZsLxhVSvQX9eeFqtYa8fyoUEIG1Td
+MMZUxz+SGs8b+IKckd6LKD1JRzb8Y6tYbF69IQ5/aGmmdv207F6NcsIXpSGAVGpN
+8+MU0ujjBNoKLRQyqlGWmn81sC+YDBX27B3g8zmxcySb9POPW5BXNrDP7l1jOdht
+SOqV2c1wwU10rv03DM4fGmJxZw79ya0gOKFIXdAlw0sIHjfnaZKhpWFI6cpP+fjw
+HJxHQVnVXEF9TO+/TWFXPzQN4GFPsfHP6MeG5LeaaibTHw3QIJpFt7meNtthfnbZ
+E+7m10v0QKmHJaKExIh2eyo/3yUI0PcuPGJ6GB3Anqk3niieiwDYSLk6zX7rZeFR
+74nLPC1O9rHbfK4x1uw52EUKB3br9N7NkFdIYWEs0xBtkyMTU4rGJvJMb5s0SUCQ
+V41MhvzlGUXY86fwgtZaO1TazejisjnyQfmBLVzrGWimPyc3IsxsQ5H4IGYn5gDw
+I9ORt+SAngSRQbcmGztkyYyMHu1s5JpexGZwhFIER6klD25OLHFm3IG7t3jbGkyx
+0dXXbW568nZarj2JObMY
+=CpWs
+-----END PGP SIGNATURE-----
