@@ -3,16 +3,13 @@ DCS schools outreach day Pi activity
 TODO
 - code on the web
   - error, triggering an edit
-- net cables, other cables -- all going to be ready?
-- audio working?
-- printouts of the OCR pages?
-- does it boot to command line or X or raspi-config?
+- printouts of the OCR pages
+- get involved / keep in touch page
 
 James Wallbank, Hamish Cunningham
 
-- As you can see from the schedule, there will be a maximum of 12 students in
-  a group. They will be rotated around your activities during the following
-  time slots:
+- there will be a maximum of 12 students in a group; they will be rotated
+  around activities during the following time slots:
   - 10:30 - 11:20
   - 11:30 - 12:20
   - 1:15 - 2:05
@@ -21,11 +18,11 @@ James Wallbank, Hamish Cunningham
 Agenda
 - all that stuff that's going to get built, and it might be by you! [JW]
 - boot up
-- 
+- X vs. command-line; cntrl/alt/f1
 - ssh to your neighbour's pi; I promise to change my password!
-- be gentle: halt
+- be gentle: sudo halt
 - ending
-  - keep in touch, get involved!
+  - keep in touch, get involved! Pi Jam advert
     - DCS
     - AccessSpace
     - pi.gate
