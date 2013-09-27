@@ -1,0 +1,264 @@
+#!/bin/bash
+#
+# pibrush -- a simple paint brush
+#
+# Author: Hamish Cunningham <hamish@gate.ac.uk>
+# This code is copyright Hamish Cunningham and the University of Sheffield
+# and is licenced under GPL 3 or any later version.
+#
+### BEGIN INIT INFO
+# Provides:          pibrush
+# Short-Description: PiBrush: a simple paint brush daemon
+# Description:       This script is implements the daemon for
+#                    PiBrush (a simple paint brush)
+### END INIT INFO
+
+# debug:
+#exec &>/tmp/pibrush-log.txt
+
+# standard locals
+P="$0"
+USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-c(li mode)] [-s(imulation)]"
+OPTIONSTRING=hdcs
+
+# define LSB log_* functions.
+. /lib/lsb/init-functions
+
+# message & exit if exit num present
+usage() { log_failure_msg Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
+
+# defaults
+PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin
+DESC="PiBrush: a simple paint brush daemon"
+NAME=pibrush
+DNAME=pibrushd
+DAEMON=/usr/sbin/$NAME
+PIDFILE=/var/run/$DNAME.pid
+SHUTDOWN='shutdown -h now'
+
+# options defaults
+DEBUG=off
+CLI=off
+SIMUL=off
+
+# process options
+ARGS="$*"
+while getopts $OPTIONSTRING OPTION
+do
+  case $OPTION in
+    h)	usage 1 ;;
+    d)	DEBUG=on ;;
+    c)	CLI=on ;;
+    s)	SIMUL=on ;;
+    *)	usage 2 ;;
+  esac
+done 
+shift `expr $OPTIND - 1`
+
+# command-line mode
+if [ "$CLI" == on ]
+then
+  logger() { echo $*; }
+  log_failure_msg() { echo $*; }
+  log_daemon_msg() { echo $*; }
+  logger "${NAME}: running in command-line mode"
+fi
+
+# log the options we got
+[ ! -z "${ARGS}" ] && log_daemon_msg "${NAME} options: ${ARGS}"
+
+# read configuration variable file if it is present
+if [ "$CLI" == on ]
+then
+  . ./${DNAME}.default
+elif [ -r /etc/default/$DNAME ] 
+then
+  . /etc/default/$DNAME
+else
+  logger "${NAME}: no config data found - fatal error"
+  exit 1
+fi
+
+# pretty date/time function
+pdate() { date "+%Y-%m-%d-%T" |sed 's,:,,g'; }
+
+# tell the world
+logger "=========== ${NAME}: running at `pdate` ==========="
+
+# check for gpio command (which may be a function defined in config)
+GPIO=
+if [ "`type -t gpio`" = "function" ]
+then
+  GPIO=gpio
+else
+  GPIO=`which gpio`
+fi
+if [ -z "${GPIO}" ]
+then
+  log_failure_msg "${NAME}: cannot find gpio command: failing" >&2
+  logger          "${NAME}: cannot find gpio command: failing"
+  exit 1
+fi
+
+# put the relevant pins into pull-up mode
+init-gpio-pins() {
+  gpio mode $GVID up
+  gpio mode $GPIC up
+  gpio mode $GPWR up
+}
+
+# handler for power off switch events
+handle-gpwr() {
+  gpio wfi $GPWR rising
+  logger "${NAME}: shutting down in $SHUT_DELAY seconds (POWER_OFF)"
+
+  # kill the preview UI if it is running
+  preview-ui stop
+
+  # when in debug mode we don't actually shutdown, so kill our parent
+  [ $DEBUG == on ] && {
+    logger "${NAME}: \$\$=$$; PPID:${PPID}; ps l --ppid=\$\$: `ps l --ppid=\$\$`; killing $$"
+    kill $$
+  }
+
+  # goodbye, cruel world
+  sleep $SHUT_DELAY
+  bash -c "$SHUTDOWN"
+  exit 0
+}
+
+# handler for take-a-pic switch events
+handle-gpic() {
+  # wait for the request
+  gpio wfi $GPIC both
+
+  # are we doing video or still?
+  GVID_STATE=`gpio read $GVID`
+
+  # kill the preview UI if it is running
+  preview-ui stop
+
+  if [ $GVID_STATE == $GVID_VIDEO ]
+  then
+    # TODO take a video
+    logger "${NAME}: oops, video not implemented yet"
+  else
+    take-a-still-picture
+  fi
+
+  # fire up the preview UI again
+  preview-ui start
+}
+
+# function to take a still
+take-a-still-picture() {
+  NOW=`pdate`
+  IMAGE_FILE=${NOW}.jpg
+  IMAGE_PATH=${WEB_HOME}/${IMAGE_FILE}
+  logger "${NAME} taking picture ${PICS_TAKEN} to ${IMAGE_PATH}"
+  # CAM_OUTPUT="`raspistill -fp -t ${TIMEOUT} -o $IMAGE_PATH 2>&1`"
+  CAM_OUTPUT="`raspistill -t ${TIMEOUT} -o $IMAGE_PATH 2>&1`"
+  [ $? != 0 -o $DEBUG == on ] && \
+    logger "${NAME}: cam output is \n${CAM_OUTPUT}\n"
+  PICS_TAKEN=`expr $PICS_TAKEN + 1`
+
+  # thumbnails
+  convert -interpolate average16 -interpolative-resize  3% ${IMAGE_PATH} ${THUMBS}/078-${IMAGE_FILE} &
+  convert -interpolate average16 -interpolative-resize 20% ${IMAGE_PATH} ${THUMBS}/518-${IMAGE_FILE} &
+
+  MARKUP="<p>${NOW}<br/><a href=\"${IMAGE_FILE}\" alt=\"${IMAGE_FILE}\"><img"
+  MARKUP="${MARKUP} src=\"thumbs/518-${IMAGE_FILE}\"></a><br/></p><hr/>"
+  echo "${MARKUP}" >/tmp/${NAME}-$$.txt
+  sed -i "/NEW PIC GOES HERE/ r /tmp/${NAME}-$$.txt" ${INDEX}
+  rm /tmp/${NAME}-$$.txt
+}
+
+# send a clear command to /dev/tty1
+clear-the-console() {
+  if [ "$CLI" == on ]
+  then
+    sudo bash -c "clear >>/dev/tty1"
+  else
+    bash -c "clear >>/dev/tty1"
+  fi
+}
+
+# set raspivid running to put preview is on (output to /dev/null)
+unset PREVIEW_UI_PID
+preview-ui() {
+  if [ $1 == stop ]
+  then
+    [ ! -z "$PREVIEW_UI_PID" ] && {
+      UI_CHILDREN=`ps -o pid --no-headers --ppid ${PREVIEW_UI_PID} |sort |uniq`
+      logger "${NAME}: kill $UI_CHILDREN"
+      [ ! -z "$UI_CHILDREN" ] && kill $UI_CHILDREN
+    }
+  else
+    clear-the-console
+    bash -c "sleep 0.1; raspivid -o - -t 0 >/dev/null; sleep 0.1" &
+    RASPIVID_PPID=$!
+    PREVIEW_UI_PID=`ps -o pid --no-headers --pid ${RASPIVID_PPID}`
+    PREVIEW_UI_PID=`ps -o pid --no-headers --pid ${PREVIEW_UI_PID}`
+    [ $DEBUG == on ] && logger "${NAME}: PREVIEW_UI_PID=${PREVIEW_UI_PID}"
+  fi
+}
+
+# cleanup function to run on termination, and a trap to trigger it
+clean-up() {
+  # kill any child processes (the list includes the ps process, so we discard
+  # the "no such process" message)
+  CHILDREN=`ps -o pid --no-headers --ppid $$ |sort |uniq`
+  PWR_HANDLER_CHILDREN=`ps -o pid --no-headers --ppid ${PWR_HANDLER_PID}`
+  logger "${NAME}: clean-up, killing ${CHILDREN}, ${PWR_HANDLER_PID} ${PWR_HANDLER_CHILDREN}; ${PREVIEW_UI_PID}"
+  [ ! -z "$PREVIEW_UI_PID" ]       && kill $PREVIEW_UI_PID #2>/dev/null
+  [ ! -z "$PWR_HANDLER_CHILDREN" ] && kill $PWR_HANDLER_CHILDREN #2>/dev/null
+  [ ! -z "$CHILDREN" ]             && kill $CHILDREN #2>/dev/null
+  [ ! -z "$PWR_HANDLER_PID" ]      && kill $PWR_HANDLER_PID #2>/dev/null
+  preview-ui stop
+}
+trap clean-up EXIT
+
+# the main loop that waits for picture requests, runs the UI, etc.
+pibrush-event-loop() {
+  # i and j index loop iterations for e.g. logging
+  i=0; j=0
+  PICS_TAKEN=0
+
+  # loop forever waiting for picture requests;
+  while :
+  do
+    i=`expr ${i} + 1`; j=`expr ${j} + 1`
+
+    # run the handler that's wait for user "take a pic" request
+    handle-gpic
+
+    # routine log messages
+    [ ${j} -eq ${LOG_INTERVAL} ] && \
+      logger "${NAME}: ${PICS_TAKEN} taken by `pdate` (i=${i})" && j=0
+
+    # let the poor beast rest... for tenth of a second
+    sleep 0.1
+  done
+}
+
+# initialise the GPIO pins
+init-gpio-pins
+
+# run a handler for the power off switch in the background
+handle-gpwr &
+PWR_HANDLER_PID=$!
+[ $DEBUG == on ] && logger "PWR_HANDLER_PID=${PWR_HANDLER_PID}; my PID = $$"
+
+# fire up the preview UI
+preview-ui start
+
+# now run the main event loop; if we're standalone we stay with it, but if
+# we're in daemon mode then we background it and record the PID
+if [ "$CLI" == on ]
+then
+  pibrush-event-loop
+else
+  sleep 3; # give things a chance to settle after boot
+  pibrush-event-loop &
+  echo $! >${PIDFILE}
+fi

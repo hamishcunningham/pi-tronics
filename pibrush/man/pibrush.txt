@@ -1,0 +1,44 @@
+NAME
+  pibrush - a simple camera daemon for the Raspberry Pi
+  TODO
+SYNOPSIS
+  pibrush [-d] [-h] [-c] [-s]
+  service pibrushd [{start [-d][-h][-s]|stop|status|restart [-d][-h][-s]}]
+DESCRIPTION
+  Battery monitoring for the Raspberry Pi...
+
+  Pi-Cam is an open source Linux daemon for switch-based picture taking on the
+  Pi's camera module.
+
+  You can find the source code on GitHub:
+
+    https://github.com/hamishcunningham/pi-tronics/tree/master/pibrush
+
+  The core of the daemon is defined in three files:
+    - /etc/pibrush.conf - configuration data
+    - /usr/sbin/pibrush - the daemon itself
+    - /etc/init.d/pibrushd - an interface to the init subsystem that
+      Linux uses to manage daemons (amongst other things)
+
+  The last of these, pibrushd, is used by the operating system to start and
+  stop Pi-Cam at boot or shutdown time, and can be used to control the daemon
+  manually when required. For example this command will stop the daemon:
+
+    sudo service pibrush stop
+
+  For more details see http://pi.gate.ac.uk/
+OPTIONS
+  -d          Turn on debug mode.
+  -h          The option -h displays help.
+  -c          Command-line mode: for running the pibrush script standalone.
+  -s          Simulation mode: for testing etc. on non-Pi systems.
+EXAMPLE
+  Restart the daemon with debugging on:
+
+    $ sudo service pibrushd restart -d
+SEE ALSO
+  service(8)
+BUGS
+  Almost certainly!
+AUTHOR
+  Fred Sonnenwald <http://pi.gate.ac.uk/>

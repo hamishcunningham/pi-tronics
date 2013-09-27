@@ -1,0 +1,1 @@
+@reboot /bin/bash -c "cd /home/pi/pi-tronics/pibrush && ./pibrush -c"
