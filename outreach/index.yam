@@ -3,10 +3,8 @@ DCS schools outreach day Pi activity
 James Wallbank, Hamish Cunningham
 
 TODO
-- try the jelly babies sheet
-- put the code on the web
-  - with a deliberate error, triggering an edit?
-- printouts of the OCR pages
+- deliberate error, triggering an edit?
+- printouts of the OCR pages etc.
 - get involved / keep in touch page
 - set up fred's demo and parent alarm on the polycom
 
@@ -29,3 +27,17 @@ Agenda
     - DCS
     - AccessSpace
     - pi.gate
+
+Singing Jelly Baby
+- prepare the circuitry as per the OCR sheet: http://tinyurl.com/jbsheet
+- install wiring pi
+  - wget -O wp.deb     -r http://tinyurl.com/wiringpi
+  - sudo dpkg -i wp.deb
+- get the code
+  - wget -O jb.sh      -r http://tinyurl.com/pijellybaby
+  - cat jb.sh
+  - chmod 755 jb.sh
+- get the sound affects
+  - wget -O police.wav -r http://tinyurl.com/sirenwav
+- run the thing
+  - sudo ./jb.sh
