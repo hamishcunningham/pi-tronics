@@ -11,7 +11,7 @@ Vcs-Browser: https://github.com/hamishcunningham/pi-tronics/tree/master/pibrush
 Package: pibrushd
 Architecture: all
 Depends: ${misc:Depends}
-Recommends: gpio, imagemagick, apache2
+Recommends: python-dev, python-pygame, python-numpy, python-rpi.gpio, i2c-tools, python-smbus
 Description: PiBrush, a paint brush for the Pi
  PiBrush is an open source Linux daemon to run as a paint brush on the Pi.
  See http://pi.gate.ac.uk/pages/pibrush.html

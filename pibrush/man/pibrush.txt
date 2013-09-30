@@ -1,44 +1,54 @@
 NAME
-  pibrush - a simple camera daemon for the Raspberry Pi
-  TODO
+  pibrush - The PiBrush interactive art and technology exhibit
 SYNOPSIS
-  pibrush [-d] [-h] [-c] [-s]
+  pibrush [-s(erver)] [-c(lient)]
   service pibrushd [{start [-d][-h][-s]|stop|status|restart [-d][-h][-s]}]
 DESCRIPTION
-  Battery monitoring for the Raspberry Pi...
+  Art for the Raspberry Pi...
 
-  Pi-Cam is an open source Linux daemon for switch-based picture taking on the
-  Pi's camera module.
+  PiBrush is a set of client and server software for the PiBrush exhibit,
+  previously shown at the Sheffield Ideas Bazaar 2013. It is an attempt to
+  simulate flinging a paintbrush full of paint at a canvas. More inforrmation
+  is available on the website:
 
-  You can find the source code on GitHub:
+    http://pi.gate.ac.uk/pages/pibrush.html
+
+  You can also find the source code on GitHub:
 
     https://github.com/hamishcunningham/pi-tronics/tree/master/pibrush
 
-  The core of the daemon is defined in three files:
+  The PiBrush software is broken down into two portions. Files dealing with
+  installing and running the software nicely, and then the actually control
+  software to play with. The latter can be completely ignored if all that's
+  goig on is an exhibit.
+
+  Software deaing with running it:
     - /etc/pibrush.conf - configuration data
-    - /usr/sbin/pibrush - the daemon itself
-    - /etc/init.d/pibrushd - an interface to the init subsystem that
-      Linux uses to manage daemons (amongst other things)
+    - /usr/bin/pibrush - wrappeer script to start PiBrush, reading in the
+      configuration data
+    - /etc/init.d/pibrushd - init script that can launch /usr/bin/pibrush
+      on boot, can also be used to stop manually e.g. sudo service pibrush stop
 
-  The last of these, pibrushd, is used by the operating system to start and
-  stop Pi-Cam at boot or shutdown time, and can be used to control the daemon
-  manually when required. For example this command will stop the daemon:
+  Control software:
+    - /opt/pibrush/accel_client.py - the client software for reading the
+      accelerometer and transferring that data over the network
+    - /opt/pibrush/accel_server.py - the server software that reads the
+      network data and translates it to paint drops on the screen
 
-    sudo service pibrush stop
+  If running the client, it will be necessary to seperately setup the XLoBorg:
 
-  For more details see http://pi.gate.ac.uk/
+    sudo bash
+    cd /opt/pibrush
+    unzip examples.zip
+    chmod +x install
+    ./instal.sh
+    reboot
 OPTIONS
-  -d          Turn on debug mode.
-  -h          The option -h displays help.
-  -c          Command-line mode: for running the pibrush script standalone.
-  -s          Simulation mode: for testing etc. on non-Pi systems.
-EXAMPLE
-  Restart the daemon with debugging on:
-
-    $ sudo service pibrushd restart -d
+  -s    Server mode, for the Pi connected to the display
+  -c    Client mode, for the Pi with the XLoBorg accelerometer
 SEE ALSO
   service(8)
 BUGS
-  Almost certainly!
+  Almost certainly, but we try to do our best...
 AUTHOR
   Fred Sonnenwald <http://pi.gate.ac.uk/>

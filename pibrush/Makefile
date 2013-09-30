@@ -3,16 +3,19 @@
 # and is licenced under GPL 3 or any later version.
 
 # vars #######################################################################
-VERSION=2.0
+VERSION=1.0
 P=pibrush
 D=pibrush
 PD=package/$(VERSION)
 INSTALLED_FILES=\
-  $(DESTDIR)/usr/sbin/$(D) \
+  $(DESTDIR)/usr/bin/$(D) \
   $(DESTDIR)/etc/init.d/$(P) \
   $(DESTDIR)/etc/default/$(P) \
   $(DESTDIR)/usr/share/man/man8/$(D).8.gz \
-  $(DESTDIR)/usr/share/man/man8/$(P).8.gz
+  $(DESTDIR)/usr/share/man/man8/$(P).8.gz \
+  $(DESTDIR)/opt/pibrush/accel_client.py \
+  $(DESTDIR)/opt/pibrush/accel_server.py \
+  $(DESTDIR)/opt/pibrush/examples.zip
 INIT_LINKS=\
   $(DESTDIR)/etc/rc?.d/*$(P)
 PACKAGE_FILES=\
@@ -52,15 +55,19 @@ help:
 # (if DESTDIR is set we assume this is a packaging run, not an install, and so
 # don't run update-rc.d)
 install:
-	install -d -m 755         $(DESTDIR)/usr/sbin
+	install -d -m 755         $(DESTDIR)/usr/bin
 	install -d -m 755         $(DESTDIR)/etc/init.d
 	install -d -m 755         $(DESTDIR)/etc/default
 	install -d -m 755         $(DESTDIR)/usr/share/man/man8
+	install -d -m 755         $(DESTDIR)/opt/pibrush
 	install $(P).default      $(DESTDIR)/etc/default/$(P)
-	install -m 755 $(D)       $(DESTDIR)/usr/sbin
+	install -m 755 $(D)       $(DESTDIR)/usr/bin
 	install -m 755 $(P).init  $(DESTDIR)/etc/init.d/$(P)
 	install man/$(P).8.gz     $(DESTDIR)/usr/share/man/man8
 	install man/$(D).8.gz     $(DESTDIR)/usr/share/man/man8
+	install -m 755 bin/accel_client.py      $(DESTDIR)/opt/pibrush
+	install -m 755 bin/accel_server.py      $(DESTDIR)/opt/pibrush
+	install -m 644 bin/examples.zip         $(DESTDIR)/opt/pibrush
 	[ -z "$(DESTDIR)" ] && update-rc.d $(P) defaults || :
 	@echo 'PiBrush installed: '
 	@$(do-listing)

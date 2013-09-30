@@ -1,144 +1,34 @@
 # pibrush.default
 #
-# Configuration variables for the Pi-Cam daemon.
-# This code is copyright Hamish Cunningham and the University of Sheffield
-# and is licenced under GPL 3 or any later version.
+# Configuration variables for the PiBrus daemon.
+#
+# This code is copyright by Hamish Cunningham, Fred Sonnenwald,
+# the University of Sheffield, and is licenced under GPL 3 or any
+# later version.
 
-# pre-image timeout period for raspistill (milliseconds)
-TIMEOUT=100
-
-# how long to wait before shutting down on power off switch?
-SHUT_DELAY=3
-
-# which GPIO pins we're using to get switch indicators
-GVID=0
-GPIC=2
-GPWR=3
-
-# which state the GVID pin corresponds to video mode
-GVID_VIDEO=0
-
-# how often should we log a routine message?
-LOG_INTERVAL=100
-
-# debug and simulation modes: 
-# don't actually call shutdown;
-# redefine gpio to take input from a simulation file
-# (which is expected to have a single line of the form nnn, in binary);
-# also sets logging and delay levels short
-if [ "$DEBUG" = on ]
-then
-  SHUT_DELAY=0.1
-  LOG_INTERVAL=3
-  WARNING_INTERVAL=10
-  SHUTDOWN='echo "would call _shutdown -h now_ !!!"; sleep 5'
-fi
-if [ "$SIMUL" = on ]
-then
-  SIMULATION_DATA=/tmp/pibrush-simulation.txt
-  gpio() {
-    if [ "$1" = "read" ]
-    then
-      if [ -r "$SIMULATION_DATA" ] 
-      then
-        CUT_INDEX=`expr $2 + 1` # cut indexes from 1, gpio from 0
-        cut -c $CUT_INDEX $SIMULATION_DATA
-      else
-        echo 0 # default gpio return value
-      fi
-    elif [ "$1" = wfi ]
-    then
-      echo ho hum not implemented yet >&2
-    fi
-  }
-fi
-
-# where files live on the web server
-WEB_HOME=/var/www
-[ "$CLI" == on ] && WEB_HOME=`pwd`/www
-INDEX=${WEB_HOME}/index.html
-HELP=${WEB_HOME}/help.html
-THUMBS=${WEB_HOME}/thumbs
-mkdir -p ${THUMBS}
-
-# initialise main landing page on the webserver
-[ -f ${INDEX} ] || cat <<EOF >${INDEX}
-<html><head>
-<title>Pi-Cam: the future of photography?!</title>
-<style type="text/css"> /*<![CDATA[*/
-<!--
-html, body { background: #fff; color: #000; font-family: sans-serif; }
-h1,h2,h3,h4,h5,p,ul,ol { font-family: sans-serif; }
-pre { font-family: monospace; }
---> /*]]>*/ </style>
-</head>
-<body>
-<!-- NEW PIC GOES HERE -->
-
-<a href="help.html">Help</a>.
-<a href="http://pi.gate.ac.uk">Pi.GATE.ac.uk</a>.
-</body>
-</html>
-EOF
-
-# initialise help file
-[ -f ${HELP} ] || cat <<EOF >${HELP}
-<html><head>
-<title>How to use your shiny Pi-Cam</title>
-<style type="text/css"> /*<![CDATA[*/
-<!--
-html, body { background: #fff; color: #000; font-family: sans-serif; }
-h1,h2,h3,h4,h5,p,ul,ol { font-family: sans-serif; }
-pre { font-family: monospace; }
---> /*]]>*/ </style>
-</head>
-</head>
-<body>
-<h1>The Pi-Cam: a legend in its own lunchtime!</h1>
-
-TODO
+# PiBrush mode, "client" (accelerometer) or "server" (display)
+# This will be overridden by a command line argumen
+MODE="server"
 
 
-<p>
-<ul>
-<li>
-<b>To turn on</b>, first connect the purple and orange wires, then press the
-button on the battery (the big black square thing). Booting takes a minute or
-so.
-<li>
-<b>To take a picture</b>, click the big red button. A red light comes on next
-to the camera lens for a couple of seconds. In a minute or two it will show up
-on the webserver. Click on the thumbnail to get the full-size image.
-<li>
-<b>To turn off</b>, first disconnect the purple and orange wires, then wait
-for 20 seconds or so, then press the button on the battery.
-<li>
-<b>To charge the battery</b>, connect a micro-usb 5 volt charger to the
-battery.
-<li>
-<b>To log in</b>, do <tt>ssh -l pi the.ip.address</tt>. You can use the same 
-IP address as the webserver, or <b>to find the local IP address</b>, reboot 
-and watch the blinking light, or <a
-href="http://pi.gate.ac.uk/pages/blinkip.html">see here</a>.
-<li>
-<b>Troubleshooting</b>
-  <ul>
-  <li>
-  The camera has to be enabled on the Pi for things to work (surprise!). It
-  seems that when using the SD card on another machine and then booting the
-  Pi again it is possible for the camera to become disabled. (Symptom: no pics
-  taken; error messages in <tt>/var/log/syslog</tt>. Cure: run <tt>sudo
-  raspi-config</tt> and re-enable the camera.)
-  <li>
-  Webserver unavailable: perhaps you're not on a network? The server runs
-  direct from the cam.
-  </ul>
-</ul>
-</p>
-<hr/>
-<p>
-<a href="http://pi.gate.ac.uk">Pi.GATE.ac.uk</a>.
-</p>
-</body>
-</html>
+# ===
+# Client configuration settings
+# ===
+
+# Server ip address or hostname
+SERVER="modelb"
+
+
+# ===
+# Server configuration settings
+# ===
+
+# Directory screenshots are saved to
+SAVEDIR="/home/pi"
+
+# Screen resolution
+XRES="1920"
+YRES="1080"
+
+
 EOF

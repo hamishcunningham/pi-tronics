@@ -26,7 +26,7 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="PiBrush: a simple paint brush daemon"
 NAME=pibrush
 DNAME=pibrushd
-DAEMON=/usr/sbin/$NAME
+DAEMON=/usr/bin/$NAME
 PIDFILE=/var/run/$DNAME.pid
 SCRIPTNAME=/etc/init.d/$DNAME
 
