@@ -28,6 +28,13 @@ Agenda
     - AccessSpace
     - pi.gate
 
+Traffic Lights
+- prepare the circuitry as per the OCR sheet: http://tinyurl.com/tlsheet
+- get the code
+  - wget -O TrafficLED.py -r http://tinyurl.com/pitraffic
+  - cat TrafficLED.py
+- run as per the sheet
+
 Singing Jelly Baby
 - prepare the circuitry as per the OCR sheet: http://tinyurl.com/jbsheet
 - install wiring pi
@@ -41,3 +48,4 @@ Singing Jelly Baby
   - wget -O police.wav -r http://tinyurl.com/policewav
 - run the thing
   - sudo ./jb.sh
+sudo amixer cset numid=3 1
