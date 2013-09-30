@@ -3,16 +3,18 @@
 # and is licenced under GPL 3 or any later version.
 
 # vars #######################################################################
-VERSION=2.0
+VERSION=1.0
 P=pibrush
-D=pibrush
+D=pibrushd
 PD=package/$(VERSION)
 INSTALLED_FILES=\
-  $(DESTDIR)/usr/sbin/$(D) \
+  $(DESTDIR)/usr/bin/$(P) \
   $(DESTDIR)/etc/init.d/$(P) \
   $(DESTDIR)/etc/default/$(P) \
-  $(DESTDIR)/usr/share/man/man8/$(D).8.gz \
-  $(DESTDIR)/usr/share/man/man8/$(P).8.gz
+  $(DESTDIR)/usr/share/man/man8/$(P).8.gz \
+  $(DESTDIR)/opt/pibrush/accel_client.py \
+  $(DESTDIR)/opt/pibrush/accel_server.py \
+  $(DESTDIR)/opt/pibrush/examples.zip
 INIT_LINKS=\
   $(DESTDIR)/etc/rc?.d/*$(P)
 PACKAGE_FILES=\
@@ -52,16 +54,19 @@ help:
 # (if DESTDIR is set we assume this is a packaging run, not an install, and so
 # don't run update-rc.d)
 install:
-	install -d -m 755         $(DESTDIR)/usr/sbin
+	install -d -m 755         $(DESTDIR)/usr/bin
 	install -d -m 755         $(DESTDIR)/etc/init.d
 	install -d -m 755         $(DESTDIR)/etc/default
 	install -d -m 755         $(DESTDIR)/usr/share/man/man8
-	install $(P).default      $(DESTDIR)/etc/default/$(P)
-	install -m 755 $(D)       $(DESTDIR)/usr/sbin
-	install -m 755 $(P).init  $(DESTDIR)/etc/init.d/$(P)
+	install -d -m 755         $(DESTDIR)/opt/pibrush
+	install $(D).default      $(DESTDIR)/etc/default/$(D)
+	install -m 755 $(P)       $(DESTDIR)/usr/bin
+	install -m 755 $(D).init  $(DESTDIR)/etc/init.d/$(D)
 	install man/$(P).8.gz     $(DESTDIR)/usr/share/man/man8
-	install man/$(D).8.gz     $(DESTDIR)/usr/share/man/man8
-	[ -z "$(DESTDIR)" ] && update-rc.d $(P) defaults || :
+	install -m 755 bin/accel_client.py      $(DESTDIR)/opt/pibrush
+	install -m 755 bin/accel_server.py      $(DESTDIR)/opt/pibrush
+	install -m 644 bin/examples.zip         $(DESTDIR)/opt/pibrush
+	[ -z "$(DESTDIR)" ] && update-rc.d $(D) defaults || :
 	@echo 'PiBrush installed: '
 	@$(do-listing)
 
@@ -69,16 +74,16 @@ install:
 uninstall:
 	@echo 'removing PiBrush files: '
 	@$(do-listing)
-	[ -z "$(DESTDIR)" ] && update-rc.d -f $(P) remove || :
+	[ -z "$(DESTDIR)" ] && update-rc.d -f $(D) remove || :
 	sudo rm -f $(INSTALLED_FILES)
 	@echo done
 
 # manpage ####################################################################
 man: man/$(P).txt
 	cd man; ../utils/txt2man -v "System Manager's Manual" -s 8 \
-          -t '$(D)' $(P).txt >$(P).8; \
+          -t '$(P)' $(P).txt >$(P).8; \
 	sed -i 1d $(P).8;  # fix error from lintian about ." macro \
-	cat $(P).8 |gzip >$(P).8.gz; cp $(P).8.gz $(D).8.gz
+	cat $(P).8 | gzip >$(P).8.gz
 
 # package ####################################################################
 package: man package-unstable package-precise
@@ -95,7 +100,7 @@ package-unstable:
 	debuild -Ipackage
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
-          [ -f $$f ] && mv $$f $(D)/$(PD)/unstable || :; done
+          [ -f $$f ] && mv $$f $(P)/$(PD)/unstable || :; done
 package-precise:
 	@echo 'packaging PiBrush for Ubuntu precise...'
 	mkdir -p $(PD)/precise
@@ -106,7 +111,7 @@ package-precise:
           debian/changelog
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
-          [ -f $$f ] && mv $$f $(D)/$(PD)/precise || :; done
+          [ -f $$f ] && mv $$f $(P)/$(PD)/precise || :; done
 snapshot:
 	@echo "packaging PiBrush SNAPSHOT $(SNAPSHOT)..."
 	mkdir -p $(SNAPD)
@@ -122,7 +127,7 @@ snapshot:
 	@head -1 debian/changelog
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
-          [ -f $$f ] && mv $$f $(D)/$(SNAPD) || :; done
+          [ -f $$f ] && mv $$f $(P)/$(SNAPD) || :; done
 	@echo "\nsnapshot:"
 	@ls -lhR $(SNAPD)
 

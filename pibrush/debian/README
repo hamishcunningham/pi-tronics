@@ -3,6 +3,4 @@ The Debian Package pibrush
 
 Comments regarding the package:
 
-- seeded from pi-cam
-
--- Hamish Cunningham <hamish@gate.ac.uk>  Fri Sep 27 12:18:49 BST 2013
+ - If running client, you'll need to complete the XLoBorg setup first.

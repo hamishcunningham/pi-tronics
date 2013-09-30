@@ -6,6 +6,8 @@ import numpy
 import math
 import datetime
 import random
+import os
+import RPi.GPIO as GPIO
 
 
 # ==============
@@ -21,9 +23,19 @@ sock = socket.socket(socket.AF_INET,
 sock.bind(("0.0.0.0", port))
 sock.setblocking(0)
 
+# directory for saves
+SAVEDIR = os.getenv('SAVEDIR', '.')
+
+# setup GPIO input for reset
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+# variable to store button state
+button = 0
+
 # screen solution
-XRES = 1920
-YRES = 1080
+XRES = int(os.getenv('XRES', 1920))
+YRES = int(os.getenv('YRES', 1080))
 
 # setup display
 pygame.init()
@@ -105,6 +117,11 @@ def cartesian(X, A, B):
     z = X * math.cos(B)
     return (x, y, z)
 
+def savereset():
+    filename = SAVEDIR + os.sep + ("%i.png" % time.time())
+    pygame.image.save(screen, filename)
+    screen.fill((255, 255, 255))
+
 
 # ============
 # main program
@@ -130,11 +147,18 @@ while running:
         if event.key == pygame.K_q:
             running = 0
         elif event.key == pygame.K_r:
-            screen.fill((255, 255, 255))
+            savereset()
             draw = 1
-        elif event.key == pygame.K_s:
-            filename = "%i.png" % time.time()
-            pygame.image.save(screen, filename)
+
+    # check for GPIO input, but because it's a
+    # pull down (goes from 1 to 0 when pressed)
+    # flip logic
+    button_now = not(GPIO.input(17))
+    if button_now == 1 and button == 0:
+        # the button was pressed
+        savereset()
+        draw = 1
+    button = button_now    
 
 
     # ===================
@@ -239,5 +263,6 @@ while running:
     if draw == 1:
         pygame.display.flip()
 
+# quit properly
+GPIO.cleanup()
 pygame.quit()
-

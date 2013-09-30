@@ -1,9 +1,10 @@
 import socket
 import XLoBorg
 import time
+import os
 
 # network stufff
-server = "modelb"
+server = os.getenv('SERVER', 'modelb')
 port = 5005
 
 # setup for the accelerometer
