@@ -30,5 +30,5 @@ SAVEDIR="/home/pi"
 XRES="1920"
 YRES="1080"
 
-
-EOF
+# Make accessible to python
+export MODE SERVER XRES YRES

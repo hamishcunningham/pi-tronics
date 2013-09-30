@@ -1,4 +1,4 @@
-Source: pibrushd
+Source: pibrush
 Section: admin
 Priority: optional
 Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
@@ -8,7 +8,7 @@ Homepage: http://pi.gate.ac.uk/
 Vcs-Git: git://github.com/hamishcunningham/pi-tronics.git
 Vcs-Browser: https://github.com/hamishcunningham/pi-tronics/tree/master/pibrush
 
-Package: pibrushd
+Package: pibrush
 Architecture: all
 Depends: ${misc:Depends}
 Recommends: python-dev, python-pygame, python-numpy, python-rpi.gpio, i2c-tools, python-smbus

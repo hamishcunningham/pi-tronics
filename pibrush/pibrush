@@ -70,6 +70,7 @@ if [ "$MODE" == "server" ]
 then
     SCRIPT="accel_server.py"
 elif [ "$MODE" == "client" ]
+then
     SCRIPT="accel_client.py"
 else
   MSG="\$MODE not specified!"
@@ -78,7 +79,14 @@ else
   exit 1
 fi
 
+# setup to kill child process when quitting
+cleanup() {
+    pkill -TERM -P `cat $PIDFILE`
+}
+trap cleanup EXIT
+
 # tell the world
 logger "=========== ${NAME}: running at `pdate` ==========="
 
+cd /opt/pibrush
 python $SCRIPT
