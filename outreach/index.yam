@@ -17,16 +17,15 @@ rotated around activities during the following time slots:
 
 Agenda
 - all that stuff that's going to get built, and it might be by you! [JW]
-- boot up; the quick start guide
-- X vs. command-line; cntrl/alt/f1
-- ssh to your neighbour's pi; I promise to change my password!
-- jelly baby; traffic light
-- be gentle: sudo halt
+- boot up; the quick start guide [HC]
+- jelly baby; traffic light (6 and 6)
+- if time
+  - X vs. command-line; cntrl/alt/f1
+  - ssh to your neighbour's pi; I promise to change my password!
 - ending
-  - keep in touch, get involved! Pi Jam advert
-    - DCS
-    - AccessSpace
-    - pi.gate
+  - be gentle: sudo halt
+  - keep in touch, get involved! Pi Jam advert (Oct 30th 6.30 at AccessSpace)
+    - DCS / AccessSpace / pi.gate
 
 Traffic Lights
 - prepare the circuitry as per the OCR sheet: http://tinyurl.com/tlsheet
@@ -42,10 +41,8 @@ Singing Jelly Baby
   - sudo dpkg -i wp.deb
 - get the code
   - wget -O jb.sh      -r http://tinyurl.com/pijellybaby
-  - cat jb.sh
   - chmod +x jb.sh
 - get the sound effects
   - wget -O police.wav -r http://tinyurl.com/policewav
 - run the thing
   - sudo ./jb.sh
-sudo amixer cset numid=3 1
