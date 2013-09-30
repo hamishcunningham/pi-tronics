@@ -38,6 +38,6 @@ Singing Jelly Baby
   - cat jb.sh
   - chmod 755 jb.sh
 - get the sound affects
-  - wget -O police.wav -r http://tinyurl.com/sirenwav
+  - wget -O police.wav -r http://tinyurl.com/policewav
 - run the thing
   - sudo ./jb.sh

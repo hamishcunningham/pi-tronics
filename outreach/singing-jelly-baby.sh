@@ -11,5 +11,5 @@ do
   fi
 
   echo "time to sleep..."
-  sleep 2
+  sleep 1
 done
