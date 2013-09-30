@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sudo amixer cset numid=3 1
 gpio mode 8 up
 
 while :

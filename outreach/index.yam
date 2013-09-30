@@ -48,3 +48,4 @@ Singing Jelly Baby
   - wget -O police.wav -r http://tinyurl.com/sirenwav
 - run the thing
   - sudo ./jb.sh
+sudo amixer cset numid=3 1
