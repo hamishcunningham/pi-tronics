@@ -7,7 +7,7 @@ do
   if [ `gpio read 8` = 0 ]
   then
     echo "time to sing!" 
-    aplay police_s.wav &
+    aplay police.wav &
   fi
 
   echo "time to sleep..."

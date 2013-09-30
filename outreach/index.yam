@@ -31,14 +31,15 @@ Agenda
     - pi.gate
 
 Singing Jelly Baby
+- prepare the circuitry as per the OCR sheet
 - install wiring pi
-  - wget -O wp.deb -r http://tinyurl.com/wiringpi
+  - wget -O wp.deb     -r http://tinyurl.com/wiringpi
   - dpkg -i wp.deb
 - get the code
-  - wget -O jb.sh -r http://tinyurl.com/pijellybaby
+  - wget -O jb.sh      -r http://tinyurl.com/pijellybaby
   - cat jb.sh
   - chmod 755 jb.sh
 - get the sound affects
-  - 
-- run it
-  - sudo jb.sh
+  - wget -O police.wav -r http://tinyurl.com/sirenwav
+- run the thing
+  - sudo ./jb.sh
