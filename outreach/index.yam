@@ -35,14 +35,16 @@ Traffic Lights
 - run as per the sheet
 
 Singing Jelly Baby
+- mkdir stuff
+- cd stuff
 - prepare the circuitry as per the OCR sheet: http://tinyurl.com/jbsheet
 - install wiring pi
-  - wget -O wp.deb     -r http://tinyurl.com/wiringpi
+  - wget -O wp.deb     -r tinyurl.com/wiringpi
   - sudo dpkg -i wp.deb
 - get the code
-  - wget -O jb.sh      -r http://tinyurl.com/pijellybaby
+  - wget -O jb.sh      -r tinyurl.com/pijellybaby
   - chmod +x jb.sh
 - get the sound effects
-  - wget -O police.wav -r http://tinyurl.com/policewav
+  - wget -O police.wav -r tinyurl.com/policewav
 - run the thing
   - sudo ./jb.sh
