@@ -58,10 +58,10 @@ Access Space: http://access-space.org/
 
 Pi GATE: http://pi.gate.ac.uk/
 | %\ %\ %\ %\ %\ %\  |
-%image(logo-usfd.png)
+%(http://shef.ac.uk/, %image(logo-usfd.png))
 | %\ %\ %\ %\ %\ %\  |
-%image(logo-access-space.png)
+%(http://access-space.org/, %image(logo-access-space.png))
 | %\ %\ %\ %\ %\ %\  |
-%image(logo-gate.png)
+%(http://pi.gate.ac.uk/, %image(logo-gate.png))
 | %]
 -----------------------------------------------------------------------------
