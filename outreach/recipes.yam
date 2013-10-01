@@ -9,11 +9,21 @@ Wallbank), %(http://gate.ac.uk/hamish/, Hamish Cunningham), October 2rd 2013
 
 
 -----------------------------------------------------------------------------
+%1* Getting Started
+
+Take the Pi out of its box and plug it in following the instructions on the
+"Quick Start Guide".
+%br
+To log in: user = ^pi^, user = ^raspberry^.
+
+
+-----------------------------------------------------------------------------
 %1* Singing Jelly Baby
 
-First build the circuit (see below), then do ^this stuff^ from the "command
-line":
-
+%[
+|
+First shut down you Pi and build the circuit (see below), then %br do ^this stuff^
+from the "command line":
 # create a work directory
   - ^mkdir work^
   - ^cd work^
@@ -27,19 +37,33 @@ line":
   - ^wget -O police.wav -r tinyurl.com/policewav^
 # run the thing
   - ^sudo ./jb.sh^
+| %\ %\ %\ %\ %\ %\  |
+This example uses Shell Script:
+%code(lang=bash)<
+#!/bin/bash
+
+sudo amixer cset numid=3 1
+gpio mode 8 up
+
+while :
+do
+  if [ `gpio read 8` = 0 ]
+  then
+    echo "time to sing!" 
+    aplay police.wav &
+  fi
+
+  echo "time to sleep..."
+  sleep 1
+done
+%>
+| %]
 
 
 -----------------------------------------------------------------------------
 %1* Traffic Lights
 
-First build the circuit (see below), then do ^this stuff^ from the "command
-line":
-
-# get the code
-  - ^wget -O TrafficLED.py -r tinyurl.com/pitraffic^
-  - ^cat TrafficLED.py^
-# run the thing
-  - ^sudo python TrafficLED.py^
+See below...
 
 
 -----------------------------------------------------------------------------
@@ -54,7 +78,7 @@ You *must* change the password on the Pi next time you start up...
 %[ |
 The Department of Computer Science: http://shef.ac.uk/dcs
 
-Access Space: http://access-space.org/
+Access Space: %br http://access-space.org/
 
 Pi GATE: http://pi.gate.ac.uk/
 | %\ %\ %\ %\ %\ %\  |
@@ -64,4 +88,3 @@ Pi GATE: http://pi.gate.ac.uk/
 | %\ %\ %\ %\ %\ %\  |
 %(http://pi.gate.ac.uk/, %image(logo-gate.png))
 | %]
------------------------------------------------------------------------------
