@@ -101,7 +101,7 @@ gpio mode 8 up
 
 while :
 do
-  if [ 'gpio read 8' = 0 ]
+  if [ `gpio read 8` = 0 ]
   then
     echo &quot;time to sing!&quot; 
     aplay police.wav &amp;
