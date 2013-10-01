@@ -37,7 +37,7 @@ from the "command line":
   - ^wget -O police.wav -r tinyurl.com/policewav^
 # run the thing
   - ^sudo ./jb.sh^
-| %\ %\ %\ %\ %\ %\  |
+| %\ %\ %\ %\ %\ %\ %\ %\ %\ %\ %\ %\ %\ %\ %\ %\ %\ %\  |
 This example uses Shell Script:
 %code(lang=bash)<
 #!/bin/bash
