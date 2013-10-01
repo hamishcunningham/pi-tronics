@@ -1,0 +1,59 @@
+The Code
+
+-----------------------------------------------------------------------------
+%1* Singing Jelly Baby
+
+This example uses Shell Script:
+
+%code(lang=bash)<
+#!/bin/bash
+
+sudo amixer cset numid=3 1
+gpio mode 8 up
+
+while :
+do
+  if [ `gpio read 8` = 0 ]
+  then
+    echo "time to sing!" 
+    aplay police.wav &
+  fi
+
+  echo "time to sleep..."
+  sleep 1
+done
+%>
+
+-----------------------------------------------------------------------------
+%1* Traffic Lights
+
+This example uses Python:
+
+%code(lang=python)<
+import time
+import RPi.GPIO as GPIO
+
+GPIO.cleanup()
+GPIO.setmode(GPIO.BOARD)
+
+GPIO.setup(3,GPIO.OUT)
+GPIO.setup(5,GPIO.OUT)
+GPIO.setup(7,GPIO.OUT)
+
+while True:
+  GPIO.output(5,GPIO.LOW)
+  GPIO.output(3,GPIO.HIGH)
+  time.sleep(2)
+
+  GPIO.output(5,GPIO.HIGH)
+  time.sleep(2)
+
+  GPIO.output(5,GPIO.LOW)
+  GPIO.output(3,GPIO.LOW)
+  GPIO.output(7,GPIO.HIGH)
+  time.sleep(2)
+
+  GPIO.output(7,GPIO.LOW)
+  GPIO.output(5,GPIO.HIGH)
+  time.sleep(2)
+%>

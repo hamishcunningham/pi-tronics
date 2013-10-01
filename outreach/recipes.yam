@@ -1,5 +1,6 @@
 Raspberry Pi First-Time Hacker Day
 
+-----------------------------------------------------------------------------
 %(http://shef.ac.uk, University of Sheffield), %(http://shef.ac.uk/dcs/,
 Department of Computer Science) / %(http://access-space.org, Access Space)
 
@@ -8,9 +9,10 @@ Wallbank), %(http://gate.ac.uk/hamish/, Hamish Cunningham), October 2rd 2013
 
 
 -----------------------------------------------------------------------------
-%1* Singing Jelly Baby: Code
+%1* Singing Jelly Baby
 
-Do ^this stuff^ from the "command line":
+First build the circuit (see below), then do ^this stuff^ from the "command
+line":
 
 # create a work directory
   - ^mkdir work^
@@ -28,7 +30,10 @@ Do ^this stuff^ from the "command line":
 
 
 -----------------------------------------------------------------------------
-%1* Traffic Lights: Code
+%1* Traffic Lights
+
+First build the circuit (see below), then do ^this stuff^ from the "command
+line":
 
 # get the code
   - ^wget -O TrafficLED.py -r tinyurl.com/pitraffic^
@@ -49,9 +54,14 @@ You *must* change the password on the Pi next time you start up...
 %[ |
 The Department of Computer Science: http://shef.ac.uk/dcs
 
-Pi GATE: http://pi.gate.ac.uk/
-
 Access Space: http://access-space.org/
+
+Pi GATE: http://pi.gate.ac.uk/
 | %\ %\ %\ %\ %\ %\  |
 %image(logo-usfd.png)
+| %\ %\ %\ %\ %\ %\  |
+%image(logo-access-space.png)
+| %\ %\ %\ %\ %\ %\  |
+%image(logo-gate.png)
 | %]
+-----------------------------------------------------------------------------
