@@ -5,7 +5,7 @@
 <head>
 <meta name="generator" content="cow"/>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
-<title>Sheffield University Computer Science Pi Day</title>
+<title>Raspberry Pi First-Time Hacker Day</title>
 <style type="text/css">
 /*<![CDATA[*/
 <!--
@@ -43,45 +43,75 @@ div.banner a:hover {
 </style>
 </head>
 <body bgcolor="#FFFFFF" text="#000000">
-<h1 class="cow-title-heading">Sheffield University Computer Science Pi Day</h1>
+<h1 class="cow-title-heading">Raspberry Pi First-Time Hacker Day</h1>
 
-<p>James Wallbank, Hamish Cunningham, 3/Oct/2013</p>
+<p><a class="cow-url" href="http://shef.ac.uk">University of Sheffield</a>, <a class="cow-url" href="http://shef.ac.uk/dcs/">Department of Computer Science</a> / <a class="cow-url" href="http://access-space.org">Access Space</a></p>
 
-<p><hr>
-Traffic Lights</p>
-<ul>
-<li>prepare the circuitry as per the OCR sheet: <a class="cow-url" href="http://tinyurl.com/tlsheet">http://tinyurl.com/tlsheet</a></li>
-<li>get the code
+<p><a class="cow-url" href="http://access-space.org/doku.php?id=about:team#james_wallbankceo">James
+Wallbank</a>, <a class="cow-url" href="http://gate.ac.uk/hamish/">Hamish Cunningham</a>, October 2rd 2013</p>
+
+
+<p><hr></p><h1 class="cow-heading">Singing Jelly Baby: Code</h1>
+
+<p>Do <tt>this stuff</tt> from the &quot;command line&quot;:</p>
+
+<ol>
+<li>create a work directory
   <ul>
-  <li>wget -O TrafficLED.py -r <a class="cow-url" href="http://tinyurl.com/pitraffic">http://tinyurl.com/pitraffic</a></li>
-  <li>cat TrafficLED.py</li>
+  <li><tt>mkdir work</tt></li>
+  <li><tt>cd work</tt></li>
   </ul></li>
-<li>run as per the sheet</li>
-</ul>
-
-<p><hr>
-Singing Jelly Baby</p>
-<ul>
-<li>mkdir stuff</li>
-<li>cd stuff</li>
-<li>prepare the circuitry as per the OCR sheet: <a class="cow-url" href="http://tinyurl.com/jbsheet">http://tinyurl.com/jbsheet</a></li>
-<li>install wiring pi
+<li>install Wiring Pi
   <ul>
-  <li>wget -O wp.deb     -r tinyurl.com/wiringpi</li>
-  <li>sudo dpkg -i wp.deb</li>
+  <li><tt>wget -O wp.deb -r tinyurl.com/wiringpi</tt></li>
+  <li><tt>sudo dpkg -i wp.deb</tt></li>
   </ul></li>
 <li>get the code
   <ul>
-  <li>wget -O jb.sh      -r tinyurl.com/pijellybaby</li>
-  <li>chmod +x jb.sh</li>
+  <li><tt>wget -O jb.sh -r tinyurl.com/pijellybaby</tt></li>
+  <li><tt>chmod +x jb.sh</tt></li>
   </ul></li>
 <li>get the sound effects
   <ul>
-  <li>wget -O police.wav -r tinyurl.com/policewav</li>
+  <li><tt>wget -O police.wav -r tinyurl.com/policewav</tt></li>
   </ul></li>
 <li>run the thing
   <ul>
-  <li>sudo ./jb.sh</li>
+  <li><tt>sudo ./jb.sh</tt></li>
   </ul></li>
-</ul>
+</ol>
+
+
+<p><hr></p><h1 class="cow-heading">Traffic Lights: Code</h1>
+
+<ol>
+<li>get the code
+  <ul>
+  <li><tt>wget -O TrafficLED.py -r tinyurl.com/pitraffic</tt></li>
+  <li><tt>cat TrafficLED.py</tt></li>
+  </ul></li>
+<li>run the thing
+  <ul>
+  <li><tt>sudo python TrafficLED.py</tt></li>
+  </ul></li>
+</ol>
+
+
+<p><hr></p><h1 class="cow-heading">Stay Safe!</h1>
+
+<p>You <b>must</b> change the password on the Pi next time you start up...</p>
+
+
+<p><hr></p><h1 class="cow-heading">Keep in touch...</h1>
+
+<table> <tr><td>
+<p>The Department of Computer Science: <a class="cow-url" href="http://shef.ac.uk/dcs">http://shef.ac.uk/dcs</a></p>
+
+<p>Pi GATE: <a class="cow-url" href="http://pi.gate.ac.uk/">http://pi.gate.ac.uk/</a></p>
+
+<p>Access Space: <a class="cow-url" href="http://access-space.org/">http://access-space.org/</a></p>
+</td><td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td><td>
+<img src="logo-usfd.png">
+</td></tr>
+</table>
 </body></html>

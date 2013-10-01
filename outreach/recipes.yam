@@ -1,27 +1,57 @@
-Sheffield University Computer Science Pi Day
+Raspberry Pi First-Time Hacker Day
 
-James Wallbank, Hamish Cunningham, 3/Oct/2013
+%(http://shef.ac.uk, University of Sheffield), %(http://shef.ac.uk/dcs/,
+Department of Computer Science) / %(http://access-space.org, Access Space)
 
------------------------------------------------------------------------------
-Traffic Lights
-- prepare the circuitry as per the OCR sheet: http://tinyurl.com/tlsheet
-- get the code
-  - wget -O TrafficLED.py -r http://tinyurl.com/pitraffic
-  - cat TrafficLED.py
-- run as per the sheet
+%(http://access-space.org/doku.php?id=about:team#james_wallbankceo, James
+Wallbank), %(http://gate.ac.uk/hamish/, Hamish Cunningham), October 2rd 2013
+
 
 -----------------------------------------------------------------------------
-Singing Jelly Baby
-- mkdir stuff
-- cd stuff
-- prepare the circuitry as per the OCR sheet: http://tinyurl.com/jbsheet
-- install wiring pi
-  - wget -O wp.deb     -r tinyurl.com/wiringpi
-  - sudo dpkg -i wp.deb
-- get the code
-  - wget -O jb.sh      -r tinyurl.com/pijellybaby
-  - chmod +x jb.sh
-- get the sound effects
-  - wget -O police.wav -r tinyurl.com/policewav
-- run the thing
-  - sudo ./jb.sh
+%1* Singing Jelly Baby: Code
+
+Do ^this stuff^ from the "command line":
+
+# create a work directory
+  - ^mkdir work^
+  - ^cd work^
+# install Wiring Pi
+  - ^wget -O wp.deb -r tinyurl.com/wiringpi^
+  - ^sudo dpkg -i wp.deb^
+# get the code
+  - ^wget -O jb.sh -r tinyurl.com/pijellybaby^
+  - ^chmod +x jb.sh^
+# get the sound effects
+  - ^wget -O police.wav -r tinyurl.com/policewav^
+# run the thing
+  - ^sudo ./jb.sh^
+
+
+-----------------------------------------------------------------------------
+%1* Traffic Lights: Code
+
+# get the code
+  - ^wget -O TrafficLED.py -r tinyurl.com/pitraffic^
+  - ^cat TrafficLED.py^
+# run the thing
+  - ^sudo python TrafficLED.py^
+
+
+-----------------------------------------------------------------------------
+%1* Stay Safe!
+
+You *must* change the password on the Pi next time you start up...
+
+
+-----------------------------------------------------------------------------
+%1* Keep in touch...
+
+%[ |
+The Department of Computer Science: http://shef.ac.uk/dcs
+
+Pi GATE: http://pi.gate.ac.uk/
+
+Access Space: http://access-space.org/
+| %\ %\ %\ %\ %\ %\  |
+%image(logo-usfd.png)
+| %]
