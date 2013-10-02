@@ -1,6 +1,7 @@
 #!/bin/bash
 
-sudo amixer cset numid=3 1
+# sudo amixer cset numid=3 0 # hdmi
+sudo amixer cset numid=3 1   # analog
 gpio mode 8 up
 
 while :
