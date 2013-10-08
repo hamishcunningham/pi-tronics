@@ -119,4 +119,27 @@ rotated around activities during the following time slots:</p>
   <li>sudo ./jb.sh</li>
   </ul></li>
 </ul>
+
+<p>Issues with the OCR sheets</p>
+<ul>
+<li>traffic lights:
+  <ul>
+  <li>&quot;pin 17&quot; should be &quot;pin 14&quot;</li>
+  <li>in the Python there should be an additional statement in the while
+    loop to turn the amber LED off</li>
+  </ul></li>
+<li>jelly babies:
+  <ul>
+  <li>the pin-out diagram is very hard to read; success rate of plugging
+    into the correct pins was around 50%...</li>
+  <li>the mpg321 program didn't work &mdash; but is unnessary for later
+    Raspbians which have aplay available</li>
+  <li>depending on the audio connections it may be necessary to switch
+    the audio out
+    <ul>
+    <li># sudo amixer cset numid=3 0 # hdmi</li>
+    <li>sudo amixer cset numid=3 1   # analog</li>
+    </ul></li>
+  </ul></li>
+</ul>
 </body></html>
