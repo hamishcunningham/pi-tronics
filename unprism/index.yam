@@ -1,0 +1,49 @@
+unPrism: Simple Secure Comms at Home
+
+As %(https://leap.se/, the LEAP project) says, democracy of all shapes and
+sizes is meaningless without *the right to whisper*. All democracies currently
+comprise groups of widely divergent levels of resource and power (think Rupert
+Murdoch or Bill Gates vs. a homeless person, or a million other less extreme
+examples). It is impossible, in these circumstances, to remove the ability of
+the powerful to coerce the powerless. As a consequence, if the powerful have
+universal access to communication, democracy is broken.
+
+Now consider Edward Snowden's
+%(http://www.theguardian.com/world/the-nsa-files, revelations about Prism),
+Tempora and related programmes. It turns our that all your email is
+%(http://www.theguardian.com/world/2013/jul/31/nsa-top-secret-program-online-data,
+bcc'd to ^BoredYoungSpies@nsa.gov^), and that you're a Facebook friend of
+^NoSenseOfHumour@gchq.gov.uk^ The NSA (in partnership with the UK's GCHQ),
+%(http://www.theguardian.com/world/2013/jul/31/nsa-top-secret-program-online-data,
+collects 'nearly everything a user does on the internet'). Not only do the
+powerful have unfettered access to our communications, but so do tens of
+thousands of contractors (and anyone who hacks or bribes their way into
+_their_ systems). And it seems pretty certain that whatever dirty business the
+US (and UK) are wrapped up in is also going on in China and a bunch of other
+countries.
+
+One of the worst consequences of the spies' actions is that the companies who
+have the resources and motivation to protect their customers' privacy (the bit
+software and internet companies -- Google, Microsoft, Apple, Facebook, etc.)
+have been completely compromised. The US spy agencies have forced them to
+allow access to our data without making their compliance public. They also do
+this to smaller companies, as
+%(http://www.theguardian.com/world/2013/aug/22/lavabit-founder-us-surveillance-snowden,
+Lavabit case) demonstrates. Every US provider is now an insecure place to
+store data by definition (and stand to
+%(http://www.idgconnect.com/blog-abstract/3720/european-datacentre-options-appeal-post-nsa-world,
+lose around $10 billion) yearly as a result).
+
+What to do?
+
+There are two quite different problems that we might address:
+
+# how to prevent powerful agencies like the NSA from compromising our privacy
+  under any circumstances
+# how to protect most of our data most of the time
+
+These two problems are very different in lots of ways. The brave souls who
+stand up for human rights in oppressive regimes need 1., of course. But
+luckily many people are not in such difficult circumstances -- in which case
+the must smaller and more tractable problem of 2. (reasonablely secure privacy
+much of the time) is what we need.
