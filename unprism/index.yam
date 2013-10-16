@@ -43,13 +43,15 @@ There are two quite different problems that we might address:
 # how to protect most of our data most of the time
 
 These two problems are very different in lots of ways. The brave souls who
-stand up for human rights in oppressive regimes need 1., of course. But
-luckily many people are not in such difficult circumstances -- in which case
-the must smaller and more tractable problem of 2. (reasonably secure privacy
-much of the time) is what we need. The situation is very similar to the level
-of security I want for my wallet -- I'm not about to wrap it in inch-thick
-chains and keep it in a fire-proof safe in the basement, but I'm also not
-going to leave it lying around on the cafe table when I go to the toilet!
+stand up for human rights in oppressive regimes need the highest levels of
+privacy and security (i.e. 1.), of course. But many people are not in such
+difficult circumstances -- in which case the much smaller and more tractable
+goal of reasonably secure privacy (2.) is what we need.
+
+The situation is very similar to the level of security I want for my wallet --
+I'm not about to wrap it in inch-thick chains and keep it in a fire-proof safe
+in the basement, but I'm also not going to leave it lying around on the cafe
+table when I go to the toilet!
 
 I also don't expect the police to knock on my door with a search warrant --
 the chances of them mistaking me for Osama Bin Laden are relatively low (even
@@ -59,4 +61,8 @@ level of security that will hide me from a full-scale criminal investigation.
 about increases in police powers; just that the likelihood of this is low
 enough that I don't see any need to take special steps.)
 
-This project is about the digital version of that level of security.
+This project is about the digital version of that level of security: secure
+and private communication that is state-of-the-art, but which is not intended
+to protect the crown jewels or stand up to an aggressive investigation by a
+well-funded agency. This level of security *is* intended to defeat Prism and
+the like -- hence *unPrism*. Read on!
