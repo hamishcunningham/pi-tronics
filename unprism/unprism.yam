@@ -13,26 +13,37 @@ Now consider Edward Snowden's
 Tempora and related programmes. It turns our that all your email is
 %(http://www.theguardian.com/world/2013/jul/31/nsa-top-secret-program-online-data,
 bcc'd to ^BoredYoungSpies@nsa.gov^), and that you're a Facebook friend of
-^NoSenseOfHumour@gchq.gov.uk^ The NSA (in partnership with the UK's GCHQ),
+^NoSenseOfHumour@gchq.gov.uk^. The NSA (in partnership with the UK's GCHQ),
 %(http://www.theguardian.com/world/2013/jul/31/nsa-top-secret-program-online-data,
 collects 'nearly everything a user does on the internet'). Not only do the
-powerful have unfettered access to our communications, but so do tens of
+powerful have unfettered access to our communications, but so do hundreds of
 thousands of contractors (and anyone who hacks or bribes their way into
 _their_ systems). And it seems pretty certain that whatever dirty business the
 US (and UK) are wrapped up in is also going on in China and a bunch of other
 countries.
 
 One of the worst consequences of the spies' actions is that the companies who
-have the resources and motivation to protect their customers' privacy (the bit
+have the resources and motivation to protect their customers' privacy (the big
 software and internet companies -- Google, Microsoft, Apple, Facebook, etc.)
 have been completely compromised. The US spy agencies have forced them to
-allow access to our data without making their compliance public. They also do
+allow access to our data without making their compliance public. (They also do
 this to smaller companies, as
 %(http://www.theguardian.com/world/2013/aug/22/lavabit-founder-us-surveillance-snowden,
-Lavabit case) demonstrates. Every US provider is now an insecure place to
+Lavabit case) demonstrates.) Every US provider is now an insecure place to
 store data by definition (and stand to
 %(http://www.idgconnect.com/blog-abstract/3720/european-datacentre-options-appeal-post-nsa-world,
 lose around $10 billion) yearly as a result).
+
+There's a reason why _investigation_ and _surveillance_ are different words.
+We need the police to be able to investigate crime, but we cannot allow the
+state to collect all our private data and allow it to leak all over the place
+in the usual manner. We are all becoming suspects in a hypothetical crime, and
+sacrificing our democratic freedoms along the way. Never mind the potential
+for corruption, blackmail, industrial espionage and the like. And we're not
+the only technologists who think this way -- witness Google's recent
+announcement of a new peer-to-peer
+%(http://business.time.com/2013/10/21/google-digital-rebels/, trusted Internet
+connection) system.
 
 What to do?
 
@@ -57,12 +68,7 @@ I also don't expect the police to knock on my door with a search warrant --
 the chances of them mistaking me for Osama Bin Laden are relatively low (even
 if I do look a bit of a zombie on Monday mornings). So I'm not looking for the
 level of security that will hide me from a full-scale criminal investigation.
-(This is not to say that I'm unaware of miscarriages of justice or worried
-about increases in police powers; just that the likelihood of this is low
-enough that I don't see any need to take special steps.)
-
 This project is about the digital version of that level of security: secure
-and private communication that is state-of-the-art, but which is not intended
-to protect the crown jewels or stand up to an aggressive investigation by a
-well-funded agency. This level of security *is* intended to defeat Prism and
-the like -- hence *unPrism*. Read on!
+and private communication that is state-of-the-art, using Open Source
+software, decentralised systems and strong encryption, but which is
+unintrusive and easy enough for my Mother to use.
