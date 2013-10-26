@@ -8,6 +8,7 @@ This a git repo for assorted Raspberry Pi projects from http://pi.gate.ac.uk/
 - ideas-bazaar -- bizarre ideas for the ideas bazaar...
 - notipi -- see http://pi.gate.ac.uk/pages/notipi.html
 - outreach -- Pi-based schools outreach material
+- pibrush -- see http://pi.gate.ac.uk/pages/pibrush.html
 - pi-cam -- see http://pi.gate.ac.uk/pages/snowcam.html
 - simbamon -- see http://pi.gate.ac.uk/pages/mopi.html
 
