@@ -22,12 +22,12 @@ DESCRIPTION
   software to play with. The latter can be completely ignored if all that's
   goig on is an exhibit.
 
-  Software deaing with running it:
-    - /etc/pibrush.conf - configuration data
-    - /usr/bin/pibrush - wrappeer script to start PiBrush, reading in the
-      configuration data
+  Files deaing with running PiBrush as a service:
+    - /etc/default/pibrushd - configuration data
     - /etc/init.d/pibrushd - init script that can launch /usr/bin/pibrush
-      on boot, can also be used to stop manually e.g. sudo service pibrush stop
+      on boot, can also be used to stop PiBrush, e.g. sudo service pibrush stop
+    - /usr/bin/pibrush - wrapper script to start PiBrush, reads in the
+      configuration data
 
   Control software:
     - /opt/pibrush/accel_client.py - the client software for reading the
@@ -41,7 +41,7 @@ DESCRIPTION
     cd /opt/pibrush
     unzip examples.zip
     chmod +x install
-    ./instal.sh
+    ./install.sh
     reboot
 OPTIONS
   -s    Server mode, for the Pi connected to the display
