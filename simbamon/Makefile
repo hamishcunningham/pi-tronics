@@ -3,7 +3,7 @@
 # and is licenced under GPL 3 or any later version.
 
 # vars #######################################################################
-VERSION=1.3
+VERSION=2.0
 P=simbamond
 D=simbamon
 PD=package/$(VERSION)
