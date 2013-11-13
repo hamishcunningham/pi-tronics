@@ -1,0 +1,49 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Wed, 13 Nov 2013 12:26:53 +0000
+Source: simbamond
+Binary: simbamond
+Architecture: source all
+Version: 2.0
+Distribution: unstable
+Urgency: low
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Changed-By: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Description: 
+ simbamond  - SimBaMon, a Simple Battery Monitor
+Changes: 
+ simbamond (2.0) unstable; urgency=low
+ .
+   * Version 2.0 matches the 2nd series of MoPi prototype boards. (Note new physical pin mappings.)
+Checksums-Sha1: 
+ edd624a91a6091544d03b54202486ef29b21d00f 1636 simbamond_2.0.dsc
+ 4b421ba40d29a66eaec7a65630833fbfdaa1d7bd 16734 simbamond_2.0.tar.gz
+ 923c65ce4a34b168b9effb72e21fbbad17303318 11040 simbamond_2.0_all.deb
+Checksums-Sha256: 
+ fd4b3ae47450fbfeabb9a0c5e396f399dc24b6dd5b53562d9ade74a458f116e2 1636 simbamond_2.0.dsc
+ 4bff91cee81714bbcc48d0dde4502f04a8c77ac3fe8f38b31f3ab18f2de9bd3e 16734 simbamond_2.0.tar.gz
+ 989886bf0e6fda7757cebe91802050f803d9874d0e6a511dd81665550a17f60d 11040 simbamond_2.0_all.deb
+Files: 
+ 78a413ac91f4f56f69799db5b68c4355 1636 admin optional simbamond_2.0.dsc
+ 9b5360edb84f2e7a8ee9b87cafae5e8a 16734 admin optional simbamond_2.0.tar.gz
+ 18f93462cf9ddc965d509ca4f89daf1b 11040 admin optional simbamond_2.0_all.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+iQIcBAEBAgAGBQJSg3HXAAoJEK3gE8dtAR3xz24QAJAHYM1S5Vvp6pn0fN/ui1ed
+7cNKxdv+KN3PkQkKHxmWh1Io8ueJqAllvDZvVe70R++7OdrYx1vpCMAYN+wV+abF
+XVmz5cnz6mpaKwTSeXS9f9bbFvGWCh7Xas2xTf6gfFizxivwMgD7wH9OIlKsMHKc
+kf1RNyVEhYiFYPpDAaO8CR6cfwccyDO/Galde+pmGQBZVv8Bq+BMs/FgWbb/yLBE
+W8iNd5DxCci/Cm2thGFXDpIGpccTJVCZZCN1kh1Epldq+5mQh6kPBiIvU2Id+bFs
+0GvMHDY9zTv4R+2BNGD5hua7FLiQElkyvT9n4Nh7ioSO8sK+tsVlkCRMi/ZEejYy
+KDAfBfDL7JnV+vIIh0gkQwnsRKTMxow3Jn9ql3ocj/PbyzUVMZRVjqUiEKvnLIxC
+eHV9e5HpLeWL1DvEQsp02L7Oi+RWRlZXnyL/CpFP8ZyiJL+lBQRxiwJjlE0wLGJ8
+pU7uT+qfytXtN1YEK1BmC9fXk7GTnwivsRxrINeBhR0xTkL5Ob7ffi2ra8qPLT+k
+LrnunQRquxo8FEKy2SROYPzTw314g3qnV6sNpxE3f2LhFG3VR3JnKeqqAC9tW3xy
+cOnBtl20wmiOFgJLZSfRYy+C2UAfRggpnwqefGw0LUbcvrFGn3d4ehflzgHIkRwR
+aq+nYZVgqDbzs9VdMsH3
+=uw5b
+-----END PGP SIGNATURE-----
