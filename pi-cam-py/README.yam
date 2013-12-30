@@ -5,3 +5,8 @@ PiCam with a Large Snake
 - http://picamera.readthedocs.org/en/release-0.8/install2.html
   - sudo apt-get install python-pip
   - pip install picamera
+
+If you get a mysterious "unable to set inline_headers" message, try
+
+- sudo rpi-update
+- sudo reboot
