@@ -34,6 +34,18 @@ shift `expr $OPTIND - 1`
 # stop requested?
 [ ${TURNOFF} == 1 ] && { >${STOPFILE}; exit 0; }
 
+# initialise gpio pins
+init() {
+  echo initialising pins...
+  for PIN in $G_RED $G_YELLOW $G_GREEN
+  do
+    echo -n "setting pin $PIN to output mode; "
+    gpio mode $PIN out
+  done
+  echo
+}
+init
+
 # led switching functions
 on-off() {
   if [ x$2 == xoff ]
@@ -58,7 +70,7 @@ fi
 # mail loop
 while :
 do
-  [ -f ${STOPFILE} ] && { rm ${STOPFILE}; exit 0; }
+  [ -f ${STOPFILE} ] && { all-off; rm ${STOPFILE}; exit 0; }
   all-on
   sleep 1
   all-off
