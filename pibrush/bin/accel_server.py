@@ -32,6 +32,7 @@ GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # variable to store button state
 button = 0
+buttonpresstime = 0
 
 # screen solution
 XRES = int(os.getenv('XRES', 1920))
@@ -158,7 +159,20 @@ while running:
         # the button was pressed
         savereset()
         draw = 1
-    button = button_now    
+        # the button was just pressed so it hasn't 
+        # been pressed for any period of time
+        buttonpresstime = 0
+    elif button_now == 1 and button == 1:
+        # increment the ammount of time the
+        # button has beem pressed for
+        buttonpresstime += dt
+    button = button_now
+
+    # if the button has been pressed for 10 seconds
+    # then trigger a shutdown
+    if buttonpresstime >= 10:
+        running = 0
+        os.system('sudo poweroff &')
 
 
     # ===================
