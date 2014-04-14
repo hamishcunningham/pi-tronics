@@ -11,6 +11,7 @@ This a git repo for assorted Raspberry Pi projects from http://pi.gate.ac.uk/
 - pibrush -- see http://pi.gate.ac.uk/pages/pibrush.html
 - pi-cam -- see http://pi.gate.ac.uk/pages/snowcam.html
 - simbamon -- see http://pi.gate.ac.uk/pages/mopi.html
+- presenting -- helper scripts for using the Pi for presentations
 
 All code is *licenced under GPL 3* -- http://www.gnu.org/licenses/gpl.html --
 or any later version (unless otherwise stated).

@@ -1,0 +1,4 @@
+Helpers for setting up the Pi for presentations.
+
+Just add a mouse, copy the talk you want to give to ~/talk.pdf
+add add the rc.local stuff in /etc (above the "exit 0").
