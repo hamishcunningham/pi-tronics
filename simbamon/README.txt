@@ -30,26 +30,27 @@ There are also:
 To install:
 
 - on Raspbian:
-  - add this line to /etc/apt/sources.list
-    - deb http://ppa.launchpad.net/hamish-dcs/pi-gate/ubuntu precise main
-  - import the encryption key from Ubuntu so that the Pi can verify the
-    package's validity:
-    - gpg --keyserver keyserver.ubuntu.com --recv-key 6C12C1CF
-    - gpg -a --export 6C12C1CF |sudo apt-key add -
-  - update your list of available packages (this may take a couple of
-    minutes):
-    - sudo apt-get update
-  - install the package:
-    - sudo apt-get install simbamond
+  - sudo apt-get install simbamond
+  - alternatively, if you want the latest development snapshot:
+    - add this line to /etc/apt/sources.list
+      - deb http://ppa.launchpad.net/hamish-dcs/pi-gate-snapshots/ubuntu
+        precise main
+    - import the encryption key from Ubuntu so that the Pi can verify the
+      package's validity:
+      - gpg --keyserver keyserver.ubuntu.com --recv-key 6C12C1CF
+      - gpg -a --export 6C12C1CF |sudo apt-key add -
+    - update your list of available packages (this may take a couple of
+      minutes):
+      - sudo apt-get update
+    - install the package:
+      - sudo apt-get install simbamond
 - on Ubuntu (for testing and debugging):
   - sudo add-apt-repository ppa:hamish-dcs/pi-gate
+    - (use ppa:hamish-dcs/pi-gate-snapshots for development builds)
   - sudo apt-get update
   - sudo apt-get install simbamond
   - this will generate a failure message as Ubuntu lacks the gpio command --
     use simulation mode as described below
-
-If you wish to use snapshot builds, add this line to sources.list
-- deb http://ppa.launchpad.net/hamish-dcs/pi-gate-snapshots/ubuntu precise main
 
 -----------------------------------------------------------------------------
 To test and debug:

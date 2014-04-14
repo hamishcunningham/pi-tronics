@@ -1,0 +1,88 @@
+MadLab Pi Jam
+
+- [Never work with...]
+  - I'm from the computer science department at the Uni of Sheffield; if
+    you're from Manchester and you don't know where Sheffield is its in the
+    big important county just across the Penines that you lot live just
+    outside of -- but don't worry, we don't look down on you almost at all,
+    and some of my best friends are from Manchester, no really.
+  - anyway, we're running an outreach programme to local schools where every
+    kid gets a Pi to take home, which is great...
+  - we ran our first event in the labs for the kids a few weeks ago, and Alan
+    Mycroft of the Pi foundation was kind enough to give a talk to kick things
+    off, and then I walked over the road from the lecture theatre to the labs
+    with 50 teenagers following me -- I felt like the Pied piper or something
+    -- anyway I got into the lab and walked up to the rig that I'd carefully
+    set up with various demos and what have you the night before, and Eeek!
+    Someone had nicked all the mains cables! Not a nice surprise -- especially
+    when it turned out that it was actually one of our technicians who had
+    come round and taken the cables away because I'd been naughty and plugged
+    two of them in series...
+  - so I'm pleased to be able to stand here in a wireless configuration today,
+    having just taken delivery of a bunch of prototype mobile power boards for
+    the Pi...
+- [MoPi proto 2, MoPi]
+  - this is a little gizmo called MoPi which is a hotswap mobile power board
+  - it will accept multiple sources, including these standard AA batteries,
+    for example, or your car cigarette lighter, or an old laptop power supply
+    up to around 25V, or whatever
+  - it will let you do hot-swap power replacement without stopping work
+  - it will shutdown your Pi cleanly if the battery charge level gets too low,
+    and it has a neat little power switch on the top to save you logging in to
+    shutdown at other times,
+  - and it even fits in the Pibow (and other well-known Pi cases)
+  - and we're planning to try and fund the final round of prototypes and a
+    production run with KickStarter; if anyone has any feedback or advice I'd
+    love to hear it!
+  - I told James Wallbank of Sheffield's equivalent of Madlab that I was going
+    to do a KickStarter and he said "you have to prepare yourself for the
+    emotional turmoil!"
+- [WiringPi, Raspbian Packaging]
+  - ok, a couple of other things to mention:
+    - I needed a daemon to monitor the battery levels on the Pi, and also
+      almost everything I do with the Pi seems to involve using Gordon
+      Henderson's excellent WiringPi system
+    - so I spent several fun weeks this summer improving my knowledge of
+      Debian packaging, and I've just got to the stage of contacting the
+      Raspbian maintainers to see if I can get these rolled into the main
+      distribution
+    - for the time being if you go to Pi.GATE.ac.uk and hit the download link
+      it will show you how to do the installs in a couple of lines
+- [PiBrush]
+  - so, we've been casting around for projects that work for school kids of
+    various shapes and sizes, and the general rule we've come up with is GPIO
+    Good... -- in other words the place where it is really easy to make the Pi
+    shine is when we've attached some other electronics to the GPIO header,
+    whether it is a couple of bits of wire stuck into a jelly baby (which is
+    what we do for our first session with the school kids) or something more
+    sophisticated like this -- an XLoBorg, which has an accelerometer and a
+    compass in it
+  - and we can use it to create a kind of poor man's Wii (or a rich man's Wii
+    if you count open source as riches, which I certainly do!)
+  - hands up who's heard of Jackson Pollock? so Fred Sonnenwald from Sheffield
+    has set up a pair of Pis -- a Model A with the XLoBorg and a MoPi
+    installed, and a Model B in server mode, and some physics to model paint
+    droplets on the Pi and the motion of the Mdel A relative to the screen,
+    and hey presto we can do Jackson Pollock stuff...
+  - and all with a couple of hundred lines of Python
+  - there'll be an article about this in the MagPi December issue, and XBorg
+    have kindly agreed to offer a prize -- so if you can think of a really
+    good place to stick an accelerometer -- don't answer that! -- you might
+    just win yourself one :-)
+- [pi.gate]
+  - so last thing, we've also been messing around with direct-to-web cameras
+    in lunch boxes 
+  - it is a fun project because you get to take the back off these little 
+  - my brother spends his sundays tramping around Kinder Scout measuring
+    erosion caused by changes in plantlife ecology, and seeding new areas of
+    heather and moss and so on, and the next generation of these cameras 
+  - I've invested in a bunch of waterproof switches and the next version of
+    this is going to sit on the peat bogs doing time-lapse on the little
+    streams and what have you to help them understand which areas are causing
+    most erosion, measure how well the seeding programme is working and so on
+- [pi.gate]
+  - that's me, thanks for your attention, I've got some demos set up over
+    there, and if you want to talk KickStarter and battery packs and
+    whathaveyou then I may end up proposing marriage :-)
+  - and there's more at pi.gate.ac.uk, e.g. a basic GPIO electronics tutorial,
+    so surf on over and say hi :-)

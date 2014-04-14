@@ -1,0 +1,120 @@
+========================
+PiBrush QuickStart Guide
+========================
+
+-----------------
+For the Impatient
+-----------------
+
+Plug the Pi with the switch on into a monitor and boot it. Put the batteries
+into the other Pi and boot it. Wave it around! Paint should splash on the
+screen...
+
+To clear the screen press the red button on the server. To shutdown the server
+press the same button for longer. To shutdown the battery-powered Pi, press
+the button through the hole in its lid.
+
+Have fun!
+
+
+----------------
+What is PiBrush?
+----------------
+PiBrush is an interactive RaspberryPi based art exhibit around the idea of
+using an XLoBorg accelerometer to create Jackson Pollock type digital
+paintings. And now that you've just received a PiBrush kit, what do you do?
+
+-----------------------
+Setting up the Hardware
+-----------------------
+PiBrush consists of two RaspberryPis. A Model B "server" unit, and a Model A
+"client" unit. The server is to be plugged into a 1080p HDMI monitor. Ensure
+that both the server and client are equipped with USB Wi-fi modules. The client
+also employs our prototype MoPi mobile power board for battery power. It uses
+8 AA NiMH rechargeable batteries, so it doesn't need a cord. The server unit
+however will need the standard 5V micro-USB power supply.
+
+-----------
+Powering up
+-----------
+Powering up the server is as simple as connecting the power. The client is
+powered on by first connecting the red jumper lead from the battery pack if it
+is not already. If it's just been plugged in it will power on automatically. If
+it doesn't, press and hold down the power button on the top of the client.
+
+----------
+Having fun
+----------
+Like the Nintendo Wii, we've made having fun as easy as possible. Grab the
+client and proceed to wave your virtual paintbrush, or PiBrush as we like to
+call it, around. You may need to wait a few seconds for everything to finish
+booting. A new painting? Press the red button on top of the server until the
+screen clears. The old painting is automatically saved.
+
+-------------
+Shutting down
+-------------
+On the client, press and hold the power button until the light flashes red.
+This indicates that the halt command has been issued and that the system is
+powering down. A soft switch will trigger when the client is fully off and the
+lights will go out. On the server, press and hold the red button for 10
+seconds. At this point the screen will be saved and the system will execute a
+clean shutdown. You'll know it's working because the console will return.
+
+============================================
+Troubleshooting & Frequently Asked Questions
+============================================
+
+---------------------------------------------------
+Am I supposed to be seeing a console on the server?
+---------------------------------------------------
+Ah, no. It should be a white screen. Try checking that the monitor is full
+1080p.
+
+--------------------------------------
+Why isn't the client isn't turning on?
+--------------------------------------
+Check that the lead from the battery pack is fully connected, and that the
+batteries are charged. They need to register more than 8V all together to
+power on the client. If it's connected and charged up, try disconnecting, the
+batteries. Let it sit for a few moments, and try again.
+
+------------------------------------
+I'm waving, but nothing's happening!
+------------------------------------
+It's probably the Wi-fi acting up. Because that never happens under Linux. What
+PiBrush does by default is create an ad-hoc Wi-fi network called 'pibrush'
+between the client and server using the addresses 192.168.31.2 and 192.168.31.1
+respectively. Ad-hoc mode is used to ensure operation anywhere, but if you've
+got a dedicated wireless network and you're not going anywhere, PiBrush will
+happily use it to. Simply add the network to the wpa_supplicant.conf file.
+
+--------------------------
+What's up with the colors?
+--------------------------
+If you're referring to the apparently random paint colors, that's exactly what
+they are. Random. Enjoy!
+
+---------------
+I zig, it zags?
+---------------
+Occasionally you may experience times when flicking the paintbrush (the
+client) one direction results in paint splattering in a completely different
+one. This is a minor bug that results from the method used to go from
+acceleration to displacement on the screen. For the moment we consider this a
+limitation of the hardware. It's all open so you can have a go at fixing it!
+(If you do, let us know!) In the meantime, it's not really a bug. It's a
+feature. (Try a slightly gentler touch and see what happens...)
+
+-----------------------------
+Where are my paintings saved?
+-----------------------------
+In the /home/pi directory of the server's SD card.
+
+------------------
+How can I hack it?
+------------------
+Username: pi, password: raspberry. Information on how the software works is
+available on our website. http://pi.gate.ac.uk/pages/pibrush.html
+Code is available on GitHub.
+https://github.com/hamishcunningham/pi-tronics/tree/master/pibrush

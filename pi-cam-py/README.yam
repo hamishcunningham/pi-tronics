@@ -1,0 +1,12 @@
+PiCam with a Large Snake
+
+- cd; ln -s pi-tronics/pi-cam-py/recvid.py
+- sudo cp pi-tronics/pi-cam-py/rc.local.example /etc/rc.local
+- http://picamera.readthedocs.org/en/release-0.8/install2.html
+  - sudo apt-get install python-pip
+  - pip install picamera
+
+If you get a mysterious "unable to set inline_headers" message, try
+
+- sudo rpi-update
+- sudo reboot
