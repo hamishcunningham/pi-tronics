@@ -25,6 +25,7 @@ There are also:
 - (when running) a process ID file in /var/run/simbamon.pid
 - a source file for the man page (man/simbamond.txt) and the man pages
   themselves (man/simbamon[d].8 and their compressed versions)
+- a configuration script in /usr/sbin/mopi (with manpage)
 
 -----------------------------------------------------------------------------
 To install:
@@ -66,6 +67,11 @@ then the utils directory contains these scripts:
 
 (The utils directory also contains a great script called txt2man from
 http://mvertes.free.fr/ that we use to maintain the manpage.)
+
+-----------------------------------------------------------------------------
+To configure:
+
+mopi
 
 -----------------------------------------------------------------------------
 To release:

@@ -3,16 +3,19 @@
 # and is licenced under GPL 3 or any later version.
 
 # vars #######################################################################
-VERSION=2.0
+VERSION=3.0
 P=simbamond
 D=simbamon
+MOPI=mopi
 PD=package/$(VERSION)
 INSTALLED_FILES=\
   $(DESTDIR)/usr/sbin/$(D) \
+  $(DESTDIR)/usr/sbin/$(MOPI) \
   $(DESTDIR)/etc/init.d/$(P) \
   $(DESTDIR)/etc/default/$(P) \
   $(DESTDIR)/usr/share/man/man8/$(D).8.gz \
   $(DESTDIR)/usr/share/man/man8/$(P).8.gz
+  $(DESTDIR)/usr/share/man/man8/$(MOPI).8.gz \
 INIT_LINKS=\
   $(DESTDIR)/etc/rc?.d/*$(P)
 PACKAGE_FILES=\
@@ -59,8 +62,10 @@ install:
 	install $(P).default      $(DESTDIR)/etc/default/$(P)
 	install -m 755 $(D)       $(DESTDIR)/usr/sbin
 	install -m 755 $(P).init  $(DESTDIR)/etc/init.d/$(P)
+	install -m 755 $(MOPI)    $(DESTDIR)/usr/sbin
 	install man/$(P).8.gz     $(DESTDIR)/usr/share/man/man8
 	install man/$(D).8.gz     $(DESTDIR)/usr/share/man/man8
+	install man/$(MOPI).8.gz  $(DESTDIR)/usr/share/man/man8
 	[ -z "$(DESTDIR)" ] && update-rc.d $(P) defaults || :
 	@echo 'SimBaMon installed: '
 	@$(do-listing)
@@ -74,11 +79,15 @@ uninstall:
 	@echo done
 
 # manpage ####################################################################
-man: man/$(P).txt
+man: man/$(P).txt man/$(MOPI).txt
 	cd man; ../utils/txt2man -v "System Manager's Manual" -s 8 \
           -t '$(D)' $(P).txt >$(P).8; \
 	sed -i 1d $(P).8;  # fix error from lintian about ." macro \
 	cat $(P).8 |gzip >$(P).8.gz; cp $(P).8.gz $(D).8.gz
+	cd man; ../utils/txt2man -v "System Manager's Manual" -s 8 \
+          -t '$(MOPI)' $(MOPI).txt >$(MOPI).8; \
+	sed -i 1d $(MOPI).8;  # fix error from lintian about ." macro \
+	cat $(MOPI).8 |gzip >$(MOPI).8.gz
 
 # package ####################################################################
 package: man package-unstable package-precise

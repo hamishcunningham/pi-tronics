@@ -1,0 +1,23 @@
+NAME
+  mopi - MoPi configuration script
+SYNOPSIS
+  mopi [-d] [-h]
+DESCRIPTION
+  Configuration tool for the MoPi mobile and 24/7 power board
+  for the Raspberry Pi. You can find the source code on GitHub:
+
+    https://github.com/hamishcunningham/pi-tronics/tree/master/simbamon
+
+  Part of the SimBaMon battery monitor package.
+
+  For more details see http://pi.gate.ac.uk/mopi
+OPTIONS
+  -d          Turn on debug mode.
+  -h          The option -h displays help.
+EXAMPLE
+    $ mopi
+SEE ALSO
+BUGS
+  Almost certainly!
+AUTHOR
+  Hamish Cunningham <http://hamish.gate.ac.uk/>

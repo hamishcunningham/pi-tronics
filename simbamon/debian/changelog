@@ -1,3 +1,9 @@
+simbamond (3.0) unstable; urgency=low
+
+  * Snapshot releases in the 3.0+1 series
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Mon, 14 Apr 2014 11:08:22 +0100
+
 simbamond (2.0) unstable; urgency=low
 
   * Version 2.0 matches the 2nd series of MoPi prototype boards. (Note new physical pin mappings.)

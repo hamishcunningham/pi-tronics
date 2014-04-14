@@ -1,0 +1,95 @@
+#!/bin/bash
+#
+# mopi - configuration tool for http://pi.gate.ac.uk/mopi
+#
+# Author: Hamish Cunningham <hamish@gate.ac.uk>
+# This code is copyright Hamish Cunningham and the University of Sheffield
+# and is licenced under GPL 3 or any later version.
+#
+# Ideas and idioms borrowed from
+# https://github.com/asb/raspi-config/blob/master/raspi-config
+# (thanks Alex & co!)
+
+# standard locals
+P="$0"
+USAGE="`basename ${P}` [-h(elp)] [-d(ebug)]"
+OPTIONSTRING=hd
+
+# menu actions
+do_something() {
+  echo something
+}
+do_something_advanced() {
+  echo something advanced
+}
+
+# figure out optimal size for whiptail
+calc_wt_size() {
+  WT_HEIGHT=17
+  WT_WIDTH=$(tput cols)
+
+  if [ -z "$WT_WIDTH" ] || [ "$WT_WIDTH" -lt 60 ]; then
+    WT_WIDTH=80
+  fi
+  if [ "$WT_WIDTH" -gt 178 ]; then
+    WT_WIDTH=120
+  fi
+  WT_MENU_HEIGHT=$(($WT_HEIGHT-8))
+}
+calc_wt_size
+
+# an about box
+do_about() {
+  whiptail --msgbox "\
+    This is a configuration tool for MoPi.
+
+    See http://pi.gate.ac.uk/mopi for details.\
+    " 20 70 1
+}
+
+# parting is such sweet sorrow
+do_finish() {
+  exit 0
+}
+
+# second-level menu
+do_advanced_menu() {
+  FUN=$(whiptail --title "MoPi Configuration Tool (mopi)" \
+    --menu "Advanced Options" $WT_HEIGHT $WT_WIDTH $WT_MENU_HEIGHT \
+    --cancel-button "Back" --ok-button "Select" \
+      "A1 Blah" "Blah blah" \
+    3>&1 1>&2 2>&3)
+  RET=$?
+  if [ $RET -eq 1 ]; then
+    return 0
+  elif [ $RET -eq 0 ]; then
+    case "$FUN" in
+      A1\ *) do_something_advanced ;;
+      *)     whiptail --msgbox "Error: unrecognized option" 20 60 1 ;;
+    esac ||  whiptail --msgbox "There was an error running option $FUN" 20 60 1
+  fi
+}
+
+# main loop
+while true; do
+  FUN=$(whiptail --title "MoPi Configuration Tool (mopi)" \
+    --menu "Setup Options" $WT_HEIGHT $WT_WIDTH $WT_MENU_HEIGHT \
+    --cancel-button Finish --ok-button Select \
+      "1 Blah" "Blah blah" \
+      "8 Advanced Options" "Configure advanced settings" \
+      "9 About mopi" "Information about this configuration tool" \
+    3>&1 1>&2 2>&3)
+  RET=$?
+  if [ $RET -eq 1 ]; then
+    do_finish
+  elif [ $RET -eq 0 ]; then
+    case "$FUN" in
+      1\ *) do_something ;;
+      8\ *) do_advanced_menu ;;
+      9\ *) do_about ;;
+      *)    whiptail --msgbox "Error: unrecognized option" 20 60 1 ;;
+    esac || whiptail --msgbox "There was an error running option $FUN" 20 60 1
+  else
+    exit 1
+  fi
+done
