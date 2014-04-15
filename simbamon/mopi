@@ -15,6 +15,21 @@ P="$0"
 USAGE="`basename ${P}` [-h(elp)] [-d(ebug)]"
 OPTIONSTRING=hd
 
+# specific locals
+DNAME=simbamond
+CONFIG=
+if [ -r ./${DNAME}.default ]  # development mode
+then
+  CONFIG=./${DNAME}.default
+elif [ -r /etc/default/$DNAME ]
+then
+  CONFIG=/etc/default/$DNAME
+fi
+
+# get current config state
+parse_config() {
+}
+
 # menu actions
 do_something() {
   echo something
