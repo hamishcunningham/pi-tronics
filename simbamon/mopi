@@ -28,6 +28,10 @@ fi
 
 # get current config state
 parse_config() {
+  for l in `grep '^[A-Z][A-Z]*=' $CONFIG`
+  do
+    echo $l
+  done
 }
 
 # menu actions
