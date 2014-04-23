@@ -162,6 +162,10 @@ package-version:
 	dch -i
 	@echo 'remember to change VERSION in the Makefile!'
 
+# test #######################################################################
+test:
+	echo; sudo python ./api-test.py |pr -l 33 -t -2 -w 132; echo
+
 # list #######################################################################
 list:
 	@$(do-listing)
