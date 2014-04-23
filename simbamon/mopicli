@@ -1,0 +1,102 @@
+#!/usr/bin/env python
+import sys
+import mopiapi
+
+commands = ['-i', '-rc', '-rpon', '-rs', '-s', '-sv', '-v',  '-wc', '-wpon', '-ws']
+
+def help():
+	print "usage: mopicli " + ' '.join(commands)
+	print ""
+	print "\t -i \ti2c bus (1 default)"
+	print ""
+	print "\t -s \tmopi status byte"
+	print "\t -sv \tverbose status"
+	print "\t -v \tcurrent battery voltage in mV"
+	print ""
+	print "\t -rc \tread current configuration"
+	print "\t -rpon \tread power on delay"
+	print "\t -rs \tread shutdown delay"
+	print ""
+	print "\t -wc \twrite configuration"
+	print "\t -wpon \tset power on delay"
+	print "\t -ws \twrite shutdown delay"
+	print ""
+	print "\t -h \tdisplay this message"
+	print ""
+	sys.exit(0)
+
+def readInt(c):
+	try:
+		t = int(sys.argv.pop(sys.argv.index(c) + 1))
+	except ValueError:
+		print "mopicli. bad input for " + c + ": " + sys.argv[sys.argv.index(c) + 1] + "."
+		sys.exit(1)
+	except IndexError:
+		print "mopicli. input for " + c + " not found."
+		sys.exit(1)
+	return t
+
+if len(sys.argv) == 1 or '-h' in sys.argv:
+	help()
+
+sys.argv.pop(0) # remove calling name...
+for arg in sys.argv:
+	if arg[0] == '-' and not arg in commands:
+		print "mopicli. unknown command: " + arg
+		sys.exit(1)
+
+if '-i' in sys.argv:
+	bus = readInt('-i')
+	try:
+		mymopi = mopiapi.mopiapi(bus)
+	except:
+		print "mopicli. bad i2c bus: %i. check connection?" % bus
+		sys.exit(1)
+	sys.argv.remove('-i')
+else:
+	mymopi = mopiapi.mopiapi()
+
+try:
+	if '-s' in sys.argv or '-sv' in sys.argv:
+		status = mymopi.getStatus()
+		if '-s' in sys.argv:
+			print status
+			sys.argv.remove('-s')
+		if '-sv' in sys.argv:
+			print mopiapi.statusDetail(status)
+			sys.argv.remove('-sv')
+
+	if '-v' in sys.argv:
+		print mymopi.getVoltage()
+		sys.argv.remove('-v')
+
+	if '-rc' in sys.argv:
+		print ' '.join(map(str, mymopi.readConfig()))
+		sys.argv.remove('-rc')
+
+	if '-rpon' in sys.argv:
+		print mymopi.getPowerOnDelay()
+		sys.argv.remove('-rpon')
+
+	if '-rs' in sys.argv:
+		print mymopi.getShutdownDelay()
+		sys.argv.remove('-rs')
+
+	if '-wc' in sys.argv:
+		data = []
+		for i in range(0,6):
+			data.append(readInt('-wc'))
+		mymopi.writeConfig(data)
+		sys.argv.remove('-wc')
+
+	if '-wpon' in sys.argv:
+		mymopi.setPowerOnDelay(readInt('-wpon'))
+		sys.argv.remove('-wpon')
+
+	if '-ws' in sys.argv:
+		mymopi.setShutdownDelay(readInt('-ws'))
+		sys.argv.remove('-ws')
+
+except IOError:
+	print "mopicli. communication error. check bus? check connection?"
+	sys.exit(1)
