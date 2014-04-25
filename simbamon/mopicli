@@ -2,10 +2,13 @@
 import sys
 import mopiapi
 
+# version 0.1
+
 commands = ['-i', '-rc', '-rpon', '-rs', '-s', '-sv', '-v',  '-wc', '-wpon', '-ws']
 
 def help():
 	print "usage: mopicli " + ' '.join(commands)
+	print "version 0.1"
 	print ""
 	print "\t -i \ti2c bus (1 default)"
 	print ""

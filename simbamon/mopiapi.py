@@ -1,5 +1,6 @@
 import smbus
 
+# version 0.1
 # for mopi firmware v3.02
 
 class mopiapi():
