@@ -46,8 +46,11 @@ parse_config() {
 }
 
 # menu actions
-do_something() {
-  echo something
+do_diff() {
+  echo Diffing ${CONFIG} with ${CONFIG_COPY}...
+  echo
+  diff ${CONFIG} ${CONFIG_COPY}
+  echo
 }
 do_something_advanced() {
   echo something advanced
@@ -106,6 +109,7 @@ while true; do
     --menu "Setup Options" $WT_HEIGHT $WT_WIDTH $WT_MENU_HEIGHT \
     --cancel-button Finish --ok-button Select \
       "1 Blah" "Blah blah" \
+      "2 Show changes" "Show config changes (not yet applied)" \
       "8 Advanced Options" "Configure advanced settings" \
       "9 About mopi" "Information about this configuration tool" \
     3>&1 1>&2 2>&3)
@@ -115,6 +119,7 @@ while true; do
   elif [ $RET -eq 0 ]; then
     case "$FUN" in
       1\ *) do_something ;;
+      2\ *) do_diff ;;
       8\ *) do_advanced_menu ;;
       9\ *) do_about ;;
       *)    whiptail --msgbox "Error: unrecognized option" 20 60 1 ;;
