@@ -18,6 +18,11 @@ OPTIONSTRING=hd
 # specific locals
 DNAME=simbamond
 CONFIG=
+
+# we do all changes to a copy of /etc/default/simbamond (in ~/.config/mopi)
+# and only push back into /etc/ when the user says "apply"; the next code
+# block checks location of these files, sets up ~/.config/mopi if it doesn't
+# exist yet, and copies the current state of the /etc config
 if [ -r ./${DNAME}.default ]  # development mode
 then
   CONFIG=./${DNAME}.default
@@ -25,11 +30,17 @@ elif [ -r /etc/default/$DNAME ]
 then
   CONFIG=/etc/default/$DNAME
 fi
+CONFIG_COPY=$CONFIG_COPY_DIR/config-copy
+CONFIG_COPY_DIR=${HOME}/.config/mopi
+[ -d ${CONFIG_COPY_DIR} ] || mkdir -p ${CONFIG_COPY_DIR}
+[ -f ${CONFIG_COPY} ] && mv ${CONFIG_COPY} ${CONFIG_COPY}.bak
+cp $CONFIG $CONFIG_COPY
 
 # get current config state
 parse_config() {
-  for l in `grep '^[A-Z][A-Z]*=' $CONFIG`
+  for l in `grep '^[A-Z][A-Z]*=' $CONFIG_COPY`
   do
+    # TODO
     echo $l
   done
 }
