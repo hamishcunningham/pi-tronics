@@ -45,15 +45,22 @@ parse_config() {
   done
 }
 
-# menu actions
+# menu actions etc.
 do_diff() {
-  echo Diffing ${CONFIG} with ${CONFIG_COPY}...
-  echo
-  diff ${CONFIG} ${CONFIG_COPY}
-  echo
+  clear
+  (
+    echo Diffing ${CONFIG} with ${CONFIG_COPY}...; echo
+    diff $* ${CONFIG} ${CONFIG_COPY}
+    echo; echo Hit return to continue
+  ) |more
+  read
+  clear
 }
-do_something_advanced() {
-  echo something advanced
+do_status() {
+  STATUS="`sudo ./mopicli -sv`"
+  STATUS="${STATUS}; `sudo ./mopicli -s`"
+  STATUS="${STATUS}; `sudo ./mopicli -v`"
+  echo $STATUS
 }
 
 # figure out optimal size for whiptail
@@ -74,7 +81,8 @@ calc_wt_size
 # an about box
 do_about() {
   whiptail --msgbox "\
-    This is a configuration tool for MoPi.
+    This is a configuration tool for MoPi
+    (mobile and 24/7 power for the Raspberry Pi).
 
     See http://pi.gate.ac.uk/mopi for details.\
     " 20 70 1
@@ -104,14 +112,17 @@ do_advanced_menu() {
 }
 
 # main loop
+STATUS="`do_status`"
 while true; do
   FUN=$(whiptail --title "MoPi Configuration Tool (mopi)" \
-    --menu "Setup Options" $WT_HEIGHT $WT_WIDTH $WT_MENU_HEIGHT \
+    --menu "Current status: ${STATUS}" $WT_HEIGHT $WT_WIDTH $WT_MENU_HEIGHT \
     --cancel-button Finish --ok-button Select \
       "1 Blah" "Blah blah" \
-      "2 Show changes" "Show config changes (not yet applied)" \
+      "2 Show Changes" "Show config changes (not yet applied)" \
+      "3 Show Changes (Wide)" "Show config changes (side-by-side view)" \
+      "7 Refresh" "Refresh current status" \
       "8 Advanced Options" "Configure advanced settings" \
-      "9 About mopi" "Information about this configuration tool" \
+      "9 About MoPi" "Information about this configuration tool" \
     3>&1 1>&2 2>&3)
   RET=$?
   if [ $RET -eq 1 ]; then
@@ -120,6 +131,8 @@ while true; do
     case "$FUN" in
       1\ *) do_something ;;
       2\ *) do_diff ;;
+      3\ *) do_diff -y ;;
+      7\ *) STATUS="`do_status`" ;;
       8\ *) do_advanced_menu ;;
       9\ *) do_about ;;
       *)    whiptail --msgbox "Error: unrecognized option" 20 60 1 ;;
