@@ -30,8 +30,8 @@ elif [ -r /etc/default/$DNAME ]
 then
   CONFIG=/etc/default/$DNAME
 fi
-CONFIG_COPY=$CONFIG_COPY_DIR/config-copy
 CONFIG_COPY_DIR=${HOME}/.config/mopi
+CONFIG_COPY=$CONFIG_COPY_DIR/config-copy
 [ -d ${CONFIG_COPY_DIR} ] || mkdir -p ${CONFIG_COPY_DIR}
 [ -f ${CONFIG_COPY} ] && mv ${CONFIG_COPY} ${CONFIG_COPY}.bak
 cp $CONFIG $CONFIG_COPY
