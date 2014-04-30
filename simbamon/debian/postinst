@@ -17,9 +17,41 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
+do_configure() {
+  echo doing configure from simbamond postinst...
+
+  # remove I2C from blacklist
+  BLIST=/etc/modprobe.d/raspi-blacklist.conf
+  if [ -r ${BLIST} ]
+  then
+    if grep -q "^[ ]*blacklist[ ]*i2c-bcm2708" ${BLIST}
+      sed -i 's/[ ]*blacklist[ ]*i2c-bcm2708/# blacklist i2c-bcm2708/g' ${BLIST}
+    fi
+  fi
+  echo I2C in ${BLIST}: `grep i2c ${BLIST}`
+
+  # add to /etc/modules
+  MODS=/etc/modules
+  if ! grep -q "i2c-dev" ${MODS}
+  then
+    echo i2c-dev >> ${MODS}
+  fi
+  if ! grep -q "i2c-bcm2708" ${MODS}
+  then
+    echo i2c-bcm2708 >> ${MODS}
+  fi
+  echo I2C in ${MODS}: `grep i2c ${MODS}`
+
+  # load the modules
+  modprobe i2c-dev
+  modprobe i2c-bcm2708
+  echo I2C in /proc/modules: `grep i2c_ /proc/modules`
+
+  echo "...done (postinst configure)"
+}
 
 case "$1" in
-    configure)
+    configure) do_configure
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
