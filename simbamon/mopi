@@ -141,7 +141,8 @@ do_advanced_menu() {
 STATUS="`do_status`"
 while true; do
   FUN=$(whiptail --title "MoPi Configuration Tool (mopi)" \
-    --menu "Current status: ${STATUS}" $WT_HEIGHT $WT_WIDTH $WT_MENU_HEIGHT \
+    --menu "*** Current status: ${STATUS} ***" \
+      $WT_HEIGHT $WT_WIDTH $WT_MENU_HEIGHT \
     --cancel-button Finish --ok-button Select \
       "1 Blah" "Blah blah" \
       "2 Show Changes" "Show config changes (not yet applied)" \
