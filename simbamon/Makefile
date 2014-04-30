@@ -79,7 +79,7 @@ uninstall:
 	@echo done
 
 # manpage ####################################################################
-man: man/$(P).txt man/$(MOPI).txt
+man: man/$(P).txt man/$(MOPI).txt 
 	cd man; ../utils/txt2man -v "System Manager's Manual" -s 8 \
           -t '$(D)' $(P).txt >$(P).8; \
 	sed -i 1d $(P).8;  # fix error from lintian about ." macro \
@@ -163,8 +163,8 @@ package-version:
 	@echo 'remember to change VERSION in the Makefile!'
 
 # test #######################################################################
-test:
-	echo; sudo python ./api-test.py |pr -l 33 -t -2 -w 132; echo
+#test:
+#	echo; sudo python ./api-test.py |pr -l 33 -t -2 -w 132; echo
 
 # list #######################################################################
 list:
