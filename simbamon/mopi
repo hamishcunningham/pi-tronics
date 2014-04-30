@@ -14,10 +14,27 @@
 P="$0"
 USAGE="`basename ${P}` [-h(elp)] [-d(ebug)]"
 OPTIONSTRING=hd
+alias cd='builtin cd'
+DBG=:
 
 # specific locals
 DNAME=simbamond
 CONFIG=
+CLI=./mopicli
+
+# message & exit if exit num present
+usage() { echo -e Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
+
+# process options
+while getopts $OPTIONSTRING OPTION
+do
+  case $OPTION in
+    h)	usage 0 ;;
+    d)	DBG=echo ;;
+    *)	usage 1 ;;
+  esac
+done 
+shift `expr $OPTIND - 1`
 
 # we do all changes to a copy of /etc/default/simbamond (in ~/.config/mopi)
 # and only push back into /etc/ when the user says "apply"; the next code
@@ -29,12 +46,21 @@ then
 elif [ -r /etc/default/$DNAME ]
 then
   CONFIG=/etc/default/$DNAME
+else
+  echo "${P}: cannot find ${DNAME} config" >&2
+  usage 2
 fi
 CONFIG_COPY_DIR=${HOME}/.config/mopi
 CONFIG_COPY=$CONFIG_COPY_DIR/config-copy
 [ -d ${CONFIG_COPY_DIR} ] || mkdir -p ${CONFIG_COPY_DIR}
 [ -f ${CONFIG_COPY} ] && mv ${CONFIG_COPY} ${CONFIG_COPY}.bak
 cp $CONFIG $CONFIG_COPY
+
+# does mopicli work?
+sudo ${CLI} >/dev/null || {
+  echo "${P}: ${CLI} not working; installation problem?" >&2
+  usage 3
+}
 
 # get current config state
 parse_config() {
@@ -57,9 +83,9 @@ do_diff() {
   clear
 }
 do_status() {
-  STATUS="`sudo ./mopicli -sv`"
-  STATUS="${STATUS}; `sudo ./mopicli -s`"
-  STATUS="${STATUS}; `sudo ./mopicli -v`"
+  STATUS="`sudo ${CLI} -sv`"
+  STATUS="${STATUS}; `sudo ${CLI} -s`"
+  STATUS="${STATUS}; `sudo ${CLI} -v`"
   echo $STATUS
 }
 
