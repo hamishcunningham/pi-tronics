@@ -57,19 +57,32 @@ CONFIG_COPY=$CONFIG_COPY_DIR/config-copy
 cp $CONFIG $CONFIG_COPY
 
 # does mopicli work?
-sudo ${CLI} >/dev/null || {
-  echo "${P}: ${CLI} not working; installation problem?" >&2
-  usage 3
-}
+if [ $DBG = echo ]
+then
+  echo skipping ${CLI} test as in debug mode
+else
+  echo testing ${CLI}...
+  sudo ${CLI} || {
+    echo "${P}: ${CLI} not working; installation problem?" >&2
+    usage 3
+  }
+  echo ...done
+fi
 
-# get current config state
-parse_config() {
-  for l in `grep '^[A-Z][A-Z]*=' $CONFIG_COPY`
-  do
-    # TODO
-    echo $l
-  done
+# figure out optimal size for whiptail
+calc_wt_size() {
+  WT_HEIGHT=17
+  WT_WIDTH=$(tput cols)
+
+  if [ -z "$WT_WIDTH" ] || [ "$WT_WIDTH" -lt 60 ]; then
+    WT_WIDTH=80
+  fi
+  if [ "$WT_WIDTH" -gt 178 ]; then
+    WT_WIDTH=120
+  fi
+  WT_MENU_HEIGHT=$(($WT_HEIGHT-8))
 }
+calc_wt_size
 
 # menu actions etc.
 do_diff() {
@@ -88,23 +101,6 @@ do_status() {
   STATUS="${STATUS}; `sudo ${CLI} -v`"
   echo $STATUS
 }
-
-# figure out optimal size for whiptail
-calc_wt_size() {
-  WT_HEIGHT=17
-  WT_WIDTH=$(tput cols)
-
-  if [ -z "$WT_WIDTH" ] || [ "$WT_WIDTH" -lt 60 ]; then
-    WT_WIDTH=80
-  fi
-  if [ "$WT_WIDTH" -gt 178 ]; then
-    WT_WIDTH=120
-  fi
-  WT_MENU_HEIGHT=$(($WT_HEIGHT-8))
-}
-calc_wt_size
-
-# an about box
 do_about() {
   whiptail --msgbox "\
     This is a configuration tool for MoPi
@@ -114,15 +110,11 @@ do_about() {
     " 20 70 1
 }
 
-# parting is such sweet sorrow
-do_finish() {
-  exit 0
-}
-
 # second-level menu
-do_advanced_menu() {
+do_battery_menu() {
   FUN=$(whiptail --title "MoPi Configuration Tool (mopi)" \
-    --menu "Advanced Options" $WT_HEIGHT $WT_WIDTH $WT_MENU_HEIGHT \
+    --menu "Battery and Other Supply Options" \
+    $WT_HEIGHT $WT_WIDTH $WT_MENU_HEIGHT \
     --cancel-button "Back" --ok-button "Select" \
       "A1 Blah" "Blah blah" \
     3>&1 1>&2 2>&3)
@@ -141,27 +133,26 @@ do_advanced_menu() {
 STATUS="`do_status`"
 while true; do
   FUN=$(whiptail --title "MoPi Configuration Tool (mopi)" \
-    --menu "*** Current status: ${STATUS} ***" \
+    --menu "Current status: ${STATUS}" \
       $WT_HEIGHT $WT_WIDTH $WT_MENU_HEIGHT \
     --cancel-button Finish --ok-button Select \
-      "1 Blah" "Blah blah" \
+      "1 Choose Battery" "Choose battery or supply type" \
       "2 Show Changes" "Show config changes (not yet applied)" \
       "3 Show Changes (Wide)" "Show config changes (side-by-side view)" \
-      "7 Refresh" "Refresh current status" \
-      "8 Advanced Options" "Configure advanced settings" \
-      "9 About MoPi" "Information about this configuration tool" \
+      "4 Status" "Show current status from your MoPi board" \
+      "5 About MoPi" "Information about this configuration tool" \
     3>&1 1>&2 2>&3)
   RET=$?
   if [ $RET -eq 1 ]; then
-    do_finish
+    exit 0
   elif [ $RET -eq 0 ]; then
     case "$FUN" in
-      1\ *) do_something ;;
+      1\ *) do_battery_menu ;;
       2\ *) do_diff ;;
       3\ *) do_diff -y ;;
-      7\ *) STATUS="`do_status`" ;;
-      8\ *) do_advanced_menu ;;
-      9\ *) do_about ;;
+      4\ *) STATUS="`do_status`";
+            whiptail --msgbox "${STATUS}" 20 60 1 ;;
+      5\ *) do_about ;;
       *)    whiptail --msgbox "Error: unrecognized option" 20 60 1 ;;
     esac || whiptail --msgbox "There was an error running option $FUN" 20 60 1
   else
