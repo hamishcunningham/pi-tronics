@@ -26,10 +26,11 @@ do_configure() {
   if [ -r ${BLIST} ]
   then
     if grep -q "^[ ]*blacklist[ ]*i2c-bcm2708" ${BLIST}
+    then
       sed -i 's/[ ]*blacklist[ ]*i2c-bcm2708/# blacklist i2c-bcm2708/g' ${BLIST}
     fi
   fi
-  echo I2C in ${BLIST}: `grep i2c ${BLIST}`
+  echo "I2C in ${BLIST}: "; grep i2c- ${BLIST}
 
   # add to /etc/modules
   MODS=/etc/modules
@@ -42,12 +43,12 @@ do_configure() {
   then
     echo i2c-bcm2708 >> ${MODS}
   fi
-  echo I2C in ${MODS}: `grep i2c ${MODS}`
+  echo "I2C in ${MODS}: "; grep i2c ${MODS}
 
   # load the modules
   modprobe i2c-dev
   modprobe i2c-bcm2708
-  echo I2C in /proc/modules: `grep i2c_ /proc/modules`
+  echo "I2C in /proc/modules: "; grep i2c_ /proc/modules
 
   echo "...done (postinst configure)"
 }
