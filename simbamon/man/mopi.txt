@@ -1,13 +1,19 @@
 NAME
-  mopi       - MoPi configuration script
-  mopicli    - MoPi command-line interface
-  mopiapi.py - MoPi Python API
+  mopi mopicli mopiapi.py - MoPi configuration script, command-line interface,
+  and Python API
 SYNOPSIS
   mopi [-d] [-h]
-  mopicli [  TODO  ]
+  mopicli [ options ]
 DESCRIPTION
-  Configuration tool for the MoPi mobile and 24/7 power board
-  for the Raspberry Pi. You can find the source code on GitHub:
+  Configuration and access tools for the MoPi mobile and 24/7 power board for
+  the Raspberry Pi:
+  
+  * mopi is for interactive configuration of e.g. battery types
+  * mopiapi.py is a Python API that talks to the MoPi board over the I2C bus
+  * mopicli is a command-line interface to the API (and is used by mopi to
+    communicate with the board)
+  
+  You can find the source code on GitHub:
 
     https://github.com/hamishcunningham/pi-tronics/tree/master/simbamon
 
@@ -16,7 +22,7 @@ DESCRIPTION
   For more details see http://pi.gate.ac.uk/mopi
 OPTIONS
   -d          Turn on debug mode.
-  -h          The option -h displays help.
+  -h          Display a help message.
 EXAMPLE
     $ mopi
 SEE ALSO
