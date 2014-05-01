@@ -71,7 +71,7 @@ logger "${NAME}: monitor frequency is ${MONITOR_FREQUENCY} seconds"
 logger "${NAME}: DEBUG is ${DEBUG}, SIMUL is ${SIMUL}"
 
 # check mopicli installed and working
-sudo ${CLI} || {
+sudo ${CLI} -s || {
   echo "${P}: ${CLI} not working; installation problem?" >&2
   usage 3
 }

@@ -63,7 +63,7 @@ then
   echo skipping ${CLI} test as in debug mode
 else
   echo testing ${CLI}...
-  sudo ${CLI} || {
+  sudo ${CLI} -s || {
     echo "${P}: ${CLI} not working; installation problem?" >&2
     usage 3
   }
