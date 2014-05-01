@@ -19,6 +19,11 @@ The daemon is implemented in three chunks:
 - /etc/init.d/simbamond  -- an init interface used by the operating system to
   start/stop/etc. the daemon (./simbamond.init)
 
+TODO
+- mopi
+- mopicli
+- mopiapi.py
+
 There are also:
 
 - links to the init interface from /etc/rc?.d which are managed by update-rc.d
@@ -79,9 +84,11 @@ To release:
 - before a release
   - use snapshots to verify that the build is a good one, that it installs
     correctly from the PPA and so on
+    - set LAST_SNAP to 0 in Makefile for first in series, then increment
   - update the version in the Makefile and do "make package-version" to add a
     changelog entry for the release (remember to ensure the maintainer line
     matches the others exactly!)
+    - for individual snapshots *don't* do a changelog entry
 - to release on the PPAs, "make package" and "make package-upload" (think
   carefully before the latter -- it can't be reverted!)
 - after a release, do "make package-version" and add a changelog entry to note

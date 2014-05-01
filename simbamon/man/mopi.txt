@@ -1,7 +1,10 @@
 NAME
-  mopi - MoPi configuration script
+  mopi       - MoPi configuration script
+  mopicli    - MoPi command-line interface
+  mopiapi.py - MoPi Python API
 SYNOPSIS
   mopi [-d] [-h]
+  mopicli [  TODO  ]
 DESCRIPTION
   Configuration tool for the MoPi mobile and 24/7 power board
   for the Raspberry Pi. You can find the source code on GitHub:
@@ -17,7 +20,8 @@ OPTIONS
 EXAMPLE
     $ mopi
 SEE ALSO
+  simbamond
 BUGS
   Almost certainly!
 AUTHOR
-  Hamish Cunningham <http://hamish.gate.ac.uk/>
+  Hamish Cunningham <http://hamish.gate.ac.uk/>, Fred Sonnenwald

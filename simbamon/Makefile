@@ -4,18 +4,25 @@
 
 # vars #######################################################################
 VERSION=3.0
+LAST_SNAP=2
 P=simbamond
 D=simbamon
 MOPI=mopi
+MOPICLI=mopicli
+MOPIAPI=mopiapi.py
 PD=package/$(VERSION)
 INSTALLED_FILES=\
   $(DESTDIR)/usr/sbin/$(D) \
   $(DESTDIR)/usr/sbin/$(MOPI) \
+  $(DESTDIR)/usr/sbin/$(MOPICLI) \
+  $(DESTDIR)/usr/sbin/$(MOPIAPI) \
   $(DESTDIR)/etc/init.d/$(P) \
   $(DESTDIR)/etc/default/$(P) \
   $(DESTDIR)/usr/share/man/man8/$(D).8.gz \
-  $(DESTDIR)/usr/share/man/man8/$(P).8.gz
+  $(DESTDIR)/usr/share/man/man8/$(P).8.gz \
   $(DESTDIR)/usr/share/man/man8/$(MOPI).8.gz \
+  $(DESTDIR)/usr/share/man/man8/$(MOPICLI).8.gz \
+  $(DESTDIR)/usr/share/man/man8/$(MOPIAPI).8.gz
 INIT_LINKS=\
   $(DESTDIR)/etc/rc?.d/*$(P)
 PACKAGE_FILES=\
@@ -27,7 +34,7 @@ PACKAGE_FILES=\
 NOW:=$(shell date "+%Y-%m-%d-%R" |sed 's,:,,')
 MAJOR_VERSION:=$(shell echo $(VERSION) |sed 's,\([0-9]*\)\..*,\1,')
 MINOR_VERSION:=$(shell echo $(VERSION) |sed 's,.*\.,,')
-SNAPSHOT_VERSION:=$(VERSION)+$(shell expr $(MINOR_VERSION) + 1)
+SNAPSHOT_VERSION:=$(VERSION)+$(shell expr $(MINOR_VERSION) + 1 + $(LAST_SNAP))
 SNAPSHOT:=$(SNAPSHOT_VERSION)-SNAPSHOT-$(NOW)
 SNAPD:=$(PD)/snapshots/$(SNAPSHOT)
 
@@ -55,17 +62,21 @@ help:
 # (if DESTDIR is set we assume this is a packaging run, not an install, and so
 # don't run update-rc.d)
 install:
-	install -d -m 755         $(DESTDIR)/usr/sbin
-	install -d -m 755         $(DESTDIR)/etc/init.d
-	install -d -m 755         $(DESTDIR)/etc/default
-	install -d -m 755         $(DESTDIR)/usr/share/man/man8
-	install $(P).default      $(DESTDIR)/etc/default/$(P)
-	install -m 755 $(D)       $(DESTDIR)/usr/sbin
-	install -m 755 $(P).init  $(DESTDIR)/etc/init.d/$(P)
-	install -m 755 $(MOPI)    $(DESTDIR)/usr/sbin
-	install man/$(P).8.gz     $(DESTDIR)/usr/share/man/man8
-	install man/$(D).8.gz     $(DESTDIR)/usr/share/man/man8
-	install man/$(MOPI).8.gz  $(DESTDIR)/usr/share/man/man8
+	install -d -m 755           $(DESTDIR)/usr/sbin
+	install -d -m 755           $(DESTDIR)/etc/init.d
+	install -d -m 755           $(DESTDIR)/etc/default
+	install -d -m 755           $(DESTDIR)/usr/share/man/man8
+	install $(P).default        $(DESTDIR)/etc/default/$(P)
+	install -m 755 $(D)         $(DESTDIR)/usr/sbin
+	install -m 755 $(P).init    $(DESTDIR)/etc/init.d/$(P)
+	install -m 755 $(MOPI)      $(DESTDIR)/usr/sbin
+	install -m 755 $(MOPICLI)   $(DESTDIR)/usr/sbin
+	install -m 755 $(MOPIAPI)   $(DESTDIR)/usr/sbin
+	install man/$(P).8.gz       $(DESTDIR)/usr/share/man/man8
+	install man/$(D).8.gz       $(DESTDIR)/usr/share/man/man8
+	install man/$(MOPI).8.gz    $(DESTDIR)/usr/share/man/man8
+	install man/$(MOPICLI).8.gz $(DESTDIR)/usr/share/man/man8
+	install man/$(MOPIAPI).8.gz $(DESTDIR)/usr/share/man/man8
 	[ -z "$(DESTDIR)" ] && update-rc.d $(P) defaults || :
 	@echo 'SimBaMon installed: '
 	@$(do-listing)
@@ -79,7 +90,7 @@ uninstall:
 	@echo done
 
 # manpage ####################################################################
-man: man/$(P).txt man/$(MOPI).txt 
+man: man/$(P).txt man/$(MOPI).txt
 	cd man; ../utils/txt2man -v "System Manager's Manual" -s 8 \
           -t '$(D)' $(P).txt >$(P).8; \
 	sed -i 1d $(P).8;  # fix error from lintian about ." macro \
@@ -87,7 +98,8 @@ man: man/$(P).txt man/$(MOPI).txt
 	cd man; ../utils/txt2man -v "System Manager's Manual" -s 8 \
           -t '$(MOPI)' $(MOPI).txt >$(MOPI).8; \
 	sed -i 1d $(MOPI).8;  # fix error from lintian about ." macro \
-	cat $(MOPI).8 |gzip >$(MOPI).8.gz
+	cat $(MOPI).8 |gzip >$(MOPI).8.gz; \
+        cp $(MOPI).8.gz $(MOPICLI).8.gz; cp $(MOPI).8.gz $(MOPIAPI).8.gz
 
 # package ####################################################################
 package: man package-unstable package-precise
