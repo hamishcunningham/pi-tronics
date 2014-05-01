@@ -76,45 +76,17 @@ sudo ${CLI} || {
   usage 3
 }
 
-# figure out optimal size for whiptail
-calc_wt_size() {
-  WT_HEIGHT=17
-  WT_WIDTH=$(tput cols)
-
-  if [ -z "$WT_WIDTH" ] || [ "$WT_WIDTH" -lt 60 ]; then
-    WT_WIDTH=80
-  fi
-  if [ "$WT_WIDTH" -gt 178 ]; then
-    WT_WIDTH=120
-  fi
-  WT_MENU_HEIGHT=$(($WT_HEIGHT-8))
-}
-calc_wt_size
-
-# menu actions etc.
-do_diff() {
-  clear
-  (
-    echo Diffing ${CONFIG} with ${CONFIG_COPY}...; echo
-    diff $* ${CONFIG} ${CONFIG_COPY}
-    echo; echo Hit return to continue
-  ) |more
-  read
-  clear
-}
-do_status() {
-
 # current level; -1 means unset
 BAT_LEVEL=-1
 
 # helper to check the level
 get-bat-level() {
   STATUS=`${CLI} -sv`
-  case ${STATUS} in
-    *Forced shutdown*)  echo 1 ;;
 #   TODO              ) echo 2 ;;
-    *Battery critical*) echo 3 ;;
-    *Battery low*)      echo 4 ;;
+  case ${STATUS} in
+    *Forced*shutdown*)  echo 1 ;;
+    *Battery*critical*) echo 3 ;;
+    *Battery*low*)      echo 4 ;;
     *)                  echo 7 ;;
   esac
 }
