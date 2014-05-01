@@ -30,7 +30,7 @@ case "$1" in
 esac
 
 # warn users we turned on I2C
-cat >&2 <<EOF
+[ "$1" == "remove" ] && cat >&2 <<EOF
 *NOTE* (from simbamond postrm script):
 
 When simbamond was installed we turned on the I2C kernel module (if it wasn't

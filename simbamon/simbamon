@@ -33,6 +33,8 @@ DAEMON=/usr/sbin/$NAME
 PIDFILE=/var/run/$DNAME.pid
 LMESS='battery level'
 SHUTDOWN='shutdown -h now'
+INST_DIR=`dirname ${P}`
+CLI=${INST_DIR}/mopicli
 
 # options defaults
 DEBUG=off
@@ -68,34 +70,53 @@ logger "=========== $0: running at `pdate` ==========="
 logger "${NAME}: monitor frequency is ${MONITOR_FREQUENCY} seconds"
 logger "${NAME}: DEBUG is ${DEBUG}, SIMUL is ${SIMUL}"
 
-# check for gpio command (which may be a function defined in config)
-GPIO=
-if [ "`type -t gpio`" = "function" ]
-then
-  GPIO=gpio
-else
-  GPIO=`which gpio`
-fi
-if [ -z "${GPIO}" ]
-then
-  log_failure_msg "${NAME}: cannot find gpio command: failing" >&2
-  logger          "${NAME}: cannot find gpio command: failing"
-  exit 1
-fi
+# check mopicli installed and working
+sudo ${CLI} || {
+  echo "${P}: ${CLI} not working; installation problem?" >&2
+  usage 3
+}
 
-# put the relevant pins into read mode
-gpio mode $IO_A in
-gpio mode $IO_B in
-gpio mode $IO_C in
+# figure out optimal size for whiptail
+calc_wt_size() {
+  WT_HEIGHT=17
+  WT_WIDTH=$(tput cols)
+
+  if [ -z "$WT_WIDTH" ] || [ "$WT_WIDTH" -lt 60 ]; then
+    WT_WIDTH=80
+  fi
+  if [ "$WT_WIDTH" -gt 178 ]; then
+    WT_WIDTH=120
+  fi
+  WT_MENU_HEIGHT=$(($WT_HEIGHT-8))
+}
+calc_wt_size
+
+# menu actions etc.
+do_diff() {
+  clear
+  (
+    echo Diffing ${CONFIG} with ${CONFIG_COPY}...; echo
+    diff $* ${CONFIG} ${CONFIG_COPY}
+    echo; echo Hit return to continue
+  ) |more
+  read
+  clear
+}
+do_status() {
 
 # current level; -1 means unset
 BAT_LEVEL=-1
 
 # helper to check the level
 get-bat-level() {
-  BAT_LEVEL_BASE2=`gpio read ${IO_A}``gpio read ${IO_B}``gpio read ${IO_C}`
-  BAT_LEVEL=`echo "ibase=2;${BAT_LEVEL_BASE2}" |bc`
-  echo ${BAT_LEVEL}
+  STATUS=`${CLI} -sv`
+  case ${STATUS} in
+    *Forced shutdown*)  echo 1 ;;
+#   TODO              ) echo 2 ;;
+    *Battery critical*) echo 3 ;;
+    *Battery low*)      echo 4 ;;
+    *)                  echo 7 ;;
+  esac
 }
 
 # do the work; i and j index loop iterations for e.g. logging

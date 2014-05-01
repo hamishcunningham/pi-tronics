@@ -10,7 +10,7 @@ Vcs-Browser: https://github.com/hamishcunningham/pi-tronics/tree/master/simbamon
 
 Package: simbamond
 Architecture: all
-Depends: python-smbus, bc, ${misc:Depends}
+Depends: python-smbus, ${misc:Depends}
 Recommends:
 Description: SimBaMon, a Simple Battery Monitor
  SimBaMon is an open source Linux daemon for monitoring battery levels;

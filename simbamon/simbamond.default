@@ -61,6 +61,7 @@ then
 fi
 if [ "$SIMUL" = on ]
 then
+  # TODO this no longer works...
   SIMULATION_DATA=/tmp/simbamon-simulation.txt
   gpio() {
     [ "$1" = "read" ] || return 0

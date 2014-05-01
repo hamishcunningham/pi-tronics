@@ -20,7 +20,8 @@ DBG=:
 # specific locals
 DNAME=simbamond
 CONFIG=
-CLI=./mopicli
+INST_DIR=`dirname ${P}`
+CLI=${INST_DIR}/mopicli
 
 # message & exit if exit num present
 usage() { echo -e Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
@@ -40,9 +41,9 @@ shift `expr $OPTIND - 1`
 # and only push back into /etc/ when the user says "apply"; the next code
 # block checks location of these files, sets up ~/.config/mopi if it doesn't
 # exist yet, and copies the current state of the /etc config
-if [ -r ./${DNAME}.default ]  # development mode
+if [ -r ${INST_DIR}/${DNAME}.default ]  # development mode
 then
-  CONFIG=./${DNAME}.default
+  CONFIG=${INST_DIR}/${DNAME}.default
 elif [ -r /etc/default/$DNAME ]
 then
   CONFIG=/etc/default/$DNAME
