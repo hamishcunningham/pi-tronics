@@ -40,7 +40,9 @@ BOOT_DELAY=30
 PREVIOUSLY_RUN_INDICATOR=/tmp/${NAME}-previously-run.txt
 
 # how long to wait before shutting down at critical level? (in seconds)
-SHUT_DELAY=30
+# (set to 0 for firmware versions 3.03 and above; we no longer have
+# an "empty" state)
+SHUT_DELAY=0
 
 # which GPIO pins we're using to get levels from the board
 IO_A=6
