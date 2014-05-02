@@ -1,43 +1,22 @@
 #!/bin/bash
 # get-bat-level.sh
 
-# source the config
-. /etc/default/simbamond
-
 # current level; -1 means unset
 BAT_LEVEL=-1
 
+# mopi command-line interface
 CLI=../mopicli
 
+# get the config and status decoding functions
+source ../simbamond.default
+
+# read the status
 STATUS=`sudo ${CLI} -s`
-echo 'status is ${STATUS}'
-
-for i in {1..10}
-do
-  echo -en "${i} is "
-  echo "obase=2;${i}" |bc
-done
-
-if [ $(( 2 & 130 )) -eq 2 ]; then echo hello; fi
-
-
-
-
-exit 0
-
-# which status bit stores level
-BAT_LEVEL_BIT=
-
-# helper to check the level
-get-bat-level() {
-  #BAT_LEVEL=`echo "ibase=2;${BAT_LEVEL_BASE2}" |bc`
-  STATUS=`${CLI} -sv`
-  case ${STATUS} in
-    *Forced*shutdown*)  echo 1 ;;
-    *Battery*critical*) echo 3 ;;
-    *Battery*low*)      echo 4 ;;
-    *)                  echo 7 ;;
-}
+VSTATUS="`sudo ${CLI} -sv |tr '\n' 'X' |sed 's,X,; ,g'`"
+echo "status is ${STATUS} ( `echo \"obase=2;${STATUS}\" |bc`; ${VSTATUS})"
 
 # get the level
-get-bat-level
+status_battery_full     $STATUS && echo battery_full
+status_battery_good     $STATUS && echo battery_good
+status_battery_low      $STATUS && echo battery_low
+status_battery_critical $STATUS && echo battery_critical

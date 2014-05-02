@@ -76,3 +76,36 @@ then
     fi
   }
 fi
+
+# functions to decode the status word (16 bits)
+#
+# bit 0:  power source #1 is live
+# bit 1:  power source #2 is live
+# bit 2:  battery is full; corresponds to blue on main LED
+# bit 3:  battery level is good; green
+# bit 4:  battery level is low; red
+# bit 5:  battery level is critical; flashing red: entering shutdown 
+# bit 6:  unused
+# bit 7:  forced shutdown; power switch pressed longer than 3 seconds 
+# bit 8:  a power on delay has been set by I2C command
+# bit 9:  a power on delay is in progress
+# bit 10: a shutdown delay has been set by I2C command
+# bit 11: a shutdown delay is in progress
+# bit 12-16: unused
+#
+status_supply1_active()         { [ $((     1 & $1 )) -eq     1 ]; }  # bit  1
+status_supply2_active()         { [ $((     2 & $1 )) -eq     2 ]; }  # bit  2
+status_battery_full()           { [ $((     4 & $1 )) -eq     4 ]; }  # bit  3
+status_battery_good()           { [ $((     8 & $1 )) -eq     8 ]; }  # bit  4
+status_battery_low()            { [ $((    16 & $1 )) -eq    16 ]; }  # bit  5
+status_battery_critical()       { [ $((    32 & $1 )) -eq    32 ]; }  # bit  6
+status_unused1()                { [ $((    64 & $1 )) -eq    64 ]; }  # bit  7
+status_forced_shutdown()        { [ $((   128 & $1 )) -eq   128 ]; }  # bit  8
+status_power_on_delay_set()     { [ $((   256 & $1 )) -eq   256 ]; }  # bit  9
+status_power_on_delay_running() { [ $((   512 & $1 )) -eq   512 ]; }  # bit 10
+status_shutdown_delay_set()     { [ $((  1024 & $1 )) -eq  1024 ]; }  # bit 11
+status_shutdown_delay_running() { [ $((  2048 & $1 )) -eq  2048 ]; }  # bit 12
+status_unused2()                { [ $((  4096 & $1 )) -eq  4096 ]; }  # bit 13
+status_unused3()                { [ $((  8192 & $1 )) -eq  8192 ]; }  # bit 14
+status_unused4()                { [ $(( 16384 & $1 )) -eq 16384 ]; }  # bit 15
+status_unused5()                { [ $(( 32768 & $1 )) -eq 32768 ]; }  # bit 16
