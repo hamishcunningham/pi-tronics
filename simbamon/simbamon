@@ -136,7 +136,7 @@ do
   fi
 
   # routine log messages
-  [ ${j} -eq ${LOG_INTERVAL} ] && \
+  [ "$DEBUG" = on -o ${j} -eq ${LOG_INTERVAL} ] && \
     logger "${NAME}: ${LMESS} is ${BAT_LEVEL} at `pdate` (i=${i})" && j=0
 
   # take a break
