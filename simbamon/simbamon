@@ -15,14 +15,14 @@
 
 # standard locals
 P="$0"
-USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-s(imulate)]"
-OPTIONSTRING=hds
+USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-v(ersion)]"
+OPTIONSTRING=hdv
 
 # define LSB log_* functions.
 . /lib/lsb/init-functions
 
 # message & exit if exit num present
-usage() { log_failure_msg Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
+usage() { log_action_msg Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
 
 # defaults
 PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin
@@ -38,7 +38,18 @@ CLI=${INST_DIR}/mopicli
 
 # options defaults
 DEBUG=off
-SIMUL=off
+
+# read configuration variable file if it is present
+if [ -r /etc/default/$DNAME ] 
+then
+  . /etc/default/$DNAME
+elif [ -r ./$DNAME.default ]
+then
+  . ./$DNAME.default
+else
+  logger "$0: no config data found - fatal error"
+  exit 1
+fi
 
 # process options
 [ ! -z "$*" ] && log_daemon_msg ${NAME} options: $*
@@ -47,20 +58,11 @@ do
   case $OPTION in
     h)	usage 1 ;;
     d)	DEBUG=on ;;
-    s)	SIMUL=on ;;
+    v)  log_action_msg Version $VERSION; usage 0 ;;
     *)	usage 2 ;;
   esac
 done 
-shift `expr $OPTIND - 1`
-
-# read configuration variable file if it is present
-if [ -r /etc/default/$DNAME ] 
-then
-  . /etc/default/$DNAME
-else
-  logger "$0: no config data found - fatal error"
-  exit 1
-fi
+shift $(( $OPTIND - 1 ))
 
 # pretty date/time function
 pdate() { date +%b-%d-%Y-%T; }
@@ -68,7 +70,7 @@ pdate() { date +%b-%d-%Y-%T; }
 # tell the world
 logger "=========== $0: running at `pdate` ==========="
 logger "${NAME}: monitor frequency is ${MONITOR_FREQUENCY} seconds"
-logger "${NAME}: DEBUG is ${DEBUG}, SIMUL is ${SIMUL}"
+logger "${NAME}: DEBUG is ${DEBUG}"
 
 # check mopicli installed and working
 sudo ${CLI} -s || {
@@ -76,26 +78,23 @@ sudo ${CLI} -s || {
   usage 3
 }
 
+# how many loops to wait between warnings when battery is low
+WAIT_LOOPS=$(( $WARNING_INTERVAL / $MONITOR_FREQUENCY ))
+PREVIOUS_WARNING=0
+
 # current level; -1 means unset
 BAT_LEVEL=-1
 
 # helper to check the level
-get-bat-level() {
-  STATUS=`${CLI} -sv`
-  case ${STATUS} in
-    *Forced*shutdown*)  echo 1 ;;
-    *Battery*critical*) echo 3 ;;
-    *Battery*low*)      echo 4 ;;
-    *)                  echo 7 ;;
-  esac
-}
+get-bat-level() { BAT_LEVEL=`${CLI} -s`; }
 
-# do the work; i and j index loop iterations for e.g. logging
+# i and j index loop iterations for controlling logging and messages
 i=0; j=0
+
+# infinite loop (backgrounded)
 while :
 do
-  i=`expr ${i} + 1`
-  j=`expr ${j} + 1`
+  i=$(( ${i} + 1 )); j=$(( ${j} + 1 ))
 
   # on first boot we delay work a little, in case the user wants to tell us 
   # not to shutdown on critical battery, for example
@@ -107,46 +106,31 @@ do
 
   # check the level and act if necessary
   BAT_LEVEL=`get-bat-level`
-  [ $BAT_LEVEL != 0 -a $BAT_LEVEL -le $BAT_WARNING ] && \
-    logger "${NAME}: ${LMESS} is at or below warning level (${BAT_LEVEL})"
-  if   [ $BAT_LEVEL -eq $POWER_OFF ]
+  if [ "$DEBUG" = on ]
   then
-    wall <<< "${NAME}: power off requested: shutting down now!"
+    ( s_battery_low $BAT_LEVEL || s_battery_critical $BAT_LEVEL ) && \
+      logger "${NAME}: ${LMESS} is at or below warning level (${BAT_LEVEL})"
+  fi
+
+  # action states (shutdown or warn)
+  if s_forced_shutdown $BAT_LEVEL
+  then
+    wall <<< "${NAME}: power off requested: shutting down now!!!"
     logger "${NAME}: shutting down (POWER_OFF)"
     bash -c "$SHUTDOWN"
-  elif [ $BAT_LEVEL -eq $BAT_SHUTDOWN ]
+  elif s_battery_critical $BAT_LEVEL
   then
     wall <<< "${NAME}: battery empty: shutting down now!!!"
     logger "${NAME}: shutting down (BAT_SHUTDOWN)"
     bash -c "$SHUTDOWN"
-  elif [ $BAT_LEVEL -eq $BAT_CRITICAL ]
+  elif s_battery_low $BAT_LEVEL
   then
-    wall <<< \
-      "${NAME}: ${LMESS} critical! shutting down in ${SHUT_DELAY} seconds!"
-    logger "${NAME}: shutting down (BAT_CRITICAL, SHUT_DELAY=${SHUT_DELAY})"
-    sleep $SHUT_DELAY
-    
-    # check if things have improved (new battery pack for example)
-    BAT_LEVEL=`get-bat-level`
-    [ $BAT_LEVEL -gt $BAT_CRITICAL ] && {
-      wall <<< "${NAME}: battery levels have risen! cancelling shutdown"
-      logger   "${NAME}: battery levels have risen! cancelling shutdown"
-      continue
-    }
-    bash -c "$SHUTDOWN"
-  elif [ $BAT_LEVEL -eq $BAT_WARNING ]
-  then
-    wall <<< "${NAME}: ${LMESS} is low! connect new battery or shut down"
-    logger "${NAME}: BAT_WARNING; sleeping ${WARNING_INTERVAL}..."
-
-    # sleep for WARNING_INTERVAL, unless something changes (check every 10)
-    ITERATIONS=`expr $WARNING_INTERVAL / 10`
-    for(( CURR_ITER=0; CURR_ITER < $ITERATIONS; CURR_ITER++ )) 
-    do
-      sleep 10
-      BAT_LEVEL=`get-bat-level`
-      [ ! $BAT_LEVEL -eq $BAT_WARNING ] && break
-    done
+    if [ $(( $PREVIOUS_WARNING - $i )) -ge $WAIT_LOOPS ]
+    then
+      PREVIOUS_WARNING=$i
+      wall <<< "${NAME}: ${LMESS} is low! connect new battery or shut down"
+      logger "${NAME}: BAT_WARNING (${BAT_LEVEL})"
+    fi
   fi
 
   # routine log messages

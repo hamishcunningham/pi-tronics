@@ -16,7 +16,7 @@ VSTATUS="`sudo ${CLI} -sv |tr '\n' 'X' |sed 's,X,; ,g'`"
 echo "status is ${STATUS} ( `echo \"obase=2;${STATUS}\" |bc`; ${VSTATUS})"
 
 # get the level
-status_battery_full     $STATUS && echo battery_full
-status_battery_good     $STATUS && echo battery_good
-status_battery_low      $STATUS && echo battery_low
-status_battery_critical $STATUS && echo battery_critical
+s_battery_full     $STATUS && echo battery_full
+s_battery_good     $STATUS && echo battery_good
+s_battery_low      $STATUS && echo battery_low
+s_battery_critical $STATUS && echo battery_critical

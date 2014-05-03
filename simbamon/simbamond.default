@@ -4,6 +4,9 @@
 # This code is copyright Hamish Cunningham and the University of Sheffield
 # and is licenced under GPL 3 or any later version.
 
+# version (DON'T EDIT: it is set by "make package" or "make snapshot")
+VERSION=3.0+8
+
 # how often should we check battery state? (in seconds, approximately)
 MONITOR_FREQUENCY=2
 
@@ -14,67 +17,20 @@ WARNING_INTERVAL=60
 # MONITOR_FREQUENCY)
 LOG_INTERVAL=1000
 
-# battery levels; the MoPi board uses 3 bits by default
-# we avoid the 0 state as this is indistinguishable from unplugging the unit!
-#
-# quoting the MoPi system docs:
-#7 battery full [LED blue];  level above 7.5V
-#6 battery good [LED green]; level 7.5V-7.0V
-#5 battery good [LED green]; level 7.0V-6.5V
-#4 battery low: warning message [LED red];                      level 6.5V-6.2V
-#3 battery critical: "urgent" warning message [LED red];        level 6.2V-6.0V
-#2 lowest battery level: shutdown, no delay [LED flashing red]; level <= 6.0V
-#1 power off button pressed: shut down with no delay [LED flashing red]
-#0 unused to avoid confusion with non-functional gpio
-#
-BAT_FULL=7
-BAT_WARNING=4
-BAT_CRITICAL=3
-BAT_SHUTDOWN=2
-POWER_OFF=1
-
-# how long to wait before starting work? (in seconds)
-BOOT_DELAY=30
+# how long to wait before starting work after boot? (in seconds)
+BOOT_DELAY=10
 
 # file used as indicator that we are running for the first time after boot
 PREVIOUSLY_RUN_INDICATOR=/tmp/${NAME}-previously-run.txt
 
-# how long to wait before shutting down at critical level? (in seconds)
-# (set to 0 for firmware versions 3.03 and above; we no longer have
-# an "empty" state)
-SHUT_DELAY=0
-
-# which GPIO pins we're using to get levels from the board
-IO_A=6
-IO_B=5
-IO_C=4
-
-# debug and simulation modes: 
+# debug mode: 
 # don't actually call shutdown;
-# redefine gpio to take input from a simulation file
-# (which is expected to have a single line of the form nnn, in binary);
-# also sets logging and delay levels short
+# set logging and delay levels short
 if [ "$DEBUG" = on ]
 then
-  SHUT_DELAY=5
   LOG_INTERVAL=3
   WARNING_INTERVAL=10
   SHUTDOWN='echo "shutdown -h now"; sleep 10'
-fi
-if [ "$SIMUL" = on ]
-then
-  # TODO this no longer works...
-  SIMULATION_DATA=/tmp/simbamon-simulation.txt
-  gpio() {
-    [ "$1" = "read" ] || return 0
-    if [ -r "$SIMULATION_DATA" ] 
-    then
-      CUT_INDEX=`expr $2 + 1` # cut indexes from 1, gpio from 0
-      cut -c $CUT_INDEX $SIMULATION_DATA
-    else
-      echo 0 # default gpio return value
-    fi
-  }
 fi
 
 # functions to decode the status word (16 bits)
@@ -93,19 +49,19 @@ fi
 # bit 11: a shutdown delay is in progress
 # bit 12-16: unused
 #
-status_supply1_active()         { [ $((     1 & $1 )) -eq     1 ]; }  # bit  1
-status_supply2_active()         { [ $((     2 & $1 )) -eq     2 ]; }  # bit  2
-status_battery_full()           { [ $((     4 & $1 )) -eq     4 ]; }  # bit  3
-status_battery_good()           { [ $((     8 & $1 )) -eq     8 ]; }  # bit  4
-status_battery_low()            { [ $((    16 & $1 )) -eq    16 ]; }  # bit  5
-status_battery_critical()       { [ $((    32 & $1 )) -eq    32 ]; }  # bit  6
-status_unused_1()               { [ $((    64 & $1 )) -eq    64 ]; }  # bit  7
-status_forced_shutdown()        { [ $((   128 & $1 )) -eq   128 ]; }  # bit  8
-status_power_on_delay_set()     { [ $((   256 & $1 )) -eq   256 ]; }  # bit  9
-status_power_on_delay_running() { [ $((   512 & $1 )) -eq   512 ]; }  # bit 10
-status_shutdown_delay_set()     { [ $((  1024 & $1 )) -eq  1024 ]; }  # bit 11
-status_shutdown_delay_running() { [ $((  2048 & $1 )) -eq  2048 ]; }  # bit 12
-status_unused_2()               { [ $((  4096 & $1 )) -eq  4096 ]; }  # bit 13
-status_unused_3()               { [ $((  8192 & $1 )) -eq  8192 ]; }  # bit 14
-status_unused_4()               { [ $(( 16384 & $1 )) -eq 16384 ]; }  # bit 15
-status_unused_5()               { [ $(( 32768 & $1 )) -eq 32768 ]; }  # bit 16
+s_supply1_active()         { [ $((     1 & $1 )) -eq     1 ]; }  # bit  1
+s_supply2_active()         { [ $((     2 & $1 )) -eq     2 ]; }  # bit  2
+s_battery_full()           { [ $((     4 & $1 )) -eq     4 ]; }  # bit  3
+s_battery_good()           { [ $((     8 & $1 )) -eq     8 ]; }  # bit  4
+s_battery_low()            { [ $((    16 & $1 )) -eq    16 ]; }  # bit  5
+s_battery_critical()       { [ $((    32 & $1 )) -eq    32 ]; }  # bit  6
+s_unused_1()               { [ $((    64 & $1 )) -eq    64 ]; }  # bit  7
+s_forced_shutdown()        { [ $((   128 & $1 )) -eq   128 ]; }  # bit  8
+s_power_on_delay_set()     { [ $((   256 & $1 )) -eq   256 ]; }  # bit  9
+s_power_on_delay_running() { [ $((   512 & $1 )) -eq   512 ]; }  # bit 10
+s_shutdown_delay_set()     { [ $((  1024 & $1 )) -eq  1024 ]; }  # bit 11
+s_shutdown_delay_running() { [ $((  2048 & $1 )) -eq  2048 ]; }  # bit 12
+s_unused_2()               { [ $((  4096 & $1 )) -eq  4096 ]; }  # bit 13
+s_unused_3()               { [ $((  8192 & $1 )) -eq  8192 ]; }  # bit 14
+s_unused_4()               { [ $(( 16384 & $1 )) -eq 16384 ]; }  # bit 15
+s_unused_5()               { [ $(( 32768 & $1 )) -eq 32768 ]; }  # bit 16
