@@ -12,8 +12,8 @@
 
 # standard locals
 P="$0"
-USAGE="`basename ${P}` [-h(elp)] [-d(ebug)]"
-OPTIONSTRING=hd
+USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-v(ersion)]"
+OPTIONSTRING=hdv
 alias cd='builtin cd'
 DBG=:
 
@@ -25,17 +25,6 @@ CLI=${INST_DIR}/mopicli
 
 # message & exit if exit num present
 usage() { echo -e Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
-
-# process options
-while getopts $OPTIONSTRING OPTION
-do
-  case $OPTION in
-    h)	usage 0 ;;
-    d)	DBG=echo ;;
-    *)	usage 1 ;;
-  esac
-done 
-shift `expr $OPTIND - 1`
 
 # we do all changes to a copy of /etc/default/simbamond (in ~/.config/mopi)
 # and only push back into /etc/ when the user says "apply"; the next code
@@ -56,6 +45,21 @@ CONFIG_COPY=$CONFIG_COPY_DIR/config-copy
 [ -d ${CONFIG_COPY_DIR} ] || mkdir -p ${CONFIG_COPY_DIR}
 [ -f ${CONFIG_COPY} ] && mv ${CONFIG_COPY} ${CONFIG_COPY}.bak
 cp $CONFIG $CONFIG_COPY
+
+# load current config
+source $CONFIG
+
+# process options
+while getopts $OPTIONSTRING OPTION
+do
+  case $OPTION in
+    h)	usage 0 ;;
+    v)	echo $P is at version $VERSION; exit 0 ;;
+    d)	DBG=echo ;;
+    *)	usage 1 ;;
+  esac
+done 
+shift `expr $OPTIND - 1`
 
 # does mopicli work?
 if [ $DBG = echo ]

@@ -2,7 +2,7 @@ NAME
   mopi mopicli mopiapi.py - MoPi configuration script, command-line interface,
   and Python API
 SYNOPSIS
-  mopi [-d] [-h]
+  mopi [-d] [-h] [-v]
   mopicli [ options ]
 DESCRIPTION
   Configuration and access tools for the MoPi mobile and 24/7 power board for
@@ -23,6 +23,7 @@ DESCRIPTION
 OPTIONS
   -d          Turn on debug mode.
   -h          Display a help message.
+  -v          Display the version number.
 EXAMPLE
     $ mopi
 SEE ALSO
