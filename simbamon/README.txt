@@ -5,8 +5,8 @@ This tree contains the code for a simple battery monitor daemon for projects
 like Mobile Pi (MoPi) -- http://pi.gate.ac.uk/pages/mopi.html
 
 The target operating system is the Raspian distribution of Debian, for the
-Raspberry Pi. (It also works in simulation mode on Ubuntu and is intended to
-be compatible with other *nixes.)
+Raspberry Pi. (It can also work in simulation mode on Ubuntu and is intended
+to be compatible with other *nixes.)
 
 The code is copyright Hamish Cunningham and the University of Sheffield and is
 licenced under GPL 3 or any later version.
@@ -55,20 +55,17 @@ To install:
     - (use ppa:hamish-dcs/pi-gate-snapshots for development builds)
   - sudo apt-get update
   - sudo apt-get install simbamond
-  - this will generate a failure message as Ubuntu lacks the gpio command --
-    use simulation mode as described below
+  - this will generate a failure message relating to I2C; testing requires
+    simulation
 
 -----------------------------------------------------------------------------
 To test and debug:
 
-First restart the service with the -d (debug) and/or -s (simulation) flags;
-then the utils directory contains these scripts:
-
-- monitor-log.sh: greps the most recent simbamon entries from syslog
-- set-simulation-level.sh: continually reads a simulation number (3 bit
-  binary) from the terminal and writes it into the /tmp file where the debug
-  rig will read it -- try "111" or "000" for starters, while watching the log
-  entries
+First restart the service with the -d (debug) flag; then the utils directory
+contains monitor-log.sh: greps the most recent simbamon entries from syslog.
+If you want to do simulation, trawl previous commits for
+set-simulation-level.sh which continually reads a simulation status from the
+terminal and writes it into the /tmp file where the debug rig will read it.
 
 (The utils directory also contains a great script called txt2man from
 http://mvertes.free.fr/ that we use to maintain the manpage.)

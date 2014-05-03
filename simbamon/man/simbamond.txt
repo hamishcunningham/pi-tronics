@@ -34,11 +34,10 @@ DESCRIPTION
 OPTIONS
   -d          Turn on debug mode.
   -h          The option -h displays help.
-  -s          Turn on simulation mode.
 EXAMPLE
-  Restart the daemon with debugging and simulation on:
+  Restart the daemon with debugging on:
 
-    $ sudo service simbamond restart -ds
+    $ sudo service simbamond restart -d
 SEE ALSO
   service(8)
 BUGS
