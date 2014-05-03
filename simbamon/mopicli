@@ -2,104 +2,147 @@
 import sys
 import mopiapi
 
-# version 0.1
+VERSION=0.2
+# for mopi firmware v3.03
 
-commands = ['-i', '-rc', '-rpon', '-rs', '-s', '-sv', '-v',  '-wc', '-wpon', '-ws']
+#commands = ['-fv', '-i', '-rc', '-rc1', '-rc2', '-rpon', '-rs', '-s', '-sn', '-sv', '-v', '-v1', '-v2', '-wc', '-wc1', '-wc2', '-wpon', '-ws']
+commands =   ['-i', '-fv', '-sn', '-h', '-s', '-sv', '-v', '-v1', '-v2', \
+	'-rc', '-rc1', '-rc2', '-rpon', '-rs', '-wc', '-wc1', '-wc2', '-wpon', '-ws']
+parameters = [   1,     0,     0,    0,    0,     0,    0,     0,     0, \
+	    0,      0,      0,       0,     0,     3,      3,       3,      1,     1]
+
+
+def shorthelp():
+	print "Usage: mopicli [-h] [options]"
+	print "Version %0.1f, API %0.1f" % (VERSION, mopiapi.getApiVersion())
 
 def help():
-	print "usage: mopicli " + ' '.join(commands)
-	print "version 0.1"
+	print "Miscellaneous:"
+	print "  -i          I2C bus (default: 1)"
+	print "  -fv         Firmware version"
+	print "  -sn         Serial number"
+	print "  -h          Display this message"
 	print ""
-	print "\t -i \ti2c bus (1 default)"
+	print "Status:"
+	print "  -s          MoPi status word"
+	print "  -sv         Verbose status"
+	print "  -v          Current battery voltage in mV"
+	print "  -v1/-v2     Battery #1/#2 voltage in mV"
 	print ""
-	print "\t -s \tmopi status byte"
-	print "\t -sv \tverbose status"
-	print "\t -v \tcurrent battery voltage in mV"
+	print "Read configuration options:"
+	print "  -rc         Combined battery #1 and #2 configuration"
+	print "  -rc1/-rc2   Configuration of battery #1/#2"
+	print "  -rpon       Power on delay"
+	print "  -rs         Shutdown delay"
 	print ""
-	print "\t -rc \tread current configuration"
-	print "\t -rpon \tread power on delay"
-	print "\t -rs \tread shutdown delay"
+	print "Write configuration options:"
+	print "  -wc mV mV mV         Combined battery #1 and #2 configuration"
+	print "  -wc1/-wc2 mV mV mV   Configuration of battery #1/#2"
+	print "  -wpon seconds        Power on delay seconds"
+	print "  -ws seconds          Shutdown delay seconds"
 	print ""
-	print "\t -wc \twrite configuration"
-	print "\t -wpon \tset power on delay"
-	print "\t -ws \twrite shutdown delay"
-	print ""
-	print "\t -h \tdisplay this message"
-	print ""
+	print "All options may be used simultaneously. When doing so, they execute in the"
+	print "  order they are listed in in this help message. However, only one of each may"
+	print "  be used."
+
+# read integer inputs to command c, with expected number of inputs
+# if none are expected and there are some though, no biggy
+def readInts(c, expected):
+	ci = sys.argv.index(c) + 1
+	data = []
+	while ci < len(sys.argv):
+		try:
+			data.append(int(sys.argv[ci]))
+		except:
+			break
+#		sys.argv.pop(ci)
+		ci += 1
+	if expected > 0 and len(data) != expected:
+		print "mopicli. Bad input for " + c + "."
+		sys.exit(1)
+	return data
+
+if len(sys.argv) == 1:
+	shorthelp()
 	sys.exit(0)
 
-def readInt(c):
-	try:
-		t = int(sys.argv.pop(sys.argv.index(c) + 1))
-	except ValueError:
-		print "mopicli. bad input for " + c + ": " + sys.argv[sys.argv.index(c) + 1] + "."
-		sys.exit(1)
-	except IndexError:
-		print "mopicli. input for " + c + " not found."
-		sys.exit(1)
-	return t
-
-if len(sys.argv) == 1 or '-h' in sys.argv:
+if '-h' in sys.argv:
+	shorthelp()
+	print ""
 	help()
+	sys.exit(0)
 
 sys.argv.pop(0) # remove calling name...
+# check that all the commands given are valid
 for arg in sys.argv:
-	if arg[0] == '-' and not arg in commands:
-		print "mopicli. unknown command: " + arg
+	if not arg.isdigit() and not arg in commands:
+		print "mopicli. Unknown option: " + arg
 		sys.exit(1)
 
-if '-i' in sys.argv:
-	bus = readInt('-i')
-	try:
-		mymopi = mopiapi.mopiapi(bus)
-	except:
-		print "mopicli. bad i2c bus: %i. check connection?" % bus
-		sys.exit(1)
-	sys.argv.remove('-i')
-else:
-	mymopi = mopiapi.mopiapi()
-
+status = 0
 try:
-	if '-s' in sys.argv or '-sv' in sys.argv:
-		status = mymopi.getStatus()
-		if '-s' in sys.argv:
-			print status
-			sys.argv.remove('-s')
-		if '-sv' in sys.argv:
-			print mopiapi.statusDetail(status)
-			sys.argv.remove('-sv')
+	if '-i' not in sys.argv:
+		mymopi = mopiapi.mopiapi()
 
-	if '-v' in sys.argv:
-		print mymopi.getVoltage()
-		sys.argv.remove('-v')
+	for ind,arg in enumerate(commands):
+		if arg in sys.argv:
+			par = readInts(arg, parameters[ind])
 
-	if '-rc' in sys.argv:
-		print ' '.join(map(str, mymopi.readConfig()))
-		sys.argv.remove('-rc')
+			if '-i' == arg:
+				mymopi = mopiapi.mopiapi(par[0])
 
-	if '-rpon' in sys.argv:
-		print mymopi.getPowerOnDelay()
-		sys.argv.remove('-rpon')
+			if '-fv' == arg:
+				data = mymopi.getFirmwareVersion()
+				print '%i.%02i' % (data[0], data[1])
 
-	if '-rs' in sys.argv:
-		print mymopi.getShutdownDelay()
-		sys.argv.remove('-rs')
 
-	if '-wc' in sys.argv:
-		data = []
-		for i in range(0,6):
-			data.append(readInt('-wc'))
-		mymopi.writeConfig(data)
-		sys.argv.remove('-wc')
+			if '-s' == arg:
+				status = mymopi.getStatus()
+				print status
 
-	if '-wpon' in sys.argv:
-		mymopi.setPowerOnDelay(readInt('-wpon'))
-		sys.argv.remove('-wpon')
+			if '-sv' == arg:
+				if status == 0:
+					status = mymopi.getStatus()
+				print mopiapi.statusDetail(status)
 
-	if '-ws' in sys.argv:
-		mymopi.setShutdownDelay(readInt('-ws'))
-		sys.argv.remove('-ws')
+			if '-sn' == arg:
+				print mymopi.getSerialNumber()
+
+			if '-v' == arg:
+				print mymopi.getVoltage()
+			if '-v1' == arg:
+				print mymopi.getVoltage(1)
+			if '-v2' == arg:
+				print mymopi.getVoltage(2)
+
+
+			if '-rc' == arg:
+				print ' '.join(map(str, mymopi.readConfig()))
+			if '-rc1' == arg:
+				print ' '.join(map(str, mymopi.readConfig(1)))
+			if '-rc2' == arg:
+				print ' '.join(map(str, mymopi.readConfig(2)))
+
+			if '-rpon' == arg:
+				print mymopi.getPowerOnDelay()
+
+			if '-rs' == arg:
+				print mymopi.getShutdownDelay()
+
+
+			if '-wc' == arg:
+				mymopi.writeConfig(par)
+			if '-wc1' == arg:
+				mymopi.writeConfig(par, 1)
+			if '-wc2' == arg:
+				mymopi.writeConfig(par, 2)
+
+			if '-wpon' == arg:
+				mymopi.setPowerOnDelay(par[0])
+
+			if '-ws' == arg:
+				mymopi.setShutdownDelay(par[0])
 
 except IOError:
-	print "mopicli. communication error. check bus? check connection?"
+	print "mopicli. Communication error. Check bus? Check connection?"
 	sys.exit(1)
