@@ -82,12 +82,6 @@ sudo ${CLI} -s || {
 WAIT_LOOPS=$(( $WARNING_INTERVAL / $MONITOR_FREQUENCY ))
 PREVIOUS_WARNING=0
 
-# current level; -1 means unset
-BAT_LEVEL=-1
-
-# helper to check the level
-get-bat-level() { BAT_LEVEL=`${CLI} -s`; }
-
 # i and j index loop iterations for controlling logging and messages
 i=0; j=0
 
@@ -105,7 +99,7 @@ do
   }
 
   # check the level and act if necessary
-  BAT_LEVEL=`get-bat-level`
+  BAT_LEVEL=`${CLI} -s`
   if [ "$DEBUG" = on ]
   then
     ( s_battery_low $BAT_LEVEL || s_battery_critical $BAT_LEVEL ) && \
