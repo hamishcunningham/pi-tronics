@@ -2,6 +2,8 @@ import smbus
 
 VERSION=0.2
 # for mopi firmware v3.03
+FIRMMAJ=3
+FIRMMINR=3
 
 class mopiapi():
 	device = 0xb
@@ -9,8 +11,8 @@ class mopiapi():
 	def __init__(self, i2cbus = 1):
 		self.bus = smbus.SMBus(i2cbus)
 		[maj, minr] = self.getFirmwareVersion()
-		if maj != 3 or minr != 3:
-			raise Exception("Version mis-match between API and MoPi.")
+		if maj != FIRMMAJ or minr != FIRMMINR:
+			raise Exception("Version mis-match between API and MoPi. Got %i.%02i, expected %i.%02i." % (maj, minr, FIRMMAJ, FIRMMINR))
 
 	def getStatus(self):
 		return self.bus.read_word_data(self.device, 0b00000000)

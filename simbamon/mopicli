@@ -146,3 +146,5 @@ try:
 except IOError:
 	print "mopicli. Communication error. Check bus? Check connection?"
 	sys.exit(1)
+except Exception as e:
+	print "mopicli. " + str(e)
