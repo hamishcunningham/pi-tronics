@@ -1,6 +1,6 @@
 import smbus
 
-# version 0.2
+VERSION=0.2
 # for mopi firmware v3.03
 
 class mopiapi():
@@ -8,6 +8,9 @@ class mopiapi():
 
 	def __init__(self, i2cbus = 1):
 		self.bus = smbus.SMBus(i2cbus)
+		[maj, minr] = self.getFirmwareVersion()
+		if maj != 3 or minr != 3:
+			raise Exception("Version mis-match between API and MoPi.")
 
 	def getStatus(self):
 		return self.bus.read_word_data(self.device, 0b00000000)
@@ -34,7 +37,7 @@ class mopiapi():
 		data2.append((data[4] << 8) + data[5])
 		return data2
 
-	# takes an array of 6 integers: max, mid, min (mV)
+	# takes an array of 3 integers: max, mid, min (mV)
 	def writeConfig(self, battery, input=0):
 		data = [
 			battery[0] >> 8, battery[0] & 0xff, \
@@ -61,10 +64,14 @@ class mopiapi():
 		return self.bus.read_word_data(self.device, 0b00000100)
 
 	def getFirmwareVersion(self):
-		return self.bus.read_word_data(self.device, 0b00000101) # 9
+		word = self.bus.read_word_data(self.device, 0b00001001) # 9
+		return [word >> 8, word & 0xff]
 
 	def getSerialNumber(self):
-		return self.bus.read_word_data(self.device, 0b00000110) # 10
+		return self.bus.read_word_data(self.device, 0b00001010) # 10
+
+def getApiVersion():
+	return VERSION
 
 def statusDetail(byte):
 	out = ""
