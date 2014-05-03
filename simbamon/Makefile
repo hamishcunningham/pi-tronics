@@ -4,7 +4,7 @@
 
 # vars #######################################################################
 VERSION=3.0
-LAST_SNAP=6
+LAST_SNAP=7
 P=simbamond
 D=simbamon
 MOPI=mopi
@@ -102,7 +102,9 @@ man: man/$(P).txt man/$(MOPI).txt
         cp $(MOPI).8.gz $(MOPICLI).8.gz; cp $(MOPI).8.gz $(MOPIAPI).8.gz
 
 # package ####################################################################
-package: man package-unstable package-precise
+version:
+	@sed -i 's,^VERSION=.*,VERSION='$(VERSION)',' simbamond.default
+package: version man package-unstable package-precise
 	@echo "\nunstable:"
 	@ls -lh $(PD)/unstable
 	@echo "\nprecise:"
@@ -128,7 +130,9 @@ package-precise:
 	@echo ""
 	cd .. && for f in $(PACKAGE_FILES); do \
           [ -f $$f ] && mv $$f $(D)/$(PD)/precise || :; done
-snapshot:
+snapshot-version:
+	@sed -i 's,^VERSION=.*,VERSION='$(SNAPSHOT_VERSION)',' simbamond.default
+snapshot: snapshot-version
 	@echo "packaging SimBaMon SNAPSHOT $(SNAPSHOT)..."
 	mkdir -p $(SNAPD)
 	rm -rf $(SNAPD)/*
@@ -184,4 +188,4 @@ list:
 
 # phonies ####################################################################
 .PHONY: install uninstall package package-unstable package-precise
-.PHONY: package-upload package-clean list
+.PHONY: package-upload package-clean list version snapshot-version
