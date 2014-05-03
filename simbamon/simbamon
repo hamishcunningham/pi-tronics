@@ -92,15 +92,23 @@ do
 
   # on first boot we delay work a little, in case the user wants to tell us 
   # not to shutdown on critical battery, for example
+#TODO add a local for after first -f check
   [ ! -f "$PREVIOUSLY_RUN_INDICATOR" ] && {
     date > $PREVIOUSLY_RUN_INDICATOR 
     logger "${NAME}: first run after boot, sleeping for $BOOT_DELAY"
     sleep $BOOT_DELAY
   }
 
-  # check the level and act if necessary
+  # get MoPi status
   BAT_LEVEL=`${CLI} -s`
-  if [ "$DEBUG" = on ]
+  [ x$BAT_LEVEL = x ] && {
+    logger "${NAME}: failed to get ${LMESS}: pausing and retrying"
+    sleep $MONITOR_FREQUENCY
+    continue
+  }
+
+  # log low levels (approx. once a minute unless debugging)
+  if [ "$DEBUG" = on -o $(( $i % 30 )) -eq 0 ]
   then
     ( s_battery_low $BAT_LEVEL || s_battery_critical $BAT_LEVEL ) && \
       logger "${NAME}: ${LMESS} is at or below warning level (${BAT_LEVEL})"
