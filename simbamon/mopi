@@ -137,11 +137,10 @@ do_supply_config() {
   RET=$?
   [ $RET -eq 1 ] && return 0
   [ $RET -eq 0 ] && \
-    case "$SUPPLY_TYPE" in
-      [123]) ;;
-      *) whiptail \
-        --msgbox "Error: unrecognized option ${SUPPLY_TYPE}" 20 60 1 ;;
-    esac
+    [ $SUPPLY_TYPE -ge 1 -a $SUPPLY_TYPE -le `supply_type_max` ] || {
+       whiptail --msgbox "Error: unrecognized option ${SUPPLY_TYPE}" 20 60 1
+        return 1
+    }
 
   # if we're on batteries...
   if [ $SUPPLY_TYPE = 1 -o $SUPPLY_TYPE = 2 ]
@@ -157,11 +156,10 @@ do_supply_config() {
     RET=$?
     [ $RET -eq 1 ] && return 0
     [ $RET -eq 0 ] && \
-      case "$NUM_CELLS" in
-        [1-9]|[1-9][0-9]) ;;
-        *) whiptail \
-          --msgbox "Error: unrecognized option ${NUM_CELLS}" 20 60 1 ;;
-      esac
+      [ $NUM_CELLS -ge 1 -a $NUM_CELLS -le `cell_number_max` ] || {
+        whiptail --msgbox "Error: unrecognized option ${NUM_CELLS}" 20 60 1
+        return 1
+      }
 
     # get chemistry
     TITLE='Specify Battery Chemistry'
@@ -174,17 +172,17 @@ do_supply_config() {
     RET=$?
     [ $RET -eq 1 ] && return 0
     [ $RET -eq 0 ] && \
-      case "$CHEMISTRY" in
-        [1-6]) ;;
-        *) whiptail \
-          --msgbox "Error: unrecognized option ${CHEMISTRY}" 20 60 1 ;;
-      esac
+      [ $CHEMISTRY -ge 1 -a $CHEMISTRY -le `battery_chemistry_max` ] || {
+        whiptail --msgbox "Error: unrecognized option ${CHEMISTRY}" 20 60 1
+        return 1
+      }
   fi
 
 # offer to edit config values (advanced)
 
 # confirm config and offer to write to MoPi
 
+echo supply type max: $(( supply_type_max ))
 echo \
   "supply type: ${SUPPLY_TYPE}; number of cells: ${NUM_CELLS}; chemistry: ${CHEMISTRY}"
 echo "supply type: $(supply_type ${SUPPLY_TYPE})"
