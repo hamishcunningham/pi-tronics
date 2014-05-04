@@ -144,7 +144,7 @@ do_supply_config() {
     esac
 
   # if we're on batteries...
-  if [ $SUPPLY_TYPE = 1 ]
+  if [ $SUPPLY_TYPE = 1 -o $SUPPLY_TYPE = 2 ]
   then
     # get number of cells
     TITLE='Specify Number of Cells'
@@ -187,6 +187,9 @@ do_supply_config() {
 
 echo \
   "supply type: ${SUPPLY_TYPE}; number of cells: ${NUM_CELLS}; chemistry: ${CHEMISTRY}"
+echo "supply type: $(supply_type ${SUPPLY_TYPE})"
+echo "number of cells: $(cell_number ${NUM_CELLS})"
+echo "chemistry: $(battery_chemistry ${CHEMISTRY})"
 }
 do_supply_config -2
 exit 0
