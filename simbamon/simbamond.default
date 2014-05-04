@@ -70,6 +70,7 @@ s_unused_5()               { [ $(( 32768 & $1 )) -eq 32768 ]; }  # bit 16
 # configuration data...
 
 # the set of supply types (note escaping of elements with spaces)
+SUPPLY_TYPE=1
 SUPPLY_TYPE_ARRAY=(
   1 '"Rechargeable batteries"'                                  on
   2 '"Non-rechargeable batteries"'                             off
@@ -79,6 +80,7 @@ supply_type() { echo ${SUPPLY_TYPE_ARRAY[$(( 1 + (($1 - 1) * 3) ))]}; }
 supply_type_max() { echo $(( ${#SUPPLY_TYPE_ARRAY[*]} / 3 )); }
 
 # the number of cells in a battery supply
+CELL_NUMBER=8
 PAD="                         "
 CELL_NUMBER_ARRAY=(
    1 "\"One cell (are you sure?!) ${PAD}\"" off
@@ -102,6 +104,7 @@ cell_number() { echo ${CELL_NUMBER_ARRAY[$(( 1 + (($1 - 1) * 3) ))]}; }
 cell_number_max() { echo $(( ${#CELL_NUMBER_ARRAY[*]} / 3 )); }
 
 # battery chemistries
+CHEMISTRY=1
 PAD='                                               '
 BATTERY_CHEMISTRY_ARRAY=(
   1 "\"NiMH ${PAD}\""   on
