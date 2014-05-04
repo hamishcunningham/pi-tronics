@@ -73,3 +73,33 @@ SUPPLY_TYPE_ARRAY=(
   2 '"Non-rechargeable batteries"'                             off
   3 '"Other (e.g. mains, solar, biomass, rubber band, ...)"'   off
 )
+# the number of cells in a battery supply
+PAD="                         "
+CELL_NUMBER_ARRAY=(
+   1 "\"One cell (are you sure?!) ${PAD}\"" off
+   2 '"Two cells (e.g. double 3.6V LiPo)"'  off
+   3 '"Three cells"'                        off
+   4 '"Four cells"'                         off
+   5 '"Five cells"'                         off
+   6 '"Six cells (e.g. a single PP3)"'      off
+   7 '"Seven cells"'                        off
+   8 '"Eight cells (e.g. eight AAs)"'        on
+   9 '"Nine cells"'                         off
+  10 '"Ten cells"'                          off
+  11 '"Eleven cells"'                       off
+  12 '"Twelve cells"'                       off
+  13 '"Thirteen cells"'                     off
+  14 '"Fourteen cells"'                     off
+  15 '"Fifteen cells"'                      off
+  16 '"Lots and lots (are you sure?!)"'     off
+)
+# battery chemistries
+PAD='                                               '
+BATTERY_CHEMISTRY_ARRAY=(
+  1 "\"NiMH ${PAD}\""   on
+  2 '"Alkaline"'       off
+  3 '"Lead Acid"'      off
+  4 '"Lithium Ion"'    off
+  5 '"LiPo"'           off
+  6 '"Other"'          off
+)
