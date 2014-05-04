@@ -30,6 +30,12 @@ usage() { echo -e Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
 # and only push back into /etc/ when the user says "apply"; the next code
 # block checks location of these files, sets up ~/.config/mopi if it doesn't
 # exist yet, and copies the current state of the /etc config
+
+### TODO
+# turns out that the firmware will not persist config changes, so we need to
+# do this, and we need the daemon to write any non-standard config to the
+# firmware as soon as it is invoked
+
 if [ -r ${INST_DIR}/${DNAME}.default ]  # development mode
 then
   CONFIG=${INST_DIR}/${DNAME}.default
