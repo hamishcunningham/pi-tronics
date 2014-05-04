@@ -55,8 +55,8 @@ To install:
     - (use ppa:hamish-dcs/pi-gate-snapshots for development builds)
   - sudo apt-get update
   - sudo apt-get install simbamond
-  - this will generate a failure message relating to I2C; testing requires
-    simulation
+  - this will generate a failure message relating to I2C -- use the -d option
+    to suppress
 
 -----------------------------------------------------------------------------
 To test and debug:
