@@ -65,3 +65,11 @@ s_unused_2()               { [ $((  4096 & $1 )) -eq  4096 ]; }  # bit 13
 s_unused_3()               { [ $((  8192 & $1 )) -eq  8192 ]; }  # bit 14
 s_unused_4()               { [ $(( 16384 & $1 )) -eq 16384 ]; }  # bit 15
 s_unused_5()               { [ $(( 32768 & $1 )) -eq 32768 ]; }  # bit 16
+
+# configuration data...
+# the set of supply types (note escaping of elements with spaces)
+SUPPLY_TYPE_ARRAY=(
+  1 '"Rechargeable batteries"'                                  on
+  2 '"Non-rechargeable batteries"'                             off
+  3 '"Other (e.g. mains, solar, biomass, rubber band, ...)"'   off
+)
