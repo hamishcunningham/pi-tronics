@@ -193,15 +193,16 @@ do_supply_config() {
         "1" "NiMH ${PAD}"        on \
         "2" "Alkaline"          off \
         "3" "Lead Acid"         off \
-        "4" "LiIon"             off \
+        "4" "Lithium Ion"       off \
         "5" "LiPo"              off \
+        "6" "Other"             off \
         3>&1 1>&2 2>&3
     )
     RET=$?
     [ $RET -eq 1 ] && return 0
     [ $RET -eq 0 ] && \
       case "$CHEMISTRY" in
-        [1-5]) ;;
+        [1-6]) ;;
         *) whiptail \
           --msgbox "Error: unrecognized option ${CHEMISTRY}" 20 60 1 ;;
       esac
