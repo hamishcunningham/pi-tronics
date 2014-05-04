@@ -76,7 +76,7 @@ fi
 
 # figure out optimal size for whiptail
 calc_wt_size() {
-  WT_HEIGHT=17
+  WT_HEIGHT=20
   WT_WIDTH=$(tput cols)
 
   if [ -z "$WT_WIDTH" ] || [ "$WT_WIDTH" -lt 60 ]; then
@@ -85,7 +85,7 @@ calc_wt_size() {
   if [ "$WT_WIDTH" -gt 178 ]; then
     WT_WIDTH=120
   fi
-  WT_MENU_HEIGHT=$(($WT_HEIGHT-8))
+  WT_MENU_HEIGHT=$(($WT_HEIGHT-6))
 }
 calc_wt_size
 
@@ -116,7 +116,8 @@ do_about() {
 }
 
 # second-level menu
-do_battery_config() {
+do_supply_config() {
+  # process options
   SETTING=both
   case $1 in
     -b) SETTING="both supplies" ;;
@@ -124,7 +125,8 @@ do_battery_config() {
     -2) SETTING="supply 2" ;;
   esac
 
-  BACKTITLE='Configuring MoPi Power Supplies...'
+  # what type of supply?
+  BACKTITLE="Configuring MoPi power supplies (${SETTING})..."
   TITLE='Specify Supply Type'
   SUPPLY_TYPE=$(
     whiptail --title "${TITLE}" --backtitle "${BACKTITLE}" \
@@ -137,19 +139,82 @@ do_battery_config() {
       3>&1 1>&2 2>&3
   )
   RET=$?
-
-  if [ $RET -eq 1 ]; then
-    return 0
-  elif [ $RET -eq 0 ]; then
+  [ $RET -eq 1 ] && return 0
+  [ $RET -eq 0 ] && \
     case "$SUPPLY_TYPE" in
-      1) echo $SUPPLY_TYPE ;;
-      2) echo $SUPPLY_TYPE ;;
-      3) echo $SUPPLY_TYPE ;;
-      *)    whiptail --msgbox "Error: unrecognized option" 20 60 1 ;;
-    esac || whiptail --msgbox "There was an error running option $FUN" 20 60 1
+      [123]) ;;
+      *) whiptail \
+        --msgbox "Error: unrecognized option ${SUPPLY_TYPE}" 20 60 1 ;;
+    esac
+
+  # if we're on batteries...
+  if [ $SUPPLY_TYPE = 1 ]
+  then
+    # get number of cells
+    PAD="                         "
+    TITLE='Specify Number of Cells'
+    NUM_CELLS=$(
+      whiptail --title "${TITLE}" --backtitle "${BACKTITLE}" \
+        --radiolist "Specify number of cells (for ${SETTING}):" \
+        $WT_HEIGHT $(( $WT_WIDTH / 2 + 9 )) $WT_MENU_HEIGHT \
+        --cancel-button "Cancel" --ok-button "Next" \
+        "1" "One cell (are you sure?!) ${PAD}"  off \
+        "2" "Two cells (e.g. double 3.6V LiPo)" off \
+        "3" "Three cells"                       off \
+        "4" "Four cells"                        off \
+        "5" "Five cells"                        off \
+        "6" "Six cells (e.g. a single PP3)"     off \
+        "7" "Seven cells"                       off \
+        "8" "Eight cells (e.g. eight AAs)"       on \
+        "9" "Nine cells"                        off \
+        "10" "Ten cells"                        off \
+        "11" "Eleven cells"                     off \
+        "12" "Twelve cells"                     off \
+        "13" "Lots and lots (are you sure?!)"   off \
+        3>&1 1>&2 2>&3
+    )
+    RET=$?
+    [ $RET -eq 1 ] && return 0
+    [ $RET -eq 0 ] && \
+      case "$NUM_CELLS" in
+        [1-9]|[1-9][0-9]) ;;
+        *) whiptail \
+          --msgbox "Error: unrecognized option ${NUM_CELLS}" 20 60 1 ;;
+      esac
+
+    # get chemistry
+    PAD='                                               '
+    TITLE='Specify Battery Chemistry'
+    CHEMISTRY=$(
+      whiptail --title "${TITLE}" --backtitle "${BACKTITLE}" \
+        --radiolist "Specify battery chemistry (for ${SETTING}):" \
+        $WT_HEIGHT $(( $WT_WIDTH / 2 + 9 )) $WT_MENU_HEIGHT \
+        --cancel-button "Cancel" --ok-button "Next" \
+        "1" "NiMH ${PAD}"        on \
+        "2" "Alkaline"          off \
+        "3" "Lead Acid"         off \
+        "4" "LiIon"             off \
+        "5" "LiPo"              off \
+        3>&1 1>&2 2>&3
+    )
+    RET=$?
+    [ $RET -eq 1 ] && return 0
+    [ $RET -eq 0 ] && \
+      case "$CHEMISTRY" in
+        [1-5]) ;;
+        *) whiptail \
+          --msgbox "Error: unrecognized option ${CHEMISTRY}" 20 60 1 ;;
+      esac
   fi
+
+# offer to edit config values (advanced)
+
+# confirm config and offer to write to MoPi
+
+echo \
+  "supply type: ${SUPPLY_TYPE}; number of cells: ${NUM_CELLS}; chemistry: ${CHEMISTRY}"
 }
-do_battery_config -2
+do_supply_config -2
 exit 0
 
 # main loop
@@ -172,9 +237,9 @@ while true; do
     exit 0
   elif [ $RET -eq 0 ]; then
     case "$FUN" in
-      1\ *) do_battery_config -b ;;
-      2\ *) do_battery_config -1 ;;
-      3\ *) do_battery_config -2 ;;
+      1\ *) do_supply_config -b ;;
+      2\ *) do_supply_config -1 ;;
+      3\ *) do_supply_config -2 ;;
       4\ *) do_diff ;;
       5\ *) do_diff -y ;;
       6\ *) STATUS="`do_status`";
