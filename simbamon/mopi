@@ -122,24 +122,6 @@ do_about() {
     " 20 70 1
 }
 
-# given a spec, calculate config data
-calculate_config() {
-  [ -z "$1" -o -z "$2" -o -z "$3" ] && {
-    echo 'foobar in calculate_config, $* is '$*
-    exit 5
-  }
-  SUPPLY_TYPE=$1
-  NUM_CELLS=$2
-  CHEMISTRY=$3
-
-  BAT_FLOOR=$( echo "`bat_dod_floor ${CHEMISTRY}`*${NUM_CELLS}"     |bc )
-  BAT_FULL=$(  echo "`bat_nominal_volts ${CHEMISTRY}`*${NUM_CELLS}" |bc )
-  BAT_GOOD=$(  echo "((${BAT_FULL}-${BAT_FLOOR})/2)+${BAT_FLOOR}"   |bc )
-
-  echo \
-    "type: $SUPPLY_TYPE; floor: $BAT_FLOOR; good: $BAT_GOOD; full: $BAT_FULL"
-}
-
 # second-level menu
 do_supply_config() {
   # process options
@@ -204,7 +186,7 @@ do_supply_config() {
   fi
 
   # hokus pokus agracadabra, etc.
-  CONFIG_STRING=`calculate_config $SUPPLY_TYPE $NUM_CELLS $CHEMISTRY`
+  calculate_config $SUPPLY_TYPE $NUM_CELLS $CHEMISTRY
 # TODO sanity check -- e.g. if floor is below MOPI_OPERATING_FLOOR
 
   # offer to edit config values (advanced)
@@ -212,7 +194,10 @@ do_supply_config() {
   whiptail --msgbox "
     The configuration for your supply has been calculated as:
 
-      $CONFIG_STRING
+      type: $SUPPLY_TYPE; floor: $BAT_FLOOR; good: $BAT_GOOD; full: $BAT_FULL
+
+      (type: ${CONFIG_A[type]} floor: ${CONFIG_A[floor]}
+       good: ${CONFIG_A[good]} full: ${CONFIG_A[full]})
 
     (supply type: $(supply_type ${SUPPLY_TYPE}))
     (number of cells: $(num_cells ${NUM_CELLS}))
