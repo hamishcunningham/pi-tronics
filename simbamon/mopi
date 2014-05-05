@@ -195,8 +195,8 @@ echo "supply type: $(supply_type ${SUPPLY_TYPE})"
 echo "number of cells: $(cell_number ${CELL_NUMBER})"
 echo "chemistry: $(battery_chemistry ${CHEMISTRY})"
 }
-do_supply_config -2
-exit 0
+#do_supply_config -2
+#exit 0
 
 # main loop
 STATUS="`do_status`"
