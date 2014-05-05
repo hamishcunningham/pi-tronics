@@ -200,7 +200,7 @@ do_supply_config() {
 
   # hokus pokus agracadabra, etc.
   CONFIG_STRING=`calculate_config $SUPPLY_TYPE $NUM_CELLS $CHEMISTRY`
-echo $CONFIG_STRING
+echo we calculated the config as: $CONFIG_STRING
 echo \
   "supply type: ${SUPPLY_TYPE}; number of cells: ${NUM_CELLS}; chemistry: ${CHEMISTRY}"
 echo "supply type: $(supply_type ${SUPPLY_TYPE})"

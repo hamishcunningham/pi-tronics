@@ -4,6 +4,9 @@
 # This code is copyright Hamish Cunningham and the University of Sheffield
 # and is licenced under GPL 3 or any later version.
 
+#############################################################################
+# monitor configuration...
+
 # version (DON'T EDIT: it is set by "make package" or "make snapshot")
 VERSION=3.0+8
 
@@ -33,7 +36,8 @@ then
   SHUTDOWN='echo "shutdown -h now"; sleep 10'
 fi
 
-# functions to decode the status word (16 bits)
+#############################################################################
+# functions to decode the MoPi status word (16 bits)...
 #
 # bit 0:  power source #1 is live
 # bit 1:  power source #2 is live
@@ -66,12 +70,13 @@ s_unused_3()               { [ $((  8192 & $1 )) -eq  8192 ]; }  # bit 14
 s_unused_4()               { [ $(( 16384 & $1 )) -eq 16384 ]; }  # bit 15
 s_unused_5()               { [ $(( 32768 & $1 )) -eq 32768 ]; }  # bit 16
 
-
-# configuration data...
+#############################################################################
+# supply configuration data...
 
 # the set of supply types (note escaping of elements with spaces)
-SUPPLY_TYPE=1
+SUPPLY_TYPE=1  # the default
 SUPPLY_TYPE_A=(
+# n=description================================================default
   1 '"Rechargeable batteries"'                                  on
   2 '"Non-rechargeable batteries"'                             off
   3 '"Other (e.g. mains, solar, biomass, rubber band, ...)"'   off
@@ -81,10 +86,11 @@ supply_type() { echo ${SUPPLY_TYPE_A[$(( 1 + (($1 - 1) * 3) ))]}; }
 # get the max tag index (the min is 0)
 supply_type_max() { echo $(( ${#SUPPLY_TYPE_A[*]} / 3 )); }
 
-# the number of cells in a battery supply
-NUM_CELLS=8
-PAD="                         "
+# the number of (in series) cells in a battery supply
+NUM_CELLS=8  # the default
+PAD="                         "  # for whiptail formatting
 NUM_CELLS_A=(
+#  n=desciption=========================================default
    1 "\"One cell (are you sure?!) ${PAD}\""             off
    2 '"Two cells (e.g. double 3.6V LiPo)"'              off
    3 '"Three cells"'                                    off
@@ -107,9 +113,17 @@ num_cells() { echo ${NUM_CELLS_A[$(( 1 + (($1 - 1) * 3) ))]}; }
 # get the max tag index (the min is 0)
 num_cells_max() { echo $(( ${#NUM_CELLS_A[*]} / 3 )); }
 
-# battery chemistries
-CHEMISTRY=1
+# battery chemistries -- notes on CUTOFFs:
+# - Vlow is the mid-point between the "under load" and "unloaded" values;
+#   exceeding Vlow will often improve battery life / charge cycles
+# - if Vlow is 0 then we use the microcontroller min operating voltage
+# - NiCd has a quite steady discharge voltage even when approaching empty :-(
+# - http://batteryuniversity.com/learn/article/secondary_batteries
+#   http://www.rcgroups.com/forums/showthread.php?t=209187
+CHEMISTRY=1  # the default
 PAD='                                               '
+# NOTE: the entries in the two arrays (for the chemistries and for the
+# cutoffs) must match
 BAT_CHEMISTRY_A=(
 # n=chem===============default
   1 "\"NiMH ${PAD}\""   on
@@ -131,16 +145,6 @@ BAT_CUTOFFS=(
   7     1.5     1.0
 )
 # get the description given the tag index
-bat_chemistry() {
-  echo ${BAT_CHEMISTRY_A[$(( 1 + (($1 - 1) * 3) ))]}
-}
+bat_chemistry() { echo ${BAT_CHEMISTRY_A[$(( 1 + (($1 - 1) * 3) ))]}; }
 # get the max tag index (the min is 0)
 bat_chemistry_max() { echo $(( ${#BAT_CHEMISTRY_A[*]} / 3 )); }
-#
-# CUTOFF notes
-# - Vlow is the mid-point between the "under load" and "unloaded" values;
-#   exceeding Vlow will often improve battery life / charge cycles
-# - if Vlow is 0 then we use the microcontroller min operating voltage
-# - NiCd has a quite steady discharge voltage even when approaching empty :-(
-# - http://batteryuniversity.com/learn/article/secondary_batteries
-#   http://www.rcgroups.com/forums/showthread.php?t=209187
