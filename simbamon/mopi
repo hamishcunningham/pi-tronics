@@ -205,15 +205,18 @@ do_supply_config() {
 
   # hokus pokus agracadabra, etc.
   CONFIG_STRING=`calculate_config $SUPPLY_TYPE $NUM_CELLS $CHEMISTRY`
+# TODO sanity check -- e.g. if floor is below MOPI_OPERATING_FLOOR
 
   # offer to edit config values (advanced)
   # TODO
   whiptail --msgbox "
-    we calculated the config as:
-    $CONFIG_STRING
-      supply type: $(supply_type ${SUPPLY_TYPE})
-      number of cells: $(num_cells ${NUM_CELLS})
-      chemistry: $(bat_chemistry ${CHEMISTRY})
+    The configuration for your supply has been calculated as:
+
+      $CONFIG_STRING
+
+    (supply type: $(supply_type ${SUPPLY_TYPE}))
+    (number of cells: $(num_cells ${NUM_CELLS}))
+    (chemistry: $(bat_chemistry ${CHEMISTRY}))
   " 20 70 1
 
   # confirm config and offer to write to MoPi
@@ -228,13 +231,13 @@ while true; do
     --menu "Current status: ${STATUS}" \
       $WT_HEIGHT $WT_WIDTH $WT_MENU_HEIGHT \
     --cancel-button Finish --ok-button Select \
-      "1 Configure Both" "Configure both power supplies" \
-      "2 Configure Supply 1" "Configure supply 1" \
-      "3 Configure Supply 2" "Configure supply 2" \
-      "4 Show Changes" "Show config changes (not yet applied)" \
-      "5 Show Changes (Wide)" "Show config changes (side-by-side view)" \
-      "6 Status" "Show current status from your MoPi board" \
-      "7 About MoPi" "Information about this configuration tool" \
+      "1 Configure Both"        "Configure both power supplies" \
+      "2 Configure Supply 1"    "Configure supply 1" \
+      "3 Configure Supply 2"    "Configure supply 2" \
+      "4 Show Changes"          "Show config changes (not yet applied)" \
+      "5 Show Changes (Wide)"   "Show config changes (side-by-side view)" \
+      "6 Status"                "Show current status from your MoPi board" \
+      "7 About MoPi"            "Information about this configuration tool" \
     3>&1 1>&2 2>&3)
   RET=$?
   if [ $RET -eq 1 ]; then

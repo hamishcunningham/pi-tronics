@@ -36,6 +36,9 @@ then
   SHUTDOWN='echo "shutdown -h now"; sleep 10'
 fi
 
+# lowest safe operating voltage for MoPi
+MOPI_OPERATING_FLOOR=6.2
+
 #############################################################################
 # functions to decode the MoPi status word (16 bits)...
 #
@@ -134,10 +137,11 @@ BAT_CHEMISTRY_A=(
   6 '"NiCd"'           off
   7 '"Other"'          off
 )
+F=${MOPI_OPERATING_FLOOR}
 BAT_CUTOFF_A=(
 # n=====Vhigh===Vlow
   1     1.2     0.95
-  2     1.5     0
+  2     1.5     ${F}
   3     2.0     1.58
   4     3.7     3.0
   5     4.2     3.0
