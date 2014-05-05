@@ -124,12 +124,12 @@ do_about() {
 # given a spec, calculate config data
 calculate_config() {
   SUPPLY_TYPE=$1
-  CELL_NUMBER=$2
+  NUM_CELLS=$2
   CHEMISTRY=$3
 
 # TODO
   BAT_FLOOR=
-  BAT_FULL=$(( $CELL_NUMBER *  TODO ))
+  BAT_FULL=$(( $NUM_CELLS * 1 ))
   BAT_GOOD=
 
   echo "$BAT_FLOOR $BAT_GOOD $BAT_FULL"
@@ -152,7 +152,7 @@ do_supply_config() {
        --radiolist \"Specify type (for ${SETTING}):\" \
        $WT_HEIGHT $(( $WT_WIDTH / 2 + 9 )) $WT_MENU_HEIGHT \
        --cancel-button \"Cancel\" --ok-button \"Next\" \
-       "${SUPPLY_TYPE_ARRAY[@]}" "
+       "${SUPPLY_TYPE_A[@]}" "
   SUPPLY_TYPE=`bash -c "${C} 3>&1 1>&2 2>&3"`
   RET=$?
   [ $RET -eq 1 ] && return 0
@@ -171,13 +171,13 @@ do_supply_config() {
          --radiolist \"Specify number of cells (for ${SETTING}):\" \
          $WT_HEIGHT $(( $WT_WIDTH / 2 + 9 )) $WT_MENU_HEIGHT \
          --cancel-button \"Cancel\" --ok-button \"Next\" \
-         "${CELL_NUMBER_ARRAY[@]}" "
-    CELL_NUMBER=`bash -c "${C} 3>&1 1>&2 2>&3"`
+         "${NUM_CELLS_A[@]}" "
+    NUM_CELLS=`bash -c "${C} 3>&1 1>&2 2>&3"`
     RET=$?
     [ $RET -eq 1 ] && return 0
     [ $RET -eq 0 ] && \
-      [ $CELL_NUMBER -ge 1 -a $CELL_NUMBER -le `cell_number_max` ] || {
-        whiptail --msgbox "Error: unrecognized option ${CELL_NUMBER}" 20 60 1
+      [ $NUM_CELLS -ge 1 -a $NUM_CELLS -le `num_cells_max` ] || {
+        whiptail --msgbox "Error: unrecognized option ${NUM_CELLS}" 20 60 1
         return 1
       }
 
@@ -187,34 +187,33 @@ do_supply_config() {
          --radiolist \"Specify battery chemistry (for ${SETTING}):\" \
          $WT_HEIGHT $(( $WT_WIDTH / 2 + 9 )) $WT_MENU_HEIGHT \
          --cancel-button \"Cancel\" --ok-button \"Next\" \
-         "${BATTERY_CHEMISTRY_ARRAY[@]}" "
+         "${BAT_CHEMISTRY_A[@]}" "
     CHEMISTRY=`bash -c "${C} 3>&1 1>&2 2>&3"`
     RET=$?
     [ $RET -eq 1 ] && return 0
     [ $RET -eq 0 ] && \
-      [ $CHEMISTRY -ge 1 -a $CHEMISTRY -le `battery_chemistry_max` ] || {
+      [ $CHEMISTRY -ge 1 -a $CHEMISTRY -le `bat_chemistry_max` ] || {
         whiptail --msgbox "Error: unrecognized option ${CHEMISTRY}" 20 60 1
         return 1
       }
   fi
 
   # hokus pokus agracadabra, etc.
-  CONFIG_STRING=`calculate_config $SUPPLY_TYPE $CELL_NUMBER $CHEMISTRY
-
-# offer to edit config values (advanced)
-
-# confirm config and offer to write to MoPi
-
+  CONFIG_STRING=`calculate_config $SUPPLY_TYPE $NUM_CELLS $CHEMISTRY`
 echo $CONFIG_STRING
-echo supply type max: $(( supply_type_max ))
 echo \
-  "supply type: ${SUPPLY_TYPE}; number of cells: ${CELL_NUMBER}; chemistry: ${CHEMISTRY}"
+  "supply type: ${SUPPLY_TYPE}; number of cells: ${NUM_CELLS}; chemistry: ${CHEMISTRY}"
 echo "supply type: $(supply_type ${SUPPLY_TYPE})"
-echo "number of cells: $(cell_number ${CELL_NUMBER})"
-echo "chemistry: $(battery_chemistry ${CHEMISTRY})"
+echo "number of cells: $(num_cells ${NUM_CELLS})"
+echo "chemistry: $(bat_chemistry ${CHEMISTRY})"
+
+  # offer to edit config values (advanced)
+  # TODO
+
+  # confirm config and offer to write to MoPi
+  # TODO
+
 }
-#do_supply_config -2
-#exit 0
 
 # main loop
 STATUS="`do_status`"

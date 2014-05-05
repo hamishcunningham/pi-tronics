@@ -110,7 +110,7 @@ do
 
   # log low levels (approx. once every 5 minutes unless debugging)
   [ "$DEBUG" = on -o $(( $i % 150 )) -eq 0 ] && {
-    ( s_battery_low $BAT_LEVEL || s_battery_critical $BAT_LEVEL ) && \
+    ( s_bat_low $BAT_LEVEL || s_bat_critical $BAT_LEVEL ) && \
       logger "${NAME}: ${LMESS} is at or below warning level (${BAT_LEVEL})"
   }
 
@@ -120,12 +120,12 @@ do
     wall <<< "${NAME}: power off requested: shutting down now!!!"
     logger "${NAME}: shutting down (POWER_OFF)"
     bash -c "$SHUTDOWN"
-  elif s_battery_critical $BAT_LEVEL
+  elif s_bat_critical $BAT_LEVEL
   then
     wall <<< "${NAME}: battery empty: shutting down now!!!"
     logger "${NAME}: shutting down (BAT_SHUTDOWN)"
     bash -c "$SHUTDOWN"
-  elif s_battery_low $BAT_LEVEL
+  elif s_bat_low $BAT_LEVEL
   then
     if [ $(( $PREVIOUS_WARNING - $i )) -ge $WAIT_LOOPS ]
     then

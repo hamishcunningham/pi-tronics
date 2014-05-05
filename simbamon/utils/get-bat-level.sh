@@ -22,7 +22,7 @@ echo "Status is ${STATUS} ( `echo \"obase=2;${STATUS}\" |bc` )"
 echo $VSTATUS
 
 # get the level
-s_battery_full     $STATUS && echo battery_full
-s_battery_good     $STATUS && echo battery_good
-s_battery_low      $STATUS && echo battery_low
-s_battery_critical $STATUS && echo battery_critical
+s_bat_full     $STATUS && echo bat_full
+s_bat_good     $STATUS && echo bat_good
+s_bat_low      $STATUS && echo bat_low
+s_bat_critical $STATUS && echo bat_critical
