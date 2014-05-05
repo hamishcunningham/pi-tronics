@@ -115,6 +115,20 @@ do_about() {
     " 20 70 1
 }
 
+# given a spec, calculate config data
+calculate_config() {
+  SUPPLY_TYPE=$1
+  CELL_NUMBER=$2
+  CHEMISTRY=$3
+
+# TODO
+  BAT_FLOOR=
+  BAT_FULL=$(( $CELL_NUMBER *  TODO ))
+  BAT_GOOD=
+
+  echo "$BAT_FLOOR $BAT_GOOD $BAT_FULL"
+}
+
 # second-level menu
 do_supply_config() {
   # process options
@@ -178,10 +192,14 @@ do_supply_config() {
       }
   fi
 
+  # hokus pokus agracadabra, etc.
+  CONFIG_STRING=`calculate_config $SUPPLY_TYPE $CELL_NUMBER $CHEMISTRY
+
 # offer to edit config values (advanced)
 
 # confirm config and offer to write to MoPi
 
+echo $CONFIG_STRING
 echo supply type max: $(( supply_type_max ))
 echo \
   "supply type: ${SUPPLY_TYPE}; number of cells: ${CELL_NUMBER}; chemistry: ${CHEMISTRY}"
