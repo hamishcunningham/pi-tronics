@@ -4,6 +4,7 @@ VERSION=0.2
 # for mopi firmware v3.03
 FIRMMAJ=3
 FIRMMINR=3
+READTRIES=3
 
 class mopiapi():
 	device = 0xb
@@ -15,15 +16,15 @@ class mopiapi():
 			raise Exception("Version mis-match between API and MoPi. Got %i.%02i, expected %i.%02i." % (maj, minr, FIRMMAJ, FIRMMINR))
 
 	def getStatus(self):
-		return self.bus.read_word_data(self.device, 0b00000000)
+		return self.readWord(0b00000000)
 
 	def getVoltage(self, input=0):
 		if input == 1:
-			return self.bus.read_word_data(self.device, 0b00000101) # 5
+			return self.readWord(0b00000101) # 5
 		elif input == 2:
-			return self.bus.read_word_data(self.device, 0b00000110) # 6
+			return self.readWord(0b00000110) # 6
 		else:
-			return self.bus.read_word_data(self.device, 0b00000001)
+			return self.readWord(0b00000001)
 
 	# returns an array of 3 integers: max, mid, min (mV)
 	def readConfig(self, input=0):
@@ -34,9 +35,10 @@ class mopiapi():
 		else:
 			data = self.bus.read_i2c_block_data(self.device, 0b00000010)
 		data2 = []
-		data2.append((data[0] << 8) + data[1])
-		data2.append((data[2] << 8) + data[3])
-		data2.append((data[4] << 8) + data[5])
+		# & 127 for leading bit, unfortunately on the LSB this is a bad idea...
+		data2.append(((data[0] & 127) << 8) + data[1])
+		data2.append(((data[2] & 127) << 8) + data[3])
+		data2.append(((data[4] & 127) << 8) + data[5])
 		return data2
 
 	# takes an array of 3 integers: max, mid, min (mV)
@@ -60,17 +62,29 @@ class mopiapi():
 		self.bus.write_word_data(self.device, 0b00000100, shutdown)
 
 	def getPowerOnDelay(self):
-		return self.bus.read_word_data(self.device, 0b00000011)
+		return self.readWord(0b00000011)
 
 	def getShutdownDelay(self):
-		return self.bus.read_word_data(self.device, 0b00000100)
+		return self.readWord(0b00000100)
 
 	def getFirmwareVersion(self):
-		word = self.bus.read_word_data(self.device, 0b00001001) # 9
+		word = self.readWord(0b00001001) # 9
 		return [word >> 8, word & 0xff]
 
 	def getSerialNumber(self):
-		return self.bus.read_word_data(self.device, 0b00001010) # 10
+		return self.readWord(0b00001010) # 10
+
+	def readWord(self, register):
+		tries = 0
+		data = 0xFFFF
+		while data == 0xFFFF and tries < READTRIES:
+			data = self.bus.read_word_data(self.device, register)
+			tries += 1
+		if data == 0xFFFF:
+			raise Exception("Error reading register %i, expected non 0xFF value." % register)
+		data = data & 32767 # fix for leading bit
+		return data
+			
 
 def getApiVersion():
 	return VERSION
