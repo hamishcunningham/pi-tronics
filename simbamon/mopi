@@ -107,6 +107,7 @@ do_diff() {
   clear
 }
 do_status() {
+  [ $DBG = echo ] && STATUS="unavailable, no CLI" && echo $STATUS && return
   STATUS="`sudo ${CLI} -sv`"
   STATUS="${STATUS}; `sudo ${CLI} -s`"
   STATUS="${STATUS}; `sudo ${CLI} -v`"
@@ -123,16 +124,20 @@ do_about() {
 
 # given a spec, calculate config data
 calculate_config() {
+  [ -z "$1" -o -z "$2" -o -z "$3" ] && {
+    echo 'foobar in calculate_config, $* is '$*
+    exit 5
+  }
   SUPPLY_TYPE=$1
   NUM_CELLS=$2
   CHEMISTRY=$3
 
-# TODO
-  BAT_FLOOR=
-  BAT_FULL=$(( $NUM_CELLS * 1 ))
-  BAT_GOOD=
+  BAT_FLOOR=$( echo "`bat_dod_floor ${CHEMISTRY}`*${NUM_CELLS}"     |bc )
+  BAT_FULL=$(  echo "`bat_nominal_volts ${CHEMISTRY}`*${NUM_CELLS}" |bc )
+  BAT_GOOD=$(  echo "((${BAT_FULL}-${BAT_FLOOR})/2)+${BAT_FLOOR}"   |bc )
 
-  echo "$BAT_FLOOR $BAT_GOOD $BAT_FULL"
+  echo \
+    "type: $SUPPLY_TYPE; floor: $BAT_FLOOR; good: $BAT_GOOD; full: $BAT_FULL"
 }
 
 # second-level menu
@@ -200,15 +205,16 @@ do_supply_config() {
 
   # hokus pokus agracadabra, etc.
   CONFIG_STRING=`calculate_config $SUPPLY_TYPE $NUM_CELLS $CHEMISTRY`
-echo we calculated the config as: $CONFIG_STRING
-echo \
-  "supply type: ${SUPPLY_TYPE}; number of cells: ${NUM_CELLS}; chemistry: ${CHEMISTRY}"
-echo "supply type: $(supply_type ${SUPPLY_TYPE})"
-echo "number of cells: $(num_cells ${NUM_CELLS})"
-echo "chemistry: $(bat_chemistry ${CHEMISTRY})"
 
   # offer to edit config values (advanced)
   # TODO
+  whiptail --msgbox "
+    we calculated the config as:
+    $CONFIG_STRING
+      supply type: $(supply_type ${SUPPLY_TYPE})
+      number of cells: $(num_cells ${NUM_CELLS})
+      chemistry: $(bat_chemistry ${CHEMISTRY})
+  " 20 70 1
 
   # confirm config and offer to write to MoPi
   # TODO
@@ -218,7 +224,7 @@ echo "chemistry: $(bat_chemistry ${CHEMISTRY})"
 # main loop
 STATUS="`do_status`"
 while true; do
-  FUN=$(whiptail --title "MoPi Configuration Tool (mopi)" \
+  SEL=$(whiptail --title "MoPi Configuration Tool (mopi)" \
     --menu "Current status: ${STATUS}" \
       $WT_HEIGHT $WT_WIDTH $WT_MENU_HEIGHT \
     --cancel-button Finish --ok-button Select \
@@ -234,7 +240,7 @@ while true; do
   if [ $RET -eq 1 ]; then
     exit 0
   elif [ $RET -eq 0 ]; then
-    case "$FUN" in
+    case "$SEL" in
       1\ *) do_supply_config -b ;;
       2\ *) do_supply_config -1 ;;
       3\ *) do_supply_config -2 ;;
@@ -244,7 +250,7 @@ while true; do
             whiptail --msgbox "${STATUS}" 20 60 1 ;;
       7\ *) do_about ;;
       *)    whiptail --msgbox "Error: unrecognized option" 20 60 1 ;;
-    esac || whiptail --msgbox "There was an error running option $FUN" 20 60 1
+    esac || whiptail --msgbox "There was an error running option $SEL" 20 60 1
   else
     exit 1
   fi

@@ -134,7 +134,7 @@ BAT_CHEMISTRY_A=(
   6 '"NiCd"'           off
   7 '"Other"'          off
 )
-BAT_CUTOFFS=(
+BAT_CUTOFF_A=(
 # n=====Vhigh===Vlow
   1     1.2     0.95
   2     1.5     0
@@ -145,6 +145,10 @@ BAT_CUTOFFS=(
   7     1.5     1.0
 )
 # get the description given the tag index
-bat_chemistry() { echo ${BAT_CHEMISTRY_A[$(( 1 + (($1 - 1) * 3) ))]}; }
+bat_chemistry() { echo ${BAT_CHEMISTRY_A[ $(( 1 + (($1 - 1) * 3) )) ]}; }
 # get the max tag index (the min is 0)
 bat_chemistry_max() { echo $(( ${#BAT_CHEMISTRY_A[*]} / 3 )); }
+# get the nominal voltage of a cell for a chemistry (Vhigh)
+bat_nominal_volts() { echo ${BAT_CUTOFF_A[ $(( 1 + (($1 - 1) * 3) )) ]}; }
+# get the safe depth of discharge (dod) floor for a chemistry (Vlow)
+bat_dod_floor() { echo ${BAT_CUTOFF_A[ $(( 2 + (($1 - 1) * 3) )) ]}; }
