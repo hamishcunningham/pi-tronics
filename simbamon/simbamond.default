@@ -173,7 +173,4 @@ calculate_config() {
   BAT_FLOOR=$( echo "`bat_dod_floor ${CHEMISTRY}`*${NUM_CELLS}"     |bc )
   BAT_FULL=$(  echo "`bat_nominal_volts ${CHEMISTRY}`*${NUM_CELLS}" |bc )
   BAT_GOOD=$(  echo "((${BAT_FULL}-${BAT_FLOOR})/2)+${BAT_FLOOR}"   |bc )
-
-  # a floor of 0 indicates non-rechargeable batteries
-  [ `echo "$BAT_FLOOR==0" |bc` -eq 1 ] && BAT_FLOOR=$OPERATING_FLOOR
 }

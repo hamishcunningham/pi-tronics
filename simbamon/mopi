@@ -244,7 +244,8 @@ Do you want to write this configuration to MoPi?
     whiptail --msgbox "Configuration cancelled" 20 70 1
     return 0
   }
-  # TODO write to mopi
+
+  # TODO save locally and write to mopi
 
 }
 
