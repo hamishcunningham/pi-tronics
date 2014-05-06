@@ -166,7 +166,7 @@ CONFIG_A=(
 # given a spec (type/num cells/chemistry), calculate config data
 calculate_config() {
   [ -z "$1" -o -z "$2" -o -z "$3" ] && {
-    echo 'foobar in calculate_config, $* is '$*
+    echo 'fubar in calculate_config, $* is '$* >&2
     exit 5
   }
   SUPPLY_TYPE=$1
