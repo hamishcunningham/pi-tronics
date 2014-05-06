@@ -77,6 +77,13 @@ s_unused_4()               { [ $(( 16384 & $1 )) -eq 16384 ]; }  # bit 15
 s_unused_5()               { [ $(( 32768 & $1 )) -eq 32768 ]; }  # bit 16
 
 #############################################################################
+# convert between volts, centivolts and milivolts
+v2mv() { echo "scale=0;${1}*1000/1" |bc; }
+mv2v() { echo "scale=0;${1}/1000/1" |bc; }
+v2cv() { echo "scale=0;${1}*100/1"  |bc; }
+cv2v() { echo "scale=0;${1}/100/1"  |bc; }
+
+#############################################################################
 # supply configuration data...
 
 # the set of supply types (note escaping of elements with spaces)
@@ -132,13 +139,13 @@ PAD='                                               '
 # cutoffs) must match
 BAT_CHEMISTRY_A=(
 # n=chem===============default
-  1 '"N/A (non-battery)"' off
-  2 "\"NiMH ${PAD}\""      on
-  3 '"Alkaline"'          off
-  4 '"Lead Acid"'         off
-  5 '"Lithium Ion"'       off
-  6 '"LiPo"'              off
-  7 '"NiCd"'              off
+  1 "\"N/A (non-battery)${PAD}\"" off
+  2 '"NiMH"'                       on
+  3 '"Alkaline"'                  off
+  4 '"Lead Acid"'                 off
+  5 '"Lithium Ion"'               off
+  6 '"LiPo"'                      off
+  7 '"NiCd"'                      off
 )
 BAT_CUTOFF_A=(
 # n=====Vhigh===Vlow

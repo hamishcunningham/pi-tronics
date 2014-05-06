@@ -73,12 +73,18 @@ then
   echo skipping ${CLI} test as in debug mode
 else
   echo testing ${CLI}...
-  sudo ${CLI} -s || {
+  sudo ${CLI} -s >/dev/null || {
     echo "${P}: ${CLI} not working; installation problem?" >&2
     usage 3
   }
   echo ...done
 fi
+
+# does bc work?
+echo 1 |bc >/dev/null || {
+  echo "${P}: bc not working; installation problem?" >&2
+  usage 4
+}
 
 # figure out optimal size for whiptail
 calc_wt_size() {
@@ -114,7 +120,7 @@ do_status() {
   echo $STATUS
 }
 do_about() {
-  whiptail --msgbox "\
+  whiptail --title "About" --msgbox "\
     This is a configuration tool for MoPi
     (mobile and 24/7 power for the Raspberry Pi).
 
@@ -125,9 +131,9 @@ do_supply_config() {
   # process options
   SETTING=both
   case $1 in
-    -b) SETTING="both supplies" ;;
-    -1) SETTING="supply 1" ;;
-    -2) SETTING="supply 2" ;;
+    -b) SETTING="both supplies"; S_FLAG=wc; ;;
+    -1) SETTING="supply 1"; S_FLAG=wc1; ;;
+    -2) SETTING="supply 2"; S_FLAG=wc2; ;;
   esac
 
   # what type of supply?
@@ -143,7 +149,8 @@ do_supply_config() {
   [ $RET -eq 1 ] && return 0
   [ $RET -eq 0 ] && \
     [ $SUPPLY_TYPE -ge 1 -a $SUPPLY_TYPE -le `supply_type_max` ] || {
-       whiptail --msgbox "Error: unrecognized option ${SUPPLY_TYPE}" 20 60 1
+       whiptail --msgbox "Error: unrecognized option ${SUPPLY_TYPE}" \
+         --title "Oops!" --backtitle "${BACKTITLE}" 20 60 1
         return 1
     }
 
@@ -159,7 +166,8 @@ do_supply_config() {
   [ $RET -eq 1 ] && return 0
   [ $RET -eq 0 ] && \
     [ $NUM_CELLS -ge 1 -a $NUM_CELLS -le `num_cells_max` ] || {
-      whiptail --msgbox "Error: unrecognized option ${NUM_CELLS}" 20 60 1
+      whiptail --msgbox "Error: unrecognized option ${NUM_CELLS}" \
+         --title "Oops!" --backtitle "${BACKTITLE}" 20 60 1
       return 1
     }
 
@@ -175,7 +183,8 @@ do_supply_config() {
   [ $RET -eq 1 ] && return 0
   [ $RET -eq 0 ] && \
     [ $CHEMISTRY -ge 1 -a $CHEMISTRY -le `bat_chemistry_max` ] || {
-      whiptail --msgbox "Error: unrecognized option ${CHEMISTRY}" 20 60 1
+      whiptail --msgbox "Error: unrecognized option ${CHEMISTRY}" \
+        --title "Oops!" --backtitle "${BACKTITLE}" 20 60 1
       return 1
     }
 
@@ -241,12 +250,34 @@ Do you want to write this configuration to MoPi?
  Chemistry:
    $(bat_chemistry ${CHEMISTRY}))
   " 25 70 1 || {
-    whiptail --msgbox "Configuration cancelled" 20 70 1
+    whiptail --title "Cancelled" --backtitle "${BACKTITLE}" \
+      --msgbox "Configuration cancelled" 20 70 1
     return 0
   }
 
-  # TODO save locally and write to mopi
+  # TODO save locally
 
+  # write to mopi
+  while :
+  do
+    F=`v2mv $BAT_FULL`; G=`v2mv $BAT_GOOD`; L=`v2mv $BAT_FLOOR`
+    COM="sudo ${CLI} -${S_FLAG} $F $G $L"
+    if OUT=`${COM}`
+    then
+      whiptail --title "Configuration written successfully" \
+        --backtitle "${BACKTITLE}" \
+        --msgbox "MoPi has been configured :-)\n\n(${COM})" 20 70 1
+      break
+    else
+      whiptail --title "Retry?" --backtitle "${BACKTITLE}" \
+        --yesno "Problem writing config -- retry?\n\n(${COM}\n ${OUT})" \
+        25 70 1 || {
+          whiptail --title ":-(" --backtitle "${BACKTITLE}" \
+            --msgbox "Configuration failed" 20 70 1
+          break
+        }
+    fi
+  done
 }
 
 # main loop
@@ -274,8 +305,8 @@ while true; do
       3\ *) do_supply_config -2 ;;
       4\ *) do_diff ;;
       5\ *) do_diff -y ;;
-      6\ *) STATUS="`do_status`";
-            whiptail --msgbox "${STATUS}" 20 60 1 ;;
+      6\ *) \
+        whiptail --title "MoPi Status" --msgbox "`sudo ${CLI} -sv`" 20 60 1 ;;
       7\ *) do_about ;;
       *)    whiptail --msgbox "Error: unrecognized option" 20 60 1 ;;
     esac || whiptail --msgbox "There was an error running option $SEL" 20 60 1

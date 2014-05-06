@@ -90,6 +90,8 @@ while :
 do
   i=$(( ${i} + 1 )); j=$(( ${j} + 1 ))
 
+# TODO no delay? or very small
+# read local config and write to MoPi if it differs from existing
   # on first boot we delay work a little, in case the user wants to tell us 
   # not to shutdown on critical battery, for example
   [ -z "$PREVIOUSLY_RUN" -a ! -f "$PREVIOUSLY_RUN_INDICATOR" ] && {
