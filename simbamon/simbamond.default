@@ -21,7 +21,7 @@ WARNING_INTERVAL=60
 LOG_INTERVAL=1000
 
 # how long to wait before starting work after boot? (in seconds)
-BOOT_DELAY=10
+BOOT_DELAY=2
 
 # file used as indicator that we are running for the first time after boot
 PREVIOUSLY_RUN_INDICATOR=/tmp/${NAME}-previously-run.txt
@@ -77,13 +77,6 @@ s_unused_4()               { [ $(( 16384 & $1 )) -eq 16384 ]; }  # bit 15
 s_unused_5()               { [ $(( 32768 & $1 )) -eq 32768 ]; }  # bit 16
 
 #############################################################################
-# convert between volts, centivolts and milivolts
-v2mv() { echo "scale=0;${1}*1000/1" |bc; }
-mv2v() { echo "scale=0;${1}/1000/1" |bc; }
-v2cv() { echo "scale=0;${1}*100/1"  |bc; }
-cv2v() { echo "scale=0;${1}/100/1"  |bc; }
-
-#############################################################################
 # supply configuration data...
 
 # the set of supply types (note escaping of elements with spaces)
@@ -121,8 +114,10 @@ NUM_CELLS_A=(
   15 '"Fifteen cells"'                                  off
   16 '"Lots and lots (are you sure?!)"'                 off
 )
+#
 # get the description given the tag index
 num_cells() { echo ${NUM_CELLS_A[$(( 1 + (($1 - 1) * 3) ))]}; }
+#
 # get the max tag index (the min is 0)
 num_cells_max() { echo $(( ${#NUM_CELLS_A[*]} / 3 )); }
 
@@ -133,10 +128,13 @@ num_cells_max() { echo $(( ${#NUM_CELLS_A[*]} / 3 )); }
 # - NiCd has a quite steady discharge voltage even when approaching empty :-(
 # - http://batteryuniversity.com/learn/article/secondary_batteries
 #   http://www.rcgroups.com/forums/showthread.php?t=209187
+#
 CHEMISTRY=1  # the default
 PAD='                                               '
+#
 # NOTE: the entries in the two arrays (for the chemistries and for the
 # cutoffs) must match
+#
 BAT_CHEMISTRY_A=(
 # n=chem===============default
   1 "\"N/A (non-battery)${PAD}\"" off
@@ -157,12 +155,16 @@ BAT_CUTOFF_A=(
   6     4.2     3.0
   7     1.2     1.1
 )
+#
 # get the description given the tag index
 bat_chemistry() { echo ${BAT_CHEMISTRY_A[ $(( 1 + (($1 - 1) * 3) )) ]}; }
+#
 # get the max tag index (the min is 0)
 bat_chemistry_max() { echo $(( ${#BAT_CHEMISTRY_A[*]} / 3 )); }
+#
 # get the nominal voltage of a cell for a chemistry (Vhigh)
 bat_nominal_volts() { echo ${BAT_CUTOFF_A[ $(( 1 + (($1 - 1) * 3) )) ]}; }
+#
 # get the safe depth of discharge (dod) floor for a chemistry (Vlow)
 bat_dod_floor() { echo ${BAT_CUTOFF_A[ $(( 2 + (($1 - 1) * 3) )) ]}; }
 
@@ -181,3 +183,23 @@ calculate_config() {
   BAT_FULL=$(  echo "`bat_nominal_volts ${CHEMISTRY}`*${NUM_CELLS}" |bc )
   BAT_GOOD=$(  echo "((${BAT_FULL}-${BAT_FLOOR})/2)+${BAT_FLOOR}"   |bc )
 }
+
+#############################################################################
+# local config i/o
+#
+# save a configuration command to local store
+save_local_config() {
+  : 
+}
+#
+# get local configuration
+get_local_config() {
+  :
+}
+
+#############################################################################
+# convert between volts, centivolts and milivolts
+v2mv() { echo "scale=0;${1}*1000/1" |bc; }
+mv2v() { echo "scale=0;${1}/1000/1" |bc; }
+v2cv() { echo "scale=0;${1}*100/1"  |bc; }
+cv2v() { echo "scale=0;${1}/100/1"  |bc; }
