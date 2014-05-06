@@ -121,8 +121,6 @@ do_about() {
     See http://pi.gate.ac.uk/mopi for details.\
     " 20 70 1
 }
-
-# second-level menu
 do_supply_config() {
   # process options
   SETTING=both
@@ -191,10 +189,12 @@ do_supply_config() {
 
   # offer to edit config values (advanced)
   # TODO
-  whiptail --msgbox "
+  whiptail --yesno "
     The configuration for your supply has been calculated as:
 
       type: $SUPPLY_TYPE; floor: $BAT_FLOOR; good: $BAT_GOOD; full: $BAT_FULL
+
+    Do you want towrite this configuration to MoPi?
 
       (type: ${CONFIG_A[type]} floor: ${CONFIG_A[floor]}
        good: ${CONFIG_A[good]} full: ${CONFIG_A[full]})
@@ -202,7 +202,8 @@ do_supply_config() {
     (supply type: $(supply_type ${SUPPLY_TYPE}))
     (number of cells: $(num_cells ${NUM_CELLS}))
     (chemistry: $(bat_chemistry ${CHEMISTRY}))
-  " 20 70 1
+  " 20 70 1 || \
+    whiptail --msgbox "Configuration cancelled" 20 70 1
 
   # confirm config and offer to write to MoPi
   # TODO
