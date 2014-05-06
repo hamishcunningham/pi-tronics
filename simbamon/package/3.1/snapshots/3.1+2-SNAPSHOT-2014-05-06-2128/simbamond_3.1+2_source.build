@@ -5,7 +5,7 @@ dpkg-buildpackage: export CXXFLAGS from dpkg-buildflags (origin: vendor): -g -O2
 dpkg-buildpackage: export FFLAGS from dpkg-buildflags (origin: vendor): -g -O2
 dpkg-buildpackage: export LDFLAGS from dpkg-buildflags (origin: vendor): -Wl,-Bsymbolic-functions -Wl,-z,relro
 dpkg-buildpackage: source package simbamond
-dpkg-buildpackage: source version 3.0+10
+dpkg-buildpackage: source version 3.1+2
 dpkg-buildpackage: source changed by Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
  dpkg-source -Ipackage --before-build simbamon
  fakeroot debian/rules clean
@@ -28,17 +28,17 @@ dh clean
 	rm -f *-stamp
  dpkg-source -Ipackage -b simbamon
 dpkg-source: info: using source format `3.0 (native)'
-dpkg-source: info: building simbamond in simbamond_3.0+10.tar.gz
-dpkg-source: info: building simbamond in simbamond_3.0+10.dsc
- dpkg-genchanges -S >../simbamond_3.0+10_source.changes
+dpkg-source: info: building simbamond in simbamond_3.1+2.tar.gz
+dpkg-source: info: building simbamond in simbamond_3.1+2.dsc
+ dpkg-genchanges -S >../simbamond_3.1+2_source.changes
 dpkg-genchanges: including full source code in upload
  dpkg-source -Ipackage --after-build simbamon
 dpkg-buildpackage: source only upload: Debian-native package
 Now running lintian...
 Finished running lintian.
 Now signing changes and any dsc files...
- signfile simbamond_3.0+10.dsc Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+ signfile simbamond_3.1+2.dsc Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
 
- signfile simbamond_3.0+10_source.changes Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+ signfile simbamond_3.1+2_source.changes Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
 
 Successfully signed dsc and changes files

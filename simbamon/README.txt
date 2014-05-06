@@ -92,6 +92,9 @@ To release:
   the move to the next series of snapshots
 - to do a snapshot PPA release, "make snapshot" and "make snapshot-upload"
 
+Note: if you hit the 10th snapshot the ordering doesn't work any more -- as a
+workaround, increment the minor version number and start over at snapshot 0.
+
 Versions which are uploaded to the PPAs should be checked in (from the
 "package" directory).
 

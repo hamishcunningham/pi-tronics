@@ -3,8 +3,8 @@
 # and is licenced under GPL 3 or any later version.
 
 # vars #######################################################################
-VERSION=3.0
-LAST_SNAP=9
+VERSION=3.1
+LAST_SNAP=2
 P=simbamond
 D=simbamon
 MOPI=mopi
