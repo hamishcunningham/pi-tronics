@@ -95,18 +95,18 @@ try:
 				data = mymopi.getFirmwareVersion()
 				print '%i.%02i' % (data[0], data[1])
 
+			if '-sn' == arg:
+				print mymopi.getSerialNumber()
+
 
 			if '-s' == arg:
-				status = mymopi.getStatus()
-				print status
+				status = mopiapi.status(mymopi.getStatus())
+				print status.getByte()
 
 			if '-sv' == arg:
 				if status == 0:
-					status = mymopi.getStatus()
-				print mopiapi.statusDetail(status)
-
-			if '-sn' == arg:
-				print mymopi.getSerialNumber()
+					status = mopiapi.status(mymopi.getStatus())
+				print status.StatusDetail()
 
 			if '-v' == arg:
 				print mymopi.getVoltage()

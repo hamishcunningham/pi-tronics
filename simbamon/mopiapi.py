@@ -89,34 +89,79 @@ class mopiapi():
 def getApiVersion():
 	return VERSION
 
-def statusDetail(byte):
-	out = ""
-	if (byte & 0b100000000000) >> 10:
-		out += 'Shutdown delay in progress\n'
-	if (byte & 0b10000000000) >> 10:
-		out += 'Shutdown delay set\n'
-	if (byte & 0b1000000000) >> 9:
-		out += 'Power on delay in progress\n'
-	if (byte & 0b100000000) >> 8:
-		out += 'Power on delay set\n'
-	if (byte & 0b10000000) >> 7:
-		out += 'Forced shutdown\n'
-#	if (byte & 0b1000000) >> 6:
-#		out += 'Unused!\n'
-	if (byte & 0b100000) >> 5:
-		out += 'Battery critical (flashing red led)\n'
-	if (byte & 0b10000) >> 4:
-		out += 'Battery low (red led)\n'
-	if (byte & 0b1000) >> 3:
-		out += 'Battery good (green led)\n'
-	if (byte & 0b100) >> 2:
-		out += 'Battery full (blue led)\n'
-	if (byte & 0b10) >> 1:
-		out += 'Battery #2 active\n'
-	if byte & 1:
-		out += 'Battery #1 active\n'
-	if out == "":
-		out = "An error has occured"
-	else:
-		out = out[:-1]
-	return out
+
+class status():
+	byte = 0
+
+	def __init__(self, status):
+		self.byte = status
+
+	def getByte(self):
+		return self.byte
+
+	# get the bit, starting from 0 LSB
+	def getBit(self, bitnum):
+		return (self.byte & (1 << bitnum)) >> bitnum
+	
+	
+	def SourceOneActive(self):
+		return self.getBit(0)
+	def SourceTwoActive(self):
+		return self.getBit(1)
+
+	def LEDBlue(self):
+		return self.getBit(2)
+	def LEDGreen(self):
+		return self.getBit(3)
+	def LEDRed(self):
+		return self.getBit(4)
+	def LEDFlashing(self):
+		return self.getBit(5)
+	
+	def ForcedShutdown(self):
+		return self.getBit(7)
+
+	def PowerOnDelaySet(self):
+		return self.getBit(8)
+	def PowerOnDelayActive(self):
+		return self.getBit(9)
+	def ShutdownDelaySet(self):
+		return self.getBit(10)
+	def ShutdownDelayActive(self):
+		return self.getBit(11)
+
+
+	def StatusDetail(self):
+		out = ""
+
+		if self.SourceOneActive():
+			out += 'Battery #1 active\n'
+		if self.SourceTwoActive():
+			out += 'Battery #2 active\n'
+
+		if self.LEDBlue():
+			out += 'Battery full (blue led)\n'
+		if self.LEDGreen():
+			out += 'Battery good (green led)\n'
+		if self.LEDRed():
+			out += 'Battery low (red led)\n'
+		if self.LEDFlashing():
+			out += 'Battery critical (flashing red led)\n'
+
+		if self.ForcedShutdown():
+			out += 'Forced shutdown\n'
+
+		if self.PowerOnDelaySet():
+			out += 'Power on delay set\n'
+		if self.PowerOnDelayActive():
+			out += 'Power on delay in progress\n'
+		if self.ShutdownDelaySet():
+			out += 'Shutdown delay set\n'
+		if self.ShutdownDelayActive():
+			out += 'Shutdown delay in progress\n'
+
+		if out == "":
+			out = "An error has occured"
+		else:
+			out = out[:-1]
+		return out
