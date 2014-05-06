@@ -130,7 +130,7 @@ num_cells_max() { echo $(( ${#NUM_CELLS_A[*]} / 3 )); }
 #   http://www.rcgroups.com/forums/showthread.php?t=209187
 #
 CHEMISTRY=1  # the default
-PAD='                                               '
+PAD='                                    '
 #
 # NOTE: the entries in the two arrays (for the chemistries and for the
 # cutoffs) must match
@@ -199,7 +199,7 @@ save_local_config() {
   then
     sed -i "s,^${LINE_START}.*,${LINE_START} $FLAGS," $ME
   else
-    sed -i "/^# local config - DON'T/a ${LINE_START} $FLAGS" $ME
+    sed -i "/^# end of local config - DON'T/i ${LINE_START} $FLAGS" $ME
   fi
 }
 #
@@ -207,6 +207,15 @@ save_local_config() {
 get_local_config() {
   sed -n "/^# local config - DON'T/,/^# end of local config - DON'T/p" $ME \
     | sed -n '2,$p' |sed '$d'
+}
+#
+# delete local configuration
+delete_local_config() {
+  TMPF=`mktemp`
+  sed -n -e '/^# end of local config - DON/,$p' $ME >$TMPF
+  sed -i -n "1,/^# local config - DON'T/p" $ME
+  cat $TMPF >>$ME
+  rm $TMPF
 }
 
 #############################################################################
