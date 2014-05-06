@@ -101,18 +101,24 @@ do
     logger "${NAME}: ...boot delay done"
 
     # ...push local config up to the board
+    OIFS="$IFS"
+    IFS='
+'
     for l in `get_local_config`
     do
-      COM="${CLI} `sed 's,^# -w.*: ,,'`"
-      check_local_config "$COM" || {
+      IFS="${OIFS}"
+      COM="${CLI} `echo \"${l}\" |sed 's/# wc[12]*: //'`"
+      if check_local_config "$COM"
+      then
+        logger "${NAME}: writing local config ${COM}"
+        OUT=`$COM` || { logger "${NAME}: error writing config: ${OUT}"; }
+      else
         logger "${NAME}: ignoring badly constructed local config ($COM)"
-        continue
-      }
-      logger "${NAME}: writing local config ${COM}"
-      OUT="`$COM`" || {
-        logger "${NAME}: error writing config (got ${OUT})"
-      }
+      fi
+      IFS='
+'
     done
+    IFS="${OIFS}"
   }
 
   # get MoPi status
