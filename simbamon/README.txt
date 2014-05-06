@@ -2,38 +2,37 @@ SimBaMon: a Simple Battery Monitor daemon
 
 -----------------------------------------------------------------------------
 This tree contains the code for a simple battery monitor daemon for projects
-like Mobile Pi (MoPi) -- http://pi.gate.ac.uk/pages/mopi.html
+like Mobile Pi (MoPi) -- http://pi.gate.ac.uk/mopi
 
 The target operating system is the Raspian distribution of Debian, for the
-Raspberry Pi. (It can also work in simulation mode on Ubuntu and is intended
-to be compatible with other *nixes.)
+Raspberry Pi. (It can also work in debug mode on Ubuntu and is intended to be
+compatible with other *nixes.)
 
 The code is copyright Hamish Cunningham and the University of Sheffield and is
 licenced under GPL 3 or any later version.
 
+-----------------------------------------------------------------------------
 The daemon is implemented in three chunks:
 
-- /etc/default/simbamond -- a set of config variables (see
+- /etc/default/simbamond -- a set of config variables and support code (see
   ./simbamond.default)
 - /usr/sbin/simbamon     -- the daemon itself (./simbamon)
 - /etc/init.d/simbamond  -- an init interface used by the operating system to
   start/stop/etc. the daemon (./simbamond.init)
 
-TODO
-- mopi
-- mopicli
-- mopiapi.py
-
 There are also:
 
+- a configuration script in /usr/sbin/mopi (with manpage) (see ./mopi)
+- a command-line interface to the board (./mopicli), used by mopi
+- a Python API for the board (./mopiapi.py), used by mopicli
 - links to the init interface from /etc/rc?.d which are managed by update-rc.d
 - (when running) a process ID file in /var/run/simbamon.pid
-- a source file for the man page (man/simbamond.txt) and the man pages
-  themselves (man/simbamon[d].8 and their compressed versions)
-- a configuration script in /usr/sbin/mopi (with manpage)
+- (when running) a "first run after boot" indicator file in /tmp
+- source files for the man pages (man/\*.txt) and the man pages themselves
+  (man/\*.8 and their compressed versions)
 
 -----------------------------------------------------------------------------
-To install:
+To install (see also http://pi.gate.ac.uk/pages/download.html):
 
 - on Raspbian:
   - sudo apt-get install simbamond
@@ -55,25 +54,26 @@ To install:
     - (use ppa:hamish-dcs/pi-gate-snapshots for development builds)
   - sudo apt-get update
   - sudo apt-get install simbamond
-  - this will generate a failure message relating to I2C -- use the -d option
+  - this will generate a failure messages relating to I2C -- use the -d option
     to suppress
 
 -----------------------------------------------------------------------------
 To test and debug:
 
 First restart the service with the -d (debug) flag; then the utils directory
-contains monitor-log.sh: greps the most recent simbamon entries from syslog.
-If you want to do simulation, trawl previous commits for
+contains monitor-log.sh which greps the most recent simbamon entries from
+syslog. If you want to do simulation, trawl previous commits for
 set-simulation-level.sh which continually reads a simulation status from the
 terminal and writes it into the /tmp file where the debug rig will read it.
 
 (The utils directory also contains a great script called txt2man from
-http://mvertes.free.fr/ that we use to maintain the manpage.)
+http://mvertes.free.fr/ that we use to maintain the manpage, and an example
+script to read battery level.)
 
 -----------------------------------------------------------------------------
 To configure:
 
-mopi
+sudo mopi
 
 -----------------------------------------------------------------------------
 To release:
