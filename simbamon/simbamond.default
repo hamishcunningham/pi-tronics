@@ -36,7 +36,10 @@ then
   SHUTDOWN='echo "shutdown -h now"; sleep 10'
 fi
 
-# lowest safe operating voltage for MoPi
+# highest safe operating voltage
+OPERATING_CEILING=25.0
+
+# lowest safe operating voltage
 OPERATING_FLOOR=6.2
 
 #############################################################################
@@ -91,10 +94,10 @@ supply_type_max() { echo $(( ${#SUPPLY_TYPE_A[*]} / 3 )); }
 
 # the number of (in series) cells in a battery supply
 NUM_CELLS=8  # the default
-PAD="                         "  # for whiptail formatting
+PAD="                       "  # for whiptail formatting
 NUM_CELLS_A=(
 #  n=desciption=========================================default
-   1 "\"One cell (are you sure?!) ${PAD}\""             off
+   1 "\"One cell (or one non-battery)${PAD}\""          off
    2 '"Two cells (e.g. double 3.6V LiPo)"'              off
    3 '"Three cells"'                                    off
    4 '"Four cells"'                                     off
@@ -129,23 +132,23 @@ PAD='                                               '
 # cutoffs) must match
 BAT_CHEMISTRY_A=(
 # n=chem===============default
-  1 "\"NiMH ${PAD}\""   on
-  2 '"Alkaline"'       off
-  3 '"Lead Acid"'      off
-  4 '"Lithium Ion"'    off
-  5 '"LiPo"'           off
-  6 '"NiCd"'           off
-  7 '"Other"'          off
+  1 '"N/A (non-battery)"' off
+  2 "\"NiMH ${PAD}\""      on
+  3 '"Alkaline"'          off
+  4 '"Lead Acid"'         off
+  5 '"Lithium Ion"'       off
+  6 '"LiPo"'              off
+  7 '"NiCd"'              off
 )
 BAT_CUTOFF_A=(
 # n=====Vhigh===Vlow
-  1     1.2     0.95
-  2     1.5     0
-  3     2.0     1.58
-  4     3.7     3.0
-  5     4.2     3.0
-  6     1.2     1.1
-  7     1.5     1.0
+  1     9.0     $OPERATING_FLOOR
+  2     1.2     0.95
+  3     1.5     0
+  4     2.0     1.58
+  5     3.7     3.0
+  6     4.2     3.0
+  7     1.2     1.1
 )
 # get the description given the tag index
 bat_chemistry() { echo ${BAT_CHEMISTRY_A[ $(( 1 + (($1 - 1) * 3) )) ]}; }
@@ -167,18 +170,9 @@ calculate_config() {
   NUM_CELLS=$2
   CHEMISTRY=$3
 
-  if [ $CHEMISTRY -eq 0 -a $NUM_CELLS -eq 0 ]   # non-battery
-  then
-    BAT_FLOOR=$OPERATING_FLOOR
-    BAT_GOOD=7.0  # arbitrary
-    BAT_FULL=9.0  # arbitrary
-    NUM_CELLS=1
-    CHEMISTRY=0
-  else                                          # batteries
-    BAT_FLOOR=$( echo "`bat_dod_floor ${CHEMISTRY}`*${NUM_CELLS}"     |bc )
-    BAT_FULL=$(  echo "`bat_nominal_volts ${CHEMISTRY}`*${NUM_CELLS}" |bc )
-    BAT_GOOD=$(  echo "((${BAT_FULL}-${BAT_FLOOR})/2)+${BAT_FLOOR}"   |bc )
-  fi
+  BAT_FLOOR=$( echo "`bat_dod_floor ${CHEMISTRY}`*${NUM_CELLS}"     |bc )
+  BAT_FULL=$(  echo "`bat_nominal_volts ${CHEMISTRY}`*${NUM_CELLS}" |bc )
+  BAT_GOOD=$(  echo "((${BAT_FULL}-${BAT_FLOOR})/2)+${BAT_FLOOR}"   |bc )
 
   # a floor of 0 indicates non-rechargeable batteries
   [ `echo "$BAT_FLOOR==0" |bc` -eq 1 ] && BAT_FLOOR=$OPERATING_FLOOR

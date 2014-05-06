@@ -147,52 +147,51 @@ do_supply_config() {
         return 1
     }
 
-  # if we're on batteries...
-  if [ $SUPPLY_TYPE = 1 -o $SUPPLY_TYPE = 2 ]
-  then
-    # get number of cells
-    TITLE='Specify Number of Cells'
-    C="whiptail --title \"${TITLE}\" --backtitle \"${BACKTITLE}\" \
-         --radiolist \"Specify number of cells (for ${SETTING}):\" \
-         $WT_HEIGHT $(( $WT_WIDTH / 2 + 9 )) $WT_MENU_HEIGHT \
-         --cancel-button \"Cancel\" --ok-button \"Next\" \
-         "${NUM_CELLS_A[@]}" "
-    NUM_CELLS=`bash -c "${C} 3>&1 1>&2 2>&3"`
-    RET=$?
-    [ $RET -eq 1 ] && return 0
-    [ $RET -eq 0 ] && \
-      [ $NUM_CELLS -ge 1 -a $NUM_CELLS -le `num_cells_max` ] || {
-        whiptail --msgbox "Error: unrecognized option ${NUM_CELLS}" 20 60 1
-        return 1
-      }
+  # get number of cells
+  TITLE='Specify Number of Cells'
+  C="whiptail --title \"${TITLE}\" --backtitle \"${BACKTITLE}\" \
+       --radiolist \"Specify number of cells (for ${SETTING}):\" \
+       $WT_HEIGHT $(( $WT_WIDTH / 2 + 9 )) $WT_MENU_HEIGHT \
+       --cancel-button \"Cancel\" --ok-button \"Next\" \
+       "${NUM_CELLS_A[@]}" "
+  NUM_CELLS=`bash -c "${C} 3>&1 1>&2 2>&3"`
+  RET=$?
+  [ $RET -eq 1 ] && return 0
+  [ $RET -eq 0 ] && \
+    [ $NUM_CELLS -ge 1 -a $NUM_CELLS -le `num_cells_max` ] || {
+      whiptail --msgbox "Error: unrecognized option ${NUM_CELLS}" 20 60 1
+      return 1
+    }
 
-    # get chemistry
-    TITLE='Specify Battery Chemistry'
-    C="whiptail --title \"${TITLE}\" --backtitle \"${BACKTITLE}\" \
-         --radiolist \"Specify battery chemistry (for ${SETTING}):\" \
-         $WT_HEIGHT $(( $WT_WIDTH / 2 + 9 )) $WT_MENU_HEIGHT \
-         --cancel-button \"Cancel\" --ok-button \"Next\" \
-         "${BAT_CHEMISTRY_A[@]}" "
-    CHEMISTRY=`bash -c "${C} 3>&1 1>&2 2>&3"`
-    RET=$?
-    [ $RET -eq 1 ] && return 0
-    [ $RET -eq 0 ] && \
-      [ $CHEMISTRY -ge 1 -a $CHEMISTRY -le `bat_chemistry_max` ] || {
-        whiptail --msgbox "Error: unrecognized option ${CHEMISTRY}" 20 60 1
-        return 1
-      }
-  elif [ $SUPPLY_TYPE = 3 ]  # non-battery supplies
-  then
-    NUM_CELLS=0
-    CHEMISTRY=0
-  fi
+  # get chemistry
+  TITLE='Specify Battery Chemistry'
+  C="whiptail --title \"${TITLE}\" --backtitle \"${BACKTITLE}\" \
+       --radiolist \"Specify battery chemistry (for ${SETTING}):\" \
+       $WT_HEIGHT $(( $WT_WIDTH / 2 + 9 )) $WT_MENU_HEIGHT \
+       --cancel-button \"Cancel\" --ok-button \"Next\" \
+       "${BAT_CHEMISTRY_A[@]}" "
+  CHEMISTRY=`bash -c "${C} 3>&1 1>&2 2>&3"`
+  RET=$?
+  [ $RET -eq 1 ] && return 0
+  [ $RET -eq 0 ] && \
+    [ $CHEMISTRY -ge 1 -a $CHEMISTRY -le `bat_chemistry_max` ] || {
+      whiptail --msgbox "Error: unrecognized option ${CHEMISTRY}" 20 60 1
+      return 1
+    }
 
   # hokus pokus abracadabra, etc.
   calculate_config $SUPPLY_TYPE $NUM_CELLS $CHEMISTRY
 
   # validate config
   TITLE="Oops!"
-  if [ `echo "$BAT_FLOOR>$BAT_GOOD" |bc` -eq 1 ]
+  if [ `echo "$BAT_FULL>$OPERATING_CEILING" |bc` -eq 1 ]
+  then
+    whiptail --title "${TITLE}" --backtitle "${BACKTITLE}" \
+      --msgbox "Configuration error!
+The full level (${BAT_FULL}V) is greater than the safe
+operating ceiling (${OPERATING_CEILING}V). Please try again!" 20 70 1
+    return 0
+  elif [ `echo "$BAT_FLOOR>$BAT_GOOD" |bc` -eq 1 ]
   then
     whiptail --title "${TITLE}" --backtitle "${BACKTITLE}" \
       --msgbox "Configuration error!
