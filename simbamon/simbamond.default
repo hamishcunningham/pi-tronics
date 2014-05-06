@@ -37,7 +37,7 @@ then
 fi
 
 # lowest safe operating voltage for MoPi
-MOPI_OPERATING_FLOOR=6.2
+OPERATING_FLOOR=6.2
 
 #############################################################################
 # functions to decode the MoPi status word (16 bits)...
@@ -157,6 +157,7 @@ bat_nominal_volts() { echo ${BAT_CUTOFF_A[ $(( 1 + (($1 - 1) * 3) )) ]}; }
 bat_dod_floor() { echo ${BAT_CUTOFF_A[ $(( 2 + (($1 - 1) * 3) )) ]}; }
 
 # given a spec (type/num cells/chemistry), calculate config data
+# (for non-battery supplies NUM_CELLS and CHEMISTRY will be 0)
 calculate_config() {
   [ -z "$1" -o -z "$2" -o -z "$3" ] && {
     echo 'fubar in calculate_config, $* is '$* >&2
@@ -166,10 +167,19 @@ calculate_config() {
   NUM_CELLS=$2
   CHEMISTRY=$3
 
-  BAT_FLOOR=$( echo "`bat_dod_floor ${CHEMISTRY}`*${NUM_CELLS}"     |bc )
-  BAT_FULL=$(  echo "`bat_nominal_volts ${CHEMISTRY}`*${NUM_CELLS}" |bc )
-  BAT_GOOD=$(  echo "((${BAT_FULL}-${BAT_FLOOR})/2)+${BAT_FLOOR}"   |bc )
+  if [ $CHEMISTRY -eq 0 -a $NUM_CELLS -eq 0 ]   # non-battery
+  then
+    BAT_FLOOR=$OPERATING_FLOOR
+    BAT_GOOD=7.0  # arbitrary
+    BAT_FULL=9.0  # arbitrary
+    NUM_CELLS=1
+    CHEMISTRY=0
+  else                                          # batteries
+    BAT_FLOOR=$( echo "`bat_dod_floor ${CHEMISTRY}`*${NUM_CELLS}"     |bc )
+    BAT_FULL=$(  echo "`bat_nominal_volts ${CHEMISTRY}`*${NUM_CELLS}" |bc )
+    BAT_GOOD=$(  echo "((${BAT_FULL}-${BAT_FLOOR})/2)+${BAT_FLOOR}"   |bc )
+  fi
 
-  # a floor of 0 indicates non-rechargeables
-  [ `echo "$BAT_FLOOR==0" |bc` -eq 1 ] && BAT_FLOOR=$MOPI_OPERATING_FLOOR
+  # a floor of 0 indicates non-rechargeable batteries
+  [ `echo "$BAT_FLOOR==0" |bc` -eq 1 ] && BAT_FLOOR=$OPERATING_FLOOR
 }

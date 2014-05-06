@@ -181,6 +181,10 @@ do_supply_config() {
         whiptail --msgbox "Error: unrecognized option ${CHEMISTRY}" 20 60 1
         return 1
       }
+  elif [ $SUPPLY_TYPE = 3 ]  # non-battery supplies
+  then
+    NUM_CELLS=0
+    CHEMISTRY=0
   fi
 
   # hokus pokus abracadabra, etc.
@@ -202,12 +206,12 @@ the good charge level (${BAT_GOOD}V). Please try again!" 20 70 1
 The good charge level (${BAT_GOOD}V) is greater than
 the full level (${BAT_FULL}V). Please try again!" 20 70 1
     return 0
-  elif [ `echo "$BAT_FLOOR<$MOPI_OPERATING_FLOOR" |bc` -eq 1 ]
+  elif [ `echo "$BAT_FLOOR<$OPERATING_FLOOR" |bc` -eq 1 ]
   then
     whiptail --title "${TITLE}" --backtitle "${BACKTITLE}" \
       --msgbox "Configuration error!
 The discharge floor (${BAT_FLOOR}V) is less than
-the minimum operating level (${MOPI_OPERATING_FLOOR}V).
+the minimum operating level (${OPERATING_FLOOR}V).
 Please try again!" 20 70 1
     return 0
   fi
@@ -215,18 +219,21 @@ Please try again!" 20 70 1
   # confirm config and offer to write to MoPi
   TITLE="Finalising configuration..."
   whiptail --title "${TITLE}" --backtitle "${BACKTITLE}" --yesno "
-    The configuration for your supply has been calculated as:
+The configuration for your supply has been calculated as:
 
-      minimum safe discharge level: $BAT_FLOOR
-      good charge level:            $BAT_GOOD
-      full charge level:            $BAT_FULL
+  minimum safe discharge level: $BAT_FLOOR
+  good charge level:            $BAT_GOOD
+  full charge level:            $BAT_FULL
 
-    Do you want to write this configuration to MoPi?
+Do you want to write this configuration to MoPi?
 
-    (supply type: $(supply_type ${SUPPLY_TYPE}))
-    (number of cells: $(num_cells ${NUM_CELLS}))
-    (chemistry: $(bat_chemistry ${CHEMISTRY}))
-  " 20 70 1 || {
+(Supply type:
+   $(supply_type ${SUPPLY_TYPE})
+ Number of cells:
+   $(num_cells ${NUM_CELLS})
+ Chemistry:
+   $(bat_chemistry ${CHEMISTRY}))
+  " 25 70 1 || {
     whiptail --msgbox "Configuration cancelled" 20 70 1
     return 0
   }
