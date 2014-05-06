@@ -104,10 +104,13 @@ do
     for l in `get_local_config`
     do
       COM="${CLI} `sed 's,^# -w.*: ,,'`"
-# TODO validate the pattern a bit
-      logger "${NAME} writing local config ${COM}"
+      check_local_config "$COM" || {
+        logger "${NAME}: ignoring badly constructed local config ($COM)"
+        continue
+      }
+      logger "${NAME}: writing local config ${COM}"
       OUT="`$COM`" || {
-        logger "${NAME} error writing config (got ${OUT})"
+        logger "${NAME}: error writing config (got ${OUT})"
       }
     done
   }
