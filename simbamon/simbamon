@@ -101,6 +101,15 @@ do
     logger "${NAME}: ...boot delay done"
 
     # TODO write_local_config
+    for l in `get_local_config`
+    do
+# TODO check state on MoPi and don't overwrite identical settings
+      COM="${CLI} `sed 's,^# -w.*: ,,'`"
+      logger "${NAME} writing local config ${COM}"
+      OUT="`$COM`" || {
+        logger "${NAME} error writing config (got ${OUT})"
+      }
+    done
   }
 
   # get MoPi status

@@ -205,7 +205,8 @@ save_local_config() {
 #
 # get local configuration
 get_local_config() {
-  sed -n "/^# local config - DON'T/,/^# end of local config - DON'T/p" $ME
+  sed -n "/^# local config - DON'T/,/^# end of local config - DON'T/p" $ME \
+    | sed -n '2,$p' |sed '$d'
 }
 
 #############################################################################
