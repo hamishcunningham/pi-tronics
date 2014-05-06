@@ -183,30 +183,54 @@ do_supply_config() {
       }
   fi
 
-  # hokus pokus agracadabra, etc.
+  # hokus pokus abracadabra, etc.
   calculate_config $SUPPLY_TYPE $NUM_CELLS $CHEMISTRY
-# TODO sanity check -- e.g. if floor is below MOPI_OPERATING_FLOOR
 
-  # offer to edit config values (advanced)
-  # TODO
-  whiptail --yesno "
+  # validate config
+  TITLE="Oops!"
+  if [ `echo "$BAT_FLOOR>$BAT_GOOD" |bc` -eq 1 ]
+  then
+    whiptail --title "${TITLE}" --backtitle "${BACKTITLE}" \
+      --msgbox "Configuration error!
+The discharge floor (${BAT_FLOOR}V) is greater than
+the good charge level (${BAT_GOOD}V). Please try again!" 20 70 1
+    return 0
+  elif [ `echo "$BAT_GOOD>$BAT_FULL" |bc` -eq 1 ]
+  then
+    whiptail --title "${TITLE}" --backtitle "${BACKTITLE}" \
+      --msgbox "Configuration error!
+The good charge level (${BAT_GOOD}V) is greater than
+the full level (${BAT_FULL}V). Please try again!" 20 70 1
+    return 0
+  elif [ `echo "$BAT_FLOOR<$MOPI_OPERATING_FLOOR" |bc` -eq 1 ]
+  then
+    whiptail --title "${TITLE}" --backtitle "${BACKTITLE}" \
+      --msgbox "Configuration error!
+The discharge floor (${BAT_FLOOR}V) is less than
+the minimum operating level (${MOPI_OPERATING_FLOOR}V).
+Please try again!" 20 70 1
+    return 0
+  fi
+
+  # confirm config and offer to write to MoPi
+  TITLE="Finalising configuration..."
+  whiptail --title "${TITLE}" --backtitle "${BACKTITLE}" --yesno "
     The configuration for your supply has been calculated as:
 
-      type: $SUPPLY_TYPE; floor: $BAT_FLOOR; good: $BAT_GOOD; full: $BAT_FULL
+      minimum safe discharge level: $BAT_FLOOR
+      good charge level:            $BAT_GOOD
+      full charge level:            $BAT_FULL
 
-    Do you want towrite this configuration to MoPi?
-
-      (type: ${CONFIG_A[type]} floor: ${CONFIG_A[floor]}
-       good: ${CONFIG_A[good]} full: ${CONFIG_A[full]})
+    Do you want to write this configuration to MoPi?
 
     (supply type: $(supply_type ${SUPPLY_TYPE}))
     (number of cells: $(num_cells ${NUM_CELLS}))
     (chemistry: $(bat_chemistry ${CHEMISTRY}))
-  " 20 70 1 || \
+  " 20 70 1 || {
     whiptail --msgbox "Configuration cancelled" 20 70 1
-
-  # confirm config and offer to write to MoPi
-  # TODO
+    return 0
+  }
+  # TODO write to mopi
 
 }
 
