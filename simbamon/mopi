@@ -198,6 +198,14 @@ operating ceiling (${OPERATING_CEILING}V). Please try again!" 20 70 1
 The discharge floor (${BAT_FLOOR}V) is greater than
 the good charge level (${BAT_GOOD}V). Please try again!" 20 70 1
     return 0
+  elif [ `echo "$BAT_GOOD<$OPERATING_FLOOR" |bc` -eq 1 ]
+  then
+    whiptail --title "${TITLE}" --backtitle "${BACKTITLE}" \
+      --msgbox "Configuration error!
+The good charge level (${BAT_GOOD}V) is less 
+than the minimum operating level (${OPERATING_FLOOR}V).
+Please try again!" 20 70 1
+    return 0
   elif [ `echo "$BAT_GOOD>$BAT_FULL" |bc` -eq 1 ]
   then
     whiptail --title "${TITLE}" --backtitle "${BACKTITLE}" \
@@ -207,12 +215,12 @@ the full level (${BAT_FULL}V). Please try again!" 20 70 1
     return 0
   elif [ `echo "$BAT_FLOOR<$OPERATING_FLOOR" |bc` -eq 1 ]
   then
+    TITLE="Warning!"
     whiptail --title "${TITLE}" --backtitle "${BACKTITLE}" \
-      --msgbox "Configuration error!
-The discharge floor (${BAT_FLOOR}V) is less than
-the minimum operating level (${OPERATING_FLOOR}V).
-Please try again!" 20 70 1
-    return 0
+      --msgbox "Note:
+The minimum safe discharge level (${BAT_FLOOR}V) is less 
+than the minimum operating level (${OPERATING_FLOOR}V).
+Discharge will stop at ${OPERATING_FLOOR}V." 20 70 1
   fi
 
   # confirm config and offer to write to MoPi
@@ -220,9 +228,9 @@ Please try again!" 20 70 1
   whiptail --title "${TITLE}" --backtitle "${BACKTITLE}" --yesno "
 The configuration for your supply has been calculated as:
 
-  minimum safe discharge level: $BAT_FLOOR
-  good charge level:            $BAT_GOOD
-  full charge level:            $BAT_FULL
+  minimum safe discharge level: ${BAT_FLOOR}V
+  good charge level:            ${BAT_GOOD}V
+  full charge level:            ${BAT_FULL}V
 
 Do you want to write this configuration to MoPi?
 
