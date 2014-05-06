@@ -45,24 +45,19 @@ do
   case $OPTION in
     h)	usage 0 ;;
     v)	echo $P is at version $VERSION; exit 0 ;;
-    d)	DBG=echo ;;
+    d)	DBG=echo; CLI=echo; ;;
     *)	usage 1 ;;
   esac
 done 
 shift `expr $OPTIND - 1`
 
 # does mopicli work?
-if [ $DBG = echo ]
-then
-  echo skipping ${CLI} test as in debug mode
-else
-  echo testing ${CLI}...
-  sudo ${CLI} -s >/dev/null || {
-    echo "${P}: ${CLI} not working; installation problem?" >&2
-    usage 3
-  }
-  echo ...done
-fi
+echo testing ${CLI}...
+sudo ${CLI} -s >/dev/null || {
+  echo "${P}: ${CLI} not working; installation problem?" >&2
+  usage 3
+}
+echo ...done
 
 # does bc work?
 echo 1 |bc >/dev/null || {
@@ -252,7 +247,7 @@ Do you want to write this configuration to MoPi?
       whiptail --title "Configuration written successfully" \
         --backtitle "${BACKTITLE}" \
         --msgbox "MoPi has been configured :-)\n\n(${COM})" 20 70 1
-      save_local_config "${S_FLAG}: $FLAGS"
+      save_local_config ${S_FLAG} "$FLAGS"
       break
     else
       whiptail --title "Retry?" --backtitle "${BACKTITLE}" \

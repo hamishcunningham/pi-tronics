@@ -187,14 +187,25 @@ calculate_config() {
 #############################################################################
 # local config i/o
 #
+ME=${BASH_SOURCE[0]}
+#
 # save a configuration command to local store
 save_local_config() {
-  : 
+  S_FLAG=$1
+  FLAGS=$2
+  LINE_START="# ${S_FLAG}:"
+
+  if grep -q "^$LINE_START" $ME
+  then
+    sed -i "s,^${LINE_START}.*,${LINE_START} $FLAGS," $ME
+  else
+    sed -i "/^# local config - DON'T/a ${LINE_START} $FLAGS" $ME
+  fi
 }
 #
 # get local configuration
 get_local_config() {
-  :
+  sed -n "/^# local config - DON'T/,/^# end of local config - DON'T/p" $ME
 }
 
 #############################################################################
@@ -203,3 +214,7 @@ v2mv() { echo "scale=0;${1}*1000/1" |bc; }
 mv2v() { echo "scale=0;${1}/1000/1" |bc; }
 v2cv() { echo "scale=0;${1}*100/1"  |bc; }
 cv2v() { echo "scale=0;${1}/100/1"  |bc; }
+
+#############################################################################
+# local config - DON'T EDIT THIS LINE!
+# end of local config - DON'T EDIT THIS LINE EITHER!
