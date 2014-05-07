@@ -1,5 +1,6 @@
 import smbus
 import errno
+import re
 
 # This is the development version
 
@@ -15,7 +16,9 @@ class mopiapi():
 	device = 0xb
 	config = [[], [], []]
 
-	def __init__(self, i2cbus = 1):
+	def __init__(self, i2cbus = -1):
+		if i2cbus == -1:
+			i2cbus = guessI2C()
 		self.bus = smbus.SMBus(i2cbus)
 		[maj, minr] = self.getFirmwareVersion()
 		if maj != FIRMMAJ or minr != FIRMMINR:
@@ -186,3 +189,10 @@ class status():
 		else:
 			out = out[:-1]
 		return out
+
+def guessI2C():
+	# try to auto-detect appropriate bus, boards 2 and 3 are Model B Rev 1.0
+	if (int(re.search('Revision\t: ([0-9a-e]*)', open('/proc/cpuinfo').read(1000)).group(1), 16) & 0xFFFF) < 4:
+		return 0
+	else:
+		return 1

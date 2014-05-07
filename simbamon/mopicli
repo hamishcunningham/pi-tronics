@@ -22,7 +22,7 @@ def shorthelp():
 
 def help():
 	print "Miscellaneous:"
-	print "  -i          I2C bus (default: 1)"
+	print "  -i          I2C bus (default: %i)" % mopiapi.guessI2C()
 	print "  -fv         Firmware version"
 	print "  -sn         Serial number"
 	print "  -h          Display this message"
