@@ -1,5 +1,7 @@
 import smbus
 
+# This is the development version
+
 VERSION=0.2
 # for mopi firmware v3.03
 FIRMMAJ=3

@@ -2,6 +2,8 @@
 import sys
 import mopiapi
 
+# This is the development version
+
 VERSION=0.2
 # for mopi firmware v3.03
 
@@ -15,6 +17,7 @@ parameters = [   1,     0,     0,    0,    0,     0,    0,     0,     0, \
 def shorthelp():
 	print "Usage: mopicli [-h] [options]"
 	print "Version %0.1f, API %0.1f" % (VERSION, mopiapi.getApiVersion())
+	print "This is the development version"
 
 def help():
 	print "Miscellaneous:"
