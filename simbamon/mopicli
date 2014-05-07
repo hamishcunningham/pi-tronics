@@ -12,9 +12,9 @@ VERSION=0.2
 APIVERSION=0.2
 
 #commands = ['-fv', '-i', '-rc', '-rc1', '-rc2', '-rpon', '-rs', '-s', '-sn', '-sv', '-v', '-v1', '-v2', '-wc', '-wc1', '-wc2', '-wpon', '-ws']
-commands =   ['-i', '-fv', '-sn', '-h', '-s', '-sv', '-v', '-v1', '-v2', \
+commands =   ['-i', '-fv', '-sn', '-h', '-e', '-s', '-sv', '-v', '-v1', '-v2', \
 	'-rc', '-rc1', '-rc2', '-rpon', '-rs', '-wc', '-wc1', '-wc2', '-wpon', '-ws']
-parameters = [   1,     0,     0,    0,    0,     0,    0,     0,     0, \
+parameters = [   1,     0,     0,    0,    0,    0,     0,    0,     0,     0, \
 	    0,      0,      0,       0,     0,     3,      3,       3,      1,     1]
 
 
@@ -29,6 +29,7 @@ def help():
 	print "  -fv         Firmware version"
 	print "  -sn         Serial number"
 	print "  -h          Display this message"
+	print "  -e          Read everything possible from the MoPi"
 	print ""
 	print "Status:"
 	print "  -s          MoPi status word"
@@ -89,6 +90,9 @@ for arg in sys.argv:
 if mopiapi.getApiVersion() != APIVERSION:
 	print "mopicli. Expected API version %0.1f, got %0.1f instead." % (APIVERSION, mopiapi.getApiVersion())
 	sys.exit(1)
+
+if '-e' in sys.argv:
+	sys.argv.extend(['-fv', '-sn', '-s', '-sv', '-v', '-v1', '-v2', '-rc', '-rc1', '-rc2', '-rpon', '-rs'])
 
 status = 0
 try:
