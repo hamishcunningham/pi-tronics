@@ -19,7 +19,6 @@ RETRIES=3
 
 class mopiapi():
 	device = 0xb
-	config = [[], [], []]
 
 	def __init__(self, i2cbus = -1):
 		if i2cbus == -1:
@@ -53,7 +52,6 @@ class mopiapi():
 		data2.append(((data[0] & 127) << 8) + data[1])
 		data2.append(((data[2] & 127) << 8) + data[3])
 		data2.append(((data[4] & 127) << 8) + data[5])
-		self.config[input] = data2
 		return data2
 
 	# takes an array of 3 integers: max, mid, min (mV)
@@ -65,30 +63,28 @@ class mopiapi():
 			battery[1] >> 8, battery[1] & 0xff, \
 			battery[2] >> 8, battery[2] & 0xff, \
 			]
-
-		# check if config to be written matches existing config
-		if len(self.config[input]) == 0:
-			self.readConfig(input)
 		
+		# check if config to be written matches existing config
 		tries = 0
-		while cmp(battery, self.config[input]) != 0 and tries < RETRIES:
+		while cmp(battery, self.readConfig(input)) != 0 and tries < RETRIES:
 			if input == 1:
 				self.bus.write_i2c_block_data(self.device, 0b00000111, data) # 7
 			elif input == 2:
 				self.bus.write_i2c_block_data(self.device, 0b00001000, data) # 8
 			else:
 				self.bus.write_i2c_block_data(self.device, 0b00000010, data)
-			self.readConfig(input)
 			tries += 1
 		# unsucessfully written
 		if tries == RETRIES:
 			raise IOError(errno.ECOMM, "Communication error on send")
+			return False
+		return True
 
 	def setPowerOnDelay(self, poweron):
-		self.bus.write_word_data(self.device, 0b00000011, poweron)
+		self.writeWord(0b00000011, poweron)
 
 	def setShutdownDelay(self, shutdown):
-		self.bus.write_word_data(self.device, 0b00000100, shutdown)
+		self.writeWord(0b00000100, shutdown)
 
 	def getPowerOnDelay(self):
 		return self.readWord(0b00000011)
@@ -113,6 +109,17 @@ class mopiapi():
 			raise IOError(errno.EIO, "")
 		data = data & 32767 # fix for leading bit
 		return data
+
+	def writeWord(self, register, data):
+		tries = 0
+		while self.readWord(register) != data and tries < RETRIES:
+			self.bus.write_word_data(self.device, register, data)
+			tries += 1
+		# unsucessfully written
+		if tries == RETRIES:
+			raise IOError(errno.ECOMM, "Communication error on send")
+			return False
+		return True
 			
 
 def getApiVersion():
