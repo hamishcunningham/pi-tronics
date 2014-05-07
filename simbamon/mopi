@@ -89,13 +89,6 @@ do_diff() {
   read
   clear
 }
-do_status() {
-  [ $CLI = echo ] && STATUS="unavailable, no CLI" && echo $STATUS && return
-  STATUS="`sudo ${CLI} -sv`"
-  STATUS="${STATUS}; `sudo ${CLI} -s`"
-  STATUS="${STATUS}; `sudo ${CLI} -v`"
-  echo $STATUS
-}
 do_about() {
   whiptail --title "About" --msgbox "\
     This is a configuration tool for MoPi
@@ -258,10 +251,9 @@ Do you want to write this configuration to MoPi?
 }
 
 # main loop
-STATUS="`do_status`"
 while true; do
   SEL=$(whiptail --title "MoPi Configuration Tool (mopi)" \
-    --menu "Current status: ${STATUS}" \
+    --menu "Configure MoPi" \
       $WT_HEIGHT $WT_WIDTH $WT_MENU_HEIGHT \
     --cancel-button Finish --ok-button Select \
       "1 Configure Both"        "Configure both power supplies" \
