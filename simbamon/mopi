@@ -251,6 +251,7 @@ Do you want to write this configuration to MoPi?
 }
 
 # main loop
+clear
 while true; do
   SEL=$(whiptail --title "MoPi Configuration Tool (mopi)" \
     --menu "Configure MoPi" \
