@@ -1,21 +1,25 @@
 import smbus
+import errno
 
 # This is the development version
 
 VERSION=0.2
-# for mopi firmware v3.03
+# For mopi firmware v3.03
 FIRMMAJ=3
 FIRMMINR=3
-READTRIES=3
+
+# Number of times to retry a failed I2C read/write to the MoPi
+RETRIES=3
 
 class mopiapi():
 	device = 0xb
+	config = [[], [], []]
 
 	def __init__(self, i2cbus = 1):
 		self.bus = smbus.SMBus(i2cbus)
 		[maj, minr] = self.getFirmwareVersion()
 		if maj != FIRMMAJ or minr != FIRMMINR:
-			raise Exception("Version mis-match between API and MoPi. Got %i.%02i, expected %i.%02i." % (maj, minr, FIRMMAJ, FIRMMINR))
+			raise OSError(errno.EUNATCH, "Version mis-match between API and MoPi. Got %i.%02i, expected %i.%02i." % (maj, minr, FIRMMAJ, FIRMMINR))
 
 	def getStatus(self):
 		return self.readWord(0b00000000)
@@ -41,21 +45,36 @@ class mopiapi():
 		data2.append(((data[0] & 127) << 8) + data[1])
 		data2.append(((data[2] & 127) << 8) + data[3])
 		data2.append(((data[4] & 127) << 8) + data[5])
+		self.config[input] = data2
 		return data2
 
 	# takes an array of 3 integers: max, mid, min (mV)
 	def writeConfig(self, battery, input=0):
+		if len(battery) != 3:
+			raise IOError(errno.EINVAL, "Invalid parameter")
 		data = [
 			battery[0] >> 8, battery[0] & 0xff, \
 			battery[1] >> 8, battery[1] & 0xff, \
 			battery[2] >> 8, battery[2] & 0xff, \
 			]
-		if input == 1:
-			self.bus.write_i2c_block_data(self.device, 0b00000111, data) # 7
-		elif input == 2:
-			self.bus.write_i2c_block_data(self.device, 0b00001000, data) # 8
-		else:
-			self.bus.write_i2c_block_data(self.device, 0b00000010, data)
+
+		# check if config to be written matches existing config
+		if len(self.config[input]) == 0:
+			self.readConfig(input)
+		
+		tries = 0
+		while cmp(battery, self.config[input]) != 0 and tries < RETRIES:
+			if input == 1:
+				self.bus.write_i2c_block_data(self.device, 0b00000111, data) # 7
+			elif input == 2:
+				self.bus.write_i2c_block_data(self.device, 0b00001000, data) # 8
+			else:
+				self.bus.write_i2c_block_data(self.device, 0b00000010, data)
+			self.readConfig(input)
+			tries += 1
+		# unsucessfully written
+		if tries == RETRIES:
+			raise IOError(errno.ECOMM, "Communication error on send")
 
 	def setPowerOnDelay(self, poweron):
 		self.bus.write_word_data(self.device, 0b00000011, poweron)
@@ -79,11 +98,11 @@ class mopiapi():
 	def readWord(self, register):
 		tries = 0
 		data = 0xFFFF
-		while data == 0xFFFF and tries < READTRIES:
+		while data == 0xFFFF and tries < RETRIES:
 			data = self.bus.read_word_data(self.device, register)
 			tries += 1
 		if data == 0xFFFF:
-			raise Exception("Error reading register %i, expected non 0xFF value." % register)
+			raise IOError(errno.EIO, "")
 		data = data & 32767 # fix for leading bit
 		return data
 			
@@ -163,7 +182,7 @@ class status():
 			out += 'Shutdown delay in progress\n'
 
 		if out == "":
-			out = "An error has occured"
+			raise Exception("An error has occured")
 		else:
 			out = out[:-1]
 		return out
