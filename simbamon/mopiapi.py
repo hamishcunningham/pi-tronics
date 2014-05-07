@@ -4,7 +4,9 @@ import re
 
 # This is the development version
 
+# Version of the API
 VERSION=0.2
+
 # For mopi firmware v3.03
 FIRMMAJ=3
 FIRMMINR=3
@@ -22,7 +24,7 @@ class mopiapi():
 		self.bus = smbus.SMBus(i2cbus)
 		[maj, minr] = self.getFirmwareVersion()
 		if maj != FIRMMAJ or minr != FIRMMINR:
-			raise OSError(errno.EUNATCH, "Version mis-match between API and MoPi. Got %i.%02i, expected %i.%02i." % (maj, minr, FIRMMAJ, FIRMMINR))
+			raise OSError(errno.EUNATCH, "Expected MoPi firmware version %i.%02i, got %i.%02i instead." % (FIRMMAJ, FIRMMINR, maj, minr))
 
 	def getStatus(self):
 		return self.readWord(0b00000000)
@@ -185,7 +187,8 @@ class status():
 			out += 'Shutdown delay in progress\n'
 
 		if out == "":
-			raise Exception("An error has occured")
+			# Battery #1 or #2 should always be active...
+			raise IOError(errno.EINVAL, "Invalid status")
 		else:
 			out = out[:-1]
 		return out

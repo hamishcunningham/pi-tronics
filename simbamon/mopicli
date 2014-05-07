@@ -5,8 +5,11 @@ import errno
 
 # This is the development version
 
+# Version of mopicli
 VERSION=0.2
-# for mopi firmware v3.03
+
+# Uses API version 0.2 for mopi firmware v3.03
+APIVERSION=0.2
 
 #commands = ['-fv', '-i', '-rc', '-rc1', '-rc2', '-rpon', '-rs', '-s', '-sn', '-sv', '-v', '-v1', '-v2', '-wc', '-wc1', '-wc2', '-wpon', '-ws']
 commands =   ['-i', '-fv', '-sn', '-h', '-s', '-sv', '-v', '-v1', '-v2', \
@@ -82,6 +85,10 @@ for arg in sys.argv:
 	if not arg.isdigit() and not arg in commands:
 		print "mopicli. Unknown option: " + arg
 		sys.exit(1)
+
+if mopiapi.getApiVersion() != APIVERSION:
+	print "mopicli. Expected API version %0.1f, got %0.1f instead." % (APIVERSION, mopiapi.getApiVersion())
+	sys.exit(1)
 
 status = 0
 try:
@@ -160,7 +167,4 @@ except IOError as e:
 	sys.exit(1)
 except OSError as e:
 	print "mopicli. " + e.strerror
-	sys.exit(1)
-except Exception as e:
-	print "mopicli. " + str(e)
 	sys.exit(1)
