@@ -1,7 +1,10 @@
+#!/usr/bin/env python
 import smbus
 import errno
 import re
 
+# mopiapi. Python interface to the MoPi battery power add-on board for the
+#   Raspberry Pi. (http://pi.gate.ac.uk)
 # This is the development version
 
 # Version of the API

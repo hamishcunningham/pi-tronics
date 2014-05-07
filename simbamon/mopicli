@@ -3,6 +3,8 @@ import sys
 import mopiapi
 import errno
 
+# mopicli .This tool is for interfacing with the MoPi battery power add-on
+#   board for the Raspberry Pi. (http://pi.gate.ac.uk)
 # This is the development version
 
 # Version of mopicli
@@ -20,6 +22,8 @@ parameters = [   1,     0,     0,    0,    0,    0,     0,    0,     0,     0, \
 
 def shorthelp():
 	print "Usage: mopicli [-h] [options]"
+	print "This tool is for interfacing with the MoPi battery power add-on"
+	print "  board for the Raspberry Pi. (http://pi.gate.ac.uk)"
 	print "Version %0.1f, API %0.1f" % (VERSION, mopiapi.getApiVersion())
 	print "This is the development version"
 
