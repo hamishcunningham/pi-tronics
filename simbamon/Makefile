@@ -104,7 +104,8 @@ man: man/$(P).txt man/$(MOPI).txt
 
 # package ####################################################################
 version:
-	@sed -i 's,^VERSION=.*,VERSION='$(VERSION)',' simbamond.default
+	@for f in simbamond.default mopicli mopiapi.py; do \
+          sed -i 's,^VERSION=.*,VERSION='$(VERSION)',' $$f; done
 package: version man package-unstable package-precise
 	@echo "\nunstable:"
 	@ls -lh $(PD)/unstable

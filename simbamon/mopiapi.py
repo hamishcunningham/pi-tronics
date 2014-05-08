@@ -1,18 +1,20 @@
 #!/usr/bin/env python
+# mopiapi. Python interface to the MoPi battery power add-on board for the
+#   Raspberry Pi. (http://pi.gate.ac.uk/mopi)
+
 import smbus
 import errno
 import re
 
-# mopiapi. Python interface to the MoPi battery power add-on board for the
-#   Raspberry Pi. (http://pi.gate.ac.uk)
-# This is the development version
-
 # Version of the API
-VERSION=0.2
+APIVERSION=0.2
 
 # For mopi firmware v3.03
 FIRMMAJ=3
 FIRMMINR=3
+
+# Package version
+VERSION=3.1
 
 # Number of times to retry a failed I2C read/write to the MoPi
 RETRIES=3
@@ -123,7 +125,7 @@ class mopiapi():
 			
 
 def getApiVersion():
-	return VERSION
+	return APIVERSION
 
 
 class status():
