@@ -81,7 +81,7 @@ To release:
 - before a release
   - use snapshots to verify that the build is a good one, that it installs
     correctly from the PPA and so on
-    - set LAST_SNAP to 0 in Makefile for first in series, then increment
+    - set NEXT_SNAP to 1 in Makefile for first in series, then increment
   - update the version in the Makefile and do "make package-version" to add a
     changelog entry for the release (remember to ensure the maintainer line
     matches the others exactly!)

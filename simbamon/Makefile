@@ -4,7 +4,7 @@
 
 # vars #######################################################################
 VERSION=3.1
-LAST_SNAP=2
+NEXT_SNAP=5
 P=simbamond
 D=simbamon
 MOPI=mopi
@@ -34,7 +34,7 @@ PACKAGE_FILES=\
 NOW:=$(shell date "+%Y-%m-%d-%R" |sed 's,:,,')
 MAJOR_VERSION:=$(shell echo $(VERSION) |sed 's,\([0-9]*\)\..*,\1,')
 MINOR_VERSION:=$(shell echo $(VERSION) |sed 's,.*\.,,')
-SNAPSHOT_VERSION:=$(VERSION)+$(shell expr $(MINOR_VERSION) + 1 + $(LAST_SNAP))
+SNAPSHOT_VERSION:=$(VERSION)+$(NEXT_SNAP)
 SNAPSHOT:=$(SNAPSHOT_VERSION)-SNAPSHOT-$(NOW)
 SNAPD:=$(PD)/snapshots/$(SNAPSHOT)
 
@@ -56,7 +56,12 @@ help:
 	@echo '   make package-info              apt-cache showpkg           '
 	@echo '   make package-purge             apt-get purge               '
 	@echo '   make package-version           update the changelog        '
+	@echo '   make print-versions            print current version #s    '
 	@echo '                                                              '
+
+# show versions ##############################################################
+print-versions:
+	@echo "VERSION: $(VERSION); SNAPSHOT_VERSION: $(SNAPSHOT_VERSION)"
 
 # install ####################################################################
 # (if DESTDIR is set we assume this is a packaging run, not an install, and so
