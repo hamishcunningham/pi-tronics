@@ -92,13 +92,17 @@ do
 
   # on first boot ...
   [ -z "$PREVIOUSLY_RUN" -a ! -f "$PREVIOUSLY_RUN_INDICATOR" ] && {
-    PREVIOUSLY_RUN=true
     date > $PREVIOUSLY_RUN_INDICATOR 
 
     # ...take a short break
     logger "${NAME}: first run after boot, sleeping for ${BOOT_DELAY}..."
     sleep $BOOT_DELAY
     logger "${NAME}: ...boot delay done"
+  }
+
+  # on first loop after start...
+  [ -z "$PREVIOUSLY_RUN" ] && {
+    PREVIOUSLY_RUN=true
 
     # ...push local config up to the board
     OIFS="$IFS"
