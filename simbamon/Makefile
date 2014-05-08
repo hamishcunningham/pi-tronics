@@ -133,7 +133,8 @@ package-precise:
 	cd .. && for f in $(PACKAGE_FILES); do \
           [ -f $$f ] && mv $$f $(D)/$(PD)/precise || :; done
 snapshot-version:
-	@sed -i 's,^VERSION=.*,VERSION='$(SNAPSHOT_VERSION)',' simbamond.default
+	@for f in simbamond.default mopicli mopiapi.py; do \
+          sed -i 's,^VERSION=.*,VERSION='$(SNAPSHOT_VERSION)',' $$f; done
 snapshot: snapshot-version
 	@echo "packaging SimBaMon SNAPSHOT $(SNAPSHOT)..."
 	mkdir -p $(SNAPD)
