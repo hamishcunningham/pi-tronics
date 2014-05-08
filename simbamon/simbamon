@@ -122,43 +122,45 @@ do
   }
 
   # get MoPi status
-  BAT_LEVEL=`${CLI} -s`
-  [ x$BAT_LEVEL = x ] && {
-    logger "${NAME}: failed to get ${LMESS}: pausing and retrying"
+  MOPI_STATUS="`${CLI} -s`"
+
+  # the status word must be an integer
+  echo "$MOPI_STATUS" |grep -q '^[0-9][0-9]*$' || {
+    logger "${NAME}: invalid MOPI_STATUS (${MOPI_STATUS}): pause/retry..."
     sleep $MONITOR_FREQUENCY
     continue
   }
 
   # log low levels (approx. once every 5 minutes unless debugging)
   [ "$DEBUG" = on -o $(( $i % 150 )) -eq 0 ] && {
-    ( s_bat_low $BAT_LEVEL || s_bat_critical $BAT_LEVEL ) && \
-      logger "${NAME}: ${LMESS} is at or below warning level (${BAT_LEVEL})"
+    ( s_bat_low "$MOPI_STATUS" || s_bat_critical "$MOPI_STATUS" ) && \
+      logger "${NAME}: ${LMESS} is at or below warning level (${MOPI_STATUS})"
   }
 
   # action states (shutdown or warn)
-  if s_forced_shutdown $BAT_LEVEL
+  if s_forced_shutdown "$MOPI_STATUS"
   then
     wall <<< "${NAME}: power off requested: shutting down now!!!"
     logger "${NAME}: shutting down (POWER_OFF)"
     bash -c "$SHUTDOWN"
-  elif s_bat_critical $BAT_LEVEL
+  elif s_bat_critical "$MOPI_STATUS"
   then
     wall <<< "${NAME}: battery empty: shutting down now!!!"
     logger "${NAME}: shutting down (BAT_SHUTDOWN)"
     bash -c "$SHUTDOWN"
-  elif s_bat_low $BAT_LEVEL
+  elif s_bat_low "$MOPI_STATUS"
   then
     if [ $(( $PREVIOUS_WARNING - $i )) -ge $WAIT_LOOPS ]
     then
       PREVIOUS_WARNING=$i
       wall <<< "${NAME}: ${LMESS} is low! connect new battery or shut down"
-      logger "${NAME}: BAT_WARNING (${BAT_LEVEL})"
+      logger "${NAME}: BAT_WARNING (${MOPI_STATUS})"
     fi
   fi
 
   # routine log messages
   [ "$DEBUG" = on -o ${j} -eq ${LOG_INTERVAL} ] && \
-    logger "${NAME}: ${LMESS} is ${BAT_LEVEL} at `pdate` (i=${i})" && j=0
+    logger "${NAME}: ${LMESS} is ${MOPI_STATUS} at `pdate` (i=${i})" && j=0
 
   # take a break
   sleep ${MONITOR_FREQUENCY}

@@ -4,9 +4,6 @@
 P="$0"
 INST_DIR=`dirname ${P}`
 
-# current level; -1 means unset
-BAT_LEVEL=-1
-
 # mopi command-line interface
 CLI=${INST_DIR}/../mopicli
 
