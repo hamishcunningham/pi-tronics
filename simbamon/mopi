@@ -274,7 +274,7 @@ while true; do
       2\ *) do_supply_config -1 ;;
       3\ *) do_supply_config -2 ;;
       4\ *) \
-          whiptail --title "MoPi Status" --msgbox "`sudo ${CLI} -sv`" 20 60 1 ;;
+          whiptail --title "MoPi Status" --msgbox "`sudo ${CLI} -e`" 20 60 1 ;;
       5\ *) \
         whiptail --title "MoPi Local Config" --msgbox "`get_local_config`" 20 60 1 ;;
       6\ *) \
