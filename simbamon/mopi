@@ -26,6 +26,13 @@ CLI=${INST_DIR}/mopicli
 # message & exit if exit num present
 usage() { echo -e Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
 
+# needs to be run as root
+if [ $(id -u) -ne 0 ]
+then
+  echo "${P} must be run as root; try 'sudo mopi'?"
+  usage 1
+fi
+
 # load current config
 if [ -r ${INST_DIR}/${DNAME}.default ]  # development mode
 then
@@ -46,7 +53,7 @@ do
     h)	usage 0 ;;
     v)	echo $P is at version $VERSION; exit 0 ;;
     d)	DBG=echo; CLI=echo ;;
-    *)	usage 1 ;;
+    *)	usage 3 ;;
   esac
 done 
 shift `expr $OPTIND - 1`
@@ -54,13 +61,13 @@ shift `expr $OPTIND - 1`
 # does mopicli work?
 ${CLI} -s >/dev/null || {
   echo "${P}: ${CLI} not working; installation problem?" >&2
-  usage 3
+  usage 4
 }
 
 # does bc work?
 echo 1 |bc >/dev/null || {
   echo "${P}: bc not working; installation problem?" >&2
-  usage 4
+  usage 5
 }
 
 # figure out optimal size for whiptail
@@ -286,6 +293,6 @@ while true; do
       *)    whiptail --msgbox "Error: unrecognized option" 20 60 1 ;;
     esac || whiptail --msgbox "There was an error running option $SEL" 20 60 1
   else
-    exit 1
+    exit 5
   fi
 done

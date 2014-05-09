@@ -75,7 +75,7 @@ install:
 	install -m 755 $(D)         $(DESTDIR)/usr/sbin
 	install -m 755 $(P).init    $(DESTDIR)/etc/init.d/$(P)
 	install -m 755 $(MOPI)      $(DESTDIR)/usr/sbin
-	install -g i2c -m 2755 $(MOPICLI) $(DESTDIR)/usr/sbin
+	install -m 755 $(MOPICLI)   $(DESTDIR)/usr/sbin
 	install -m 644 $(MOPIAPI)   $(DESTDIR)/usr/sbin
 	install man/$(P).8.gz       $(DESTDIR)/usr/share/man/man8
 	install man/$(D).8.gz       $(DESTDIR)/usr/share/man/man8
