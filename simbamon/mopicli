@@ -13,7 +13,7 @@ CLIVERSION=0.3
 APIVERSION=0.3
 
 # Package version
-VERSION=3.1+6
+VERSION=3.1+7
 
 #commands = ['-fv', '-i', '-rc', '-rc1', '-rc2', '-rpon', '-rs', '-s', '-sn', '-sv', '-v', '-v1', '-v2', '-wc', '-wc1', '-wc2', '-wpon', '-ws']
 commands =   ['-i', '-fv', '-sn', '-h', '-e', '-s', '-sv', '-v', '-v1', '-v2', \

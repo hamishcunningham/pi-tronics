@@ -4,7 +4,7 @@
 
 # vars #######################################################################
 VERSION=3.1
-NEXT_SNAP=7
+NEXT_SNAP=8
 P=simbamond
 D=simbamon
 MOPI=mopi
@@ -139,6 +139,7 @@ package-precise:
 snapshot-version:
 	@for f in simbamond.default mopicli mopiapi.py; do \
           sed -i 's,^VERSION=.*,VERSION='$(SNAPSHOT_VERSION)',' $$f; done
+	sed -i "s,^NEXT_SNAP=.**,NEXT_SNAP=$$((NEXT_SNAP) + 1))," Makefile
 snapshot: snapshot-version
 	@echo "packaging SimBaMon SNAPSHOT $(SNAPSHOT)..."
 	mkdir -p $(SNAPD)
