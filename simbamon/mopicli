@@ -7,10 +7,10 @@ import mopiapi
 import errno
 
 # Version of mopicli
-CLIVERSION=0.2
+CLIVERSION=0.3
 
 # Uses API version 0.2 for mopi firmware v3.03
-APIVERSION=0.2
+APIVERSION=0.3
 
 # Package version
 VERSION=3.1+5
@@ -19,13 +19,17 @@ VERSION=3.1+5
 commands =   ['-i', '-fv', '-sn', '-h', '-e', '-s', '-sv', '-v', '-v1', '-v2', \
 	'-rc', '-rc1', '-rc2', '-rpon', '-rs', '-wc', '-wc1', '-wc2', '-wpon', '-ws']
 parameters = [   1,     0,     0,    0,    0,    0,     0,    0,     0,     0, \
-	    0,      0,      0,       0,     0,     3,      3,       3,      1,     1]
+	    0,      0,      0,       0,     0,     5,      5,       5,      1,     1]
+
+# add -L for labels for everything
+# define them in the same ordered array 
+# replace the help descriptions with the labels?
 
 
 def shorthelp():
 	print "Usage: mopicli [-h] [options]"
 	print "This tool is for interfacing with the MoPi battery power add-on"
-	print "  board for the Raspberry Pi. (http://pi.gate.ac.uk)"
+	print "  board 'for the Raspberry Pi. (http://pi.gate.ac.uk)"
 	print "Package Version %s" % (VERSION)
 	print "Version %0.1f, API %0.1f" % (CLIVERSION, mopiapi.getApiVersion())
 
@@ -40,20 +44,25 @@ def help():
 	print "Status:"
 	print "  -s          MoPi status word"
 	print "  -sv         Verbose status"
-	print "  -v          Current battery voltage in mV"
-	print "  -v1/-v2     Battery #1/#2 voltage in mV"
+	print "  -v          Current source voltage in mV"
+	print "  -v1         Source #1 voltage in mV"
+	print "  -v2         Source #2 voltage in mV"
 	print ""
 	print "Read configuration options:"
-	print "  -rc         Combined battery #1 and #2 configuration"
-	print "  -rc1/-rc2   Configuration of battery #1/#2"
+	print "  -rc         Combined source #1 and #2 configuration"
+	print "  -rc1        Configuration of source #1"
+	print "  -rc2        Configuration of source #2"
 	print "  -rpon       Power on delay"
 	print "  -rs         Shutdown delay"
 	print ""
 	print "Write configuration options:"
-	print "  -wc mV mV mV         Combined battery #1 and #2 configuration"
-	print "  -wc1/-wc2 mV mV mV   Configuration of battery #1/#2"
-	print "  -wpon seconds        Power on delay seconds"
-	print "  -ws seconds          Shutdown delay seconds"
+	print "  -wc t mV mV mV mV     Combined source #1 and #2 configuration"
+	print "  -wc1 t mV mV mV mV    Configuration of source #1"
+	print "  -wc2 t mV mV mV mV    Configuration of source #2"
+	print "    Where t is \x1b[1m1\x1b[0m for batteries, \x1b[1m2\x1b[0m for PSU / DC adapter, and the four mV"
+        print "      settings are the \x1b[1mmaximum\x1b[0m, \x1b[1mgood\x1b[0m, \x1b[1mlow\x1b[0m, and \x1b[1mcritical\x1b[0m voltage levels."
+	print "  -wpon seconds         Power on delay seconds"
+	print "  -ws seconds           Shutdown delay seconds"
 	print ""
 	print "All options may be used simultaneously. When doing so, they execute in the"
 	print "  order they are listed in in this help message. However, only one of each may"

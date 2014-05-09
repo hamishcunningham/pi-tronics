@@ -7,11 +7,11 @@ import errno
 import re
 
 # Version of the API
-APIVERSION=0.2
+APIVERSION=0.3
 
-# For mopi firmware v3.03
+# For mopi firmware v3.04
 FIRMMAJ=3
-FIRMMINR=3
+FIRMMINR=4
 
 # Package version
 VERSION=3.1+5
@@ -41,7 +41,7 @@ class mopiapi():
 		else:
 			return self.readWord(0b00000001)
 
-	# returns an array of 3 integers: max, mid, min (mV)
+	# returns an array of 5 integers: power source type, max, good, low, crit (mV)
 	def readConfig(self, input=0):
 		if input == 1:
 			data = self.bus.read_i2c_block_data(self.device, 0b00000111) # 7
@@ -49,23 +49,24 @@ class mopiapi():
 			data = self.bus.read_i2c_block_data(self.device, 0b00001000) # 8
 		else:
 			data = self.bus.read_i2c_block_data(self.device, 0b00000010)
-		data2 = []
-		# & 127 for leading bit, unfortunately on the LSB this is a bad idea...
-		data2.append(((data[0] & 127) << 8) + data[1])
-		data2.append(((data[2] & 127) << 8) + data[3])
-		data2.append(((data[4] & 127) << 8) + data[5])
-		return data2
+		if data[0] != 255:
+			for i in range(1,5):
+				data[i] *= 100
+		return data[:5]
 
-	# takes an array of 3 integers: max, mid, min (mV)
+	# takes an array of 5 integers: power source type, max, good, low, crit (mV)
 	def writeConfig(self, battery, input=0):
-		if len(battery) != 3:
+		if len(battery) != 5:
 			raise IOError(errno.EINVAL, "Invalid parameter")
-		data = [
-			battery[0] >> 8, battery[0] & 0xff, \
-			battery[1] >> 8, battery[1] & 0xff, \
-			battery[2] >> 8, battery[2] & 0xff, \
-			]
-		
+		if battery[0] < 1 or battery[0] > 2:
+			raise IOError(errno.EINVAL, "Invalid parameter")
+
+		data = [battery[0]]
+		for i in range(1,5):
+			data.append(battery[i]/100)
+			if data[i] < 0 or data[i] > 255:
+				raise IOError(errno.EINVAL, "Invalid parameter")
+
 		# check if config to be written matches existing config
 		tries = 0
 		while cmp(battery, self.readConfig(input)) != 0 and tries < RETRIES:
@@ -113,6 +114,9 @@ class mopiapi():
 		return data
 
 	def writeWord(self, register, data):
+		if data < 0 or data > 0xFFFF:
+			raise IOError(errno.EINVAL, "Invalid parameter")
+
 		tries = 0
 		while self.readWord(register) != data and tries < RETRIES:
 			self.bus.write_word_data(self.device, register, data)
@@ -168,6 +172,11 @@ class status():
 	def ShutdownDelayActive(self):
 		return self.getBit(11)
 
+	def CheckSourceOne(self):
+		return self.getBit(12)
+	def CheckSourceTwo(self):
+		return self.getBit(13)
+
 
 	def StatusDetail(self):
 		out = ""
@@ -197,6 +206,11 @@ class status():
 			out += 'Shutdown delay set\n'
 		if self.ShutdownDelayActive():
 			out += 'Shutdown delay in progress\n'
+
+		if self.CheckSourceOne():
+			out += 'Battery #1 good\n'
+		if self.CheckSourceTwo():
+			out += 'Battery #2 good\n'
 
 		if out == "":
 			# Battery #1 or #2 should always be active...
