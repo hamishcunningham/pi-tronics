@@ -208,6 +208,7 @@ Discharge will stop at ${OPERATING_FLOOR}V." 20 70 1
 The configuration for your supply has been calculated as:
 
   minimum safe discharge level: ${BAT_FLOOR}V
+  low charge level:             ${BAT_LOW}V
   good charge level:            ${BAT_GOOD}V
   full charge level:            ${BAT_FULL}V
 
@@ -228,8 +229,7 @@ Do you want to write this configuration to MoPi?
   # write to mopi (and save locally)
   while :
   do
-    F=`v2mv $BAT_FULL`; G=`v2mv $BAT_GOOD`; L=`v2mv $BAT_FLOOR`
-    FLAGS="-${S_FLAG} $F $G $L"
+    FLAGS="-${S_FLAG} $BAT_FULL $BAT_GOOD $BAT_LOW $BAT_FLOOR"
     COM="sudo ${CLI} ${FLAGS}"
     if OUT=`${COM}`
     then
