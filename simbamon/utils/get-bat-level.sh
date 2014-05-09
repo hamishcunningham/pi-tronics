@@ -11,9 +11,9 @@ CLI=${INST_DIR}/../mopicli
 source ${INST_DIR}/../simbamond.default
 
 # read the status
-STATUS=`sudo ${CLI} -s`
-#VSTATUS="`sudo ${CLI} -sv |tr '\n' 'X' |sed 's,X,; ,g'`"
-VSTATUS=`sudo ${CLI} -sv`
+STATUS=`${CLI} -s`
+#VSTATUS="`${CLI} -sv |tr '\n' 'X' |sed 's,X,; ,g'`"
+VSTATUS=`${CLI} -sv`
 #echo "status is ${STATUS} ( `echo \"obase=2;${STATUS}\" |bc`; ${VSTATUS})"
 echo "Status is ${STATUS} ( `echo \"obase=2;${STATUS}\" |bc` )"
 echo $VSTATUS
