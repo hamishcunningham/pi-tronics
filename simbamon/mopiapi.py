@@ -63,7 +63,9 @@ class mopiapi():
 
 		data = [battery[0]]
 		for i in range(1,5):
-			data.append(battery[i]/100)
+			battery[i] /= 100
+			data.append(battery[i])
+			battery[i] *= 100 # for the read back we need to compare to the rounded value
 			if data[i] < 0 or data[i] > 255:
 				raise IOError(errno.EINVAL, "Invalid parameter")
 
