@@ -80,7 +80,7 @@ class mopiapi():
 				self.bus.write_i2c_block_data(self.device, 0b00000010, data)
 			tries += 1
 		# unsucessfully written
-		if tries == RETRIES:
+		if tries - 1 == RETRIES:
 			raise IOError(errno.ECOMM, "Communication error on send")
 			return False
 		return True
@@ -124,7 +124,7 @@ class mopiapi():
 			self.bus.write_word_data(self.device, register, data)
 			tries += 1
 		# unsucessfully written
-		if tries == RETRIES:
+		if tries - 1 == RETRIES:
 			raise IOError(errno.ECOMM, "Communication error on send")
 			return False
 		return True
