@@ -11,7 +11,7 @@ APIVERSION=0.3
 
 # For mopi firmware v3.04
 FIRMMAJ=3
-FIRMMINR=4
+FIRMMINR=5
 
 # Package version
 VERSION=3.1+7
@@ -161,6 +161,9 @@ class status():
 		return self.getBit(4)
 	def LEDFlashing(self):
 		return self.getBit(5)
+
+	def JumperState(self):
+		return not self.getBit(6)
 	
 	def ForcedShutdown(self):
 		return self.getBit(7)
@@ -178,6 +181,9 @@ class status():
 		return self.getBit(12)
 	def CheckSourceTwo(self):
 		return self.getBit(13)
+
+	def UserConfiguration(self):
+		return self.getBit(14)
 
 
 	def StatusDetail(self):
@@ -197,6 +203,12 @@ class status():
 		if self.LEDFlashing():
 			out += 'Battery critical (flashing red led)\n'
 
+		if not self.UserConfiguration():
+			if self.JumperState():
+				out += 'NiMH battery profile\n'
+			else:
+				out += 'Alkaline battery profile\n'
+
 		if self.ForcedShutdown():
 			out += 'Forced shutdown\n'
 
@@ -213,6 +225,9 @@ class status():
 			out += 'Battery #1 good\n'
 		if self.CheckSourceTwo():
 			out += 'Battery #2 good\n'
+
+		if self.UserConfiguration():
+			out += 'User configured\n'
 
 		if out == "":
 			# Battery #1 or #2 should always be active...
