@@ -7,21 +7,64 @@ import mopiapi
 import errno
 
 # Version of mopicli
-CLIVERSION=0.3
+CLIVERSION=0.4
 
-# Uses API version 0.2 for mopi firmware v3.03
+# Version of API used
 APIVERSION=0.3
 
 # Package version
 VERSION=3.1+7
 
-#commands = ['-fv', '-i', '-rc', '-rc1', '-rc2', '-rpon', '-rs', '-s', '-sn', '-sv', '-v', '-v1', '-v2', '-wc', '-wc1', '-wc2', '-wpon', '-ws']
-commands =   ['-i', '-fv', '-sn', '-h', '-e', '-s', '-sv', '-v', '-v1', '-v2', \
-	'-rc', '-rc1', '-rc2', '-rpon', '-rs', '-wc', '-wc1', '-wc2', '-wpon', '-ws']
-parameters = [   1,     0,     0,    0,    0,    0,     0,    0,     0,     0, \
-	    0,      0,      0,       0,     0,     5,      5,       5,      1,     1]
+# Different categories for the mopicli arguments
+categories = ["Miscellaneous", "Status", "Read configuration options", "Write configuration options"]
 
-# add -L for labels for everything
+# flag (0), description (1), label (2), number of arguments (3), category (4)
+# dash for label means to use the description
+commands2 = [
+	[  "-i", "I2C bus", "-", 1, 0],
+	[ "-fv", "Firmware version", "-", 0, 0],
+	[ "-sn", "Serial number", "-", 0, 0],
+	[  "-h", "Display this message", "-", 0, 0],
+	[  "-e", "Read everything possible from the MoPi", "-", 0, 0],
+	[ "-nl", "No labels on output", "-", 0, 0],
+
+	[  "-s", "MoPi status word", "Status word", 0, 1],
+	[ "-sv", "Verbose status", "-", 0, 1],
+	[  "-v", "Current source voltage in mV", "Current source voltage", 0, 1],
+	[ "-v1", "Source #1 voltage in mV", "Source #1 voltage", 0, 1],
+	[ "-v2", "Source #2 voltage in mV", "Source #2 voltage", 0, 1],
+
+	[ "-rc", "Combined source #1 and #2 configuration", "Combined configuration", 0, 2],
+	["-rc1", "Configuration of source #1", "-", 0, 2],
+	["-rc2", "Configuration of source #2", "-", 0, 2],
+	["-ron", "Power on delay", "-", 0, 2],
+	["-rsd", "Shutdown delay", "-", 0, 2],
+
+	[ "-wc", "Combined source #1 and #2 configuration", "", 5, 3],
+	["-wc1", "Configuration of source #1", "", 5, 3],
+	["-wc2", "Configuration of source #2", "", 5, 3],
+	["-won", "\tPower on timer in seconds", "", 1, 3],
+	["-wsd", "\tShutdown timer in seconds", "", 1, 3],
+	]
+
+# command, parameters, details
+parameters2 = [
+	[  "-i", "x", "Where x is the I2C bus that connects the MoPi to the Raspberry Pi. If ths\n    flag is not set, the default bus of \x1b[1m%i\x1b[0m is used, based on board revision." % mopiapi.guessI2C()],
+	[ "-wc", "t mV mV mV mV", ""],
+	["-wc1", "t mV mV mV mV", ""],
+	["-wc2", "t mV mV mV mV", "Where t (type) is \x1b[1m1\x1b[0m for batteries, \x1b[1m2\x1b[0m for PSU / DC adapter, and the four mV\n    settings are the \x1b[1mmaximum\x1b[0m, \x1b[1mgood\x1b[0m, \x1b[1mlow\x1b[0m, and \x1b[1mcritical\x1b[0m voltage levels."
+],
+	["-won", "seconds", "This timer counts down from the moment the MoPi is powered off and turns it\n    back on when reaching zero."],
+	["-wsd", "seconds", "This timer counts down from the moment it is set and powers off the MoPi\n    when reaching zero."],
+	]
+
+# create command arrays for use in the code later
+commands = []
+parameters = []
+for i in range(0, len(commands2)):
+	commands.append(commands2[i][0])
+	parameters.append(commands2[i][3])
+
 # define them in the same ordered array 
 # replace the help descriptions with the labels?
 
@@ -34,36 +77,21 @@ def shorthelp():
 	print "Version %0.1f, API %0.1f" % (CLIVERSION, mopiapi.getApiVersion())
 
 def help():
-	print "Miscellaneous:"
-	print "  -i          I2C bus (default: %i)" % mopiapi.guessI2C()
-	print "  -fv         Firmware version"
-	print "  -sn         Serial number"
-	print "  -h          Display this message"
-	print "  -e          Read everything possible from the MoPi"
-	print ""
-	print "Status:"
-	print "  -s          MoPi status word"
-	print "  -sv         Verbose status"
-	print "  -v          Current source voltage in mV"
-	print "  -v1         Source #1 voltage in mV"
-	print "  -v2         Source #2 voltage in mV"
-	print ""
-	print "Read configuration options:"
-	print "  -rc         Combined source #1 and #2 configuration"
-	print "  -rc1        Configuration of source #1"
-	print "  -rc2        Configuration of source #2"
-	print "  -rpon       Power on delay"
-	print "  -rs         Shutdown delay"
-	print ""
-	print "Write configuration options:"
-	print "  -wc t mV mV mV mV     Combined source #1 and #2 configuration"
-	print "  -wc1 t mV mV mV mV    Configuration of source #1"
-	print "  -wc2 t mV mV mV mV    Configuration of source #2"
-	print "    Where t is \x1b[1m1\x1b[0m for batteries, \x1b[1m2\x1b[0m for PSU / DC adapter, and the four mV"
-        print "      settings are the \x1b[1mmaximum\x1b[0m, \x1b[1mgood\x1b[0m, \x1b[1mlow\x1b[0m, and \x1b[1mcritical\x1b[0m voltage levels."
-	print "  -wpon seconds         Power on delay seconds"
-	print "  -ws seconds           Shutdown delay seconds"
-	print ""
+	for i in range(0, len(categories)):
+		print "%s:" % categories[i]
+		for j in range(0, len(commands2)):
+			if commands2[j][4] == i: # in the category
+				if commands2[j][3] == 0:
+					print "  %s\t%s" % (commands2[j][0], commands2[j][1])
+				else:
+					for z in range(0, len(parameters)):
+						if parameters2[z][0] == commands2[j][0]:
+							break
+					print "  %s %s\t%s" % (commands2[j][0], parameters2[z][1], commands2[j][1])
+					if parameters2[z][2] != "":
+						print "    %s" % parameters2[z][2]
+		print ""
+
 	print "All options may be used simultaneously. When doing so, they execute in the"
 	print "  order they are listed in in this help message. However, only one of each may"
 	print "  be used."
@@ -85,10 +113,33 @@ def readInts(c, expected):
 		sys.exit(1)
 	return data
 
+def getLabel(flag):
+	if labels == 0:
+		return ""
+	for j in range(0, len(commands2)):
+		if commands2[j][0] == flag:
+			l = commands2[j][2]
+			if l == '-':
+				l = commands2[j][1]
+			return "%s: " % l
+
+def confDisp(cnf):
+	if cnf[0] == 1:
+		print "  Source type: batteries"
+	elif cnf[0] == 2:
+		print "  Source type: PSU / DC adapter"
+	print "  Maximum voltage: %i mV" % cnf[1]
+	print "  Good voltage: %i mV" % cnf[2]
+	print "  Low voltage: %i mV" % cnf[3]
+	print "  Critical voltage: %i mV" % cnf[4]
+
+# === code starts here === #
+
 if len(sys.argv) == 1:
 	shorthelp()
 	sys.exit(0)
 
+# special handling for -h
 if '-h' in sys.argv:
 	shorthelp()
 	print ""
@@ -106,11 +157,19 @@ if mopiapi.getApiVersion() != APIVERSION:
 	print "mopicli. Expected API version %0.1f, got %0.1f instead." % (APIVERSION, mopiapi.getApiVersion())
 	sys.exit(1)
 
+# special handling for -e
 if '-e' in sys.argv:
-	sys.argv.extend(['-fv', '-sn', '-s', '-sv', '-v', '-v1', '-v2', '-rc', '-rc1', '-rc2', '-rpon', '-rs'])
+	sys.argv.extend(['-fv', '-sn', '-s', '-sv', '-v', '-v1', '-v2', '-rc', '-rc1', '-rc2', '-ron', '-rsd'])
+
+# special handling for -nl
+if '-nl' in sys.argv:
+	labels = 0
+else:
+	labels = 1
 
 status = 0
 try:
+	# special handling for -i
 	if '-i' not in sys.argv:
 		mymopi = mopiapi.mopiapi()
 
@@ -123,41 +182,77 @@ try:
 
 			if '-fv' == arg:
 				data = mymopi.getFirmwareVersion()
-				print '%i.%02i' % (data[0], data[1])
+				print '%s%i.%02i' % (getLabel(arg), data[0], data[1])
 
 			if '-sn' == arg:
-				print mymopi.getSerialNumber()
+				print "%s%i" % (getLabel(arg), mymopi.getSerialNumber())
 
 
 			if '-s' == arg:
 				status = mopiapi.status(mymopi.getStatus())
-				print status.getByte()
+				print "%s%i" % (getLabel(arg), status.getByte())
 
 			if '-sv' == arg:
 				if status == 0:
 					status = mopiapi.status(mymopi.getStatus())
-				print status.StatusDetail()
+				if labels:
+					print getLabel(arg)
+					print "  " + status.StatusDetail().replace("\n", "\n  ")
+					
+				else:
+					print status.StatusDetail()
 
 			if '-v' == arg:
-				print mymopi.getVoltage()
+				print "%s%i" % (getLabel(arg), mymopi.getVoltage())
 			if '-v1' == arg:
-				print mymopi.getVoltage(1)
+				print "%s%i" % (getLabel(arg), mymopi.getVoltage(1))
 			if '-v2' == arg:
-				print mymopi.getVoltage(2)
+				print "%s%i" % (getLabel(arg), mymopi.getVoltage(2))
 
 
 			if '-rc' == arg:
-				print ' '.join(map(str, mymopi.readConfig()))
+				cnf = mymopi.readConfig()
+				if labels == 1:
+					diff = 1
+					for z in range(0, len(cnf)):
+						if cnf[z] != 255:
+							diff = 0
+							break
+					if diff:
+						print "%sdiffering, see below" % getLabel(arg)
+					else:
+						print getLabel(arg)
+						confDisp(cnf)
+				else:
+					print ' '.join(map(str, cnf))
 			if '-rc1' == arg:
-				print ' '.join(map(str, mymopi.readConfig(1)))
+				cnf = mymopi.readConfig(1)
+				if labels == 1:
+					print getLabel(arg)
+					confDisp(cnf)
+				else:
+					print ' '.join(map(str, cnf))
 			if '-rc2' == arg:
-				print ' '.join(map(str, mymopi.readConfig(2)))
+				cnf = mymopi.readConfig(2)
+				if labels == 1:
+					print getLabel(arg)
+					confDisp(cnf)
+				else:
+					print ' '.join(map(str, cnf))
 
-			if '-rpon' == arg:
-				print mymopi.getPowerOnDelay()
+			if '-ron' == arg:
+				d = mymopi.getPowerOnDelay()
+				if labels == 1:
+					print "%s%i seconds" % (getLabel(arg), d)
+				else:
+					print d
 
-			if '-rs' == arg:
-				print mymopi.getShutdownDelay()
+			if '-rsd' == arg:
+				d = mymopi.getShutdownDelay()
+				if labels == 1:
+					print "%s%i seconds" % (getLabel(arg), d)
+				else:
+					print d
 
 
 			if '-wc' == arg:
@@ -167,10 +262,10 @@ try:
 			if '-wc2' == arg:
 				mymopi.writeConfig(par, 2)
 
-			if '-wpon' == arg:
+			if '-won' == arg:
 				mymopi.setPowerOnDelay(par[0])
 
-			if '-ws' == arg:
+			if '-wsd' == arg:
 				mymopi.setShutdownDelay(par[0])
 
 except IOError as e:
