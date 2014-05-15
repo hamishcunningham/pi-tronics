@@ -7,7 +7,6 @@ import errno
 import re
 import RPi.GPIO
 
-
 # Version of the API
 APIVERSION=0.3
 
