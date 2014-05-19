@@ -9,9 +9,9 @@ import re
 # Version of the API
 APIVERSION=0.3
 
-# For mopi firmware v3.04
+# For mopi firmware v...
 FIRMMAJ=3
-FIRMMINR=5
+FIRMMINR=6
 
 # Package version
 VERSION=3.1+7
