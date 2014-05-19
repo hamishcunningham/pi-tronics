@@ -72,7 +72,7 @@ for i in range(0, len(commands2)):
 def shorthelp():
 	print "Usage: mopicli [-h] [options]"
 	print "This tool is for interfacing with the MoPi battery power add-on"
-	print "  board 'for the Raspberry Pi. (http://pi.gate.ac.uk)"
+	print "  board for the Raspberry Pi. (http://pi.gate.ac.uk)"
 	print "Package Version %s" % (VERSION)
 	print "Version %0.1f, API %0.1f" % (CLIVERSION, mopiapi.getApiVersion())
 

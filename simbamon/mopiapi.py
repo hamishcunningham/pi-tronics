@@ -9,9 +9,9 @@ import re
 # Version of the API
 APIVERSION=0.3
 
-# For mopi firmware v...
+# For at least mopi firmware vX.YY...
 FIRMMAJ=3
-FIRMMINR=6
+FIRMMINR=5
 
 # Package version
 VERSION=3.1+8
@@ -27,8 +27,8 @@ class mopiapi():
 			i2cbus = guessI2C()
 		self.bus = smbus.SMBus(i2cbus)
 		[maj, minr] = self.getFirmwareVersion()
-		if maj != FIRMMAJ or minr != FIRMMINR:
-			raise OSError(errno.EUNATCH, "Expected MoPi firmware version %i.%02i, got %i.%02i instead." % (FIRMMAJ, FIRMMINR, maj, minr))
+		if maj != FIRMMAJ or minr < FIRMMINR:
+			raise OSError(errno.EUNATCH, "Expected at least MoPi firmware version %i.%02i, got %i.%02i instead." % (FIRMMAJ, FIRMMINR, maj, minr))
 
 	def getStatus(self):
 		return self.readWord(0b00000000)
