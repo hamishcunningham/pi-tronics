@@ -12,8 +12,8 @@
 
 # standard locals
 P="$0"
-USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-v(ersion)]"
-OPTIONSTRING=hdv
+USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-v(ersion)] [-l(og entries)]"
+OPTIONSTRING=hdvl
 alias cd='builtin cd'
 DBG=:
 
@@ -22,6 +22,7 @@ DNAME=simbamond
 CONFIG=
 INST_DIR=`dirname ${P}`
 CLI=${INST_DIR}/mopicli
+LOG_STRING=simbamon
 
 # message & exit if exit num present
 usage() { echo -e Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
@@ -46,6 +47,9 @@ else
 fi
 source $CONFIG
 
+# get recent log entries
+do_log_grep() { grep -i $LOG_STRING /var/log/syslog |tail -30; }
+
 # process options
 while getopts $OPTIONSTRING OPTION
 do
@@ -53,6 +57,7 @@ do
     h)	usage 0 ;;
     v)	echo $P is at version $VERSION; exit 0 ;;
     d)	DBG=echo; CLI=echo ;;
+    l)  do_log_grep; exit 0 ;;
     *)	usage 3 ;;
   esac
 done 
@@ -87,9 +92,6 @@ calc_wt_size() {
 calc_wt_size
 
 # menu actions etc.
-do_log_grep() {
-  grep -i simbamon /var/log/syslog |tail -30
-}
 do_about() {
   whiptail --title "About" --msgbox "\
     This is a configuration tool for MoPi
