@@ -223,8 +223,12 @@ class status():
 
 		if self.CheckSourceOne():
 			out += 'Battery #1 good\n'
+		else:
+			out += 'Battery #1 low/not present\n'
 		if self.CheckSourceTwo():
 			out += 'Battery #2 good\n'
+		else:
+			out += 'Battery #2 low/not present\n'
 
 		if self.UserConfiguration():
 			out += 'User configured\n'
