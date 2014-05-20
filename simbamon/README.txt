@@ -86,7 +86,8 @@ To release:
   - update the version in the Makefile and do "make package-version" to add a
     changelog entry for the release (remember to ensure the maintainer line
     matches the others exactly!)
-    - for individual snapshots *don't* do a changelog entry
+    - for individual snapshots *don't* do a changelog entry (unless you want
+      to increment the major version, e.g. after a +9 snap)
 - to release on the PPAs, "make package" and "make package-upload" (think
   carefully before the latter -- it can't be reverted!)
 - after a release, do "make package-version" and add a changelog entry to note
