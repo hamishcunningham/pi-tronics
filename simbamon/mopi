@@ -102,6 +102,8 @@ do_about() {
     This is a configuration tool for MoPi
     (mobile and 24/7 power for the Raspberry Pi).
 
+    Version ${VERSION}.
+
     See http://pi.gate.ac.uk/mopi for details.\
     " 20 70 1
 }
