@@ -4,7 +4,7 @@
 
 # vars #######################################################################
 VERSION=3.2
-NEXT_SNAP=3
+NEXT_SNAP=4
 P=simbamond
 D=simbamon
 MOPI=mopi
