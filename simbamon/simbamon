@@ -74,8 +74,9 @@ logger "${NAME}: DEBUG is ${DEBUG}"
 
 # check mopicli installed and working
 ${CLI} -s >/dev/null || {
-  echo "${P}: ${CLI} not working; installation problem?" >&2
-  usage 3
+  COUT=`${CLI} -s 2>&1`
+  echo "${P}: ${CLI} not working; installation problem? (${COUT})" >&2
+  logger "${P}: ${CLI} not working; installation problem? (${COUT})"
 }
 
 # how many loops to wait between warnings when battery is low
@@ -126,7 +127,7 @@ do
   }
 
   # get MoPi status
-  MOPI_STATUS="`${CLI} -s`"
+  MOPI_STATUS="`${CLI} -nl -s`"
 
   # the status word must be an integer
   echo "$MOPI_STATUS" |grep -q '^[0-9][0-9]*$' || {
