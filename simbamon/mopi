@@ -290,7 +290,7 @@ while true; do
               25 70 1 && \
             delete_local_config ;;
       7\ *) whiptail --title "SimBaMon Log Entries" --msgbox \
-              "`do_log_grep`" 32 78 1 ;;
+              "`do_log_grep`" 40 120 1 ;;
       8\ *) do_about ;;
       *)    whiptail --msgbox "Error: unrecognized option" 20 60 1 ;;
     esac || whiptail --msgbox "There was an error running option $SEL" 20 60 1
