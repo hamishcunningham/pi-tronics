@@ -8,7 +8,7 @@
 # monitor configuration...
 
 # version (DON'T EDIT: it is set by "make package" or "make snapshot")
-VERSION=3.2+4
+VERSION=3.2+5
 
 # how often should we check battery state? (in seconds, approximately)
 MONITOR_FREQUENCY=2
