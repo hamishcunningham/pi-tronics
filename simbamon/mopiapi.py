@@ -5,6 +5,7 @@
 import smbus
 import errno
 import re
+import RPi.GPIO
 
 # Version of the API
 APIVERSION=0.3
@@ -14,7 +15,7 @@ FIRMMAJ=3
 FIRMMINR=5
 
 # Package version
-VERSION=3.2+3
+VERSION=3.2+6
 
 # Number of times to retry a failed I2C read/write to the MoPi
 RETRIES=3
@@ -241,8 +242,8 @@ class status():
 		return out
 
 def guessI2C():
-	# try to auto-detect appropriate bus, boards 2 and 3 are Model B Rev 1.0
-	if (int(re.search('Revision\t: ([0-9a-e]*)', open('/proc/cpuinfo').read(1000)).group(1), 16) & 0xFFFF) < 4:
+	# Rev2 of RPi switched the i2c address, so return the right one for the board we have 
+	if RPi.GPIO.RPI_REVISION == 1:
 		return 0
 	else:
 		return 1
