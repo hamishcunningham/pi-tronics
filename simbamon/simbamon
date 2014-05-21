@@ -32,7 +32,7 @@ DNAME=simbamond
 DAEMON=/usr/sbin/$NAME
 PIDFILE=/var/run/$DNAME.pid
 LMESS='battery level'
-SHUTDOWN='shutdown -h now'
+SHUTDOWN="halt && exit 0"
 INST_DIR=`dirname ${P}`
 CLI=${INST_DIR}/mopicli
 
@@ -147,12 +147,12 @@ do
   then
     wall <<< "${NAME}: power off requested: shutting down now!!!"
     logger "${NAME}: shutting down (POWER_OFF)"
-    bash -c "$SHUTDOWN"
+    eval "$SHUTDOWN"
   elif s_bat_critical "$MOPI_STATUS"
   then
     wall <<< "${NAME}: battery empty: shutting down now!!!"
     logger "${NAME}: shutting down (BAT_SHUTDOWN)"
-    bash -c "$SHUTDOWN"
+    eval "$SHUTDOWN"
   elif s_bat_low "$MOPI_STATUS"
   then
     if [ $(( $PREVIOUS_WARNING - $i )) -ge $WAIT_LOOPS ]

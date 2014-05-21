@@ -33,7 +33,7 @@ if [ "$DEBUG" = on ]
 then
   LOG_INTERVAL=3
   WARNING_INTERVAL=10
-  SHUTDOWN='echo "shutdown -h now"; sleep 10'
+  SHUTDOWN='echo "not halting, in debug mode"'
 fi
 
 # highest safe operating voltage
