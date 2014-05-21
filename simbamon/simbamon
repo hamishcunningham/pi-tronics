@@ -81,7 +81,7 @@ ${CLI} -s >/dev/null || {
 
 # how many loops to wait between warnings when battery is low
 WAIT_LOOPS=$(( $WARNING_INTERVAL / $MONITOR_FREQUENCY ))
-PREVIOUS_WARNING=0
+PREV_WARNING=0
 
 # i and j index loop iterations for controlling logging and messages
 i=0; j=0
@@ -155,9 +155,9 @@ do
     eval "$SHUTDOWN"
   elif s_bat_low "$MOPI_STATUS"
   then
-    if [ $(( $PREVIOUS_WARNING - $i )) -ge $WAIT_LOOPS ]
+    if [ $PREV_WARNING -eq 0 -o $(( $i - $PREV_WARNING )) -ge $WAIT_LOOPS ]
     then
-      PREVIOUS_WARNING=$i
+      PREV_WARNING=$i
       wall <<< "${NAME}: ${LMESS} is low! connect new battery or shut down"
       logger "${NAME}: BAT_WARNING (${MOPI_STATUS})"
     fi
