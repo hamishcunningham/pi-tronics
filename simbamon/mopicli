@@ -13,7 +13,7 @@ CLIVERSION=0.4
 APIVERSION=0.3
 
 # Package version
-VERSION=3.2+3
+VERSION=3.2+4
 
 # Different categories for the mopicli arguments
 categories = ["Miscellaneous", "Status", "Read configuration options", "Write configuration options"]
