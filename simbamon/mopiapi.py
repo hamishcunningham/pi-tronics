@@ -57,9 +57,9 @@ class mopiapi():
 	# takes an array of 5 integers: power source type, max, good, low, crit (mV)
 	def writeConfig(self, battery, input=0):
 		if len(battery) != 5:
-			raise IOError(errno.EINVAL, "Invalid parameter")
-		if battery[0] < 1 or battery[0] > 2:
-			raise IOError(errno.EINVAL, "Invalid parameter")
+			raise IOError(errno.EINVAL, "Invalid parameter (1)")
+		if battery[0] < 1 or battery[0] > 3:
+			raise IOError(errno.EINVAL, "Invalid parameter (2)")
 
 		data = [battery[0]]
 		for i in range(1,5):
@@ -67,7 +67,7 @@ class mopiapi():
 			data.append(battery[i])
 			battery[i] *= 100 # for the read back we need to compare to the rounded value
 			if data[i] < 0 or data[i] > 255:
-				raise IOError(errno.EINVAL, "Invalid parameter")
+				raise IOError(errno.EINVAL, "Invalid parameter (3)")
 
 		# check if config to be written matches existing config
 		tries = 0
@@ -117,7 +117,7 @@ class mopiapi():
 
 	def writeWord(self, register, data):
 		if data < 0 or data > 0xFFFF:
-			raise IOError(errno.EINVAL, "Invalid parameter")
+			raise IOError(errno.EINVAL, "Invalid parameter (4)")
 
 		tries = 0
 		while self.readWord(register) != data and tries < RETRIES:
