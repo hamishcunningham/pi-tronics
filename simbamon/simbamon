@@ -141,9 +141,6 @@ do
     ( s_bat_low "$MOPI_STATUS" || s_bat_critical "$MOPI_STATUS" ) && \
       logger "${NAME}: ${LMESS} is at or below warning level (${MOPI_STATUS})"
   }
-# TODO
-logger "${NAME}: s_forced_shutdown: `s_forced_shutdown ${MOPI_STATUS}; echo $?` (${MOPI_STATUS})"
-logger "${NAME}: s_bat_critical: `s_bat_critical ${MOPI_STATUS}; echo $?` (${MOPI_STATUS})"
 
   # action states (shutdown or warn)
   if s_forced_shutdown "$MOPI_STATUS"
