@@ -1,8 +1,10 @@
 #!/bin/bash
 
 LOG_PATTERN='mopi-status-log-2014-05-22-*'
+NORMAL_READING_PATTERN=4101
+
 LOGS=`find . -name "${LOG_PATTERN}"`
-ABNORMAL_LINES=`grep 'Status.word: ' $LOGS |grep -v 4101`
+ABNORMAL_LINES=`grep 'Status.word: ' $LOGS |grep -v ${NORMAL_READING_PATTERN}`
 OIFS="$IFS"
 IFS='
 '
@@ -15,11 +17,13 @@ done
 IFS="$OIFS"
 
 ABNORMAL_READINGS=`echo $ABNORMAL_READINGS |sed 's, ,\n,g' |sort |uniq`
-echo abnormal readings: $ABNORMAL_READINGS
-echo
 
 for r in $ABNORMAL_READINGS
 do
+  echo Details for reading $r:
+  echo 0123456789012345
+  echo "obase=2;${r};" |bc |rev
+
   for f in $LOGS
   do
     set x `grep -n 'Status.word: '$r $f |sed 's,:, ,'`
