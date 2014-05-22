@@ -51,30 +51,32 @@ OPERATING_FLOOR=6.2
 # bit 3:  battery level is good; green
 # bit 4:  battery level is low; red
 # bit 5:  battery level is critical; flashing red: entering shutdown 
-# bit 6:  unused
+# bit 6:  jumper on/off
 # bit 7:  forced shutdown; power switch pressed longer than 3 seconds 
 # bit 8:  a power on delay has been set by I2C command
 # bit 9:  a power on delay is in progress
 # bit 10: a shutdown delay has been set by I2C command
 # bit 11: a shutdown delay is in progress
-# bit 12-16: unused
+# bit 12: source 1 good
+# bit 13: source 2 good
+# bit 14: unused
 #
-s_supply1_active()         { [ $((     1 & $1 )) -eq     1 ]; }  # bit  1
-s_supply2_active()         { [ $((     2 & $1 )) -eq     2 ]; }  # bit  2
-s_bat_full()               { [ $((     4 & $1 )) -eq     4 ]; }  # bit  3
-s_bat_good()               { [ $((     8 & $1 )) -eq     8 ]; }  # bit  4
-s_bat_low()                { [ $((    16 & $1 )) -eq    16 ]; }  # bit  5
-s_bat_critical()           { [ $((    32 & $1 )) -eq    32 ]; }  # bit  6
-s_unused_1()               { [ $((    64 & $1 )) -eq    64 ]; }  # bit  7
-s_forced_shutdown()        { [ $((   128 & $1 )) -eq   128 ]; }  # bit  8
-s_power_on_delay_set()     { [ $((   256 & $1 )) -eq   256 ]; }  # bit  9
-s_power_on_delay_running() { [ $((   512 & $1 )) -eq   512 ]; }  # bit 10
-s_shutdown_delay_set()     { [ $((  1024 & $1 )) -eq  1024 ]; }  # bit 11
-s_shutdown_delay_running() { [ $((  2048 & $1 )) -eq  2048 ]; }  # bit 12
-s_unused_2()               { [ $((  4096 & $1 )) -eq  4096 ]; }  # bit 13
-s_unused_3()               { [ $((  8192 & $1 )) -eq  8192 ]; }  # bit 14
-s_unused_4()               { [ $(( 16384 & $1 )) -eq 16384 ]; }  # bit 15
-s_unused_5()               { [ $(( 32768 & $1 )) -eq 32768 ]; }  # bit 16
+s_supply1_active()         { [ $((     1 & $1 )) -eq     1 ]; }  # bit  0
+s_supply2_active()         { [ $((     2 & $1 )) -eq     2 ]; }  # bit  1
+s_bat_full()               { [ $((     4 & $1 )) -eq     4 ]; }  # bit  2
+s_bat_good()               { [ $((     8 & $1 )) -eq     8 ]; }  # bit  3
+s_bat_low()                { [ $((    16 & $1 )) -eq    16 ]; }  # bit  4
+s_bat_critical()           { [ $((    32 & $1 )) -eq    32 ]; }  # bit  5
+s_jumper_on()              { [ $((    64 & $1 )) -eq    64 ]; }  # bit  6
+s_forced_shutdown()        { [ $((   128 & $1 )) -eq   128 ]; }  # bit  7
+s_power_on_delay_set()     { [ $((   256 & $1 )) -eq   256 ]; }  # bit  8
+s_power_on_delay_running() { [ $((   512 & $1 )) -eq   512 ]; }  # bit  9
+s_shutdown_delay_set()     { [ $((  1024 & $1 )) -eq  1024 ]; }  # bit 10
+s_shutdown_delay_running() { [ $((  2048 & $1 )) -eq  2048 ]; }  # bit 11
+s_check_supply1()          { [ $((  4096 & $1 )) -eq  4096 ]; }  # bit 12
+s_check_supply2()          { [ $((  8192 & $1 )) -eq  8192 ]; }  # bit 13
+s_user_configured()        { [ $(( 16384 & $1 )) -eq 16384 ]; }  # bit 14
+s_unused()                 { [ $(( 32768 & $1 )) -eq 32768 ]; }  # bit 15
 
 #############################################################################
 # supply configuration data...
