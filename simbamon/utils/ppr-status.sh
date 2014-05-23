@@ -23,7 +23,11 @@ s_unused()                 # bit 15
 EOF
 echo
 
-echo Status word $1 is:
-echo 0123456789012345
-echo "obase=2;$1;" |bc |rev
-echo "0x`echo "obase=16;$1" |bc`"
+for w in $*
+do
+  echo Status word $w is:
+  echo 0123456789012345
+  echo "obase=2;$w;" |bc |rev
+  echo "0x`echo "obase=16;$w" |bc`"
+  echo
+done
