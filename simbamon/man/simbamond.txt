@@ -19,7 +19,7 @@ DESCRIPTION
     https://github.com/hamishcunningham/pi-tronics/tree/master/simbamon
 
   The core of the daemon is defined in three files:
-    - /etc/simbamon.conf - configuration data
+    - /etc/default/simbamond - configuration data
     - /usr/sbin/simbamon - the daemon itself
     - /etc/init.d/simbamond - an interface to the init subsystem that
       Linux uses to manage daemons (amongst other things)
