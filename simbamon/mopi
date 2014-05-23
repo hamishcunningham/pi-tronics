@@ -48,7 +48,7 @@ fi
 source $CONFIG
 
 # get recent log entries
-do_log_grep() { grep -i $LOG_STRING /var/log/syslog |tail -30; }
+do_log_grep() { grep -i $LOG_STRING /var/log/syslog |tail -${WT_HEIGHT}; }
 
 # process options
 while getopts $OPTIONSTRING OPTION
@@ -100,7 +100,7 @@ do_about() {
     Version ${VERSION}.
 
     See http://pi.gate.ac.uk/mopi for details.\
-    " 20 70 1
+    " $WT_HEIGHT $(( $WT_WIDTH / 2 )) $WT_MENU_HEIGHT
 }
 do_supply_config() {
   # process options
@@ -125,8 +125,9 @@ do_supply_config() {
   [ $RET -eq 0 ] && \
     [ $SUPPLY_TYPE -ge 1 -a $SUPPLY_TYPE -le `supply_type_max` ] || {
        whiptail --msgbox "Error: unrecognized option ${SUPPLY_TYPE}" \
-         --title "Oops!" --backtitle "${BACKTITLE}" 20 60 1
-        return 1
+         --title "Oops!" --backtitle "${BACKTITLE}" \
+         $WT_HEIGHT $(( $WT_WIDTH / 2 )) $WT_MENU_HEIGHT
+       return 1
     }
 
   # get number of cells
@@ -142,7 +143,8 @@ do_supply_config() {
   [ $RET -eq 0 ] && \
     [ $NUM_CELLS -ge 1 -a $NUM_CELLS -le `num_cells_max` ] || {
       whiptail --msgbox "Error: unrecognized option ${NUM_CELLS}" \
-         --title "Oops!" --backtitle "${BACKTITLE}" 20 60 1
+        --title "Oops!" --backtitle "${BACKTITLE}" \
+        $WT_HEIGHT $(( $WT_WIDTH / 2 )) $WT_MENU_HEIGHT
       return 1
     }
 
@@ -159,7 +161,8 @@ do_supply_config() {
   [ $RET -eq 0 ] && \
     [ $CHEMISTRY -ge 1 -a $CHEMISTRY -le `bat_chemistry_max` ] || {
       whiptail --msgbox "Error: unrecognized option ${CHEMISTRY}" \
-        --title "Oops!" --backtitle "${BACKTITLE}" 20 60 1
+        --title "Oops!" --backtitle "${BACKTITLE}" \
+        $WT_HEIGHT $(( $WT_WIDTH / 2 )) $WT_MENU_HEIGHT
       return 1
     }
 
@@ -282,15 +285,15 @@ while true; do
       2\ *) do_supply_config -1 ;;
       3\ *) do_supply_config -2 ;;
       4\ *) whiptail --title "MoPi Status" --msgbox \
-              "`${CLI} -e |pr -e -t2 -w76 |expand`" 25 78 1 ;;
+              "`${CLI} -e |pr -e -t2 -w76 |expand`" $WT_HEIGHT 78 1 ;;
       5\ *) whiptail --title "MoPi Local Config" --msgbox \
               "`get_local_config`" 20 60 1 ;;
       6\ *) whiptail --title "Clear Local Config" --yesno \
               "This will DELETE all local configuration -- are you sure?!" \
-              25 70 1 && \
+              24 70 1 && \
             delete_local_config ;;
       7\ *) whiptail --title "SimBaMon Log Entries" --msgbox \
-              "`do_log_grep`" 40 120 1 ;;
+              "`do_log_grep`" $WT_HEIGHT $WT_WIDTH 1 ;;
       8\ *) do_about ;;
       *)    whiptail --msgbox "Error: unrecognized option" 20 60 1 ;;
     esac || whiptail --msgbox "There was an error running option $SEL" 20 60 1
