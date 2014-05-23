@@ -28,7 +28,7 @@ OPTIONS
 EXAMPLE
     $ mopi
 SEE ALSO
-  simbamond
+  simbamond(8)
 BUGS
   Almost certainly!
 AUTHOR
