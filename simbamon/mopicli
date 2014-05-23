@@ -2,6 +2,7 @@
 # mopicli .This tool is for interfacing with the MoPi battery power add-on
 #   board for the Raspberry Pi. (http://pi.gate.ac.uk/mopi)
 
+import os
 import sys
 import mopiapi
 import errno
@@ -276,8 +277,11 @@ except IOError as e:
 	elif e.errno == errno.ECOMM:
 		print "mopicli. Failed to write configuration."
 		sys.exit(2)
-	else:
+	elif e.strerror:
 		print "mopicli. " + e.strerror
+	else:
+		# IOError(70) really should have the string encoded in it, but handle ourselves
+		 print "mopicli. " + os.strerror(e.args[0])
 	sys.exit(1)
 except OSError as e:
 	print "mopicli. " + e.strerror
