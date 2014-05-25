@@ -52,7 +52,7 @@ parameters2 = [
 	[  "-i", "x", "Where x is the I2C bus that connects the MoPi to the Raspberry Pi. If ths\n    flag is not set, the default bus of \x1b[1m%i\x1b[0m is used, based on board revision." % mopiapi.guessI2C()],
 	[ "-wc", "t mV mV mV mV", ""],
 	["-wc1", "t mV mV mV mV", ""],
-	["-wc2", "t mV mV mV mV", "Where t (type) is \x1b[1m1\x1b[0m for batteries, \x1b[1m2\x1b[0m for PSU / DC adapter, and the four mV\n    settings are the \x1b[1mmaximum\x1b[0m, \x1b[1mgood\x1b[0m, \x1b[1mlow\x1b[0m, and \x1b[1mcritical\x1b[0m voltage levels."
+	["-wc2", "t mV mV mV mV", "Where t (type) is \x1b[1m1\x1b[0m for rechargeable batteries, \x1b[1m2\x1b[0m for non-rechargeable\n    batteries, \x1b[1m3\x1b[0m for PSU / DC adapter, and the four mV settings are the\n    \x1b[1mmaximum\x1b[0m, \x1b[1mgood\x1b[0m, \x1b[1mlow\x1b[0m, and \x1b[1mcritical\x1b[0m voltage levels."
 ],
 	["-won", "seconds", "This timer counts down from the moment the MoPi is powered off and turns it\n    back on when reaching zero."],
 	["-wsd", "seconds", "This timer counts down from the moment it is set and powers off the MoPi\n    when reaching zero."],
@@ -65,9 +65,7 @@ for i in range(0, len(commands2)):
 	commands.append(commands2[i][0])
 	parameters.append(commands2[i][3])
 
-# define them in the same ordered array 
-# replace the help descriptions with the labels?
-
+# === helper functions start here === #
 
 def shorthelp():
 	print "Usage: mopicli [-h] [options]"
@@ -125,8 +123,10 @@ def getLabel(flag):
 
 def confDisp(cnf):
 	if cnf[0] == 1:
-		print "  Source type: batteries"
+		print "  Source type: Rechargeable batteries"
 	elif cnf[0] == 2:
+		print "  Source type: Non-rechargeable batteries"
+	elif cnf[0] == 3:
 		print "  Source type: PSU / DC adapter"
 	print "  Maximum voltage: %i mV" % cnf[1]
 	print "  Good voltage: %i mV" % cnf[2]
@@ -168,6 +168,7 @@ else:
 	labels = 1
 
 status = 0
+diff = 1 # differing battery configuration?
 try:
 	# special handling for -i
 	if '-i' not in sys.argv:
@@ -213,7 +214,6 @@ try:
 			if '-rc' == arg:
 				cnf = mymopi.readConfig()
 				if labels == 1:
-					diff = 1
 					for z in range(0, len(cnf)):
 						if cnf[z] != 255:
 							diff = 0
@@ -226,19 +226,25 @@ try:
 				else:
 					print ' '.join(map(str, cnf))
 			if '-rc1' == arg:
-				cnf = mymopi.readConfig(1)
-				if labels == 1:
-					print getLabel(arg)
-					confDisp(cnf)
+				if diff == 0:
+					print "%smatching, see above" % getLabel(arg)
 				else:
-					print ' '.join(map(str, cnf))
+					cnf = mymopi.readConfig(1)
+					if labels == 1:
+						print getLabel(arg)
+						confDisp(cnf)
+					else:
+						print ' '.join(map(str, cnf))
 			if '-rc2' == arg:
-				cnf = mymopi.readConfig(2)
-				if labels == 1:
-					print getLabel(arg)
-					confDisp(cnf)
+				if diff == 0:
+					print "%smatching, see above" % getLabel(arg)
 				else:
-					print ' '.join(map(str, cnf))
+					cnf = mymopi.readConfig(2)
+					if labels == 1:
+						print getLabel(arg)
+						confDisp(cnf)
+					else:
+						print ' '.join(map(str, cnf))
 
 			if '-ron' == arg:
 				d = mymopi.getPowerOnDelay()
@@ -270,11 +276,11 @@ try:
 
 except IOError as e:
 	if e.errno == errno.EACCES:
-		print "mopicli. Permission denied." # add something about i2c bus
+		print "mopicli. Permission denied. Are you running as root?"
 	elif e.errno == errno.EIO:
-		print "mopicli. Communication error. Check bus? Check connection?"
+		print "mopicli. %s. Check bus? Check connection?" % e.strerror
 	elif e.errno == errno.ECOMM:
-		print "mopicli. Failed to write configuration."
+		print "mopicli. %s." % e.strerror
 		sys.exit(2)
 	else:
 		print "mopicli. " + e.strerror

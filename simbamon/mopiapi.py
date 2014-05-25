@@ -219,18 +219,18 @@ class status():
 		out = ""
 
 		if self.SourceOneActive():
-			out += 'Battery #1 active\n'
+			out += 'Source #1 active\n'
 		if self.SourceTwoActive():
-			out += 'Battery #2 active\n'
+			out += 'Source #2 active\n'
 
 		if self.LEDBlue():
-			out += 'Battery full (blue led)\n'
+			out += 'Source full (blue led)\n'
 		if self.LEDGreen():
-			out += 'Battery good (green led)\n'
+			out += 'Source good (green led)\n'
 		if self.LEDRed():
-			out += 'Battery low (red led)\n'
+			out += 'Source low (red led)\n'
 		if self.LEDFlashing():
-			out += 'Battery critical (flashing red led)\n'
+			out += 'Source critical (flashing red led)\n'
 
 		if not self.UserConfiguration():
 			if self.JumperState():
@@ -251,19 +251,19 @@ class status():
 			out += 'Shutdown delay in progress\n'
 
 		if self.CheckSourceOne():
-			out += 'Battery #1 good\n'
+			out += 'Source #1 good\n'
 		else:
-			out += 'Battery #1 low/not present\n'
+			out += 'Source #1 low/not present\n'
 		if self.CheckSourceTwo():
-			out += 'Battery #2 good\n'
+			out += 'Source #2 good\n'
 		else:
-			out += 'Battery #2 low/not present\n'
+			out += 'Source #2 low/not present\n'
 
 		if self.UserConfiguration():
 			out += 'User configured\n'
 
 		if out == "":
-			# Battery #1 or #2 should always be active...
+			# Source #1 or #2 should always be active...
 			raise IOError(errno.EINVAL, "Invalid status")
 		else:
 			out = out[:-1]
