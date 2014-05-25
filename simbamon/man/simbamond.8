@@ -1,4 +1,4 @@
-.TH simbamon 8 "May 23, 2014" "" "System Manager's Manual"
+.TH simbamon 8 "May 25, 2014" "" "System Manager's Manual"
 .SH NAME
 \fBsimbamon \fP- a Simple Battery Monitor daemon
 .SH SYNOPSIS
@@ -36,7 +36,7 @@ You can find the source code on GitHub:
 The core of the daemon is defined in three files:
 .RS
 .IP \(bu 3
-/etc/simbamon.conf - configuration data
+/etc/default/\fIsimbamond\fP - configuration data
 .IP \(bu 3
 /usr/sbin/\fBsimbamon\fP - the daemon itself
 .IP \(bu 3
@@ -73,7 +73,7 @@ Restart the daemon with debugging on:
 .fam T
 .fi
 .SH SEE ALSO
-\fBmopi\fP(8) \fBservice\fP(8)
+\fBmopi\fP(8) \fBmopicli\fP(8) \fBservice\fP(8)
 .SH BUGS
 Almost certainly!
 .SH AUTHOR

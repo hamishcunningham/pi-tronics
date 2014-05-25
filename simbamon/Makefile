@@ -95,7 +95,7 @@ uninstall:
 	@echo done
 
 # manpage ####################################################################
-man: man/$(P).txt man/$(MOPI).txt
+man: man/$(P).txt man/$(MOPI).txt man/$(MOPICLI).txt
 	cd man; ../utils/txt2man -v "System Manager's Manual" -s 8 \
           -t '$(D)' $(P).txt >$(P).8; \
 	sed -i 1d $(P).8;  # fix error from lintian about ." macro \
@@ -103,8 +103,12 @@ man: man/$(P).txt man/$(MOPI).txt
 	cd man; ../utils/txt2man -v "System Manager's Manual" -s 8 \
           -t '$(MOPI)' $(MOPI).txt >$(MOPI).8; \
 	sed -i 1d $(MOPI).8;  # fix error from lintian about ." macro \
-	cat $(MOPI).8 |gzip >$(MOPI).8.gz; \
-        cp $(MOPI).8.gz $(MOPICLI).8.gz; cp $(MOPI).8.gz $(MOPIAPI).8.gz
+	cat $(MOPI).8 |gzip >$(MOPI).8.gz;
+	cd man; ../utils/txt2man -v "System Manager's Manual" -s 8 \
+          -t '$(MOPICLI)' $(MOPICLI).txt >$(MOPICLI).8; \
+	sed -i 1d $(MOPI).8;  # fix error from lintian about ." macro \
+	cat $(MOPICLI).8 |gzip >$(MOPICLI).8.gz; \
+	cp $(MOPICLI).8.gz $(MOPIAPI).8.gz
 
 # package ####################################################################
 version:

@@ -39,7 +39,7 @@ EXAMPLE
 
     $ sudo service simbamond restart -d
 SEE ALSO
-  mopi(8) service(8)
+  mopi(8) mopicli(8) service(8)
 BUGS
   Almost certainly!
 AUTHOR
