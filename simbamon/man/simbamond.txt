@@ -30,6 +30,8 @@ DESCRIPTION
 
     sudo service simbamon stop
 
+  The mopi utility is provided for easy user configuration.
+
   For more details see http://pi.gate.ac.uk/pages/mopi.html#simbamon
 OPTIONS
   -d          Turn on debug mode.
