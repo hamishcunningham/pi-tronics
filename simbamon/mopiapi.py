@@ -4,7 +4,6 @@
 
 import smbus
 import errno
-import re
 import RPi.GPIO
 
 # Version of the API
@@ -18,7 +17,7 @@ FIRMMINR=5
 VERSION=3.2+8
 
 # Number of times to retry a failed I2C read/write to the MoPi
-RETRIES=3
+MAXTRIES=3
 
 class mopiapi():
 	device = 0xb
@@ -49,7 +48,7 @@ class mopiapi():
 		elif input == 2:
 			data = self.bus.read_i2c_block_data(self.device, 0b00001000) # 8
 		else:
-			data = self.bus.read_i2c_block_data(self.device, 0b00000010)
+			data = self.bus.read_i2c_block_data(self.device, 0b00000010) # 2
 		if data[0] != 255:
 			for i in range(1,5):
 				data[i] *= 100
@@ -58,9 +57,9 @@ class mopiapi():
 	# takes an array of 5 integers: power source type, max, good, low, crit (mV)
 	def writeConfig(self, battery, input=0):
 		if len(battery) != 5:
-			raise IOError(errno.EINVAL, "Invalid parameter (1)")
+			raise IOError(errno.EINVAL, "Invalid parameter, wrong number of arguments")
 		if battery[0] < 1 or battery[0] > 3:
-			raise IOError(errno.EINVAL, "Invalid parameter (2)")
+			raise IOError(errno.EINVAL, "Invalid parameter, type outside range")
 
 		data = [battery[0]]
 		for i in range(1,5):
@@ -68,21 +67,28 @@ class mopiapi():
 			data.append(battery[i])
 			battery[i] *= 100 # for the read back we need to compare to the rounded value
 			if data[i] < 0 or data[i] > 255:
-				raise IOError(errno.EINVAL, "Invalid parameter (3)")
+				raise IOError(errno.EINVAL, "Invalid parameter, voltage outside range")
 
 		# check if config to be written matches existing config
+		if cmp(battery, self.readConfig(input)) == 0:
+			return
+
+		# try writing the config
 		tries = 0
-		while cmp(battery, self.readConfig(input)) != 0 and tries < RETRIES:
+		while tries < MAXTRIES:
 			if input == 1:
 				self.bus.write_i2c_block_data(self.device, 0b00000111, data) # 7
 			elif input == 2:
 				self.bus.write_i2c_block_data(self.device, 0b00001000, data) # 8
 			else:
-				self.bus.write_i2c_block_data(self.device, 0b00000010, data)
+				self.bus.write_i2c_block_data(self.device, 0b00000010, data) # 2
+			# read back test
+			if cmp(battery, self.readConfig(input)) == 0:
+				break
 			tries += 1
 		# unsucessfully written
-		if tries - 1 == RETRIES:
-			raise IOError(errno.ECOMM, "Communication error on send")
+		if tries == MAXTRIES:
+			raise IOError(errno.ECOMM, "Communication error on send config")
 			return False
 		return True
 
@@ -105,28 +111,50 @@ class mopiapi():
 	def getSerialNumber(self):
 		return self.readWord(0b00001010) # 10
 
-	def readWord(self, register):
+	def baseReadWord(self, register):
 		tries = 0
 		data = 0xFFFF
-		while data == 0xFFFF and tries < RETRIES:
+		while data == 0xFFFF and tries < MAXTRIES:
 			data = self.bus.read_word_data(self.device, register)
 			tries += 1
 		if data == 0xFFFF:
-			raise IOError(errno.EIO, "")
-		data = data & 32767 # fix for leading bit
+			raise IOError(errno.EIO, "Communication error on read word")
+		return data
+
+	def readWord(self, register):
+		data = self.baseReadWord(register)
+
+		# try and re-read the config in the case of a high bit as a stop-gap measure
+		if data & 32768 == 32768 or data & 128 == 128:
+			data2 = self.baseReadWord(register)
+			if data != data2:
+				data3 = self.baseReadWord(register)
+				if data2 == data3:
+					return data2
+				else:
+					raise IOError(errno.EIO, "Communication error on read word, bit 15 or 7")
 		return data
 
 	def writeWord(self, register, data):
 		if data < 0 or data > 0xFFFF:
-			raise IOError(errno.EINVAL, "Invalid parameter (4)")
+			raise IOError(errno.EINVAL, "Invalid parameter, value outside range")
 
+		# check if word is already set
+		if self.readWord(register) == data:
+			return
+
+		# try writing
 		tries = 0
-		while self.readWord(register) != data and tries < RETRIES:
+		while tries < MAXTRIES:
 			self.bus.write_word_data(self.device, register, data)
+			# read back test
+			if self.readWord(register) == data:
+				break
 			tries += 1
+			print tries
 		# unsucessfully written
-		if tries - 1 == RETRIES:
-			raise IOError(errno.ECOMM, "Communication error on send")
+		if tries == MAXTRIES:
+			raise IOError(errno.ECOMM, "Communication error on send word")
 			return False
 		return True
 			
