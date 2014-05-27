@@ -38,4 +38,4 @@ SEE ALSO
 BUGS
   Almost certainly!
 AUTHOR
-  Hamish Cunningham <http://hamish.gate.ac.uk/>, Fred Sonnenwald
+  Fred Sonnenwald, Hamish Cunningham <http://hamish.gate.ac.uk/>

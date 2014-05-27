@@ -3,8 +3,8 @@ NAME
 SYNOPSIS
   mopi [-d] [-h] [-v] [-l]
 DESCRIPTION
-  Easy user configuration tool for the MoPi mobile and 24/7 power board for
-  the Raspberry Pi.
+  Graphical configuration tool for the MoPi mobile and 24/7 power board
+  for the Raspberry Pi.
   
   Features...
 
