@@ -31,6 +31,7 @@ PREVIOUSLY_RUN_INDICATOR=/tmp/${NAME}-previously-run.txt
 # set logging and delay levels short
 if [ "$DEBUG" = on ]
 then
+  MONITOR_FREQUENCY=1
   LOG_INTERVAL=3
   WARNING_INTERVAL=10
   SHUTDOWN='echo "not halting, in debug mode"'
