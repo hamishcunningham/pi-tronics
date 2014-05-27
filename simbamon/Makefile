@@ -106,7 +106,7 @@ man: man/$(P).txt man/$(MOPI).txt man/$(MOPICLI).txt
 	cat $(MOPI).8 |gzip >$(MOPI).8.gz;
 	cd man; ../utils/txt2man -v "System Manager's Manual" -s 8 \
           -t '$(MOPICLI)' $(MOPICLI).txt >$(MOPICLI).8; \
-	sed -i 1d $(MOPI).8;  # fix error from lintian about ." macro \
+	sed -i 1d $(MOPICLI).8;  # fix error from lintian about ." macro \
 	cat $(MOPICLI).8 |gzip >$(MOPICLI).8.gz; \
 	cp $(MOPICLI).8.gz $(MOPIAPI).8.gz
 
