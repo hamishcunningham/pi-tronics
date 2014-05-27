@@ -1,4 +1,10 @@
-simbamond (3.2+9) precise; urgency=low
+simbamond (3.3) unstable; urgency=low
+
+  * Snapshot releases in the 3.3+1 series
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Tue, 27 May 2014 10:06:36 +0100
+
+simbamond (3.2+9) unstable; urgency=low
 
   *  Snapshot releases in the 3.2+1 series
 
