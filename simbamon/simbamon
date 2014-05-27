@@ -119,6 +119,7 @@ do
         OUT=`$COM` || { logger "${NAME}: error writing config: ${OUT}"; }
       else
         logger "${NAME}: ignoring badly constructed local config ($COM)"
+        echo "${NAME}: ignoring badly constructed local config ($COM)" >&2
       fi
       IFS='
 '
