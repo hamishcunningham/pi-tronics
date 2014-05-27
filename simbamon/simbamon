@@ -57,7 +57,7 @@ while getopts $OPTIONSTRING OPTION
 do
   case $OPTION in
     h)	usage 1 ;;
-    d)	DEBUG=on; CLI=echo; ;;
+    d)	DEBUG=on ;;
     v)  log_action_msg Version $VERSION; usage 0 ;;
     *)	usage 2 ;;
   esac
