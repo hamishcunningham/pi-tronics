@@ -123,7 +123,7 @@ class mopiapi():
 
 	def readWord(self, register):
 		data = self.baseReadWord(register)
-
+		return data
 		# try and re-read the config in the case of a high bit as a stop-gap measure
 		if data & 32768 == 32768 or data & 128 == 128:
 			data2 = self.baseReadWord(register)
