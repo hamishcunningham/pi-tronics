@@ -35,6 +35,7 @@ LMESS='status word'
 SHUTDOWN="halt && exit 0"
 INST_DIR=`dirname ${P}`
 CLI=${INST_DIR}/mopicli
+STATUS_LOG_NEEDED=true
 
 # options defaults
 DEBUG=off
@@ -93,12 +94,12 @@ do
 
   # on first boot ...
   [ -z "$PREVIOUSLY_RUN" -a ! -f "$PREVIOUSLY_RUN_INDICATOR" ] && {
-    date > $PREVIOUSLY_RUN_INDICATOR 
+    date > $PREVIOUSLY_RUN_INDICATOR
 
     # ...take a short break
     logger "${NAME}: first run after boot, sleeping for ${BOOT_DELAY}..."
     sleep $BOOT_DELAY
-    logger "${NAME}: ...boot delay done; ${LMESS} is ${MOPI_STATUS}"
+    logger "${NAME}: ...boot delay done"
   }
 
   # on first loop after start...
@@ -129,6 +130,10 @@ do
 
   # get MoPi status
   MOPI_STATUS="`${CLI} -nl -s`"
+  [ "$STATUS_LOG_NEEDED" = true ] && {
+    logger "${NAME}: MOPI_STATUS is ${MOPI_STATUS}"
+    STATUS_LOG_NEEDED=false
+  }
 
   # the status word must be an integer
   echo "$MOPI_STATUS" |grep -q '^[0-9][0-9]*$' || {
