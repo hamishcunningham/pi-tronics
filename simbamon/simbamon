@@ -98,7 +98,7 @@ do
     # ...take a short break
     logger "${NAME}: first run after boot, sleeping for ${BOOT_DELAY}..."
     sleep $BOOT_DELAY
-    logger "${NAME}: ...boot delay done"
+    logger "${NAME}: ...boot delay done; ${LMESS} is ${MOPI_STATUS}"
   }
 
   # on first loop after start...
