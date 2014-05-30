@@ -1,0 +1,49 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Fri, 30 May 2014 08:03:12 +0100
+Source: simbamond
+Binary: simbamond
+Architecture: source all
+Version: 3.4
+Distribution: unstable
+Urgency: low
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Changed-By: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Description: 
+ simbamond  - SimBaMon, a Simple Battery Monitor
+Changes: 
+ simbamond (3.4) unstable; urgency=low
+ .
+   * Version 3.4, for firmware 3.08
+Checksums-Sha1: 
+ 5f99e2ea373ea223ad88b8cf94133afb8594917e 1636 simbamond_3.4.dsc
+ 997a75521103b3f1887c68efffeb1f0054fd8811 35091 simbamond_3.4.tar.gz
+ cd147699328bf1071c9943b7130536762927a742 23762 simbamond_3.4_all.deb
+Checksums-Sha256: 
+ 5d30e50144610a37fc806cf5e491faf07220cc5d3247c1a262c0d20c139c23df 1636 simbamond_3.4.dsc
+ 13b2fa7c33792901f04617eaa03d5122ff897450995e49cbd5080509b87c2568 35091 simbamond_3.4.tar.gz
+ 75ce7019b18d445ec6508f3d48f7f5eb6746b220113ee360a3f6cde2c8baed21 23762 simbamond_3.4_all.deb
+Files: 
+ 68df4db94923bd48b1cb0bcead36ebf6 1636 admin optional simbamond_3.4.dsc
+ 65dd4fe1ddda963af69c84ebbbc60021 35091 admin optional simbamond_3.4.tar.gz
+ 3c345127d11789cd275a9f0f0fce732c 23762 admin optional simbamond_3.4_all.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+iQIcBAEBAgAGBQJTiC2TAAoJEK3gE8dtAR3x4fkP+QEf2ohC6t5L9utVg0c0+6xe
+HbHd1AqPUpVHdWITKe4P38ujndqmMnBO3WUV9exsfCB3xSsGQQrsUVSPORbI5oLx
+xlN5hVl37/xFPRndFGRWpG1RSEjRwUw6wvPQWQRs+DY5ysjKMNF2Fbrr95td+DD7
+hW22x59K9E5QIfb47gyoAEzBp5dGCVKKHeTl+FCmIUVccXsJUfg7WK8hf0Wg0yKJ
+3gHGDF3EGPCVcIXWZL2yHJhek34KJ11UDrZKagLo2vI2n5++EHWAU5xX2GiB/lFf
+rzMwC9qM8LN15rE0VpWKBgPW/lavcudDBDubNqPeztrux4WG36RtarDvF6lHmbqI
+CIVB6x5gOJ8jfW3frTXpZXcC6o0kcBs6klkVCBCGzeBlgYT38BbpO76MPfrmov3o
+vVK8gZ9vkNjVqjp2XewmdLFxYmLMNI6ouy62CdDCqoIsXb+02GZL2UyN4r4USfJy
+uoeDdcNlwpNPjFq2mTXEK1MrA4v/EKU+lt5+2dT4SJHT50IN02vcsPKPTmsBpZzB
+bH8HNLhJ6YNd7JB6AOLoCyDalQE0mO9mSYTXtUcOIJbLyM0gnLFZvA56ZRp5dTeX
+Z1ZJTeWApZ+9FZsfwM2sRO23gFjdQXMcY69u/IfZcqwTBeeDj3cb4Ut77/7VtVES
+Kwui3D1yfMXuQMqaChfA
+=Gy3q
+-----END PGP SIGNATURE-----

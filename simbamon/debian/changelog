@@ -1,3 +1,9 @@
+simbamond (3.4) unstable; urgency=low
+
+  * Version 3.4, for firmware 3.08
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Fri, 30 May 2014 08:03:12 +0100
+
 simbamond (3.3) unstable; urgency=low
 
   * Snapshot releases in the 3.3+1 series
