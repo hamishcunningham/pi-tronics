@@ -1,5 +1,11 @@
 simbamond (3.4) unstable; urgency=low
 
+  * Snapshots 3.4+1...
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Fri, 30 May 2014 11:03:59 +0100
+
+simbamond (3.4) unstable; urgency=low
+
   * Version 3.4, for firmware 3.08
 
  -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Fri, 30 May 2014 08:03:12 +0100
