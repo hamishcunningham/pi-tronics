@@ -1,3 +1,9 @@
+simbamond (3.5) unstable; urgency=low
+
+  * Version 3.5, 3rd-party test release, for firmware version 3.08
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Fri, 30 May 2014 22:11:06 +0100
+
 simbamond (3.4) unstable; urgency=low
 
   * Snapshots 3.4+1...
