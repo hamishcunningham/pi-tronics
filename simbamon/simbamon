@@ -71,7 +71,7 @@ pdate() { date +%b-%d-%Y-%T; }
 # tell the world
 logger "=========== $0: running at `pdate` ==========="
 logger "${NAME}: monitor frequency is ${MONITOR_FREQUENCY} seconds"
-logger "${NAME}: DEBUG is ${DEBUG}"
+[ "${DEBUG}" = on ] && logger "${NAME}: DEBUG is ${DEBUG}"
 
 # check mopicli installed and working
 ${CLI} -s >/dev/null || {
