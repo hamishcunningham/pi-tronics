@@ -25,9 +25,9 @@ echo
 
 for w in $*
 do
-  echo Status word $w is:
-  echo 0123456789012345
-  echo "obase=2;$w;" |bc |rev
-  echo "0x`echo "obase=16;$w" |bc`"
+  echo Status word " "$w is:
+  echo "  bit key:   0123456789012345"
+  echo -n "  binary:    "; echo "obase=2;$w;" |bc |rev
+  echo -n "  hex:       "; echo "0x`echo "obase=16;$w" |bc`"
   echo
 done
