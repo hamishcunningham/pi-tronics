@@ -69,7 +69,7 @@ shift $(( $OPTIND - 1 ))
 pdate() { date +%b-%d-%Y-%T; }
 
 # tell the world
-logger "=========== $0: running at `pdate` ==========="
+logger "$0: version $VERSION running at `pdate`"
 logger "${NAME}: monitor frequency is ${MONITOR_FREQUENCY} seconds"
 [ "${DEBUG}" = on ] && logger "${NAME}: DEBUG is ${DEBUG}"
 
