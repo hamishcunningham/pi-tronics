@@ -15,7 +15,7 @@ FIRMMAJ=3
 FIRMMINR=5
 
 # Package version
-VERSION=3.5+2
+VERSION="3.5+2"
 
 # Number of times to retry a failed I2C read/write to the MoPi
 MAXTRIES=3
@@ -66,10 +66,11 @@ class mopiapi():
 			if e.errno == errno.EIO:
 				e.strerror = "I2C bus input/output error on read config"
 			raise e
-		if tries == MAXTRIES or data[0] == 255:
+		if tries == MAXTRIES:
 			raise IOError(errno.ECOMM, "Communications protocol error on read config")
-		else:
-			# sucessful read
+		if  data[0] != 255:
+			# it's a cV reading that we need to convert back to mV
+			# (with 255's it's indicating a differing config)
 			for i in range(1,5):
 				data[i] *= 100
 		return data[:5]
@@ -119,8 +120,6 @@ class mopiapi():
 			raise e
 		if tries == MAXTRIES:
 			raise IOError(errno.ECOMM, "Communications protocol error on send config")
-			return False
-		return True
 
 	def setPowerOnDelay(self, poweron):
 		self.writeWord(0b00000011, poweron)
@@ -211,8 +210,6 @@ class mopiapi():
 			raise e
 		if tries == MAXTRIES:
 			raise IOError(errno.ECOMM, "Communications protocol error on write word")
-			return False
-		return True
 			
 
 def getApiVersion():
