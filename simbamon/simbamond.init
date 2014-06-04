@@ -30,6 +30,13 @@ SCRIPTNAME=/etc/init.d/$DNAME
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
 
+# Needs to be run as root
+if [ $(id -u) -ne 0 ]
+then
+  echo "${DAEMON} must be run as root; try 'sudo service simbamond ...'?"
+  exit 1
+fi
+
 # Read configuration variable file if it is present
 [ -r /etc/default/$DNAME ] && . /etc/default/$DNAME
 
@@ -122,8 +129,10 @@ do_reload() {
   # restarting (for example, when it is sent a SIGHUP),
   # then implement that here.
   #
-  start-stop-daemon --stop --signal 1 --quiet --pidfile $PIDFILE --name $NAME
-  return 0
+  # start-stop-daemon --stop --signal 1 --quiet --pidfile $PIDFILE --name $NAME
+
+  # we can't reload, do restart instead
+  return 1
 }
 
 # Do the work

@@ -1,0 +1,41 @@
+NAME
+  mopicli mopiapi.py - MoPi command-line interface and Python API
+SYNOPSIS
+  mopicli [-h] [options]
+DESCRIPTION
+  Command-line tool and programming interface for the MoPi mobile and 24/7
+  power board for the Raspberry Pi:
+  
+  * mopicli is a command-line interface to configuring the MoPi, powered by
+    the API and used by the mopi tool
+  * mopiapi.py is a Python API that talks to the MoPi board over the I2C bus
+
+  To get started with mopicli and show the system status:
+
+    $ sudo mopicli -sv
+
+  See the help message for more details of options and parameters.
+  
+  To get started with the API:
+
+    import mopiapi
+    mymopi = mopiapi.mopiapi()
+    print mopiapi.status(mymopi.getStatus()).StatusDetail()
+
+  You can find the source code on GitHub:
+
+    https://github.com/hamishcunningham/pi-tronics/tree/master/simbamon
+
+  Part of the SimBaMon battery monitor package.
+
+  For more details see http://pi.gate.ac.uk/mopi
+OPTIONS
+  -h          Display a help message.
+EXAMPLE
+    $ mopicli -sv
+SEE ALSO
+  mopi(8) simbamond(8)
+BUGS
+  Almost certainly!
+AUTHOR
+  Fred Sonnenwald, Hamish Cunningham <http://hamish.gate.ac.uk/>

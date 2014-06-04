@@ -1,0 +1,49 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Fri, 30 May 2014 22:11:06 +0100
+Source: simbamond
+Binary: simbamond
+Architecture: source all
+Version: 3.5
+Distribution: unstable
+Urgency: low
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Changed-By: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Description: 
+ simbamond  - SimBaMon, a Simple Battery Monitor
+Changes: 
+ simbamond (3.5) unstable; urgency=low
+ .
+   * Version 3.5, 3rd-party test release, for firmware version 3.08
+Checksums-Sha1: 
+ e4e229859a88c1069a48d054385adf3622092bcd 1636 simbamond_3.5.dsc
+ 363a42e2064600c45b89e2e1cd110919c2739cbf 35035 simbamond_3.5.tar.gz
+ ef80f0c80ace4ff217414599e73284c4d4966be2 23844 simbamond_3.5_all.deb
+Checksums-Sha256: 
+ 35c8fa66a60094ad87c0dbb3cbbb12cddfec200cbe318b6e8c5adf6fc9a56030 1636 simbamond_3.5.dsc
+ 7d1558d5be9e74ee20553606fb6ff72abd49b5f4a37d66e4c3877c3316b99bd7 35035 simbamond_3.5.tar.gz
+ 9ab3f951d326815e8d071075066a0c38609c8042ea221c05e65f9981f2390a6f 23844 simbamond_3.5_all.deb
+Files: 
+ 5d83b8036ffa1f7cdee15b6f9d41a0d0 1636 admin optional simbamond_3.5.dsc
+ cd8ec09886447afc9f159b16ab1583f8 35035 admin optional simbamond_3.5.tar.gz
+ fc22e34ff3ce73bb9841dd68b8932e96 23844 admin optional simbamond_3.5_all.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+iQIcBAEBAgAGBQJTiPSbAAoJEK3gE8dtAR3xKKYP/2/79JSos8izpk1PoC5NyOqr
+/c7cuzEX3hkZc89kdqTOSL7Z07a/g4j9g8FRgL8pMv+Cu7eUTOU1XKk200X+sNbB
+h1HxiN+g2iCCd47YDkEvN0Mk1wuILgTH93e8MV555sdpPt5cBmmq6eqShfLcZLfE
+XcrAXWg2AviccfBgoIhuMO8IC3EXcMNCHpJ1yza45CFns4c8aIM2qXlx4fAFxcL8
+o49AwlcuHv1klt2UOi6tM29/qjfPUj+LzMBToJ5ljRfBwRZRfRIcBhkCeIDf9U9R
+s0dZSpmUEZWYz4kSeQThcBms+Swbg9hV1cthbj1iDXMpQekuJlHTalrjEq09CNR3
+JIuCy1gv2gihvrutyuGmZJ3cTqjScglmUQGk3TbWxJlDm3oNjPjEe21BYS5TpOu4
+mR7dtSRMdVl5pohIW7KhFciCzIWLtoA8I/CHp4oCkDoADpf4tlSF5PwxdnwgtBj4
+XoE1TC3wyDhLfLptHJcFCDdzWXjcT3pU+zBtDGFExZ49k9YynLG+Ls8d6MIlSXaB
+FJxRNFLQ4bQspzyKtKrGpNGhIOOl8Z1UUK8mpXN66TN1AltB4lTnTHhZzs6kq6Oz
+Xp85WvBktsHlKJGB1GYBi1ccMKKRDWckZt00vJ+qJ3wSb85yKhwv6aRtDOEZTsVj
+n5i0w7WmEPT6kF48P6jN
+=u8F1
+-----END PGP SIGNATURE-----

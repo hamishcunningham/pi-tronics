@@ -8,7 +8,7 @@
 # monitor configuration...
 
 # version (DON'T EDIT: it is set by "make package" or "make snapshot")
-VERSION=3.2+8
+VERSION="3.5+3"
 
 # how often should we check battery state? (in seconds, approximately)
 MONITOR_FREQUENCY=2
@@ -31,6 +31,7 @@ PREVIOUSLY_RUN_INDICATOR=/tmp/${NAME}-previously-run.txt
 # set logging and delay levels short
 if [ "$DEBUG" = on ]
 then
+  MONITOR_FREQUENCY=1
   LOG_INTERVAL=3
   WARNING_INTERVAL=10
   SHUTDOWN='echo "not halting, in debug mode"'
@@ -182,7 +183,7 @@ calculate_config() {
   CHEMISTRY=$3
 
   BAT_FLOOR=$( echo "`bat_dod_floor ${CHEMISTRY}`*${NUM_CELLS}"     |bc )
-  BAT_LOW=$(   echo "${BAT_FLOOR}*1.1"                              |bc )
+  BAT_LOW=$(   echo "${BAT_FLOOR}*1.15"                             |bc )
   BAT_FULL=$(  echo "`bat_nominal_volts ${CHEMISTRY}`*${NUM_CELLS}" |bc )
   BAT_GOOD=$(  echo "((${BAT_FULL}-${BAT_LOW})/2)+${BAT_LOW}"       |bc )
 }
@@ -223,7 +224,8 @@ delete_local_config() {
 #
 # check a local configuration command pattern
 check_local_config() {
-  echo "$1" |grep -q ' -wc[12]* [123] [0-9][0-9]* [0-9][0-9]* [0-9][0-9]*$'
+  echo "$1" |grep -q \
+    ' -wc[12]* [123] [0-9][0-9]* [0-9][0-9]* [0-9][0-9]* [0-9][0-9]*$'
 }
 
 #############################################################################

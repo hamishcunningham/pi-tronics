@@ -1,4 +1,28 @@
-simbamond (3.2) unstable; urgency=low
+simbamond (3.5) unstable; urgency=low
+
+  * Version 3.5, 3rd-party test release, for firmware version 3.08
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Fri, 30 May 2014 22:11:06 +0100
+
+simbamond (3.4) unstable; urgency=low
+
+  * Snapshots 3.4+1...
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Fri, 30 May 2014 11:03:59 +0100
+
+simbamond (3.4) unstable; urgency=low
+
+  * Version 3.4, for firmware 3.08
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Fri, 30 May 2014 08:03:12 +0100
+
+simbamond (3.3) unstable; urgency=low
+
+  * Snapshot releases in the 3.3+1 series
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Tue, 27 May 2014 10:06:36 +0100
+
+simbamond (3.2+9) unstable; urgency=low
 
   *  Snapshot releases in the 3.2+1 series
 

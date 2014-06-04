@@ -16,5 +16,6 @@ Description: SimBaMon, a Simple Battery Monitor
  SimBaMon is an open source Linux daemon for monitoring battery levels;
  sending warning messages to the user if the battery is low; shutting down
  cleanly at critical battery levels; managing a power supply on/off switch;
- writing relevant data to the system logs. See
+ writing relevant data to the system logs. It is bundled with configuration
+ and API tools for the MoPi mobile Pi power board. See
  http://pi.gate.ac.uk/pages/mopi.html#simbamon

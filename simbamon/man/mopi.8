@@ -1,24 +1,25 @@
-.TH mopi 8 "May 23, 2014" "" "System Manager's Manual"
+.TH mopi 8 "May 30, 2014" "" "System Manager's Manual"
 .SH NAME
-\fBmopi mopicli mopiapi.py \fP- MoPi configuration script, command-line interface,
-\fBand Python API
+\fBmopi \fP- MoPi configuration tool
 .SH SYNOPSIS
 .nf
 .fam C
 \fBmopi\fP [\fB-d\fP] [\fB-h\fP] [\fB-v\fP] [\fB-l\fP]
-\fBmopicli\fP [ \fIoptions\fP ]
 .fam T
 .fi
 .SH DESCRIPTION
-Configuration and access tools for the MoPi mobile and 24/7 power board for
-the Raspberry Pi:
+Graphical configuration tool for the MoPi mobile and 24/7 power board
+for the Raspberry Pi.
+.PP
+Features\.\.\.
+.RS
 .IP \(bu 3
-\fBmopi\fP is for interactive configuration of e.g. battery types
+interactive configuration of e.g. battery types
 .IP \(bu 3
-mopiapi.py is a Python API that talks to the MoPi board over the I2C bus
+view status
 .IP \(bu 3
-\fBmopicli\fP is a command-line interface to the API (and is used by \fBmopi\fP to
-communicate with the board)
+check relevant logs for errors
+.RE
 .PP
 You can find the source code on GitHub:
 .PP
@@ -51,7 +52,7 @@ Show recent log entries.
 .SH EXAMPLE
 $ \fBmopi\fP
 .SH SEE ALSO
-\fBsimbamond\fP(8)
+\fBmopicli\fP(8) \fBsimbamond\fP(8)
 .SH BUGS
 Almost certainly!
 .SH AUTHOR

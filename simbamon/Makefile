@@ -3,8 +3,8 @@
 # and is licenced under GPL 3 or any later version.
 
 # vars #######################################################################
-VERSION=3.2
-NEXT_SNAP=9
+VERSION=3.5
+NEXT_SNAP=4
 P=simbamond
 D=simbamon
 MOPI=mopi
@@ -95,7 +95,7 @@ uninstall:
 	@echo done
 
 # manpage ####################################################################
-man: man/$(P).txt man/$(MOPI).txt
+man: man/$(P).txt man/$(MOPI).txt man/$(MOPICLI).txt
 	cd man; ../utils/txt2man -v "System Manager's Manual" -s 8 \
           -t '$(D)' $(P).txt >$(P).8; \
 	sed -i 1d $(P).8;  # fix error from lintian about ." macro \
@@ -103,13 +103,17 @@ man: man/$(P).txt man/$(MOPI).txt
 	cd man; ../utils/txt2man -v "System Manager's Manual" -s 8 \
           -t '$(MOPI)' $(MOPI).txt >$(MOPI).8; \
 	sed -i 1d $(MOPI).8;  # fix error from lintian about ." macro \
-	cat $(MOPI).8 |gzip >$(MOPI).8.gz; \
-        cp $(MOPI).8.gz $(MOPICLI).8.gz; cp $(MOPI).8.gz $(MOPIAPI).8.gz
+	cat $(MOPI).8 |gzip >$(MOPI).8.gz;
+	cd man; ../utils/txt2man -v "System Manager's Manual" -s 8 \
+          -t '$(MOPICLI)' $(MOPICLI).txt >$(MOPICLI).8; \
+	sed -i 1d $(MOPICLI).8;  # fix error from lintian about ." macro \
+	cat $(MOPICLI).8 |gzip >$(MOPICLI).8.gz; \
+	cp $(MOPICLI).8.gz $(MOPIAPI).8.gz
 
 # package ####################################################################
 version:
 	@for f in simbamond.default mopicli mopiapi.py; do \
-          sed -i 's,^VERSION=.*,VERSION='$(VERSION)',' $$f; done
+          sed -i 's,^VERSION=.*,VERSION=\"'$(VERSION)'\",' $$f; done
 package: version man package-unstable package-precise
 	@echo "\nunstable:"
 	@ls -lh $(PD)/unstable
@@ -138,7 +142,7 @@ package-precise:
           [ -f $$f ] && mv $$f $(D)/$(PD)/precise || :; done
 snapshot-version:
 	@for f in simbamond.default mopicli mopiapi.py; do \
-          sed -i 's,^VERSION=.*,VERSION='$(SNAPSHOT_VERSION)',' $$f; done
+          sed -i 's,^VERSION=.*,VERSION=\"'$(SNAPSHOT_VERSION)'\",' $$f; done
 	sed -i 's,^NEXT_SNAP=.*,NEXT_SNAP='$$(($(NEXT_SNAP) + 1))',' Makefile
 snapshot: snapshot-version
 	@echo "packaging SimBaMon SNAPSHOT $(SNAPSHOT)..."
