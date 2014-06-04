@@ -6,7 +6,6 @@ import smbus
 import errno
 import re
 import RPi.GPIO
-from decorators import retry
 
 # Version of the API
 APIVERSION=0.3
@@ -18,8 +17,8 @@ FIRMMINR=5
 # Package version
 VERSION=3.2+8
 
-# Number of times to attempt an I2C read/write to the MoPi
-TRIES=4
+# Number of times to retry a failed I2C read/write to the MoPi
+RETRIES=3
 
 class mopiapi():
 	device = 0xb
@@ -57,7 +56,6 @@ class mopiapi():
 		return data[:5]
 
 	# takes an array of 5 integers: power source type, max, good, low, crit (mV)
-	@retry(IOError(errno.ECOMM), tries=TRIES, backoff=1, delay=0.1, silent=True)
 	def writeConfig(self, battery, input=0):
 		if len(battery) != 5:
 			raise IOError(errno.EINVAL, "Invalid parameter (1)")
@@ -72,16 +70,21 @@ class mopiapi():
 			if data[i] < 0 or data[i] > 255:
 				raise IOError(errno.EINVAL, "Invalid parameter (3)")
 
-		if input == 1:
-			self.bus.write_i2c_block_data(self.device, 0b00000111, data) # 7
-		elif input == 2:
-			self.bus.write_i2c_block_data(self.device, 0b00001000, data) # 8
-		else:
-			self.bus.write_i2c_block_data(self.device, 0b00000010, data)
-		
+		# check if config to be written matches existing config
+		tries = 0
+		while cmp(battery, self.readConfig(input)) != 0 and tries < RETRIES:
+			if input == 1:
+				self.bus.write_i2c_block_data(self.device, 0b00000111, data) # 7
+			elif input == 2:
+				self.bus.write_i2c_block_data(self.device, 0b00001000, data) # 8
+			else:
+				self.bus.write_i2c_block_data(self.device, 0b00000010, data)
+			tries += 1
 		# unsucessfully written
-		if battery != self.readConfig(input):
-			raise IOError(errno.ECOMM)
+		if tries - 1 == RETRIES:
+			raise IOError(errno.ECOMM, "Communication error on send")
+			return False
+		return True
 
 	def setPowerOnDelay(self, poweron):
 		self.writeWord(0b00000011, poweron)
@@ -102,21 +105,30 @@ class mopiapi():
 	def getSerialNumber(self):
 		return self.readWord(0b00001010) # 10
 
-	@retry(IOError(errno.EIO), tries=TRIES, backoff=1, delay=0.1, silent=True)
 	def readWord(self, register):
-		data = self.bus.read_word_data(self.device, register)
+		tries = 0
+		data = 0xFFFF
+		while data == 0xFFFF and tries < RETRIES:
+			data = self.bus.read_word_data(self.device, register)
+			tries += 1
 		if data == 0xFFFF:
-			raise IOError(errno.EIO)
+			raise IOError(errno.EIO, "")
 		data = data & 32767 # fix for leading bit
 		return data
 
-	@retry(IOError(errno.ECOMM), tries=TRIES, backoff=1, delay=0.1, silent=True)
 	def writeWord(self, register, data):
 		if data < 0 or data > 0xFFFF:
 			raise IOError(errno.EINVAL, "Invalid parameter (4)")
-		self.bus.write_word_data(self.device, register, data)
-		if self.readWord(register) != data:
-			raise IOError(errno.ECOMM)
+
+		tries = 0
+		while self.readWord(register) != data and tries < RETRIES:
+			self.bus.write_word_data(self.device, register, data)
+			tries += 1
+		# unsucessfully written
+		if tries - 1 == RETRIES:
+			raise IOError(errno.ECOMM, "Communication error on send")
+			return False
+		return True
 			
 
 def getApiVersion():
