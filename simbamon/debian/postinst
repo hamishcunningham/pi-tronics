@@ -46,8 +46,12 @@ do_configure() {
   echo "I2C in ${MODS}: "; grep i2c ${MODS}
 
   # load the modules
-  modprobe i2c-dev
-  modprobe i2c-bcm2708
+  modprobe i2c-dev || {
+    echo "warning: failed to modprobe i2c-dev - reboot and retry?" >&2
+  }
+  modprobe i2c-bcm2708 || {
+    echo "warning: failed to modprobe i2c-bcm2708 - reboot and retry?" >&2
+  }
   echo "I2C in /proc/modules: "; grep i2c_ /proc/modules
 
   echo "...done (postinst configure)"

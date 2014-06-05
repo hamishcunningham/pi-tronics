@@ -4,7 +4,7 @@
 
 # vars #######################################################################
 VERSION=3.5
-NEXT_SNAP=2
+NEXT_SNAP=4
 P=simbamond
 D=simbamon
 MOPI=mopi
@@ -113,7 +113,7 @@ man: man/$(P).txt man/$(MOPI).txt man/$(MOPICLI).txt
 # package ####################################################################
 version:
 	@for f in simbamond.default mopicli mopiapi.py; do \
-          sed -i 's,^VERSION=.*,VERSION='$(VERSION)',' $$f; done
+          sed -i 's,^VERSION=.*,VERSION=\"'$(VERSION)'\",' $$f; done
 package: version man package-unstable package-precise
 	@echo "\nunstable:"
 	@ls -lh $(PD)/unstable
@@ -142,7 +142,7 @@ package-precise:
           [ -f $$f ] && mv $$f $(D)/$(PD)/precise || :; done
 snapshot-version:
 	@for f in simbamond.default mopicli mopiapi.py; do \
-          sed -i 's,^VERSION=.*,VERSION='$(SNAPSHOT_VERSION)',' $$f; done
+          sed -i 's,^VERSION=.*,VERSION=\"'$(SNAPSHOT_VERSION)'\",' $$f; done
 	sed -i 's,^NEXT_SNAP=.*,NEXT_SNAP='$$(($(NEXT_SNAP) + 1))',' Makefile
 snapshot: snapshot-version
 	@echo "packaging SimBaMon SNAPSHOT $(SNAPSHOT)..."

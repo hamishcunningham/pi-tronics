@@ -5,6 +5,7 @@
 import smbus
 import errno
 import RPi.GPIO
+import time
 
 # Version of the API
 APIVERSION=0.3
@@ -14,7 +15,7 @@ FIRMMAJ=3
 FIRMMINR=5
 
 # Package version
-VERSION=3.5+1
+VERSION="3.5+3"
 
 # Number of times to retry a failed I2C read/write to the MoPi
 MAXTRIES=3
@@ -43,13 +44,33 @@ class mopiapi():
 
 	# returns an array of 5 integers: power source type, max, good, low, crit (mV)
 	def readConfig(self, input=0):
-		if input == 1:
-			data = self.bus.read_i2c_block_data(self.device, 0b00000111) # 7
-		elif input == 2:
-			data = self.bus.read_i2c_block_data(self.device, 0b00001000) # 8
-		else:
-			data = self.bus.read_i2c_block_data(self.device, 0b00000010) # 2
-		if data[0] != 255:
+		# try reading the config
+		tries = 0
+		error = 0
+		while tries < MAXTRIES:
+			error = 0
+			try:
+				if input == 1:
+					data = self.bus.read_i2c_block_data(self.device, 0b00000111) # 7
+				elif input == 2:
+					data = self.bus.read_i2c_block_data(self.device, 0b00001000) # 8
+				else:
+					data = self.bus.read_i2c_block_data(self.device, 0b00000010) # 2
+				break
+			except IOError as e:
+				error = e
+				time.sleep(0.33)
+			tries += 1
+		# unsucessfully read
+		if error != 0:
+			if e.errno == errno.EIO:
+				e.strerror = "I2C bus input/output error on read config"
+			raise e
+		if tries == MAXTRIES:
+			raise IOError(errno.ECOMM, "Communications protocol error on read config")
+		if  data[0] != 255:
+			# it's a cV reading that we need to convert back to mV
+			# (with 255's it's indicating a differing config)
 			for i in range(1,5):
 				data[i] *= 100
 		return data[:5]
@@ -75,22 +96,30 @@ class mopiapi():
 
 		# try writing the config
 		tries = 0
+		error = 0
 		while tries < MAXTRIES:
-			if input == 1:
-				self.bus.write_i2c_block_data(self.device, 0b00000111, data) # 7
-			elif input == 2:
-				self.bus.write_i2c_block_data(self.device, 0b00001000, data) # 8
-			else:
-				self.bus.write_i2c_block_data(self.device, 0b00000010, data) # 2
+			error = 0
+			try:
+				if input == 1:
+					self.bus.write_i2c_block_data(self.device, 0b00000111, data) # 7
+				elif input == 2:
+					self.bus.write_i2c_block_data(self.device, 0b00001000, data) # 8
+				else:
+					self.bus.write_i2c_block_data(self.device, 0b00000010, data) # 2
+			except IOError as e:
+				error = e
+				time.sleep(0.33)
 			# read back test
 			if cmp(battery, self.readConfig(input)) == 0:
 				break
 			tries += 1
 		# unsucessfully written
+		if error != 0:
+			if e.errno == errno.EIO:
+				e.strerror = "I2C bus input/output error on send config"
+			raise e
 		if tries == MAXTRIES:
-			raise IOError(errno.ECOMM, "Communication error on send config")
-			return False
-		return True
+			raise IOError(errno.ECOMM, "Communications protocol error on send config")
 
 	def setPowerOnDelay(self, poweron):
 		self.writeWord(0b00000011, poweron)
@@ -114,17 +143,34 @@ class mopiapi():
 	def baseReadWord(self, register):
 		tries = 0
 		data = 0xFFFF
+		error = 0
 		while data == 0xFFFF and tries < MAXTRIES:
-			data = self.bus.read_word_data(self.device, register)
+			error = 0
+			try:
+				data = self.bus.read_word_data(self.device, register)
+			except IOError as e:
+				error = e
+				time.sleep(0.33)
 			tries += 1
+		# unsucessfully read
+		if error != 0:
+			if e.errno == errno.EIO:
+				e.strerror = "I2C bus input/output error on read word"
+			raise e
 		if data == 0xFFFF:
-			raise IOError(errno.EIO, "Communication error on read word")
+			raise IOError(errno.ECOMM, "Communications protocol error on read word")
 		return data
 
 	def readWord(self, register):
+		return self.baseReadWord(register)
+
+	def advancedReadWord(self, register):
 		data = self.baseReadWord(register)
-		return data
-		# try and re-read the config in the case of a high bit as a stop-gap measure
+
+		# try and re-read the config in the case of a high bit to
+		# counter possible i2c clock drift
+		# see https://github.com/raspberrypi/linux/issues/254
+		# use if you're having consistent problems reading words
 		if data & 32768 == 32768 or data & 128 == 128:
 			data2 = self.baseReadWord(register)
 			if data != data2:
@@ -132,7 +178,7 @@ class mopiapi():
 				if data2 == data3:
 					return data2
 				else:
-					raise IOError(errno.EIO, "Communication error on read word, bit 15 or 7")
+					raise IOError(errno.ECOMM, "Communications protocol error on read word, bit 15 or 7")
 		return data
 
 	def writeWord(self, register, data):
@@ -145,18 +191,25 @@ class mopiapi():
 
 		# try writing
 		tries = 0
+		error = 0
 		while tries < MAXTRIES:
-			self.bus.write_word_data(self.device, register, data)
+			error = 0
+			try:
+				self.bus.write_word_data(self.device, register, data)
+			except IOError as e:
+				error = e
+				time.sleep(0.33)
 			# read back test
 			if self.readWord(register) == data:
 				break
 			tries += 1
-			print tries
 		# unsucessfully written
+		if error != 0:
+			if e.errno == errno.EIO:
+				e.strerror = "I2C bus input/output error on write word"
+			raise e
 		if tries == MAXTRIES:
-			raise IOError(errno.ECOMM, "Communication error on send word")
-			return False
-		return True
+			raise IOError(errno.ECOMM, "Communications protocol error on write word")
 			
 
 def getApiVersion():
