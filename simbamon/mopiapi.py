@@ -15,7 +15,7 @@ FIRMMAJ=3
 FIRMMINR=5
 
 # Package version
-VERSION="3.5+3"
+VERSION="3.5+4"
 
 # Number of times to retry a failed I2C read/write to the MoPi
 MAXTRIES=3
