@@ -34,8 +34,13 @@ START_STOP_ARGS="--pidfile ${PIDFILE} --startas ${DAEMON} --name ${NAME}"
 # Needs to be run as root
 if [ $(id -u) -ne 0 ]
 then
-  echo "${DAEMON} must be run as root; try 'sudo service simbamond ...'?"
-  exit 1
+  case "$1" in
+    help|status|"")
+    ;;
+    *)
+    echo "${DAEMON} $1 must be run as root; try 'sudo service simbamond ...'?"
+    exit 1
+  esac
 fi
 
 # Read configuration variable file if it is present
