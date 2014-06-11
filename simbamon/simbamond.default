@@ -182,10 +182,10 @@ calculate_config() {
   NUM_CELLS=$2
   CHEMISTRY=$3
 
-  BAT_FLOOR=$( echo "`bat_dod_floor ${CHEMISTRY}`*${NUM_CELLS}"     |bc )
-  BAT_LOW=$(   echo "${BAT_FLOOR}*1.1"                              |bc )
-  BAT_FULL=$(  echo "`bat_nominal_volts ${CHEMISTRY}`*${NUM_CELLS}" |bc )
-  BAT_GOOD=$(  echo "((${BAT_FULL}-${BAT_LOW})/2)+${BAT_LOW}"       |bc )
+  BAT_FLOOR=$( echo "`bat_dod_floor ${CHEMISTRY}`*${NUM_CELLS}"       |bc )
+  BAT_LOW=$(   echo "${BAT_FLOOR}*1.1"                                |bc )
+  BAT_FULL=$(  echo "`bat_nominal_volts ${CHEMISTRY}`*${NUM_CELLS}"   |bc )
+  BAT_GOOD=$(  echo "scale=3;((${BAT_FULL}-${BAT_LOW})/2)+${BAT_LOW}" |bc )
 }
 
 #############################################################################
