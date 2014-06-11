@@ -15,24 +15,30 @@ FIRMMAJ=3
 FIRMMINR=5
 
 # Package version
-VERSION="3.5+3"
+VERSION="3.5+4"
 
 # Number of times to retry a failed I2C read/write to the MoPi
 MAXTRIES=3
 
 class mopiapi():
 	device = 0xb
+	maj = 0
+	minr = 0
 
 	def __init__(self, i2cbus = -1):
 		if i2cbus == -1:
 			i2cbus = guessI2C()
 		self.bus = smbus.SMBus(i2cbus)
-		[maj, minr] = self.getFirmwareVersion()
-		if maj != FIRMMAJ or minr < FIRMMINR:
-			raise OSError(errno.EUNATCH, "Expected at least MoPi firmware version %i.%02i, got %i.%02i instead." % (FIRMMAJ, FIRMMINR, maj, minr))
+		[self.maj, self.minr] = self.getFirmwareVersion()
+		if self.maj != FIRMMAJ or self.minr < FIRMMINR:
+			raise OSError(errno.EUNATCH, "Expected at least MoPi firmware version %i.%02i, got %i.%02i instead." % (FIRMMAJ, FIRMMINR, self.maj, self.minr))
 
 	def getStatus(self):
-		return self.readWord(0b00000000)
+		word = self.readWord(0b00000000)
+		if self.maj == 3 and self.minr > 9:
+			# bit changed at v3.10
+			word = word ^ (1 << 6)
+		return word
 
 	def getVoltage(self, input=0):
 		if input == 1:
@@ -66,9 +72,12 @@ class mopiapi():
 			if e.errno == errno.EIO:
 				e.strerror = "I2C bus input/output error on read config"
 			raise e
-		if tries == MAXTRIES:
+		if tries == MAXTRIES or (self.maj == 3 and self.minr > 9 and data[0] == 255):
 			raise IOError(errno.ECOMM, "Communications protocol error on read config")
-		if  data[0] != 255:
+		# behaivour changed at v3.10 to 5x0 so that 255 could serve as error detection
+		if self.maj == 3 and self.minr > 9 and cmp(data[:5], [0, 0, 0, 0, 0]) == 0:
+			data = [255, 255, 255, 255, 255]
+		if data[0] != 255:
 			# it's a cV reading that we need to convert back to mV
 			# (with 255's it's indicating a differing config)
 			for i in range(1,5):
@@ -244,6 +253,7 @@ class status():
 	def LEDFlashing(self):
 		return self.getBit(5)
 
+	# Output: 1 for NiMH, 0 for Alkaline
 	def JumperState(self):
 		return not self.getBit(6)
 	
