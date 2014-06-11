@@ -34,7 +34,7 @@ commands2 = [
 	[ "-v1", "Source #1 voltage in mV", "Source #1 voltage", 0, 1],
 	[ "-v2", "Source #2 voltage in mV", "Source #2 voltage", 0, 1],
 
-	[ "-rc", "Combined source #1/#2 conf", "Combined configuration", 0, 2],
+	[ "-rc", "Combined source #1/#2 conf", "Combined conf", 0, 2],
 	["-rc1", "Source #1 conf", "-", 0, 2],
 	["-rc2", "Source #2 conf", "-", 0, 2],
 	["-ron", "Power on delay", "-", 0, 2],
