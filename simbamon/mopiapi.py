@@ -119,6 +119,7 @@ class mopiapi():
 				error = e
 				time.sleep(0.33)
 			# read back test
+			time.sleep(0.02) # slight delay to allow write to take effect
 			if cmp(battery, self.readConfig(input)) == 0:
 				break
 			tries += 1
@@ -209,6 +210,7 @@ class mopiapi():
 				error = e
 				time.sleep(0.33)
 			# read back test
+			time.sleep(0.02) # slight delay to allow write to take effect
 			if self.readWord(register) == data:
 				break
 			tries += 1
