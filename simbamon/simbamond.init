@@ -78,7 +78,8 @@ do_stop()
   logger ${NAME}: stopping...
   log_daemon_msg ${NAME}: stopping...
 
-  # If there's no PIDFILE then either daemon hasn't been started, or it has killed itself (which it will do when MoPi triggers shutdown)
+  # If there's no PIDFILE then either daemon hasn't been started, or 
+  # it has killed itself (which it will do when MoPi triggers shutdown)
   [ -f $PIDFILE ] || {
     return 1
   }
