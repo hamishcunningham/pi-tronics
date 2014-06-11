@@ -22,17 +22,22 @@ MAXTRIES=3
 
 class mopiapi():
 	device = 0xb
+	maj = 0
+	minr = 0
 
 	def __init__(self, i2cbus = -1):
 		if i2cbus == -1:
 			i2cbus = guessI2C()
 		self.bus = smbus.SMBus(i2cbus)
-		[maj, minr] = self.getFirmwareVersion()
-		if maj != FIRMMAJ or minr < FIRMMINR:
-			raise OSError(errno.EUNATCH, "Expected at least MoPi firmware version %i.%02i, got %i.%02i instead." % (FIRMMAJ, FIRMMINR, maj, minr))
+		[self.maj, self.minr] = self.getFirmwareVersion()
+		if self.maj != FIRMMAJ or self.minr < FIRMMINR:
+			raise OSError(errno.EUNATCH, "Expected at least MoPi firmware version %i.%02i, got %i.%02i instead." % (FIRMMAJ, FIRMMINR, self.maj, self.minr))
 
 	def getStatus(self):
-		return self.readWord(0b00000000)
+		word = self.readWord(0b00000000)
+		if self.maj == 3 and self.minr > 9:
+			word = word ^ (1 << 6)
+		return word
 
 	def getVoltage(self, input=0):
 		if input == 1:
@@ -244,6 +249,7 @@ class status():
 	def LEDFlashing(self):
 		return self.getBit(5)
 
+	# Output: 1 for NiMH, 0 for Alkaline
 	def JumperState(self):
 		return not self.getBit(6)
 	
