@@ -36,6 +36,7 @@ class mopiapi():
 	def getStatus(self):
 		word = self.readWord(0b00000000)
 		if self.maj == 3 and self.minr > 9:
+			# bit changed at v3.10
 			word = word ^ (1 << 6)
 		return word
 
@@ -71,9 +72,12 @@ class mopiapi():
 			if e.errno == errno.EIO:
 				e.strerror = "I2C bus input/output error on read config"
 			raise e
-		if tries == MAXTRIES:
+		if tries == MAXTRIES or (self.maj == 3 and self.minr > 9 and data[0] == 255):
 			raise IOError(errno.ECOMM, "Communications protocol error on read config")
-		if  data[0] != 255:
+		# behaivour changed at v3.10 to 5x0 so that 255 could serve as error detection
+		if self.maj == 3 and self.minr > 9 and cmp(data[:5], [0, 0, 0, 0, 0]) == 0:
+			data = [255, 255, 255, 255, 255]
+		if data[0] != 255:
 			# it's a cV reading that we need to convert back to mV
 			# (with 255's it's indicating a differing config)
 			for i in range(1,5):
