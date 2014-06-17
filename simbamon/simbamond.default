@@ -199,12 +199,9 @@ save_local_config() {
   FLAGS=$2
   LINE_START="# ${S_FLAG}:"
 
-  if grep -q "^$LINE_START" $ME
-  then
-    sed -i "s,^${LINE_START}.*,${LINE_START} $FLAGS," $ME
-  else
-    sed -i "/^# end of local config - DON'T/i ${LINE_START} $FLAGS" $ME
-  fi
+  # Delete any existing config with this flag, and then write the new config at the end
+  # (this ensures the most recently configured option will be written to MoPi last)
+  sed -r -i -e "/^${LINE_START}.*/d" -e  "/^# end of local config - DON'T/i ${LINE_START} $FLAGS" $ME
 }
 #
 # get local configuration
