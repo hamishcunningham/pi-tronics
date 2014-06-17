@@ -15,7 +15,7 @@ FIRMMAJ=3
 FIRMMINR=5
 
 # Package version
-VERSION="3.5+4"
+VERSION="3.5+7"
 
 # Number of times to retry a failed I2C read/write to the MoPi
 MAXTRIES=3
@@ -119,6 +119,7 @@ class mopiapi():
 				error = e
 				time.sleep(0.33)
 			# read back test
+			time.sleep(0.02) # slight delay to allow write to take effect
 			if cmp(battery, self.readConfig(input)) == 0:
 				break
 			tries += 1
@@ -209,6 +210,7 @@ class mopiapi():
 				error = e
 				time.sleep(0.33)
 			# read back test
+			time.sleep(0.02) # slight delay to allow write to take effect
 			if self.readWord(register) == data:
 				break
 			tries += 1

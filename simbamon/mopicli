@@ -13,7 +13,7 @@ CLIVERSION=0.4
 APIVERSION=0.3
 
 # Package version
-VERSION="3.5+4"
+VERSION="3.5+7"
 
 # Different categories for the mopicli arguments
 categories = ["Miscellaneous", "Status", "Read configuration options", "Write configuration options"]
@@ -34,15 +34,15 @@ commands2 = [
 	[ "-v1", "Source #1 voltage in mV", "Source #1 voltage", 0, 1],
 	[ "-v2", "Source #2 voltage in mV", "Source #2 voltage", 0, 1],
 
-	[ "-rc", "Combined source #1 and #2 configuration", "Combined configuration", 0, 2],
-	["-rc1", "Configuration of source #1", "-", 0, 2],
-	["-rc2", "Configuration of source #2", "-", 0, 2],
+	[ "-rc", "Combined source #1/#2 conf", "Combined conf", 0, 2],
+	["-rc1", "Source #1 conf", "-", 0, 2],
+	["-rc2", "Source #2 conf", "-", 0, 2],
 	["-ron", "Power on delay", "-", 0, 2],
 	["-rsd", "Shutdown delay", "-", 0, 2],
 
-	[ "-wc", "Combined source #1 and #2 configuration", "", 5, 3],
-	["-wc1", "Configuration of source #1", "", 5, 3],
-	["-wc2", "Configuration of source #2", "", 5, 3],
+	[ "-wc", "Combined source #1/#2 conf", "", 5, 3],
+	["-wc1", "Source #1 conf", "", 5, 3],
+	["-wc2", "Source #2 conf", "", 5, 3],
 	["-won", "\tPower on timer in seconds", "", 1, 3],
 	["-wsd", "\tShutdown timer in seconds", "", 1, 3],
 	]
