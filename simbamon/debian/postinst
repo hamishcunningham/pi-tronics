@@ -22,9 +22,9 @@ do_configure() {
 
   # remove I2C from blacklist
   BLIST=/etc/modprobe.d/raspi-blacklist.conf
-  cp ${BLIST} ${BLIST}.bak
   if [ -r ${BLIST} ]
   then
+    cp ${BLIST} ${BLIST}.bak
     if grep -q "^[ ]*blacklist[ ]*i2c-bcm2708" ${BLIST}
     then
       sed -i 's/[ ]*blacklist[ ]*i2c-bcm2708/# blacklist i2c-bcm2708/g' ${BLIST}
@@ -34,13 +34,14 @@ do_configure() {
 
   # add to /etc/modules
   MODS=/etc/modules
-  cp ${MODS} ${MODS}.bak
   if ! grep -q "i2c-dev" ${MODS}
   then
+    cp ${MODS} ${MODS}.bak1
     echo i2c-dev >> ${MODS}
   fi
   if ! grep -q "i2c-bcm2708" ${MODS}
   then
+    cp ${MODS} ${MODS}.bak2
     echo i2c-bcm2708 >> ${MODS}
   fi
   echo "I2C in ${MODS}: "; grep i2c ${MODS}
