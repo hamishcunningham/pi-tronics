@@ -7,7 +7,7 @@ import mopiapi
 import errno
 
 # Version of mopicli
-CLIVERSION=0.4
+CLIVERSION=0.5
 
 # Version of API used
 APIVERSION=0.3
@@ -168,12 +168,31 @@ else:
 	labels = 1
 
 status = 0
-diff = 1 # differing battery configuration?
 try:
 	# special handling for -i
 	if '-i' not in sys.argv:
 		mymopi = mopiapi.mopiapi()
 
+	# find out about the battery configuration
+	diff = 1 # differing by default
+	if '-rc' in sys.argv or '-rc1' in sys.argv or '-rc2' in sys.argv:
+		cnf0 = mymopi.readConfig()
+		for z in range(0, len(cnf0)):
+			if cnf0[z] != 255:
+				diff = 0
+				break
+		# if the config doesn't differ, then display that for -rc1/-rc2 when there's no -rc
+		if diff == 0:
+			if not '-rc' in sys.argv and ('-rc1' in sys.argv or '-rc2' in sys.argv):
+				sys.argv.append('-rc')
+				sys.argv = [value for value in sys.argv if (value != '-rc1' and value != '-rc2')]
+		else: # do the opposite and show the difference config with -rc when it's called
+			if '-rc' in sys.argv:
+				sys.argv.append('-rc1')
+				sys.argv.append('-rc2')
+
+	# check if each command exists in the arguments array, and process
+	# doing it this way around keeps the output in a fixed order
 	for ind,arg in enumerate(commands):
 		if arg in sys.argv:
 			par = readInts(arg, parameters[ind])
@@ -211,40 +230,39 @@ try:
 				print "%s%i" % (getLabel(arg), mymopi.getVoltage(2))
 
 
-			if '-rc' == arg:
-				cnf = mymopi.readConfig()
+			if '-rc' == arg:# or ('-rc1' in sys.argv and diff == 0) or ('-rc2' in sys.argv and diff == 0):
 				if labels == 1:
-					for z in range(0, len(cnf)):
-						if cnf[z] != 255:
-							diff = 0
-							break
 					if diff:
-						print "%sdiffering, see below" % getLabel(arg)
+						print "%sdiffering" % getLabel(arg)
 					else:
 						print getLabel(arg)
-						confDisp(cnf)
+						confDisp(cnf0)
 				else:
-					print ' '.join(map(str, cnf))
+					print ' '.join(map(str, cnf0))
+
 			if '-rc1' == arg:
-				if diff == 0:
-					print "%smatching, see above" % getLabel(arg)
+				if labels == 1:
+					if diff == 1 or (diff != 0 and '-rc' in sys.argv):
+						cnf = mymopi.readConfig(1)
+						print getLabel(arg)
+						confDisp(cnf)
+					else:
+						print "%smatching, see above" % getLabel(arg)
 				else:
 					cnf = mymopi.readConfig(1)
-					if labels == 1:
+					print ' '.join(map(str, cnf))
+			# same logic as above
+			if '-rc2' == arg:
+				if labels == 1:
+					if diff == 1 or (diff != 0 and '-rc' in sys.argv):
+						cnf = mymopi.readConfig(2)
 						print getLabel(arg)
 						confDisp(cnf)
 					else:
-						print ' '.join(map(str, cnf))
-			if '-rc2' == arg:
-				if diff == 0:
-					print "%smatching, see above" % getLabel(arg)
+						print "%smatching, see above" % getLabel(arg)
 				else:
 					cnf = mymopi.readConfig(2)
-					if labels == 1:
-						print getLabel(arg)
-						confDisp(cnf)
-					else:
-						print ' '.join(map(str, cnf))
+					print ' '.join(map(str, cnf))
 
 			if '-ron' == arg:
 				d = mymopi.getPowerOnDelay()
