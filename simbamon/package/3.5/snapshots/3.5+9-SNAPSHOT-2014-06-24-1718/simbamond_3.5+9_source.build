@@ -1,0 +1,44 @@
+ dpkg-buildpackage -rfakeroot -d -us -uc -S -Ipackage
+dpkg-buildpackage: export CFLAGS from dpkg-buildflags (origin: vendor): -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Wformat-security
+dpkg-buildpackage: export CPPFLAGS from dpkg-buildflags (origin: vendor): -D_FORTIFY_SOURCE=2
+dpkg-buildpackage: export CXXFLAGS from dpkg-buildflags (origin: vendor): -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Wformat-security
+dpkg-buildpackage: export FFLAGS from dpkg-buildflags (origin: vendor): -g -O2
+dpkg-buildpackage: export LDFLAGS from dpkg-buildflags (origin: vendor): -Wl,-Bsymbolic-functions -Wl,-z,relro
+dpkg-buildpackage: source package simbamond
+dpkg-buildpackage: source version 3.5+9
+dpkg-buildpackage: source changed by Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+ dpkg-source -Ipackage --before-build simbamon
+ fakeroot debian/rules clean
+dh clean 
+   dh_testdir
+   dh_auto_clean
+   dh_clean
+	rm -f debian/simbamond.substvars
+	rm -f debian/simbamond.*.debhelper
+	rm -rf debian/simbamond/
+	rm -f debian/*.debhelper.log
+	rm -f debian/files
+	find .  \( \( -type f -a \
+	        \( -name '#*#' -o -name '.*~' -o -name '*~' -o -name DEADJOE \
+		 -o -name '*.orig' -o -name '*.rej' -o -name '*.bak' \
+		 -o -name '.*.orig' -o -name .*.rej -o -name '.SUMS' \
+		 -o -name TAGS -o \( -path '*/.deps/*' -a -name '*.P' \) \
+		\) -exec rm -f {} \; \) -o \
+		\( -type d -a -name autom4te.cache -prune -exec rm -rf {} \; \) \)
+	rm -f *-stamp
+ dpkg-source -Ipackage -b simbamon
+dpkg-source: info: using source format `3.0 (native)'
+dpkg-source: info: building simbamond in simbamond_3.5+9.tar.gz
+dpkg-source: info: building simbamond in simbamond_3.5+9.dsc
+ dpkg-genchanges -S >../simbamond_3.5+9_source.changes
+dpkg-genchanges: including full source code in upload
+ dpkg-source -Ipackage --after-build simbamon
+dpkg-buildpackage: source only upload: Debian-native package
+Now running lintian...
+Finished running lintian.
+Now signing changes and any dsc files...
+ signfile simbamond_3.5+9.dsc Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+
+ signfile simbamond_3.5+9_source.changes Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+
+Successfully signed dsc and changes files
