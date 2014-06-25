@@ -1,0 +1,49 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Wed, 25 Jun 2014 08:51:38 +0100
+Source: simbamond
+Binary: simbamond
+Architecture: source all
+Version: 3.6
+Distribution: unstable
+Urgency: low
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Changed-By: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Description: 
+ simbamond  - SimBaMon, a Simple Battery Monitor
+Changes: 
+ simbamond (3.6) unstable; urgency=low
+ .
+   * Final test release prior to 4.0
+Checksums-Sha1: 
+ 6e18d6f81dc7b5a259e8ae3ddd7f00036f2f4eed 1636 simbamond_3.6.dsc
+ 5875589369c9ce96c1d8f4b7dddc032a3e3203a6 34838 simbamond_3.6.tar.gz
+ 1029f05197a8800b59d685f14244b44ea60dc2f3 24816 simbamond_3.6_all.deb
+Checksums-Sha256: 
+ 0beb8fc9af0fa6354f5457524886e6c3dc44f953edb008d9f4d44b0641a94e47 1636 simbamond_3.6.dsc
+ 85747da23112b0b1292c12a9dc5c53e0635293ea6060780743471a91af110145 34838 simbamond_3.6.tar.gz
+ 1e3b480fe3a5c5df98be2540852b803aedd359933cdc9d2b3ee4a57ccc1a2e49 24816 simbamond_3.6_all.deb
+Files: 
+ 28ced44c71a83393fde70ef3dffde822 1636 admin optional simbamond_3.6.dsc
+ a067a901ec91afb8610f8a5c4b640c33 34838 admin optional simbamond_3.6.tar.gz
+ 007e4dfa107b60ddd388979633af8597 24816 admin optional simbamond_3.6_all.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+iQIcBAEBAgAGBQJTqn/yAAoJEK3gE8dtAR3xnDUP/iPBa+3Tc0pCie559vUkAr/i
+uPlzdeGybXa/hLGTmYerG4CLlx1ryHClJLhn6liVY7dAyl3UUaXhdM5NeVVJmNj+
+yD3MPIYFkNHdkyjIvtTHjzwi0C2/fp80/BX6qcYcoxBeO7rnF75LogN/3hXIbG2s
+/BLMgZWK2fs+GHXPnrQ3A6S9CBX9hOcSI54/cD8SmPr1syBpDlvLrIHpZCo+7R0S
+6mh0LmMcY8dnexfT9ItZQzUtERleu2QmtEgJdoU4EbZs1+HvnbmiRcEUpzO9rb2E
+TAXC2kVf2cJ8Y5gz5fi4/v39Vh6RcVhb1o9l+Cfbb9cor8SzTevRYx+T9toSvTJn
+jOl61pknOmoaSQqeK9BWDikqVHl3KLiuSWgJH53oUhKqfcHFzYDkHbfI6ViIYG7z
+slktJ8kHEmD47iV94RwbmbSMYbwmR4xlDl/7sDX5xpNo5Ern4Z+GTquYphgrHBQp
+pPNRz2j/86BTNKvb2BZCk3nrWCUC8APYXLu+N1dDDQkap/PNffwGK/f/lrb7lCFE
+va2HhD/mAAfle3buB29Zj/tNl6/wlPuwAyo75opKq8VZ8GCKMfZucCV6k1IgcB35
+8ZV09rlC475IkxETeYuabjwdBx+2AY8KmdaF4TUcAE5uVQMXyoz2on5Eutg3FtiC
+vykm3sIsP4WbJRqf7oR1
+=9ZYI
+-----END PGP SIGNATURE-----

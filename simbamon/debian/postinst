@@ -18,7 +18,7 @@ set -e
 # the debian-policy package
 
 do_configure() {
-  echo doing configure from simbamond postinst...
+  echo 'simbamond postinst: ensuring I2C is active...'
 
   # remove I2C from blacklist
   BLIST=/etc/modprobe.d/raspi-blacklist.conf
@@ -30,21 +30,24 @@ do_configure() {
       sed -i 's/[ ]*blacklist[ ]*i2c-bcm2708/# blacklist i2c-bcm2708/g' ${BLIST}
     fi
   fi
-  echo "I2C in ${BLIST}: "; grep i2c- ${BLIST}
+  # uncomment to debug: echo "I2C in ${BLIST}: "; grep i2c- ${BLIST} || :
 
   # add to /etc/modules
   MODS=/etc/modules
-  if ! grep -q "i2c-dev" ${MODS}
+  if [ -r ${MODS} ]
   then
-    cp ${MODS} ${MODS}.bak1
-    echo i2c-dev >> ${MODS}
+    if ! grep -q "i2c-dev" ${MODS}
+    then
+      cp ${MODS} ${MODS}.bak1
+      echo i2c-dev >> ${MODS}
+    fi
+    if ! grep -q "i2c-bcm2708" ${MODS}
+    then
+      cp ${MODS} ${MODS}.bak2
+      echo i2c-bcm2708 >> ${MODS}
+    fi
   fi
-  if ! grep -q "i2c-bcm2708" ${MODS}
-  then
-    cp ${MODS} ${MODS}.bak2
-    echo i2c-bcm2708 >> ${MODS}
-  fi
-  echo "I2C in ${MODS}: "; grep i2c ${MODS}
+  # uncomment to debug: echo "I2C in ${MODS}: "; grep i2c ${MODS} || :
 
   # load the modules
   modprobe i2c-dev || {
@@ -53,9 +56,9 @@ do_configure() {
   modprobe i2c-bcm2708 || {
     echo "warning: failed to modprobe i2c-bcm2708 - reboot and retry?" >&2
   }
-  echo "I2C in /proc/modules: "; grep i2c_ /proc/modules
+  # uncomment to debug: echo "I2C in /proc/modules: "; grep i2c_ /proc/modules || :
 
-  echo "...done (postinst configure)"
+  echo "...done (simbamond postinst)"
 }
 
 case "$1" in
