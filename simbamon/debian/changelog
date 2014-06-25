@@ -1,3 +1,9 @@
+simbamond (4.0) unstable; urgency=low
+
+  * First KickStarter shipment release, for Firmware 3.10, API 0.3, CLI 0.5
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Wed, 25 Jun 2014 19:03:12 +0100
+
 simbamond (3.6) unstable; urgency=low
 
   * Final test release prior to 4.0

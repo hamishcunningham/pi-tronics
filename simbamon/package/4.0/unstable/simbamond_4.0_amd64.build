@@ -1,0 +1,238 @@
+ dpkg-buildpackage -rfakeroot -D -us -uc -Ipackage
+dpkg-buildpackage: export CFLAGS from dpkg-buildflags (origin: vendor): -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Wformat-security
+dpkg-buildpackage: export CPPFLAGS from dpkg-buildflags (origin: vendor): -D_FORTIFY_SOURCE=2
+dpkg-buildpackage: export CXXFLAGS from dpkg-buildflags (origin: vendor): -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Wformat-security
+dpkg-buildpackage: export FFLAGS from dpkg-buildflags (origin: vendor): -g -O2
+dpkg-buildpackage: export LDFLAGS from dpkg-buildflags (origin: vendor): -Wl,-Bsymbolic-functions -Wl,-z,relro
+dpkg-buildpackage: source package simbamond
+dpkg-buildpackage: source version 4.0
+dpkg-buildpackage: source changed by Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+ dpkg-source -Ipackage --before-build simbamon
+dpkg-buildpackage: host architecture amd64
+ fakeroot debian/rules clean
+dh clean 
+   dh_testdir
+   dh_auto_clean
+   dh_clean
+	rm -f debian/simbamond.substvars
+	rm -f debian/simbamond.*.debhelper
+	rm -rf debian/simbamond/
+	rm -f debian/*.debhelper.log
+	rm -f debian/files
+	find .  \( \( -type f -a \
+	        \( -name '#*#' -o -name '.*~' -o -name '*~' -o -name DEADJOE \
+		 -o -name '*.orig' -o -name '*.rej' -o -name '*.bak' \
+		 -o -name '.*.orig' -o -name .*.rej -o -name '.SUMS' \
+		 -o -name TAGS -o \( -path '*/.deps/*' -a -name '*.P' \) \
+		\) -exec rm -f {} \; \) -o \
+		\( -type d -a -name autom4te.cache -prune -exec rm -rf {} \; \) \)
+	rm -f *-stamp
+ dpkg-source -Ipackage -b simbamon
+dpkg-source: info: using source format `3.0 (native)'
+dpkg-source: info: building simbamond in simbamond_4.0.tar.gz
+dpkg-source: info: building simbamond in simbamond_4.0.dsc
+ debian/rules build
+dh build 
+   dh_testdir
+   dh_auto_configure
+   dh_auto_build
+	make -j1
+make[1]: Entering directory `/home/hamish/pi-tronics/simbamon'
+Makefile for SimBaMon                                         
+                                                              
+Usage:                                                        
+   make install                   installs the SimBaMon daemon
+   make uninstall                 removes the daemon          
+   make list                      list installed files        
+   make package                   create .deb/.dcs packagings 
+   make package-upload            upload to PPA repository    
+   make package-clean             delete tmp packaging files  
+   make package-info              apt-cache showpkg           
+   make package-purge             apt-get purge               
+   make package-version           update the changelog        
+   make print-versions            print current version #s    
+                                                              
+make[1]: Leaving directory `/home/hamish/pi-tronics/simbamon'
+   dh_auto_test
+ fakeroot debian/rules binary
+dh binary 
+   dh_testroot
+   dh_prep
+	rm -f debian/simbamond.substvars
+	rm -f debian/simbamond.*.debhelper
+	rm -rf debian/simbamond/
+   dh_installdirs
+	install -d debian/simbamond
+   dh_auto_install
+	make -j1 install DESTDIR=/home/hamish/pi-tronics/simbamon/debian/simbamond
+make[1]: Entering directory `/home/hamish/pi-tronics/simbamon'
+install -d -m 755           /home/hamish/pi-tronics/simbamon/debian/simbamond/usr/sbin
+install -d -m 755           /home/hamish/pi-tronics/simbamon/debian/simbamond/etc/init.d
+install -d -m 755           /home/hamish/pi-tronics/simbamon/debian/simbamond/etc/default
+install -d -m 755           /home/hamish/pi-tronics/simbamon/debian/simbamond/usr/share/man/man8
+install simbamond.default        /home/hamish/pi-tronics/simbamon/debian/simbamond/etc/default/simbamond
+install -m 755 simbamon         /home/hamish/pi-tronics/simbamon/debian/simbamond/usr/sbin
+install -m 755 simbamond.init    /home/hamish/pi-tronics/simbamon/debian/simbamond/etc/init.d/simbamond
+install -m 755 mopi      /home/hamish/pi-tronics/simbamon/debian/simbamond/usr/sbin
+install -m 755 mopicli   /home/hamish/pi-tronics/simbamon/debian/simbamond/usr/sbin
+install -m 644 mopiapi.py   /home/hamish/pi-tronics/simbamon/debian/simbamond/usr/sbin
+install man/simbamond.8.gz       /home/hamish/pi-tronics/simbamon/debian/simbamond/usr/share/man/man8
+install man/simbamon.8.gz       /home/hamish/pi-tronics/simbamon/debian/simbamond/usr/share/man/man8
+install man/mopi.8.gz    /home/hamish/pi-tronics/simbamon/debian/simbamond/usr/share/man/man8
+install man/mopicli.8.gz /home/hamish/pi-tronics/simbamon/debian/simbamond/usr/share/man/man8
+install man/mopiapi.py.8.gz /home/hamish/pi-tronics/simbamon/debian/simbamond/usr/share/man/man8
+[ -z "/home/hamish/pi-tronics/simbamon/debian/simbamond" ] && update-rc.d simbamond defaults || :
+SimBaMon installed: 
+/home/hamish/pi-tronics/simbamon/debian/simbamond/etc/default/simbamond
+/home/hamish/pi-tronics/simbamon/debian/simbamond/etc/init.d/simbamond
+/home/hamish/pi-tronics/simbamon/debian/simbamond/usr/sbin/mopi
+/home/hamish/pi-tronics/simbamon/debian/simbamond/usr/sbin/mopiapi.py
+/home/hamish/pi-tronics/simbamon/debian/simbamond/usr/sbin/mopicli
+/home/hamish/pi-tronics/simbamon/debian/simbamond/usr/sbin/simbamon
+/home/hamish/pi-tronics/simbamon/debian/simbamond/usr/share/man/man8/mopi.8.gz
+/home/hamish/pi-tronics/simbamon/debian/simbamond/usr/share/man/man8/mopiapi.py.8.gz
+/home/hamish/pi-tronics/simbamon/debian/simbamond/usr/share/man/man8/mopicli.8.gz
+/home/hamish/pi-tronics/simbamon/debian/simbamond/usr/share/man/man8/simbamon.8.gz
+/home/hamish/pi-tronics/simbamon/debian/simbamond/usr/share/man/man8/simbamond.8.gz
+make[1]: Leaving directory `/home/hamish/pi-tronics/simbamon'
+   dh_install
+   dh_installdocs
+	install -g 0 -o 0 -d debian/simbamond/usr/share/doc/simbamond
+	cp -a man/simbamond.txt debian/simbamond/usr/share/doc/simbamond
+	cp -a README.txt debian/simbamond/usr/share/doc/simbamond
+	chown -R 0:0 debian/simbamond/usr/share/doc
+	chmod -R go=rX debian/simbamond/usr/share/doc
+	chmod -R u\+rw debian/simbamond/usr/share/doc
+	install -g 0 -o 0 -m 644 -p debian/copyright debian/simbamond/usr/share/doc/simbamond/copyright
+   dh_installchangelogs
+	install -o 0 -g 0 -p -m644 debian/changelog debian/simbamond/usr/share/doc/simbamond/changelog
+   dh_installexamples
+   dh_installman
+	man --recode UTF-8 ./simbamond\.8\.gz > simbamond\.8\.gz\.new
+	rm -f simbamond.8.gz
+	chmod 644 simbamond.8.gz.new
+	mv -f simbamond.8.gz.new simbamond.8
+	man --recode UTF-8 ./mopiapi\.py\.8\.gz > mopiapi\.py\.8\.gz\.new
+	rm -f mopiapi.py.8.gz
+	chmod 644 mopiapi.py.8.gz.new
+	mv -f mopiapi.py.8.gz.new mopiapi.py.8
+	man --recode UTF-8 ./mopicli\.8\.gz > mopicli\.8\.gz\.new
+	rm -f mopicli.8.gz
+	chmod 644 mopicli.8.gz.new
+	mv -f mopicli.8.gz.new mopicli.8
+	man --recode UTF-8 ./mopi\.8\.gz > mopi\.8\.gz\.new
+	rm -f mopi.8.gz
+	chmod 644 mopi.8.gz.new
+	mv -f mopi.8.gz.new mopi.8
+	man --recode UTF-8 ./simbamon\.8\.gz > simbamon\.8\.gz\.new
+	rm -f simbamon.8.gz
+	chmod 644 simbamon.8.gz.new
+	mv -f simbamon.8.gz.new simbamon.8
+   dh_installcatalogs
+   dh_installcron
+   dh_installdebconf
+	install -o 0 -g 0 -d debian/simbamond/DEBIAN
+   dh_installemacsen
+   dh_installifupdown
+   dh_installinfo
+   dh_pysupport
+dh_pysupport: This program is deprecated, you should use dh_python2 instead. Migration guide: http://deb.li/dhs2p
+	/usr/share/python-support/private/movemodules debian/simbamond
+	(grep -s -v python:Depends debian/simbamond.substvars; echo python:Depends=python) > debian/simbamond.substvars.new
+	mv debian/simbamond.substvars.new debian/simbamond.substvars
+   dh_installinit
+	install -p -m644 debian/simbamond.default debian/simbamond/etc/default/simbamond
+	install -p -m755 debian/simbamond.init debian/simbamond/etc/init.d/simbamond
+	echo "# Automatically added by dh_installinit">> debian/simbamond.postinst.debhelper
+	sed "s/#SCRIPT#/simbamond/;s/#INITPARMS#/defaults/;s/#ERROR_HANDLER#/exit \$?/" /usr/share/debhelper/autoscripts/postinst-init >> debian/simbamond.postinst.debhelper
+	echo '# End automatically added section' >> debian/simbamond.postinst.debhelper
+	echo "# Automatically added by dh_installinit">> debian/simbamond.prerm.debhelper
+	sed "s/#SCRIPT#/simbamond/;s/#INITPARMS#/defaults/;s/#ERROR_HANDLER#/exit \$?/" /usr/share/debhelper/autoscripts/prerm-init >> debian/simbamond.prerm.debhelper
+	echo '# End automatically added section' >> debian/simbamond.prerm.debhelper
+	echo "# Automatically added by dh_installinit">> debian/simbamond.postrm.debhelper
+	sed "s/#SCRIPT#/simbamond/;s/#INITPARMS#/defaults/;s/#ERROR_HANDLER#/exit \$?/" /usr/share/debhelper/autoscripts/postrm-init >> debian/simbamond.postrm.debhelper
+	echo '# End automatically added section' >> debian/simbamond.postrm.debhelper
+   dh_installmenu
+   dh_installmime
+   dh_installmodules
+   dh_installlogcheck
+   dh_installlogrotate
+   dh_installpam
+   dh_installppp
+   dh_installudev
+   dh_installwm
+   dh_installxfonts
+   dh_installgsettings
+   dh_bugfiles
+   dh_ucf
+   dh_lintian
+   dh_gconf
+   dh_icons
+   dh_perl
+   dh_usrlocal
+   dh_link
+   dh_compress
+	cd debian/simbamond
+	chmod a-x usr/share/man/man8/mopi.8 usr/share/man/man8/simbamond.8 usr/share/man/man8/simbamon.8 usr/share/man/man8/mopicli.8 usr/share/man/man8/mopiapi.py.8 usr/share/doc/simbamond/changelog usr/share/doc/simbamond/README.txt
+	gzip -9nf usr/share/man/man8/mopi.8 usr/share/man/man8/simbamond.8 usr/share/man/man8/simbamon.8 usr/share/man/man8/mopicli.8 usr/share/man/man8/mopiapi.py.8 usr/share/doc/simbamond/changelog usr/share/doc/simbamond/README.txt
+	cd '/home/hamish/pi-tronics/simbamon'
+   dh_fixperms
+	find debian/simbamond  -print0 2>/dev/null | xargs -0r chown --no-dereference 0:0
+	find debian/simbamond ! -type l  -print0 2>/dev/null | xargs -0r chmod go=rX,u+rw,a-s
+	find debian/simbamond/usr/share/doc -type f  ! -regex 'debian/simbamond/usr/share/doc/[^/]*/examples/.*' -print0 2>/dev/null | xargs -0r chmod 644
+	find debian/simbamond/usr/share/doc -type d  -print0 2>/dev/null | xargs -0r chmod 755
+	find debian/simbamond/usr/share/man debian/simbamond/usr/man/ debian/simbamond/usr/X11*/man/ -type f  -print0 2>/dev/null | xargs -0r chmod 644
+	find debian/simbamond -perm -5 -type f \( -name '*.so.*' -or -name '*.so' -or -name '*.la' -or -name '*.a' \)  -print0 2>/dev/null | xargs -0r chmod 644
+	find debian/simbamond/usr/include -type f  -print0 2>/dev/null | xargs -0r chmod 644
+	find debian/simbamond/usr/share/applications -type f  -print0 2>/dev/null | xargs -0r chmod 644
+	find debian/simbamond -perm -5 -type f \( -name '*.cmxs' \)  -print0 2>/dev/null | xargs -0r chmod 644
+	find debian/simbamond/usr/lib/perl5 debian/simbamond/usr/share/perl5 -type f -perm -5 -name '*.pm'  -print0 2>/dev/null | xargs -0r chmod a-X
+	find debian/simbamond/usr/sbin -type f  -print0 2>/dev/null | xargs -0r chmod a+x
+	find debian/simbamond/etc/init.d -type f  -print0 2>/dev/null | xargs -0r chmod a+x
+	find debian/simbamond/usr/lib -type f -name '*.ali'  -print0 2>/dev/null | xargs -0r chmod uga-w
+   dh_installdeb
+	perl -pe 's~#DEBHELPER#~qx{cat debian/simbamond.postinst.debhelper}~eg' < debian/postinst > debian/simbamond/DEBIAN/postinst
+	chown 0:0 debian/simbamond/DEBIAN/postinst
+	chmod 755 debian/simbamond/DEBIAN/postinst
+	printf '#!/bin/sh
+set -e
+' > debian/simbamond/DEBIAN/prerm
+	cat debian/simbamond.prerm.debhelper >> debian/simbamond/DEBIAN/prerm
+	chown 0:0 debian/simbamond/DEBIAN/prerm
+	chmod 755 debian/simbamond/DEBIAN/prerm
+	perl -pe 's~#DEBHELPER#~qx{cat debian/simbamond.postrm.debhelper}~eg' < debian/postrm > debian/simbamond/DEBIAN/postrm
+	chown 0:0 debian/simbamond/DEBIAN/postrm
+	chmod 755 debian/simbamond/DEBIAN/postrm
+	find debian/simbamond/etc -type f -printf '/etc/%P
+' >> debian/simbamond/DEBIAN/conffiles
+	chmod 644 debian/simbamond/DEBIAN/conffiles
+   dh_gencontrol
+	echo misc:Depends= >> debian/simbamond.substvars
+	dpkg-gencontrol -ldebian/changelog -Tdebian/simbamond.substvars -Pdebian/simbamond
+dpkg-gencontrol: warning: package simbamond: unused substitution variable ${python:Depends}
+	chmod 644 debian/simbamond/DEBIAN/control
+	chown 0:0 debian/simbamond/DEBIAN/control
+   dh_md5sums
+	(cd debian/simbamond >/dev/null ; find . -type f ! -path "./etc/default/simbamond" ! -path "./etc/init.d/simbamond"  ! -regex '.*/DEBIAN/.*' -printf '%P\0' | LC_ALL=C sort -z | xargs -r0 md5sum > DEBIAN/md5sums) >/dev/null
+	chmod 644 debian/simbamond/DEBIAN/md5sums
+	chown 0:0 debian/simbamond/DEBIAN/md5sums
+   dh_builddeb
+	dpkg-deb --build debian/simbamond ..
+dpkg-deb: building package `simbamond' in `../simbamond_4.0_all.deb'.
+ dpkg-genchanges  >../simbamond_4.0_amd64.changes
+dpkg-genchanges: including full source code in upload
+ dpkg-source -Ipackage --after-build simbamon
+dpkg-buildpackage: full upload; Debian-native package (full source is included)
+Now running lintian...
+W: simbamond: script-with-language-extension usr/sbin/mopiapi.py
+W: simbamond: manpage-has-bad-whatis-entry usr/share/man/man8/mopiapi.py.8.gz
+W: simbamond: manpage-has-bad-whatis-entry usr/share/man/man8/mopicli.8.gz
+E: simbamond: python-script-but-no-python-dep usr/sbin/mopiapi.py
+E: simbamond: python-script-but-no-python-dep usr/sbin/mopicli
+Finished running lintian.
+Now signing changes and any dsc files...
+ signfile simbamond_4.0.dsc Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+
+ signfile simbamond_4.0_amd64.changes Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+
+Successfully signed dsc and changes files

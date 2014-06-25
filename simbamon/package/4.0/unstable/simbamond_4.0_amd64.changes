@@ -1,0 +1,49 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Wed, 25 Jun 2014 19:03:12 +0100
+Source: simbamond
+Binary: simbamond
+Architecture: source all
+Version: 4.0
+Distribution: unstable
+Urgency: low
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Changed-By: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Description: 
+ simbamond  - SimBaMon, a Simple Battery Monitor
+Changes: 
+ simbamond (4.0) unstable; urgency=low
+ .
+   * First KickStarter shipment release, for Firmware 3.10, API 0.3, CLI 0.5
+Checksums-Sha1: 
+ e576750feba9ab5921550ab5dae2808c9b08f07d 1636 simbamond_4.0.dsc
+ c52e25c89349d7fc6cfba639fab41fbb22761518 34380 simbamond_4.0.tar.gz
+ a564af576b475aaf217b3bcb6b1c91b141334b4c 24700 simbamond_4.0_all.deb
+Checksums-Sha256: 
+ 876dd2e3377d51522a563c8a2dfdec29c134107038a1b4d14e12fff2af2c3f64 1636 simbamond_4.0.dsc
+ cc2ab4b6cc925e60c508468be9b3a31331435a9223b9b4df87cf451345cdc6a8 34380 simbamond_4.0.tar.gz
+ 46920fd31b813e48c9ad09475e6cb7b60ae80acedb9d7bdc3f5cb487e4d140f0 24700 simbamond_4.0_all.deb
+Files: 
+ e6a0e1a229dc587d833cdeca84ab18ea 1636 admin optional simbamond_4.0.dsc
+ 71eae5cc7bd8fcc99ce3624704eed440 34380 admin optional simbamond_4.0.tar.gz
+ 8af0c14d79f0d16ec0fc80f95ec23f34 24700 admin optional simbamond_4.0_all.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+iQIcBAEBAgAGBQJTqw+7AAoJEK3gE8dtAR3xXVcP/i/wCLRDla3Qq70wjShN6SeN
+ST5hJHyX3XHsKSo5BAo8rHYdjWAlnXO2J4zYBWYx7/H1qSyc93iyGrZmC1byly+s
+eN+hJOnH83PR/tTtk6LZV7PEnS8ka3iS/LpI8iofv6blAP7PmrVB0Y6ynt63pNL6
+9uxLV7L3C7sACBgdHwOyklZPoovV8YRhY3TAyLU8G+5Rntg8ZEahg4pagwExRG/R
+7i4Ujh6XuYxEqR91ImgC9kJ0bF5i3hm30ec1uFMaTpWCvhjIQRIykmg2DO47Rvz+
+LhrQs3YtniwIu1jEaxCfOkJngKItgb3TmkaQzIp646csbbSnDUI5MVsyXisYmfOo
+R42aafcFZnYJ/v0ZIC9sTgCra0qQ5COh7R3CZ566ssFMdDhkmYHBO9LQX2Sg9tkI
+UyvbKzMbNbGBvIwAeYV1Ci5cYM/N12CstfksWxq8DVS+qq+A1CgIbxlnWAAuqjuE
+A3lVEsMErSwbOJdKD/CqxubLx2720ZAf6ooYcHr+Yv/wBK38RC/BXduNI3lTcG3s
+Ov1UTe4WRD9HAUpEZi05xNrk+nwewJ/TUq9/qkixgb/WmnTKSZWglbz1ZtaYuw8O
+FIZMeyWjeO/ZGJLmSsPLly8mBgeN317l0DKOvVy4c4d8gGmArZeYSRnCMLfMt0i1
+DLxekZ41H5BNTIICki5d
+=q4aC
+-----END PGP SIGNATURE-----
