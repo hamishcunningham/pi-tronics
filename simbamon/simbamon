@@ -76,8 +76,8 @@ logger "${NAME}: monitor frequency is ${MONITOR_FREQUENCY} seconds"
 # check mopicli installed and working
 ${CLI} -s >/dev/null || {
   COUT=`${CLI} -s 2>&1`
-  echo "${P}: ${CLI} not working; installation problem? (${COUT})" >&2
-  logger "${P}: ${CLI} not working; installation problem? (${COUT})"
+  echo "${P}: ${CLI} not working; MoPi not attached or powered? (${COUT})" >&2
+  logger "${P}: ${CLI} not working; MoPi not attached or powered? (${COUT})"
 }
 
 # how many loops to wait between warnings when battery is low
