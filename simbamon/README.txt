@@ -1,4 +1,4 @@
-SimBaMon: a Simple Battery Monitor daemon
+simbamon: a Simple Battery Monitor daemon
 
 -----------------------------------------------------------------------------
 This tree contains the code for a simple battery monitor daemon for projects

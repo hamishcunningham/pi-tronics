@@ -12,8 +12,8 @@ Package: simbamond
 Architecture: all
 Depends: python-rpi.gpio, python-smbus, whiptail, bc, ${misc:Depends}
 Recommends:
-Description: SimBaMon, a Simple Battery Monitor
- SimBaMon is an open source Linux daemon for monitoring battery levels;
+Description: simbamon, a Simple Battery Monitor
+ simbamon is an open source Linux daemon for monitoring battery levels;
  sending warning messages to the user if the battery is low; shutting down
  cleanly at critical battery levels; managing a power supply on/off switch;
  writing relevant data to the system logs. It is bundled with configuration

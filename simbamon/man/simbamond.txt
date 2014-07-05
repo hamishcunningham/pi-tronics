@@ -6,7 +6,7 @@ SYNOPSIS
 DESCRIPTION
   Battery monitoring for the Raspberry Pi...
 
-  SimBaMon is an open source Linux daemon for
+  simbamon is an open source Linux daemon for
 
     - monitoring battery levels
     - sending warning messages to the user if the battery is low
@@ -25,7 +25,7 @@ DESCRIPTION
       Linux uses to manage daemons (amongst other things)
 
   The last of these, simbamond, is used by the operating system to start and
-  stop SimBaMon at boot or shutdown time, and can be used to control the daemon
+  stop simbamon at boot or shutdown time, and can be used to control the daemon
   manually when required. For example this command will stop the daemon:
 
     sudo service simbamon stop

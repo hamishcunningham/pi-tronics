@@ -8,9 +8,9 @@
 #
 ### BEGIN INIT INFO
 # Provides:          simbamon
-# Short-Description: SimBaMon: a simple battery monitor daemon
-# Description:       This script is implements the daemon for
-#                    SimBaMon (a simple battery monitor)
+# Short-Description: simbamon: a simple battery monitor daemon
+# Description:       This script checks battery level and
+#                    reports it
 ### END INIT INFO
 
 # standard locals
@@ -26,7 +26,7 @@ usage() { log_action_msg Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
 
 # defaults
 PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin
-DESC="SimBaMon: a simple battery monitor daemon"
+DESC="simbamon: a simple battery monitor daemon"
 NAME=simbamon
 DNAME=simbamond
 DAEMON=/usr/sbin/$NAME

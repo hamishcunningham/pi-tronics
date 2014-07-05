@@ -292,7 +292,7 @@ while true; do
               "This will DELETE all local configuration -- are you sure?!" \
               24 70 1 && \
             delete_local_config ;;
-      7\ *) whiptail --title "SimBaMon Log Entries" --msgbox \
+      7\ *) whiptail --title "simbamon Log Entries" --msgbox \
               "`do_log_grep`" $WT_HEIGHT $WT_WIDTH 1 ;;
       8\ *) do_about ;;
       *)    whiptail --msgbox "Error: unrecognized option" 20 60 1 ;;

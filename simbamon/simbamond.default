@@ -1,6 +1,6 @@
 # simbamon.default
 #
-# Configuration variables for the SimBaMon simple battery monitor daemon.
+# Configuration variables for the simbamon simple battery monitor daemon.
 # This code is copyright Hamish Cunningham and the University of Sheffield
 # and is licenced under GPL 3 or any later version.
 

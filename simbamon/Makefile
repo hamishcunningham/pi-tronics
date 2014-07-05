@@ -1,4 +1,4 @@
-# Makefile for SimBaMon
+# Makefile for simbamon
 # This code is copyright Hamish Cunningham and the University of Sheffield
 # and is licenced under GPL 3 or any later version.
 
@@ -44,10 +44,10 @@ do-listing=\
 
 # help #######################################################################
 help:
-	@echo 'Makefile for SimBaMon                                         '
+	@echo 'Makefile for simbamon                                         '
 	@echo '                                                              '
 	@echo 'Usage:                                                        '
-	@echo '   make install                   installs the SimBaMon daemon'
+	@echo '   make install                   installs the simbamon daemon'
 	@echo '   make uninstall                 removes the daemon          '
 	@echo '   make list                      list installed files        '
 	@echo '   make package                   create .deb/.dcs packagings '
@@ -83,12 +83,12 @@ install:
 	install man/$(MOPICLI).8.gz $(DESTDIR)/usr/share/man/man8
 	install man/$(MOPIAPI).8.gz $(DESTDIR)/usr/share/man/man8
 	[ -z "$(DESTDIR)" ] && update-rc.d $(P) defaults || :
-	@echo 'SimBaMon installed: '
+	@echo 'simbamon installed: '
 	@$(do-listing)
 
 # uninstall ##################################################################
 uninstall:
-	@echo 'removing SimBaMon files: '
+	@echo 'removing simbamon files: '
 	@$(do-listing)
 	[ -z "$(DESTDIR)" ] && update-rc.d -f $(P) remove || :
 	sudo rm -f $(INSTALLED_FILES)
@@ -120,7 +120,7 @@ package: version man package-unstable package-precise
 	@echo "\nprecise:"
 	@ls -lh $(PD)/precise
 package-unstable:
-	@echo 'packaging SimBaMon for Debian unstable...'
+	@echo 'packaging simbamon for Debian unstable...'
 	mkdir -p $(PD)/unstable
 	rm -f $(PD)/unstable/*
 	sed -i \
@@ -130,7 +130,7 @@ package-unstable:
 	cd .. && for f in $(PACKAGE_FILES); do \
           [ -f $$f ] && mv $$f $(D)/$(PD)/unstable || :; done
 package-precise:
-	@echo 'packaging SimBaMon for Ubuntu precise...'
+	@echo 'packaging simbamon for Ubuntu precise...'
 	mkdir -p $(PD)/precise
 	rm -f $(PD)/precise/*
 	sed -i 's,\(^$(P) ('$(VERSION)') \)[a-z]*,\1precise,' debian/changelog
@@ -145,7 +145,7 @@ snapshot-version:
           sed -i 's,^VERSION=.*,VERSION=\"'$(SNAPSHOT_VERSION)'\",' $$f; done
 	sed -i 's,^NEXT_SNAP=.*,NEXT_SNAP='$$(($(NEXT_SNAP) + 1))',' Makefile
 snapshot: snapshot-version
-	@echo "packaging SimBaMon SNAPSHOT $(SNAPSHOT)..."
+	@echo "packaging simbamon SNAPSHOT $(SNAPSHOT)..."
 	mkdir -p $(SNAPD)
 	rm -rf $(SNAPD)/*
 	sed -i -e 's,\(^$(P) ('$(VERSION)') \)[a-z]*,\1precise,' \
