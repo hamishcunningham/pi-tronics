@@ -1,0 +1,19 @@
+{
+  "name": "mopiapi",
+  "version": "1.0.0",
+  "description": "Interface to the MoPi battery power add-on board for the Raspberry Pi. (http://pi.gate.ac.uk/mopi)",
+  "main": "main.js",
+  "author": "Mike Cardwell (https://grepular.com/)",
+  "license": {
+      "type": "GPL",
+      "url": "http://www.opensource.org/licenses/GPL-3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hamishcunningham/pi-tronics.git"
+  },
+  "dependencies": {
+    "i2c": "~0.1.4"
+  },
+  "readmeFilename": "README.md"
+}
