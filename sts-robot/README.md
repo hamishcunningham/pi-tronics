@@ -4,6 +4,18 @@ Robot Demo
 
 Code seeds from Phil Howard at Pimoroni -- @Gadgetoid -- thanks Phil!
 
+---
+
+cd; ln -s pi-tronics/sts-robot robot
+
+sudo apt-get install python-pip
+sudo pip install pibrella
+
+edit /etc/rc.local and add /home/pi/robot/fotm-startup.sh &
+
+----
+
+
 
 Requires RPi.GPIO and Pibrella libraries
 
