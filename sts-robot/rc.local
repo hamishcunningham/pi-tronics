@@ -1,0 +1,6 @@
+
+
+# for autostart of the remote control add this to rc.local
+cd /home/pi/robot
+./photos.sh &
+python test2.py &
