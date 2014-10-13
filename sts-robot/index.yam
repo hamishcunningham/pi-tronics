@@ -1,0 +1,43 @@
+Simple Robotics Demo with Camera and Remote Control
+
+%contents
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%1 Phil's original
+
+Requires RPi.GPIO and Pibrella libraries
+
+Includes alpha of Motobrella library
+
+Ensure the files included in this demo are in /home/pi/robot/
+
+Make sure startup.sh is executable.
+
+Add /home/pi/robot/startup.sh to /etc/rc.local
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%1 HC's self-driving thing
+
+cd; ln -s pi-tronics/sts-robot robot
+
+sudo apt-get install python-pip
+sudo pip install pibrella
+
+edit /etc/rc.local and add /home/pi/robot/fotm-startup.sh &
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%1 Fred's web server
+
+# for autostart of the remote control add this to rc.local
+cd /home/pi/robot
+./photos.sh &
+python remote-control.py &
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%1 WiFi access point
+
+http://elinux.org/RPI-Wireless-Hotspot
