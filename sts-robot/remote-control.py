@@ -87,6 +87,6 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 
 server_class=BaseHTTPServer.HTTPServer
-httpd=server_class(("0.0.0.0", 8080), MyHandler)
+httpd=server_class(("0.0.0.0", 80), MyHandler)
 httpd.serve_forever()
 

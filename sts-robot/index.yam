@@ -41,3 +41,6 @@ python remote-control.py &
 %1 WiFi access point
 
 http://elinux.org/RPI-Wireless-Hotspot
+SSID: openrobot
+
+(no NAT configured)
