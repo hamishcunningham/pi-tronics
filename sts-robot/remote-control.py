@@ -28,7 +28,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 		if s.path == "/test.html":
 			s.send_response(200)
 			s.end_headers()
-			s.wfile.write('<html><head><meta http-equiv=\"refresh"\ content=\"1\"></head><body><img src="/test.jpg" width=\"640\" height=\"480\"></body></html>')
+			s.wfile.write('<html><head><meta http-equiv=\"refresh"\ content=\"2\"></head><body><p align=\"center\"><img src="/test.jpg" width=\"640\" height=\"480\"></p></body></html>')
 			return
 
 		if s.path == "/forward":
@@ -65,24 +65,24 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 		s.send_response(200)
 		s.end_headers()
 		s.wfile.write("<head><style>a { font-size: large; color: black; border: 3px solid black; padding: 20px; } p { padding: 3px }</style></head>")
-		s.wfile.write("<body>")
+		s.wfile.write("<body><h1 align=\"center\">A simple, open robot</h1><p><br/>")
 #		s.wfile.write("<body style=\"font-size: 200%\">")
-		s.wfile.write("<p><a href=\"/forward\">forward</a> ")
+		s.wfile.write("<p align=\"center\"><a href=\"/forward\">forward</a> ")
 		s.wfile.write("<a href=\"/left\">left</a> ")
 		s.wfile.write("<a href=\"/right\">right</a></p>")
-		s.wfile.write("<p>&nbsp;</p>")
-		s.wfile.write("<p><a href=\"/forwardstart\">forwardstart</a> ")
+		s.wfile.write("<p align=\"center\">&nbsp;</p>")
+		s.wfile.write("<p align=\"center\"><a href=\"/forwardstart\">forwardstart</a> ")
 		s.wfile.write("<a href=\"/forwardstop\">forwardstop</a></p>")
 
-		s.wfile.write("<p>&nbsp;</p>")
-		s.wfile.write("<p><a href=\"/leftstart\">leftstart</a> ")
+		s.wfile.write("<p align=\"center\">&nbsp;</p>")
+		s.wfile.write("<p align=\"center\"><a href=\"/leftstart\">leftstart</a> ")
 		s.wfile.write("<a href=\"/leftstop\">leftstop</a></p>")
 
-		s.wfile.write("<p>&nbsp;</p>")
-		s.wfile.write("<p><a href=\"/rightstart\">rightstart</a>")
+		s.wfile.write("<p align=\"center\">&nbsp;</p>")
+		s.wfile.write("<p align=\"center\"><a href=\"/rightstart\">rightstart</a>")
 		s.wfile.write("<a href=\"/rightstop\">rightstop</a></p>")
 
-		s.wfile.write("<iframe src=\"/test.html\" width=\"680\" height=\"520\"></iframe>")
+		s.wfile.write("<p><br/><p align=\"center\"><iframe src=\"/test.html\" width=\"680\" height=\"520\"></iframe></p>")
 		s.wfile.write("</body>")
 
 
