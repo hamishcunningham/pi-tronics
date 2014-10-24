@@ -12,6 +12,7 @@ This a git repo for assorted Raspberry Pi projects from http://pi.gate.ac.uk/
 - loadtest -- benchmarking stuff
 - madlab-jam -- stuff for Manchester Pi Jam October 2013 ish
 - maker-day -- stuff for Sheffield Maker Day 2013
+- musipi -- music Pi controller
 - notipi -- see http://pi.gate.ac.uk/pages/notipi.html
 - outreach -- Pi-based schools outreach material
 - pibrush -- see http://pi.gate.ac.uk/pages/pibrush.html
