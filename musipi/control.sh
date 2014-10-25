@@ -47,5 +47,6 @@ do
 done
 
 # start playing (on repeat)
-$MPC play
 $MPC repeat
+sleep 0.5
+$MPC play
