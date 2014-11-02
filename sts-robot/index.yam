@@ -27,7 +27,6 @@ Simple Robotics Demo with Camera and Remote Control
 
 - # for autostart of the remote control add this to rc.local
 - cd /home/pi/robot
-- ./photos.sh &
 - python remote-control.py &
 
 
