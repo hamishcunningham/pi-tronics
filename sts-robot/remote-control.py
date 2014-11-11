@@ -76,7 +76,7 @@ class ControlHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s.send_response(200)
         s.end_headers()
         s.wfile.write('<html><head>\n')
-        s.wfile.write('<style>body { font-size: large; } h1 { text-align: center } h3 { text-align: center }\n')
+        s.wfile.write('<style>body { font-size: x-large; } h1 { text-align: center } h3 { text-align: center }\n')
         s.wfile.write('p.control a { color: black; border: 3px solid black; padding: 1em; }\n')
         s.wfile.write('p { text-align:center; }\n')
         s.wfile.write('p.control { padding: 3px; margin-bottom: 2.5em; }</style>\n')
