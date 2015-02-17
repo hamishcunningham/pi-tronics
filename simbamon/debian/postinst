@@ -59,6 +59,7 @@ do_configure() {
   # uncomment to debug: echo "I2C in ${MODS}: "; grep i2c ${MODS} || :
 
   # load the I2C modules
+  # TODO dump the error messages from here; see DT note above
   modprobe i2c-dev || {
     echo "warning: failed to modprobe i2c-dev - reboot and retry?" >&2
   }
