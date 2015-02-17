@@ -28,7 +28,7 @@ INIT_LINKS=\
 PACKAGE_FILES=\
   $(P)_$(VERSION)*.deb \
   $(P)_$(VERSION)*.dsc \
-  $(P)_$(VERSION)*.tar.gz \
+  $(P)_$(VERSION)*.tar.xz \
   $(P)_$(VERSION)*.changes \
   $(P)_$(VERSION)*.build
 NOW:=$(shell date "+%Y-%m-%d-%R" |sed 's,:,,')
