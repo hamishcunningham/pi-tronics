@@ -32,7 +32,16 @@ do_configure() {
   fi
   # uncomment to debug: echo "I2C in ${BLIST}: "; grep i2c- ${BLIST} || :
 
-  # add to /etc/modules
+  # TODO: Harmonise i2c switch-on code.
+  # At some point it might be best to delete the modules stuff, or to do
+  # it conditionally depending on the kernel revision or presence/absence of
+  # DT support, for example like Phil Howard does in this script:
+  #     https://github.com/pimoroni/get/blob/master/i2c
+  # For now I'm leaving the modules code and adding DT code (which writes a
+  # param to config.txt). This means that it should "just work" on both new
+  # and old systems... Cross your fingers!
+
+  # add I2C to /etc/modules
   MODS=/etc/modules
   if [ -r ${MODS} ]
   then
@@ -49,7 +58,7 @@ do_configure() {
   fi
   # uncomment to debug: echo "I2C in ${MODS}: "; grep i2c ${MODS} || :
 
-  # load the modules
+  # load the I2C modules
   modprobe i2c-dev || {
     echo "warning: failed to modprobe i2c-dev - reboot and retry?" >&2
   }
@@ -57,6 +66,14 @@ do_configure() {
     echo "warning: failed to modprobe i2c-bcm2708 - reboot and retry?" >&2
   }
   # uncomment to debug: echo "I2C in /proc/modules: "; grep i2c_ /proc/modules || :
+
+  # i2c enable on device tree (DT) systems; see e.g.
+  # http://www.raspberrypi.org/forums/viewtopic.php?t=97314
+  # http://www.raspberrypi.org/forums/viewtopic.php?f=44&t=98318
+  DT_I2C_ON='dtparam=i2c=on'
+  BCONF='/boot/config.txt'
+  echo " (adding '$DT_I2C_ON' to $BCONF) "
+  grep -q "${DT_I2C_ON}" ${BCONF} || echo "${DT_I2C_ON}" >> ${BCONF}
 
   echo "...done (simbamond postinst)"
 }
