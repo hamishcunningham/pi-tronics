@@ -3,7 +3,7 @@
 # and is licenced under GPL 3 or any later version.
 
 # vars #######################################################################
-VERSION=4.0
+VERSION=4.1
 NEXT_SNAP=1
 P=simbamond
 D=simbamon

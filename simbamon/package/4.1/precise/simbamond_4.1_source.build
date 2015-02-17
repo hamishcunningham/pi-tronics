@@ -1,0 +1,41 @@
+ dpkg-buildpackage -rfakeroot -d -us -uc -S -Ipackage
+dpkg-buildpackage: source package simbamond
+dpkg-buildpackage: source version 4.1
+dpkg-buildpackage: source distribution precise
+dpkg-buildpackage: source changed by Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+ dpkg-source -Ipackage --before-build simbamon
+ fakeroot debian/rules clean
+dh clean 
+   dh_testdir
+   dh_auto_clean
+   dh_clean
+	rm -f debian/simbamond.substvars
+	rm -f debian/simbamond.*.debhelper
+	rm -rf debian/simbamond/
+	rm -f debian/*.debhelper.log
+	rm -f debian/files
+	find .  \( \( -type f -a \
+	        \( -name '#*#' -o -name '.*~' -o -name '*~' -o -name DEADJOE \
+		 -o -name '*.orig' -o -name '*.rej' -o -name '*.bak' \
+		 -o -name '.*.orig' -o -name .*.rej -o -name '.SUMS' \
+		 -o -name TAGS -o \( -path '*/.deps/*' -a -name '*.P' \) \
+		\) -exec rm -f {} + \) -o \
+		\( -type d -a -name autom4te.cache -prune -exec rm -rf {} + \) \)
+	rm -f *-stamp
+ dpkg-source -Ipackage -b simbamon
+dpkg-source: info: using source format `3.0 (native)'
+dpkg-source: info: building simbamond in simbamond_4.1.tar.xz
+dpkg-source: info: building simbamond in simbamond_4.1.dsc
+ dpkg-genchanges -S >../simbamond_4.1_source.changes
+dpkg-genchanges: including full source code in upload
+ dpkg-source -Ipackage --after-build simbamon
+dpkg-buildpackage: source-only upload: Debian-native package
+Now running lintian...
+W: simbamond source: ancient-standards-version 3.9.3 (current is 3.9.5)
+Finished running lintian.
+Now signing changes and any dsc files...
+ signfile simbamond_4.1.dsc Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+
+ signfile simbamond_4.1_source.changes Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+
+Successfully signed dsc and changes files

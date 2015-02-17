@@ -1,0 +1,49 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Tue, 17 Feb 2015 16:09:35 +0000
+Source: simbamond
+Binary: simbamond
+Architecture: source all
+Version: 4.1
+Distribution: unstable
+Urgency: low
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Changed-By: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Description:
+ simbamond  - simbamon, a Simple Battery Monitor
+Changes:
+ simbamond (4.1) unstable; urgency=low
+ .
+   * Fix i2c under device tree (issue 36); Firmware 3.10, API 0.3, CLI 0.5
+Checksums-Sha1:
+ 5e33ba77448fe45eecf896264a28ae3bbce91830 1624 simbamond_4.1.dsc
+ ec6af00a79ce0c8f8e7bd2862e47f27133867dc8 34876 simbamond_4.1.tar.xz
+ 64cbfc06c354e22a7f4600b88e862ae9b078c1be 24372 simbamond_4.1_all.deb
+Checksums-Sha256:
+ bc55992272b0e1d67d8159c9ff432d7bb5510f5d9d70af93378aca776978a73c 1624 simbamond_4.1.dsc
+ 5bfd8b88b02315ba49b78f8fade562dad5987d39d8a9a7ccbdc25dfc1c1d98af 34876 simbamond_4.1.tar.xz
+ d15f1da06becd929e36ec4e1ad09342efb8b4b8009e13398a26bd5d3a0571584 24372 simbamond_4.1_all.deb
+Files:
+ 9aa0404fd48dcb4760f9a6a44a053433 24372 admin optional simbamond_4.1_all.deb
+ a79d4374d14bed24a4b1460af831821b 1624 admin optional simbamond_4.1.dsc
+ 16fa4669e8e7493b5ef111c864616b64 34876 admin optional simbamond_4.1.tar.xz
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQIcBAEBAgAGBQJU42p0AAoJEK3gE8dtAR3x1cgP/2yPx2sZ7WFw/1d7xSE0xw2i
+M/f6K5JSbFug9fHfU9QVaZD1ojjEor8csoci8j1dHcIFxb9IZEMlPNRGZD4c4GD5
+JJbKXyAupCS06y2Mzu1ZwofwBjp2n4kmUQjUXm/25cPmNIWcvJLupsDcC+VJOSBZ
+jImYecbJZQx49Wkm2zs2D3m+NWHbrH536gYOFbu2xv1ssgsl5v8Hdle6G7VZcKSQ
+hOfP55zsFFdvs+qKa1n7Cpv8U60ih+96cqGyIcK3rOTP3Q5cKcSiQaZT1FaTX8lu
+x48sr8Q3S797CLlLw/8gzb8+AoqZbihbfF864VJgfqroL/xuIubFSvzRU5vpAi8C
+MELfzrc566GLvhDrb2IzjvVk55DCpOq9sN8CD0i+Mr88Dul0q5f0VjhoaBd5NSSK
+O+rFFwv8g6E5pJKEcSifmj1rOxSgSBH246JOl5lDDugEUqnBkX/uzaGfG9nTYXBu
+RxWEy7J0YvKR3XGOs7r88LjiF+h+8Wy10xHRx8MNcdMeRlMfpVJrHyIMkVGIcu9d
+eppNa5yFduZwVjRBWnjmqbS2XTdNqcGASqSOquAgXs0gYBb54umFKik31HTFBGyN
+D6VCN6quyaeN3r+9fdnTHLt7I4mHswDzwSnTDbM2F244+OjKmIhoOjYbiLwewEYJ
+HboEHDPtxum+DgGuDmBt
+=7pS6
+-----END PGP SIGNATURE-----

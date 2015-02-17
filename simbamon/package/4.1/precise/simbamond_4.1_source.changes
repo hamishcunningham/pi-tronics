@@ -1,0 +1,46 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Tue, 17 Feb 2015 16:09:35 +0000
+Source: simbamond
+Binary: simbamond
+Architecture: source
+Version: 4.1
+Distribution: precise
+Urgency: low
+Maintainer: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Changed-By: Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>
+Description:
+ simbamond  - simbamon, a Simple Battery Monitor
+Changes:
+ simbamond (4.1) precise; urgency=low
+ .
+   * Fix i2c under device tree (issue 36); Firmware 3.10, API 0.3, CLI 0.5
+Checksums-Sha1:
+ 5dac9579274bb4716b7211aef403848c13cff9bf 1624 simbamond_4.1.dsc
+ d254c044f4fb34f81948972632eee143b62c2e5b 34884 simbamond_4.1.tar.xz
+Checksums-Sha256:
+ eb93922b66d35aa91e3b352a283270f40e1534732d0850d80b84b2d912675e5e 1624 simbamond_4.1.dsc
+ 071b38b509e746a2dd4ad02a9ae51275341ec8b374ef4cd96cc0e7ec8760c900 34884 simbamond_4.1.tar.xz
+Files:
+ ae96c81fb96f30d891bcdbe185acb20b 1624 admin optional simbamond_4.1.dsc
+ 0d84930becd604764ba10597401b4138 34884 admin optional simbamond_4.1.tar.xz
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQIcBAEBAgAGBQJU42p3AAoJEK3gE8dtAR3xLrAP/iZvjCpnCTdb8u8Ewa50ivZg
+D0es7qubeqviZnO2ETaYle6LQtw4vSloCQREvVABfxvcTMPadK11onjKIkuq5IZ7
+feYhRZJKLWBmvNbOtRdRC5TgLbLgBT+R2/HKoXD7OyAdlfwf1/7sRgkMMUivloma
+81wCIGGJU13NM0HrLrt9nB9XTu6EUMZ24Q7Hek100moP+Q1GCU56VTooSvtYS/u3
+6JGcaIk6YhdlRtebeKOwykUKOhlTWOhW07PzRrXaTRBfnol5FPtz07Lm/6xYoM88
+KukXGY0mJbPP0SyDXKqIPSkruI1SQlzgtVV++eSiE6npPKXpCk5r+Evaxlw7At46
+GT5glSev3/eWwyRWNFihOefSnFag510vlB2ZofUv5KQnLtGL0nGCf84tGEZxnpVf
+Tx+HS/+R2ZqV4gjMHSIm09+HgDadT3RQWx3HtW/dmT1tQ16pPM6syweLDvxamoOm
+Mj/71xmAOL6vCYArfUZn69IW9lR0iCPkVvBelwzjdfkUVfbMS+2almP6eUbrhu8S
+aUmLrhbSatdK0y6PsvitRHbbNWKNdKmTym28RJAQSGy3HjhsjPNJFR6HoJc7jmpN
+iKnnjuhT8XuftMRAD2K1ewktKaKCqVqBXRrnzFe9wYjfQ99k5EiY7mrIO8nC5eLG
+gL+Yi25XGsHyAS0nAUdd
+=7+Aq
+-----END PGP SIGNATURE-----

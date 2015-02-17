@@ -1,3 +1,9 @@
+simbamond (4.1) unstable; urgency=low
+
+  * Fix i2c under device tree (issue 36); Firmware 3.10, API 0.3, CLI 0.5
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Tue, 17 Feb 2015 16:09:35 +0000
+
 simbamond (4.0) unstable; urgency=low
 
   * First KickStarter shipment release, for Firmware 3.10, API 0.3, CLI 0.5
