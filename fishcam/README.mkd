@@ -1,0 +1,4 @@
+Timelapse Rig for Backgarden Aquaponics Build
+
+To rc.local add:
+/home/pi/pi-tronics/fishcam/timelapse.sh &
