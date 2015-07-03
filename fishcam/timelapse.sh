@@ -12,7 +12,7 @@ OPTIONSTRING=hdni:
 # specific locals
 ABC=0
 USEXYZ="1"
-SLEEP=10
+SLEEP=60
 PICSDIR=/home/pi/pics
 
 # message & exit if exit num present
