@@ -36,7 +36,7 @@ picsloop() {
   while :
   do
     NOW=`date '+%Y-%m-%d--%T'|sed 's,:,-,g'`
-    raspistill -t 3 -o ${NOW}.jpg
+    raspistill -t 1500 -o ${NOW}.jpg
     sleep $SLEEP
   done
 }
