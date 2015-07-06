@@ -103,9 +103,12 @@ picsloop() {
     su pi -c "scp ${NOW}.jpg pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
 
     # TODO add to the index.html
-    MARKUP="<p><a href='${NOW}.jpg'><img src='${NOW}-thumb.jpg'/></a></p>"
-    COM='bash -c "echo '${MARKUP}' >>fishpics/'${ME}/${TODAYDIR}'/index.html"'
-    su pi -c "ssh pi@${NUCIP} \"${COM}\""
+    TMPF=tmp-`hostname`-$$
+    echo "<p><a href='${NOW}.jpg'><img src='${NOW}-thumb.jpg'/></a></p>" >$TMPF
+    su pi -c "scp ${TMPF} pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
+    ssh -i /home/pi/id_dsa pi@${NUCIP} \
+      "bash -c 'cd fishpics/${ME}/${TODAYDIR} && cat $TMPF >>index.html && rm $TMPF'"
+    rm $TMPF
 
     # wait for next scheduled pic
     sleep $SLEEP
