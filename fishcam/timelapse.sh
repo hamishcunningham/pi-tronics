@@ -104,9 +104,10 @@ picsloop() {
 
     # TODO add to the index.html
     MARKUP="<p><a href='${NOW}.jpg'><img src='${NOW}-thumb.jpg'/></a></p>"
-    ssh -i /home/pi/.ssh/id_dsa pi@${NUCIP} \
-      'bash -c "echo '${MARKUP}' >>fishpics/'${ME}/${TODAYDIR}'/index.html"'
+    su pi -c \
+"ssh pi@${NUCIP} 'bash -c \"echo '${MARKUP}' >>fishpics/'${ME}/${TODAYDIR}'/index.html\"'"
 
+    # wait for next scheduled pic
     sleep $SLEEP
   done
 }
