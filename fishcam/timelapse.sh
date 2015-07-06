@@ -103,7 +103,7 @@ picsloop() {
     su pi -c "scp ${NOW}.jpg pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
 
     # TODO add to the index.html
-    MARKUP="<p><a href='${NOW.jpg}'><img src='${NOW}-thumb.jpg'/></a></p>"
+    MARKUP="<p><a href='${NOW}.jpg'><img src='${NOW}-thumb.jpg'/></a></p>"
     ssh -i .ssh/pitronics_id_dsa pi@${IP} \
       'bash -c "echo '${MARKUP}' >>fishpics/'${ME}/${TODAYDIR}'/index.html"'
 
