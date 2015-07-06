@@ -51,11 +51,11 @@ picsloop() {
   while :
   do
     NOW=`date '+%T'|sed 's,:,-,g'`
-    raspistill -t 1500 -o ${NOW}.jpg
+    raspistill -th -t 1000 -o ${NOW}.jpg
+    exiv2 -et ${NOW}.jpg        # extract thumbnail
 
     # TODO
-    # create thumbnails with each pic
-    # sync to pi@hc-nuc after each pic
+    # sync to pi@hc-nuc after each pic, thumbnail first
 
     sleep $SLEEP
   done
