@@ -16,7 +16,13 @@ PICSDIR=/home/pi/pics
 SIN=
 SYNC=
 UPDATE=
+NUCIP=10.0.0.5
 
+# logical name
+ME=
+case `hostname` in fishcam1) ME=f1 ;; fishcam2) ME=f2 ;; fishcam3) ME=f3 ;; esac
+echo logical name: $ME
+ 
 # message & exit if exit num present
 usage() { echo -e Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
 
@@ -44,10 +50,15 @@ picsloop() {
   # subdir for each day
   TODAYDIR=`date '+%Y-%m-%d'`
   [ -d $TODAYDIR ] || mkdir -p $TODAYDIR
+
+  # TODO make sure nuc copy of this dir is up to date
+  echo rsync -av ${TODAYDIR}/ $NCUIP:$PICSDIR
   cd $TODAYDIR
+pwd
+exit
 
   # TODO
-  # send text if can't ping hamish-nuc -- 10.0.0.5
+  # send text if can't ping NUCIP
 
   # loop forever taking pics
   while :
@@ -58,6 +69,7 @@ picsloop() {
 
     # TODO
     # sync to pi@hc-nuc after each pic, thumbnail first
+    scp ${NOW}-thumb.jpg ${NUCIP}:fishpics/XXX/${TODAYDIR}
 
     sleep $SLEEP
   done
