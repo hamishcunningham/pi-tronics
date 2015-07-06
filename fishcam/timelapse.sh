@@ -58,8 +58,10 @@ picsloop() {
   ping -c 1 $NUCIP || { echo no server ping; sleep 5; }
 
   # make sure nuc copy of this dir is up to date
-  echo rsync -av ${TODAYDIR}/ $NUCIP:$PICSDIR
-  rsync -av ${TODAYDIR}/ $NUCIP:$PICSDIR
+  echo rsync -av -e "ssh -i ~pi/.ssh/pitronics_id_dsa" \
+    ${TODAYDIR}/ pi@$NUCIP:$PICSDIR
+  rsync -av -e "ssh -i ~pi/.ssh/pitronics_id_dsa" \
+    ${TODAYDIR}/ pi@$NUCIP:$PICSDIR
   cd $TODAYDIR
 pwd
 exit
