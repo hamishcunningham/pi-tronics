@@ -2,6 +2,10 @@
 #
 # timelapse.sh
 
+# When started on a cam with no options (typically via rc.local), this script
+# updates the server with the latest pics then loops taking new pics every
+# minute or so. The various options are for actions on the server. 
+
 # standard locals
 alias cd='builtin cd'
 P="$0"
@@ -11,7 +15,7 @@ OPTIONSTRING=hdf:sruwbS
 
 # specific locals
 CAM=
-SLEEP=57
+SLEEP=52
 PICSDIR=/home/pi/pics
 SIN=
 SYNC=
@@ -99,6 +103,9 @@ picsloop() {
     su pi -c "scp ${NOW}.jpg pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
 
     # TODO add to the index.html
+    MARKUP="<p><a href='${NOW.jpg}'><img src='${NOW}-thumb.jpg'/></a></p>"
+    ssh -i .ssh/pitronics_id_dsa pi@${IP} \
+      'bash -c "echo '${MARKUP}' >>fishpics/'${ME}/${TODAYDIR}'/index.html"'
 
     sleep $SLEEP
   done
