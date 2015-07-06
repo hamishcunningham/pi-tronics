@@ -64,8 +64,11 @@ picsloop() {
   # make sure nuc copy of this dir is up to date
   echo rsync -av -e "ssh -i /home/pi/.ssh/id_dsa" \
     ${TODAYDIR}/ "pi@${NUCIP}:fishpics/${ME}"
-  rsync -av -e "ssh -i /home/pi/.ssh/id_dsa" \
-    ${TODAYDIR}/ "pi@${NUCIP}:fishpics/${ME}"
+  ( 
+    su pi
+    rsync -av -e "ssh -i /home/pi/.ssh/id_dsa" \
+      ${TODAYDIR}/ "pi@${NUCIP}:fishpics/${ME}"
+  )
   cd $TODAYDIR
 pwd
 exit
@@ -79,6 +82,11 @@ exit
 
     # TODO
     # send text if can't ping NUCIP
+    ping -c 1 $NUCIP || ( echo 'no server ping (loop 1)'; sleep 5; \
+      ping -c 1 $NUCIP || ( echo 'no server ping (loop 2)'; sleep 5; \
+        ping -c 1 $NUCIP || ( echo 'no server ping (loop 3)'; sleep 5; \
+          ping -c 1 $NUCIP || ( echo 'no server ping (loop 4)'; sleep 5; \
+    ))))
 
     # TODO
     # sync to pi@hc-nuc after each pic, thumbnail first
