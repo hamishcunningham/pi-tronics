@@ -106,13 +106,13 @@ picsloop() {
 servehttp() {
   # TODO
   # hamish-nuc serve thumbs page
-  # python -m SimpleHTTPServer
+  echo python -m SimpleHTTPServer
 }
 
 # back up the server copy
 makebackup() {
   # TODO
-  # rsync /home/pi/fishpics /home/hamish/fishpics
+  echo rsync /home/pi/fishpics /home/hamish/fishpics
 }
 
 # update and reboot the cameras
