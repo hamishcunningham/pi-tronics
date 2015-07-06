@@ -5,14 +5,16 @@
 # standard locals
 alias cd='builtin cd'
 P="$0"
-USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-f[123]]"
+USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]]"
 DBG=:
-OPTIONSTRING=hdf:
+OPTIONSTRING=hdf:sr
 
 # specific locals
 CAM=
 SLEEP=60
 PICSDIR=/home/pi/pics
+SIN=
+SYNC=
 
 # message & exit if exit num present
 usage() { echo -e Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
@@ -24,6 +26,8 @@ do
     h)	usage 0 ;;
     d)	DBG=echo ;;
     f)	CAM="f${OPTARG}" ;;
+    s)  SIN=yes ;;
+    r)  SYNC=yes ;;
     *)	usage 1 ;;
   esac
 done 
@@ -31,6 +35,7 @@ shift `expr $OPTIND - 1`
 
 # take pics
 picsloop() {
+  [ -d $PICSDIR ] || mkdir -p $PICSDIR
   while :
   do
     NOW=`date '+%Y-%m-%d--%T'|sed 's,:,-,g'`
@@ -38,7 +43,6 @@ picsloop() {
     sleep $SLEEP
   done
 }
-[ -d $PICSDIR ] || mkdir -p $PICSDIR
 
 # create a vid
 makevid() {
@@ -74,18 +78,16 @@ makevid() {
 }
 
 # do summut
-if [ x"$CAM" != x ]                             # ssh into the cam
+cd
+if [ x$SIN = xyes -a x"$CAM" != x ]             # ssh into the cam
 then
-  eval echo "\$$CAM" >/tmp/$$
-  IP=`cat /tmp/$$`
-  rm /tmp/$$
-  echo $IP
-
-  cd
+  eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
   ssh -i .ssh/pitronics_id_dsa pi@${IP}
-  exit 0
+elif [ x$SYNC = xyes -a x"$CAM" != x ]          # rsync back to nuc
+then
+  eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
+  rsync -av -e "ssh -i .ssh/pitronics_id_dsa" pi@${IP}:pics/ fishpics/${CAM}-pics
+else                                            # the default: take pics
+  cd $PICSDIR
+  picsloop
 fi
-
-# the default: take pics
-cd $PICSDIR
-picsloop
