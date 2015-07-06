@@ -5,9 +5,9 @@
 # standard locals
 alias cd='builtin cd'
 P="$0"
-USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]] [-u(pdate)]"
+USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]] [-u(pdate)] [-w(ebserve)] [-b(ackup)]"
 DBG=:
-OPTIONSTRING=hdf:sru
+OPTIONSTRING=hdf:sruwb
 
 # specific locals
 CAM=
@@ -17,6 +17,8 @@ SIN=
 SYNC=
 UPDATE=
 NUCIP=10.0.0.5
+BACKUP=
+WEBSERVE=
 
 # logical name
 ME=
@@ -36,6 +38,8 @@ do
     s)  SIN=yes ;;
     r)  SYNC=yes ;;
     u)  UPDATE=yes ;;
+    w)  WEBSERVE=yes ;;
+    b)  BACKUP=yes ;;
     *)	usage 1 ;;
   esac
 done 
@@ -64,18 +68,17 @@ picsloop() {
   # make sure nuc copy of this dir is up to date
   echo "rsync -av -e \"ssh -i /home/pi/.ssh/id_dsa\" \
     ${TODAYDIR}/ \"pi@${NUCIP}:fishpics/${ME}\""
-su pi -c "whoami; who am i"
   su pi -c "rsync -av -e \"ssh -i /home/pi/.ssh/id_dsa\" \
     ${TODAYDIR}/ \"pi@${NUCIP}:fishpics/${ME}\""
+
+  # location for new pics
   cd $TODAYDIR
-pwd
-exit
 
   # loop forever taking pics
   while :
   do
     NOW=`date '+%T'|sed 's,:,-,g'`
-    raspistill -t 1000 -o ${NOW}.jpg
+    raspistill -t 1000 -thumb '320:240:70' -o ${NOW}.jpg
     exiv2 -et ${NOW}.jpg        # extract thumbnail
 
     # TODO
@@ -84,17 +87,32 @@ exit
       ping -c 1 $NUCIP || ( echo 'no server ping (loop 2)'; sleep 5; \
         ping -c 1 $NUCIP || ( echo 'no server ping (loop 3)'; sleep 5; \
           ping -c 1 $NUCIP || ( echo 'no server ping (loop 4)'; sleep 5; \
-    ))))
+            ping -c 1 $NUCIP || ( echo TODO send a text; \
+    )))))
 
-    # TODO
     # sync to pi@hc-nuc after each pic, thumbnail first
-    scp ${NOW}-thumb.jpg ${NUCIP}:fishpics/XXX/${TODAYDIR}
+    echo "scp ${NOW}-thumb.jpg pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
+    su pi -c "scp ${NOW}-thumb.jpg pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
+    echo "scp ${NOW}.jpg pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
+    su pi -c "scp ${NOW}.jpg pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
+
+    # TODO add to the index.html
 
     sleep $SLEEP
   done
+}
 
+# serve the thumbnails
+servehttp() {
   # TODO
   # hamish-nuc serve thumbs page
+  # python -m SimpleHTTPServer
+}
+
+# back up the server copy
+makebackup() {
+  # TODO
+  # rsync /home/pi/fishpics /home/hamish/fishpics
 }
 
 # update and reboot the cameras
@@ -151,9 +169,15 @@ elif [ x$SYNC = xyes -a x"$CAM" != x ]          # rsync back to nuc
 then
   eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
   rsync -av -e "ssh -i .ssh/pitronics_id_dsa" pi@${IP}:pics/ fishpics/${CAM}-pics
-elif [ x$UPDATE = xyes ]                        # update and reboor
+elif [ x$UPDATE = xyes ]                        # update and reboot cams
 then
   updatecams
+elif [ x$BACKUP = xyes ]                        # back up server copy
+then
+  makebackup
+elif [ x$WEBSERVE = xyes ]                      # web server
+then
+  servehttp
 else                                            # the default: take pics
   picsloop
 fi
