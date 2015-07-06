@@ -5,13 +5,12 @@
 # standard locals
 alias cd='builtin cd'
 P="$0"
-USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-n(no xyz)] [-i [1|2|3|...]"
+USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-f[123]]"
 DBG=:
-OPTIONSTRING=hdni:
+OPTIONSTRING=hdf:
 
 # specific locals
-ABC=0
-USEXYZ="1"
+CAM=
 SLEEP=60
 PICSDIR=/home/pi/pics
 
@@ -24,8 +23,7 @@ do
   case $OPTION in
     h)	usage 0 ;;
     d)	DBG=echo ;;
-    n)	USEXYZ="" ;;
-    i)	ABC="${OPTARG}" ;;
+    f)	CAM="f${OPTARG}" ;;
     *)	usage 1 ;;
   esac
 done 
@@ -76,5 +74,18 @@ makevid() {
 }
 
 # do summut
+if [ x"$CAM" != x ]                             # ssh into the cam
+then
+  eval echo "\$$CAM" >/tmp/$$
+  IP=`cat /tmp/$$`
+  rm /tmp/$$
+  echo $IP
+
+  cd
+  ssh -i .ssh/pitronics_id_dsa pi@${IP}
+  exit 0
+fi
+
+# the default: take pics
 cd $PICSDIR
 picsloop
