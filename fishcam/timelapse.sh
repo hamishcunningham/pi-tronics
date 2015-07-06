@@ -55,15 +55,17 @@ picsloop() {
   [ -d $TODAYDIR ] || mkdir -p $TODAYDIR
 
   # check server
-  ping -c 1 $NUCIP || { echo 'no server ping (1)'; sleep 5; }
-  ping -c 1 $NUCIP || { echo 'no server ping (2)'; sleep 5; }
-  ping -c 1 $NUCIP || { echo 'no server ping (3)'; sleep 5; }
-  ping -c 1 $NUCIP || { echo 'no server ping (4)'; sleep 5; }
+  ping -c 1 $NUCIP || { echo 'no server ping (1)'; sleep 5;
+    ping -c 1 $NUCIP || { echo 'no server ping (2)'; sleep 5;
+      ping -c 1 $NUCIP || { echo 'no server ping (3)'; sleep 5;
+        ping -c 1 $NUCIP || { echo 'no server ping (4)'; sleep 5;
+  }}}}
 
   # make sure nuc copy of this dir is up to date
-  echo \
-    rsync -av -e "ssh -i /home/pi/.ssh/id_dsa" ${TODAYDIR}/ pi@$NUCIP:$PICSDIR
-  rsync -av -e "ssh -i /home/pi/.ssh/id_dsa" ${TODAYDIR}/ pi@$NUCIP:$PICSDIR
+  echo rsync -av -e "ssh -i /home/pi/.ssh/id_dsa" \
+    ${TODAYDIR}/ pi@$NUCIP:fishpics/${ME}
+  rsync -av -e "ssh -i /home/pi/.ssh/id_dsa" \
+    ${TODAYDIR}/ pi@$NUCIP:fishpics/${ME}
   cd $TODAYDIR
 pwd
 exit
