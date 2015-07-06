@@ -64,12 +64,9 @@ picsloop() {
   # make sure nuc copy of this dir is up to date
   echo "rsync -av -e \"ssh -i /home/pi/.ssh/id_dsa\" \
     ${TODAYDIR}/ \"pi@${NUCIP}:fishpics/${ME}\""
-  (
-    su pi
-    whoami; who am i
-    rsync -av -e "ssh -i /home/pi/.ssh/id_dsa" \
-      ${TODAYDIR}/ "pi@${NUCIP}:fishpics/${ME}"
-  )
+su pi -c "whoami; who am i"
+  su pi -c "rsync -av -e \"ssh -i /home/pi/.ssh/id_dsa\" \
+    ${TODAYDIR}/ \"pi@${NUCIP}:fishpics/${ME}\""
   cd $TODAYDIR
 pwd
 exit
