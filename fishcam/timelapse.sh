@@ -78,7 +78,7 @@ picsloop() {
   while :
   do
     NOW=`date '+%T'|sed 's,:,-,g'`
-    raspistill -t 1000 -thumb '320:240:70' -o ${NOW}.jpg
+    raspistill -t 1000 --thumb '320:240:70' -o ${NOW}.jpg
     exiv2 -et ${NOW}.jpg        # extract thumbnail
 
     # TODO
