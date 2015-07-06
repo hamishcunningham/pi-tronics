@@ -5,9 +5,9 @@
 # standard locals
 alias cd='builtin cd'
 P="$0"
-USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]]"
+USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]] [-u(pdate)]"
 DBG=:
-OPTIONSTRING=hdf:sr
+OPTIONSTRING=hdf:sru
 
 # specific locals
 CAM=
@@ -15,6 +15,7 @@ SLEEP=60
 PICSDIR=/home/pi/pics
 SIN=
 SYNC=
+UPDATE=
 
 # message & exit if exit num present
 usage() { echo -e Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
@@ -28,6 +29,7 @@ do
     f)	CAM="f${OPTARG}" ;;
     s)  SIN=yes ;;
     r)  SYNC=yes ;;
+    u)  UPDATE=yes ;;
     *)	usage 1 ;;
   esac
 done 
@@ -51,7 +53,7 @@ picsloop() {
   while :
   do
     NOW=`date '+%T'|sed 's,:,-,g'`
-    raspistill --thumb -t 1000 -o ${NOW}.jpg
+    raspistill -t 1000 -o ${NOW}.jpg
     exiv2 -et ${NOW}.jpg        # extract thumbnail
 
     # TODO
@@ -62,6 +64,17 @@ picsloop() {
 
   # TODO
   # hamish-nuc serve thumbs page
+}
+
+# update and reboot the cameras
+updatecams() {
+  for cam in f1 f2 f3
+  do
+    CAM=$cam
+    eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
+    ssh -i .ssh/pitronics_id_dsa pi@${IP} \
+      'bash -c "hostname && cd pi-tronics && git pull && sudo reboot"'
+  done
 }
 
 # create a vid
@@ -107,6 +120,9 @@ elif [ x$SYNC = xyes -a x"$CAM" != x ]          # rsync back to nuc
 then
   eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
   rsync -av -e "ssh -i .ssh/pitronics_id_dsa" pi@${IP}:pics/ fishpics/${CAM}-pics
+elif [ x$UPDATE = xyes ]                        # update and reboor
+then
+  updatecams
 else                                            # the default: take pics
   picsloop
 fi
