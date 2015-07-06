@@ -9,9 +9,9 @@
 # standard locals
 alias cd='builtin cd'
 P="$0"
-USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]] [-u(pdate)] [-w(ebserve)] [-b(ackup)] [-S(top)]"
+USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]] [-u(pdate)] [-w(ebserve)] [-b(ackup)] [-S(top)] [-H(alt)]"
 DBG=:
-OPTIONSTRING=hdf:sruwbS
+OPTIONSTRING=hdf:sruwbSH
 
 # specific locals
 CAM=
@@ -24,6 +24,7 @@ NUCIP=10.0.0.5
 BACKUP=
 WEBSERVE=
 STOP=
+HALT=
 
 # logical name
 ME=
@@ -46,6 +47,7 @@ do
     w)  WEBSERVE=yes ;;
     b)  BACKUP=yes ;;
     S)  STOP=yes ;;
+    H)  HALT=yes ;;
     *)	usage 1 ;;
   esac
 done 
@@ -119,6 +121,16 @@ servehttp() {
   # TODO
   # hamish-nuc serve thumbs page
   echo python -m SimpleHTTPServer
+}
+
+# halt cameras
+haltcams() {
+  for cam in f1 f2 f3
+  do
+    CAM=$cam
+    eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
+    ssh -i .ssh/pitronics_id_dsa pi@${IP} 'bash -c "sudo halt"'
+  done
 }
 
 # stop taking pics
@@ -200,6 +212,9 @@ then
 elif [ x$STOP = xyes ]                          # stop taking pics
 then
   stopcams
+elif [ x$HALT = xyes ]                          # halt cameras
+then
+  haltcams
 elif [ x$WEBSERVE = xyes ]                      # web server
 then
   servehttp
