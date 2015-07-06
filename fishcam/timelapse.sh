@@ -106,8 +106,7 @@ picsloop() {
     TMPF=tmp-`hostname`-$$
     echo "<p><a href='${NOW}.jpg'><img src='${NOW}-thumb.jpg'/></a></p>" >$TMPF
     su pi -c "scp ${TMPF} pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
-    ssh -i /home/pi/.ssh/id_dsa pi@${NUCIP} \
-      "bash -c 'cd fishpics/${ME}/${TODAYDIR} && cat $TMPF >>index.html && rm $TMPF'"
+    su pi -c "ssh pi@${NUCIP} 'cd fishpics/${ME}/${TODAYDIR} && cat $TMPF >>index.html && rm $TMPF'"
     rm $TMPF
 
     # wait for next scheduled pic
