@@ -51,8 +51,9 @@ picsloop() {
   TODAYDIR=`date '+%Y-%m-%d'`
   [ -d $TODAYDIR ] || mkdir -p $TODAYDIR
 
-  # TODO make sure nuc copy of this dir is up to date
+  # make sure nuc copy of this dir is up to date
   echo rsync -av ${TODAYDIR}/ $NUCIP:$PICSDIR
+  rsync -av ${TODAYDIR}/ $NUCIP:$PICSDIR
   cd $TODAYDIR
 pwd
 exit
