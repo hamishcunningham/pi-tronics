@@ -43,6 +43,9 @@ shift `expr $OPTIND - 1`
 
 # take pics
 picsloop() {
+  # not a camera?
+  [ x$ME == x ] && { echo not a camera...; usage 2; }
+
   # top level dir
   [ -d $PICSDIR ] || mkdir -p $PICSDIR
   cd $PICSDIR
@@ -51,6 +54,9 @@ picsloop() {
   TODAYDIR=`date '+%Y-%m-%d'`
   [ -d $TODAYDIR ] || mkdir -p $TODAYDIR
 
+  # check server
+  ping -c 1 $NUCIP || { echo no server ping; sleep 5; }
+
   # make sure nuc copy of this dir is up to date
   echo rsync -av ${TODAYDIR}/ $NUCIP:$PICSDIR
   rsync -av ${TODAYDIR}/ $NUCIP:$PICSDIR
@@ -58,15 +64,15 @@ picsloop() {
 pwd
 exit
 
-  # TODO
-  # send text if can't ping NUCIP
-
   # loop forever taking pics
   while :
   do
     NOW=`date '+%T'|sed 's,:,-,g'`
     raspistill -t 1000 -o ${NOW}.jpg
     exiv2 -et ${NOW}.jpg        # extract thumbnail
+
+    # TODO
+    # send text if can't ping NUCIP
 
     # TODO
     # sync to pi@hc-nuc after each pic, thumbnail first
