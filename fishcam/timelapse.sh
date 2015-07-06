@@ -5,13 +5,13 @@
 # standard locals
 alias cd='builtin cd'
 P="$0"
-USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]] [-u(pdate)] [-w(ebserve)] [-b(ackup)]"
+USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]] [-u(pdate)] [-w(ebserve)] [-b(ackup)] [-S(top)]"
 DBG=:
-OPTIONSTRING=hdf:sruwb
+OPTIONSTRING=hdf:sruwbS
 
 # specific locals
 CAM=
-SLEEP=60
+SLEEP=57
 PICSDIR=/home/pi/pics
 SIN=
 SYNC=
@@ -19,6 +19,7 @@ UPDATE=
 NUCIP=10.0.0.5
 BACKUP=
 WEBSERVE=
+STOP=
 
 # logical name
 ME=
@@ -40,6 +41,7 @@ do
     u)  UPDATE=yes ;;
     w)  WEBSERVE=yes ;;
     b)  BACKUP=yes ;;
+    S)  STOP=yes ;;
     *)	usage 1 ;;
   esac
 done 
@@ -67,9 +69,9 @@ picsloop() {
 
   # make sure nuc copy of this dir is up to date
   echo "rsync -av -e \"ssh -i /home/pi/.ssh/id_dsa\" \
-    ${TODAYDIR}/ \"pi@${NUCIP}:fishpics/${ME}\""
+    ${TODAYDIR} \"pi@${NUCIP}:fishpics/${ME}\""
   su pi -c "rsync -av -e \"ssh -i /home/pi/.ssh/id_dsa\" \
-    ${TODAYDIR}/ \"pi@${NUCIP}:fishpics/${ME}\""
+    ${TODAYDIR} \"pi@${NUCIP}:fishpics/${ME}\""
 
   # location for new pics
   cd $TODAYDIR
@@ -107,6 +109,16 @@ servehttp() {
   # TODO
   # hamish-nuc serve thumbs page
   echo python -m SimpleHTTPServer
+}
+
+# stop taking pics
+stopcams() {
+  for cam in f1 f2 f3
+  do
+    CAM=$cam
+    eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
+    ssh -i .ssh/pitronics_id_dsa pi@${IP} 'bash -c "sudo kill `pgrep timelapse.sh`"'
+  done
 }
 
 # back up the server copy
@@ -175,6 +187,9 @@ then
 elif [ x$BACKUP = xyes ]                        # back up server copy
 then
   makebackup
+elif [ x$STOP = xyes ]                          # stop taking pics
+then
+  stopcams
 elif [ x$WEBSERVE = xyes ]                      # web server
 then
   servehttp
