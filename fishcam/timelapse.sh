@@ -35,13 +35,33 @@ shift `expr $OPTIND - 1`
 
 # take pics
 picsloop() {
+  # top level dir
   [ -d $PICSDIR ] || mkdir -p $PICSDIR
+  cd $PICSDIR
+
+  # subdir for each day
+  TODAYDIR=`date '+%Y-%m-%d'`
+  [ -d $TODAYDIR ] || mkdir -p $TODAYDIR
+  cd $TODAYDIR
+
+  # TODO
+  # send text if can't ping hamish-nuc -- 10.0.0.5
+
+  # loop forever taking pics
   while :
   do
-    NOW=`date '+%Y-%m-%d--%T'|sed 's,:,-,g'`
+    NOW=`date '+%T'|sed 's,:,-,g'`
     raspistill -t 1500 -o ${NOW}.jpg
+
+    # TODO
+    # create thumbnails with each pic
+    # sync to pi@hc-nuc after each pic
+
     sleep $SLEEP
   done
+
+  # TODO
+  # hamish-nuc serve thumbs page
 }
 
 # create a vid
@@ -88,6 +108,5 @@ then
   eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
   rsync -av -e "ssh -i .ssh/pitronics_id_dsa" pi@${IP}:pics/ fishpics/${CAM}-pics
 else                                            # the default: take pics
-  cd $PICSDIR
   picsloop
 fi
