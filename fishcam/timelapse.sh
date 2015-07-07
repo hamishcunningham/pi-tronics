@@ -57,6 +57,12 @@ shift `expr $OPTIND - 1`
 picsloop() {
   # not a camera?
   [ x$ME == x ] && { echo not a camera...; usage 2; }
+  
+  # initialise the LED pins
+  /home/pi/wiringPi/gpio/gpio mode 0 out
+  /home/pi/wiringPi/gpio/gpio mode 1 out
+  redoff
+  greenon
 
   # check server
   i=0
@@ -64,8 +70,12 @@ picsloop() {
   do
     i=$((i + 1))
     echo 'no server ping ($i)'
+    greenoff
+    redon
     sleep 5
   done
+  redoff
+  greenon
 
   # top level dir
   [ -d $PICSDIR ] || mkdir -p $PICSDIR
@@ -91,15 +101,14 @@ picsloop() {
     raspistill -t 1000 --thumb '320:240:70' -o ${NOW}.jpg
     exiv2 -et ${NOW}.jpg        # extract thumbnail
 
-    # TODO
-    # send text if can't ping NUCIP
-    ping -c 1 $NUCIP || ( echo 'no server ping (loop 1)'; sleep 5; \
+    # set LED red if can't ping NUCIP
+    ping -c 1 $NUCIP || ( echo 'no server ping (loop 1)'; sleep 5; redon; \
       ping -c 1 $NUCIP || ( echo 'no server ping (loop 2)'; sleep 5; \
         ping -c 1 $NUCIP || ( echo 'no server ping (loop 3)'; sleep 5; \
           ping -c 1 $NUCIP || ( echo 'no server ping (loop 4)'; sleep 5; \
-            ping -c 1 $NUCIP || (
-              echo TODO if not net, blink LED, else send a text; \
+            ping -c 1 $NUCIP || ( greenoff; \
     )))))
+    ping -c 1 $NUCIP && greenon && redoff
 
     # sync to pi@hc-nuc after each pic, thumbnail first
     echo "scp ${NOW}-thumb.jpg pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
@@ -169,7 +178,14 @@ updatecams() {
   done
 }
 
+# LED control
+greenon()  { /home/pi/wiringPi/gpio/gpio write 0 1; }
+greenoff() { /home/pi/wiringPi/gpio/gpio write 0 0; }
+redon()    { /home/pi/wiringPi/gpio/gpio write 1 1; }
+redoff()   { /home/pi/wiringPi/gpio/gpio write 1 0; }
+
 # create a vid
+# TODO
 makevid() {
   # from http://www.raspberrypi-spy.co.uk/2013/05/creating-timelapse-videos-with-the-raspberry-pi-camera/
   avconv \
