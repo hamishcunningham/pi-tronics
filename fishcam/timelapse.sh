@@ -76,9 +76,9 @@ picsloop() {
   [ -d $TODAYDIR ] || mkdir -p $TODAYDIR
 
   # make sure nuc copy of this dir is up to date
-  echo "rsync -av -e \"ssh -i /home/pi/.ssh/id_dsa\" \
+  echo "rsync -av --size-only -e \"ssh -i /home/pi/.ssh/id_dsa\" \
     ${TODAYDIR} \"pi@${NUCIP}:fishpics/${ME}\""
-  su pi -c "rsync -av -e \"ssh -i /home/pi/.ssh/id_dsa\" \
+  su pi -c "rsync -av --size-only -e \"ssh -i /home/pi/.ssh/id_dsa\" \
     ${TODAYDIR} \"pi@${NUCIP}:fishpics/${ME}\""
 
   # location for new pics
@@ -111,7 +111,8 @@ picsloop() {
     TMPF=tmp-`hostname`-$$
     echo "<p><a href='${NOW}.jpg'><img src='${NOW}-thumb.jpg'/></a></p>" >$TMPF
     su pi -c "scp ${TMPF} pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
-    su pi -c "ssh pi@${NUCIP} 'cd fishpics/${ME}/${TODAYDIR} && cat $TMPF >>index.html && rm $TMPF'"
+    su pi -c "ssh pi@${NUCIP} 'cd fishpics/${ME}/${TODAYDIR} && \
+      cat index.html $TMPF >$$ && mv $$ index.html && rm $TMPF'"
     rm $TMPF
 
     # wait for next scheduled pic
@@ -153,7 +154,7 @@ stopcams() {
 
 # back up the server copy
 makebackup() {
-  rsync -av /home/pi/fishpics /home/hamish/Pictures
+  rsync -av --size-only /home/pi/fishpics /home/hamish/Pictures
 }
 
 # update and reboot the cameras
@@ -209,7 +210,8 @@ then
 elif [ x$SYNC = xyes -a x"$CAM" != x ]          # rsync back to nuc
 then
   eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
-  rsync -av -e "ssh -i .ssh/pitronics_id_dsa" pi@${IP}:pics/ fishpics/${CAM}-pics
+  rsync -av --size-only -e "ssh -i .ssh/pitronics_id_dsa" \
+    pi@${IP}:pics/ fishpics/${CAM}-pics
 elif [ x$UPDATE = xyes ]                        # update and reboot cams
 then
   updatecams
