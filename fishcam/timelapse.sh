@@ -114,8 +114,6 @@ picsloop() {
     su pi -c "ssh pi@${NUCIP} 'cd fishpics/${ME}/${TODAYDIR} && cat $TMPF >>index.html && rm $TMPF'"
     rm $TMPF
 
-# TODO verify working
-
     # wait for next scheduled pic
     sleep $SLEEP
   done
@@ -155,8 +153,7 @@ stopcams() {
 
 # back up the server copy
 makebackup() {
-  # TODO
-  echo rsync /home/pi/fishpics /home/hamish/fishpics
+  rsync -av /home/pi/fishpics /home/hamish/Pictures
 }
 
 # update and reboot the cameras
