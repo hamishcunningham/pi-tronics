@@ -9,7 +9,9 @@
 # standard locals
 alias cd='builtin cd'
 P="$0"
-USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]] [-u(pdate)] [-w(ebserve)] [-b(ackup)] [-S(top)] [-H(alt)] [-m(ake vid) in out]"
+USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]] \
+[-u(pdate)] [-w(ebserve)] [-b(ackup)] [-S(top)] [-H(alt)] \
+[-m(ake vid) indir [outname]]"
 DBG=:
 OPTIONSTRING=hdf:sruwbSHm
 
@@ -101,6 +103,7 @@ picsloop() {
     NOW=`date '+%T'|sed 's,:,-,g'`
     raspistill -t 1000 --thumb '320:240:70' -o ${NOW}.jpg
     exiv2 -et ${NOW}.jpg        # extract thumbnail
+    mv ${NOW}-thumb.jpg .${NOW}-thumb.jpg
 
     # set LED red if can't ping NUCIP
     ping -c 1 $NUCIP || ( echo 'no server ping (loop 1)'; sleep 5; redon; \
@@ -112,14 +115,14 @@ picsloop() {
     ping -c 1 $NUCIP && greenon && redoff
 
     # sync to pi@hc-nuc after each pic, thumbnail first
-    echo "scp ${NOW}-thumb.jpg pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
-    su pi -c "scp ${NOW}-thumb.jpg pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
+    echo "scp .${NOW}-thumb.jpg pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
+    su pi -c "scp .${NOW}-thumb.jpg pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
     echo "scp ${NOW}.jpg pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
     su pi -c "scp ${NOW}.jpg pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
 
     # add to the index.html
     TMPF=tmp-`hostname`-$$
-    echo "<p><a href='${NOW}.jpg'><img src='${NOW}-thumb.jpg'/></a></p>" >$TMPF
+    echo "<p><a href='${NOW}.jpg'><img src='.${NOW}-thumb.jpg'/></a></p>" >$TMPF
     su pi -c "scp ${TMPF} pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
     su pi -c "ssh pi@${NUCIP} 'cd fishpics/${ME}/${TODAYDIR} && \
       [ -f index.html ] || >index.html && \
@@ -133,7 +136,7 @@ picsloop() {
 
 # serve the thumbnails
 servehttp() {
-  cd /home/pi/fishpics
+  cd /home/hamish/fishpics
   echo '<ul>'   >index.html
   for d in `find . -type d`
   do
@@ -159,7 +162,8 @@ stopcams() {
   do
     CAM=$cam
     eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
-    ssh -i .ssh/pitronics_id_dsa pi@${IP} 'bash -c "sudo kill `pgrep timelapse.sh`"'
+    ssh -i .ssh/pitronics_id_dsa pi@${IP} \
+      'bash -c "sudo kill `pgrep timelapse.sh`"'
   done
 }
 
@@ -186,40 +190,25 @@ redon()    { /home/pi/wiringPi/gpio/gpio write 1 1; }
 redoff()   { /home/pi/wiringPi/gpio/gpio write 1 0; }
 
 # create a vid
-# TODO
 makevid() {
-  echo $1 $2
+  # validate args and find inputs
+  [ x$1 == x ] && { echo oops: wrong args to makevid: $1 $2; usage 3; }
+  VIDFILE=
+  [ x$2 == x ] && VIDFILE=vid.mp4
+  [ -d $1 ] || { oops: $1 is not a directory; usage 4; }
+  [ x${VIDFILE} == x ] && case "$2" in
+    *.mp4) VIDFILE=$2 ;;
+    *)     VIDFILE=$2.mp4 ;;
+  esac
+  cd $1
+  echo creating video from `pwd` to ${VIDFILE} ...
+  sleep 2
 
-  # from http://blog.davidsingleton.org/raspberry-pi-timelapse-controller/
-  # (also discusses exposure times and flicker at sunset)
-# ffmpeg -r 18 -q:v 2 -start_number XXXX -i /tmp/timelapse/IMG_%d.JPG \
-#   output.mp4
+  # ffmpeg on all .jpg
+  ffmpeg -pattern_type glob -i "*.jpg" $VIDFILE
 
+  # all done
   return 0
-  
-  # from http://www.raspberrypi-spy.co.uk/2013/05/creating-timelapse-videos-with-the-raspberry-pi-camera/
-  avconv \
-    -r 10 -i timelapse_%04d.jpg \
-    -r 10 -vcodec libx264 -crf 20 -g 15 \
-    -vf crop=2592:1458,scale=1280:720 \
-  timelapse.mp4
-
-  # alternatives:
-
-  # from http://www.instructables.com/id/Simple-timelapse-camera-using-Raspberry-Pi-and-a-c/?ALLSTEPS
-  mencoder -nosound -ovc lavc -lavcopts \
-    vcodec=mpeg4:aspect=16/9:vbitrate=8000000 -vf scale=1920:1080 \
-    -o timelapse.avi -mf type=jpeg:fps=24 mf://@list.txt
-
-  # from https://www.raspberrypi.org/learning/timelapse-setup/worksheet.md
-  mencoder -nosound -ovc lavc -lavcopts \
-    vcodec=mpeg4:aspect=16/9:vbitrate=8000000 \
-    -vf scale=1920:1080 -o timelapse.avi -mf type=jpeg:fps=24 mf://@stills.txt
-
-  # from http://computers.tutsplus.com/tutorials/creating-time-lapse-photography-with-a-raspberry-pi--cms-20794
-  mencoder -nosound -ovc lavc -lavcopts \
-    vcodec=mpeg4:aspect=16/9:vbitrate=8000000 -vf scale=1920:1080 \
-    -o timelapse.avi -mf type=jpeg:fps=24 mf://@stills.txt
 }
 
 # do summut
@@ -254,3 +243,34 @@ then
 else                                            # the default: take pics
   picsloop
 fi
+
+
+#########################################################################
+# makevid NOTES:
+#  
+# from http://blog.davidsingleton.org/raspberry-pi-timelapse-controller/
+# (also discusses exposure times and flicker at sunset)
+# ffmpeg -r 18 -q:v 2 -start_number XXXX -i /tmp/timelapse/IMG_%d.JPG \
+#   output.mp4
+#
+# from http://www.raspberrypi-spy.co.uk/2013/05/creating-timelapse-videos-with-the-raspberry-pi-camera/
+# avconv \
+#   -r 10 -i timelapse_%04d.jpg \
+#   -r 10 -vcodec libx264 -crf 20 -g 15 \
+#   -vf crop=2592:1458,scale=1280:720 \
+# timelapse.mp4
+#
+# from http://www.instructables.com/id/Simple-timelapse-camera-using-Raspberry-Pi-and-a-c/?ALLSTEPS
+# mencoder -nosound -ovc lavc -lavcopts \
+#   vcodec=mpeg4:aspect=16/9:vbitrate=8000000 -vf scale=1920:1080 \
+#   -o timelapse.avi -mf type=jpeg:fps=24 mf://@list.txt
+#
+# from https://www.raspberrypi.org/learning/timelapse-setup/worksheet.md
+# mencoder -nosound -ovc lavc -lavcopts \
+#   vcodec=mpeg4:aspect=16/9:vbitrate=8000000 \
+#   -vf scale=1920:1080 -o timelapse.avi -mf type=jpeg:fps=24 mf://@stills.txt
+#
+# from http://computers.tutsplus.com/tutorials/creating-time-lapse-photography-with-a-raspberry-pi--cms-20794
+# mencoder -nosound -ovc lavc -lavcopts \
+#   vcodec=mpeg4:aspect=16/9:vbitrate=8000000 -vf scale=1920:1080 \
+#   -o timelapse.avi -mf type=jpeg:fps=24 mf://@stills.txt
