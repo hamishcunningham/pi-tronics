@@ -123,9 +123,15 @@ picsloop() {
 
 # serve the thumbnails
 servehttp() {
-  # TODO
-  # hamish-nuc serve thumbs page
-  echo python -m SimpleHTTPServer
+  sudo su pi -c \
+   "cd /home/pi/fishpics &&
+    echo '<ul>'   >index.html && \
+    for d in 20*; \
+    do \
+      echo '<li><a href='${d}'/>'${d}'/</a></li>'; \
+    done          >>index.html && \
+    echo '</ul>'  >>index.html"
+  cd /home/pi/fishpics && python -m SimpleHTTPServer
 }
 
 # halt cameras
