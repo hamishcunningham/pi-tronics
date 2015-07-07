@@ -58,6 +58,15 @@ picsloop() {
   # not a camera?
   [ x$ME == x ] && { echo not a camera...; usage 2; }
 
+  # check server
+  i=0
+  while ! ping -c 1 $NUCIP
+  do
+    i=$((i + 1))
+    echo 'no server ping ($i)'
+    sleep 5
+  done
+
   # top level dir
   [ -d $PICSDIR ] || mkdir -p $PICSDIR
   cd $PICSDIR
@@ -65,13 +74,6 @@ picsloop() {
   # subdir for each day
   TODAYDIR=`date '+%Y-%m-%d'`
   [ -d $TODAYDIR ] || mkdir -p $TODAYDIR
-
-  # check server
-  ping -c 1 $NUCIP || ( echo 'no server ping (1)'; sleep 5; \
-    ping -c 1 $NUCIP || ( echo 'no server ping (2)'; sleep 5; \
-      ping -c 1 $NUCIP || ( echo 'no server ping (3)'; sleep 5; \
-        ping -c 1 $NUCIP || ( echo 'no server ping (4)'; sleep 5; \
-  ))))
 
   # make sure nuc copy of this dir is up to date
   echo "rsync -av -e \"ssh -i /home/pi/.ssh/id_dsa\" \
@@ -95,7 +97,8 @@ picsloop() {
       ping -c 1 $NUCIP || ( echo 'no server ping (loop 2)'; sleep 5; \
         ping -c 1 $NUCIP || ( echo 'no server ping (loop 3)'; sleep 5; \
           ping -c 1 $NUCIP || ( echo 'no server ping (loop 4)'; sleep 5; \
-            ping -c 1 $NUCIP || ( echo TODO send a text; \
+            ping -c 1 $NUCIP || (
+              echo TODO if not net, blink LED, else send a text; \
     )))))
 
     # sync to pi@hc-nuc after each pic, thumbnail first
