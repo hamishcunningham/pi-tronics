@@ -69,7 +69,7 @@ picsloop() {
   while ! ping -c 1 $NUCIP
   do
     i=$((i + 1))
-    echo 'no server ping ($i)'
+    echo "no server ping ($i)"
     greenoff
     redon
     sleep 5
