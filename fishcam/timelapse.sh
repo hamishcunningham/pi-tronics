@@ -113,7 +113,7 @@ picsloop() {
     su pi -c "scp ${TMPF} pi@${NUCIP}:fishpics/${ME}/${TODAYDIR}"
     su pi -c "ssh pi@${NUCIP} 'cd fishpics/${ME}/${TODAYDIR} && \
       [ -f index.html ] || >index.html && \
-      cat index.html $TMPF >$$ && mv $$ index.html && rm $TMPF'"
+      cat $TMPF index.html >$$ && mv $$ index.html && rm $TMPF'"
     rm $TMPF
 
     # wait for next scheduled pic
