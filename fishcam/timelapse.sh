@@ -9,9 +9,9 @@
 # standard locals
 alias cd='builtin cd'
 P="$0"
-USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]] [-u(pdate)] [-w(ebserve)] [-b(ackup)] [-S(top)] [-H(alt)]"
+USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]] [-u(pdate)] [-w(ebserve)] [-b(ackup)] [-S(top)] [-H(alt)] [-m(ake vid) in out]"
 DBG=:
-OPTIONSTRING=hdf:sruwbSH
+OPTIONSTRING=hdf:sruwbSHm
 
 # specific locals
 CAM=
@@ -25,11 +25,11 @@ BACKUP=
 WEBSERVE=
 STOP=
 HALT=
+MAKEVID=
 
 # logical name
 ME=
 case `hostname` in fishcam1) ME=f1 ;; fishcam2) ME=f2 ;; fishcam3) ME=f3 ;; esac
-echo logical name: $ME
  
 # message & exit if exit num present
 usage() { echo -e Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
@@ -48,6 +48,7 @@ do
     b)  BACKUP=yes ;;
     S)  STOP=yes ;;
     H)  HALT=yes ;;
+    m)  MAKEVID=yes ;;
     *)	usage 1 ;;
   esac
 done 
@@ -187,13 +188,21 @@ redoff()   { /home/pi/wiringPi/gpio/gpio write 1 0; }
 # create a vid
 # TODO
 makevid() {
+  echo $1 $2
+
+  # from http://blog.davidsingleton.org/raspberry-pi-timelapse-controller/
+  # (also discusses exposure times and flicker at sunset)
+# ffmpeg -r 18 -q:v 2 -start_number XXXX -i /tmp/timelapse/IMG_%d.JPG \
+#   output.mp4
+
+  return 0
+  
   # from http://www.raspberrypi-spy.co.uk/2013/05/creating-timelapse-videos-with-the-raspberry-pi-camera/
   avconv \
     -r 10 -i timelapse_%04d.jpg \
     -r 10 -vcodec libx264 -crf 20 -g 15 \
     -vf crop=2592:1458,scale=1280:720 \
   timelapse.mp4
-  return 0
 
   # alternatives:
 
@@ -206,11 +215,6 @@ makevid() {
   mencoder -nosound -ovc lavc -lavcopts \
     vcodec=mpeg4:aspect=16/9:vbitrate=8000000 \
     -vf scale=1920:1080 -o timelapse.avi -mf type=jpeg:fps=24 mf://@stills.txt
-
-  # from http://blog.davidsingleton.org/raspberry-pi-timelapse-controller/
-  # (also discusses exposure times and flicker at sunset)
-  ffmpeg -r 18 -q:v 2 -start_number XXXX -i /tmp/timelapse/IMG_%d.JPG \
-    output.mp4
 
   # from http://computers.tutsplus.com/tutorials/creating-time-lapse-photography-with-a-raspberry-pi--cms-20794
   mencoder -nosound -ovc lavc -lavcopts \
@@ -238,6 +242,9 @@ then
 elif [ x$STOP = xyes ]                          # stop taking pics
 then
   stopcams
+elif [ x$MAKEVID = xyes ]                       # create a video
+then
+  makevid $*
 elif [ x$HALT = xyes ]                          # halt cameras
 then
   haltcams
