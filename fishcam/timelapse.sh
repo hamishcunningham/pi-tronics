@@ -9,6 +9,7 @@
 # TODO
 # -C clear
 # -p pause, with flashing LED
+# 15 sec sleep
 
 # standard locals
 alias cd='builtin cd'
