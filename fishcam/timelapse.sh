@@ -6,6 +6,11 @@
 # updates the server with the latest pics then loops taking new pics every
 # minute or so. The various options are for actions on the server. 
 
+# TODO
+# yes/no confirmation for -H and clear
+# -C clear
+# -p pause, with flashing LED
+
 # standard locals
 alias cd='builtin cd'
 P="$0"
