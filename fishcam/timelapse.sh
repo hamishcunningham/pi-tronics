@@ -7,9 +7,7 @@
 # minute or so. The various options are for actions on the server. 
 
 # TODO
-# -C clear
 # -p pause, with flashing LED
-# 15 sec sleep
 
 # standard locals
 alias cd='builtin cd'
@@ -190,7 +188,7 @@ clearcams() {
   do
     CAM=$cam
     eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
-    echo ssh -i .ssh/pitronics_id_dsa pi@${IP} \
+    ssh -i .ssh/pitronics_id_dsa pi@${IP} \
       'bash -c "sudo rm -rf /home/pi/pics/*"'
   done
 }
