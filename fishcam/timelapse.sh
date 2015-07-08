@@ -10,10 +10,10 @@
 alias cd='builtin cd'
 P="$0"
 USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]] \
-[-u(pdate)] [-w(ebserve)] [-b(ackup)] [-S(top)] [-H(alt)] \
+[-u(pdate)] [-w(ebserve)] [-b(ackup)] [-S(top)] [-H(alt)] [-D(isk free)]\
 [-m(ake vid) indir [outname]]"
 DBG=:
-OPTIONSTRING=hdf:sruwbSHm
+OPTIONSTRING=hdf:sruwbSHmD
 
 # specific locals
 CAM=
@@ -28,6 +28,7 @@ WEBSERVE=
 STOP=
 HALT=
 MAKEVID=
+DF=
 
 # logical name
 ME=
@@ -49,6 +50,7 @@ do
     w)  WEBSERVE=yes ;;
     b)  BACKUP=yes ;;
     S)  STOP=yes ;;
+    D)  DF=yes ;;
     H)  HALT=yes ;;
     m)  MAKEVID=yes ;;
     *)	usage 1 ;;
@@ -146,6 +148,20 @@ servehttp() {
   python -m SimpleHTTPServer
 }
 
+# df on each cam
+diskfree() {
+  for cam in f1 f2 f3
+  do
+    CAM=$cam
+    eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
+    AVAIL=`ssh -i .ssh/pitronics_id_dsa pi@${IP} \
+      'set \`df -h |grep '/$'\`; echo $4'`
+    echo "Disk usage on ${cam} (${AVAIL} available on /):"
+    ssh -i .ssh/pitronics_id_dsa pi@${IP} 'bash -c "df -h"'
+    echo
+  done
+}
+
 # halt cameras
 haltcams() {
   for cam in f1 f2 f3
@@ -234,6 +250,9 @@ then
 elif [ x$MAKEVID = xyes ]                       # create a video
 then
   makevid $*
+elif [ x$DF = xyes ]                            # df
+then
+  diskfree
 elif [ x$HALT = xyes ]                          # halt cameras
 then
   haltcams
