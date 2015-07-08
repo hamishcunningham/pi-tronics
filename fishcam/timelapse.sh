@@ -16,9 +16,9 @@ alias cd='builtin cd'
 P="$0"
 USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]] \
 [-u(pdate)] [-w(ebserve)] [-b(ackup)] [-S(top)] [-H(alt)] [-D(isk free)]\
-[-m(ake vid) indir [outname]]"
+[-m(ake vid) indir [outname]] [-C(lear cams)]"
 DBG=:
-OPTIONSTRING=hdf:sruwbSHmD
+OPTIONSTRING=hdf:sruwbSHmDC
 
 # specific locals
 CAM=
@@ -34,6 +34,7 @@ STOP=
 HALT=
 MAKEVID=
 DF=
+CLEAR=
 
 # logical name
 ME=
@@ -56,6 +57,7 @@ do
     b)  BACKUP=yes ;;
     S)  STOP=yes ;;
     D)  DF=yes ;;
+    C)  CLEAR=yes ;;
     H)  HALT=yes ;;
     m)  MAKEVID=yes ;;
     *)	usage 1 ;;
@@ -180,6 +182,19 @@ haltcams() {
   done
 }
 
+# clear cam disks
+clearcams() {
+  read -p "about to CLEAR cams; are you sure? (y/N) " -n 1 -r; echo
+  [[ $REPLY =~ ^[Yy]$ ]] || { echo "ok, giving up!"; return 1; }
+  for cam in f1 f2 f3
+  do
+    CAM=$cam
+    eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
+    echo ssh -i .ssh/pitronics_id_dsa pi@${IP} \
+      'bash -c "sudo rm -rf /home/pi/pics/*"'
+  done
+}
+
 # stop taking pics
 stopcams() {
   read -p "about to stop cams; are you sure? (y/N) " -n 1 -r; echo
@@ -242,37 +257,40 @@ makevid() {
 
 # do summut
 cd
-if [ x$SIN = xyes -a x"$CAM" != x ]             # ssh into the cam
+if [ x$SIN              == xyes -a x"$CAM" != x ]       # ssh into the cam
 then
   eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
   ssh -i .ssh/pitronics_id_dsa pi@${IP}
-elif [ x$SYNC = xyes -a x"$CAM" != x ]          # rsync back to nuc
+elif [ x$SYNC           == xyes -a x"$CAM" != x ]       # rsync back to nuc
 then
   eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
   rsync -av --size-only -e "ssh -i .ssh/pitronics_id_dsa" \
     pi@${IP}:pics/ fishpics/${CAM}-pics
-elif [ x$UPDATE = xyes ]                        # update and reboot cams
+elif [ x$UPDATE         == xyes ]                       # update and reboot cams
 then
   updatecams
-elif [ x$BACKUP = xyes ]                        # back up server copy
+elif [ x$BACKUP         == xyes ]                       # back up server copy
 then
   makebackup
-elif [ x$STOP = xyes ]                          # stop taking pics
+elif [ x$STOP           == xyes ]                       # stop taking pics
 then
   stopcams
-elif [ x$MAKEVID = xyes ]                       # create a video
+elif [ x$MAKEVID        == xyes ]                       # create a video
 then
   makevid $*
-elif [ x$DF = xyes ]                            # df
+elif [ x$DF             == xyes ]                       # df
 then
   diskfree
-elif [ x$HALT = xyes ]                          # halt cameras
+elif [ x$CLEAR          == xyes ]                       # clear camera disks
+then
+  clearcams
+elif [ x$HALT           == xyes ]                       # halt cameras
 then
   haltcams
-elif [ x$WEBSERVE = xyes ]                      # web server
+elif [ x$WEBSERVE       == xyes ]                       # web server
 then
   servehttp
-else                                            # the default: take pics
+else                                                    # the default: take pics
   picsloop
 fi
 
