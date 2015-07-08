@@ -224,7 +224,7 @@ makevid() {
   [ x$1 == x ] && { echo oops: wrong args to makevid: $1 $2; usage 3; }
   VIDFILE=
   [ x$2 == x ] && VIDFILE=vid.mp4
-  [ -d $1 ] || { oops: $1 is not a directory; usage 4; }
+  [ -d $1 ] || { echo oops: $1 is not a directory; usage 4; }
   [ x${VIDFILE} == x ] && case "$2" in
     *.mp4) VIDFILE=$2 ;;
     *)     VIDFILE=$2.mp4 ;;
