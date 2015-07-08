@@ -7,7 +7,6 @@
 # minute or so. The various options are for actions on the server. 
 
 # TODO
-# yes/no confirmation for -H and clear
 # -C clear
 # -p pause, with flashing LED
 
@@ -169,6 +168,9 @@ diskfree() {
 
 # halt cameras
 haltcams() {
+  read -p "about to halt cams; are you sure? (y/N) " -n 1 -r; echo
+  [[ $REPLY =~ ^[Yy]$ ]] || { echo "ok, giving up!"; return 1; }
+
   for cam in f1 f2 f3
   do
     CAM=$cam
@@ -179,6 +181,8 @@ haltcams() {
 
 # stop taking pics
 stopcams() {
+  read -p "about to stop cams; are you sure? (y/N) " -n 1 -r; echo
+  [[ $REPLY =~ ^[Yy]$ ]] || { echo "ok, giving up!"; return 1; }
   for cam in f1 f2 f3
   do
     CAM=$cam
@@ -195,6 +199,9 @@ makebackup() {
 
 # update and reboot the cameras
 updatecams() {
+  read -p "about to update cams; are you sure? (y/N) " -n 1 -r; echo
+  [[ $REPLY =~ ^[Yy]$ ]] || { echo "ok, giving up!"; return 1; }
+
   for cam in f1 f2 f3
   do
     CAM=$cam
