@@ -14,9 +14,9 @@ alias cd='builtin cd'
 P="$0"
 USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]] \
 [-u(pdate)] [-w(ebserve)] [-b(ackup)] [-S(top)] [-H(alt)] [-D(isk free)]\
-[-m(ake vid) indir [outname]] [-C(lear cams)]"
+[-m(ake vid) indir [outname]] [-C(lear cams)] [-t(emperature)]"
 DBG=:
-OPTIONSTRING=hdf:sruwbSHmDC
+OPTIONSTRING=hdf:sruwbSHmDCt
 
 # specific locals
 CAM=
@@ -33,6 +33,7 @@ HALT=
 MAKEVID=
 DF=
 CLEAR=
+TEMP=
 
 # logical name
 ME=
@@ -58,6 +59,7 @@ do
     C)  CLEAR=yes ;;
     H)  HALT=yes ;;
     m)  MAKEVID=yes ;;
+    t)  TEMP=yes ;;
     *)	usage 1 ;;
   esac
 done 
@@ -202,6 +204,17 @@ clearcams() {
   done
 }
 
+# cpu temp on cams
+temperature() {
+  for cam in f1 f2 f3
+  do
+    CAM=$cam
+    eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
+    ssh -i .ssh/pitronics_id_dsa pi@${IP} \
+      'bash -c "echo -n $HOSTNAME:\ ; /opt/vc/bin/vcgencmd measure_temp;"'
+  done
+}
+
 # stop taking pics
 stopcams() {
   read -p "about to stop cams; are you sure? (y/N) " -n 1 -r; echo
@@ -279,6 +292,9 @@ then
 elif [ x$BACKUP         == xyes ]                       # back up server copy
 then
   makebackup
+elif [ x$TEMP           == xyes ]                       # cpu temp on cams
+then
+  temperature
 elif [ x$STOP           == xyes ]                       # stop taking pics
 then
   stopcams
