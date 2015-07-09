@@ -20,7 +20,7 @@ OPTIONSTRING=hdf:sruwbSHmDC
 
 # specific locals
 CAM=
-SLEEP=13
+SLEEP=10
 PICSDIR=/home/pi/pics
 SIN=
 SYNC=
