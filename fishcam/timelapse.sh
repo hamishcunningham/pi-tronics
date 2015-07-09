@@ -101,8 +101,9 @@ picsloop() {
   su pi -c "rsync -av --size-only -e \"ssh -i /home/pi/.ssh/id_dsa\" \
     ${TODAYDIR} \"pi@${NUCIP}:fishpics/${ME}\""
 
-  # location for new pics
+  # location for new pics; serve recent ones
   cd $TODAYDIR
+  python -m SimpleHTTPServer &
 
   # loop forever taking pics
   while :
