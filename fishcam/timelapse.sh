@@ -103,6 +103,7 @@ picsloop() {
 
   # location for new pics; serve recent ones
   cd $TODAYDIR
+  [ -f recent.html ] || >recent.html
   python -m SimpleHTTPServer &
 
   # loop forever taking pics
@@ -112,6 +113,13 @@ picsloop() {
     raspistill -t 1000 --thumb '320:240:70' -o ${NOW}.jpg
     exiv2 -et ${NOW}.jpg        # extract thumbnail
     mv ${NOW}-thumb.jpg .${NOW}-thumb.jpg
+
+    # add to recent page
+    head -2 recent.html >recent-tmp-$$
+    echo "<p><a href='${NOW}.jpg'><img src='.${NOW}-thumb.jpg'/></a></p>" \
+      >recent.html
+    tac recent-tmp-$$ >>recent.html
+    rm recent-tmp-$$
 
     # set LED red if can't ping NUCIP
     ping -c 1 $NUCIP || ( echo 'no server ping (loop 1)'; sleep 5; redon; \
