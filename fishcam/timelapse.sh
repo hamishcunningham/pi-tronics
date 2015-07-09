@@ -118,7 +118,7 @@ picsloop() {
     head -2 recent.html >recent-tmp-$$
     echo "<p><a href='${NOW}.jpg'><img src='.${NOW}-thumb.jpg'/></a></p>" \
       >recent.html
-    tac recent-tmp-$$ >>recent.html
+    cat recent-tmp-$$ >>recent.html
     rm recent-tmp-$$
 
     # set LED red if can't ping NUCIP
