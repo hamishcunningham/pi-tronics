@@ -69,7 +69,7 @@ shift `expr $OPTIND - 1`
 picsloop() {
   # not a camera?
   [ x$ME == x ] && { echo not a camera...; usage 2; }
-  
+
   # initialise the LED pins
   /home/pi/wiringPi/gpio/gpio mode 0 out
   /home/pi/wiringPi/gpio/gpio mode 1 out
@@ -88,6 +88,13 @@ picsloop() {
   done
   redoff
   greenon
+
+# TODO
+# force wait until ntp is up-to-date
+# in /etc/rc.local ?
+# sudo service ntp stop
+# sudo ntpdate-debian
+# sudo service ntp start
 
   # top level dir
   [ -d $PICSDIR ] || mkdir -p $PICSDIR
