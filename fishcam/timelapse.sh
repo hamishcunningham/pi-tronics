@@ -14,7 +14,7 @@ alias cd='builtin cd'
 P="$0"
 USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]] \
 [-u(pdate)] [-w(ebserve)] [-b(ackup)] [-S(top)] [-H(alt)] [-D(isk free)]\
-[-m(ake vid) indir [outname]] [-C(lear cams)] [-t(emperature)]"
+[-m(ake vid) indir [outname]] [-C(lear cams)] [-t(emperature)] [-F(ilm)]"
 DBG=:
 OPTIONSTRING=hdf:sruwbSHmDCt
 
@@ -34,6 +34,7 @@ MAKEVID=
 DF=
 CLEAR=
 TEMP=
+FILM=
 
 # logical name
 ME=
@@ -49,6 +50,7 @@ do
     h)	usage 0 ;;
     d)	DBG=echo ;;
     f)	CAM="f${OPTARG}" ;;
+    F)  FILM=yes ;;
     s)  SIN=yes ;;
     r)  SYNC=yes ;;
     u)  UPDATE=yes ;;
@@ -171,6 +173,19 @@ servehttp() {
   python -m SimpleHTTPServer
 }
 
+# start filming on each cam
+film() {
+  for cam in f1 f2 f3
+  do
+    CAM=$cam
+    eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
+    echo "Starting to film on ${cam}..."
+    ssh -i .ssh/pitronics_id_dsa pi@${IP} \
+      'bash -c "sudo nohup /home/pi/pi-tronics/fishcam/timelapse.sh&"'
+    echo
+  done
+}
+
 # df on each cam
 diskfree() {
   for cam in f1 f2 f3
@@ -180,7 +195,7 @@ diskfree() {
     AVAIL=`ssh -i .ssh/pitronics_id_dsa pi@${IP} \
       'set \`df -h |grep '/$'\`; echo $4'`
     echo "Disk usage on ${cam} (${AVAIL} available on /):"
-    ssh -i .ssh/pitronics_id_dsa pi@${IP} 'bash -c "df -h"'
+    ssh -i .ssh/pitronics_id_dsa pi@${IP} 'bash -c "df -h;date"'
     echo
   done
 }
@@ -293,6 +308,9 @@ then
   eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
   rsync -av --size-only -e "ssh -i .ssh/pitronics_id_dsa" \
     pi@${IP}:pics/ fishpics/${CAM}-pics
+elif [ x$FILM           == xyes ]                       # start filming
+then
+  film
 elif [ x$UPDATE         == xyes ]                       # update and reboot cams
 then
   updatecams
