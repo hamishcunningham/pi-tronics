@@ -16,7 +16,7 @@ USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]] \
 [-u(pdate)] [-w(ebserve)] [-b(ackup)] [-S(top)] [-H(alt)] [-D(isk free)]\
 [-m(ake vid) indir [outname]] [-C(lear cams)] [-t(emperature)] [-F(ilm)]"
 DBG=:
-OPTIONSTRING=hdf:sruwbSHmDCt
+OPTIONSTRING=hdf:sruwbSHmDCtF
 
 # specific locals
 CAM=
