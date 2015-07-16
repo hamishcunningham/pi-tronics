@@ -181,7 +181,7 @@ film() {
     eval echo "\$$CAM" >/tmp/$$; IP=`cat /tmp/$$`; rm /tmp/$$
     echo "Starting to film on ${cam}..."
     ssh -i .ssh/pitronics_id_dsa pi@${IP} \
-      'bash -c "sudo nohup /home/pi/pi-tronics/fishcam/timelapse.sh" &'
+      'sudo /home/pi/pi-tronics/fishcam/timelapse.sh </dev/null >/tmp/timelapse-$$.log 2>&1 &'
     echo
   done
 }
