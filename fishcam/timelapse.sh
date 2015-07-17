@@ -14,9 +14,10 @@ alias cd='builtin cd'
 P="$0"
 USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]] \
 [-u(pdate)] [-w(ebserve)] [-b(ackup)] [-S(top)] [-H(alt)] [-D(isk free)]\
-[-m(ake vid) indir [outname]] [-C(lear cams)] [-t(emperature)] [-F(ilm)]"
+[-m(ake vid) indir [outname]] [-C(lear cams)] [-t(emperature)] [-F(ilm)]\
+[-M(ake all today's vids)]"
 DBG=:
-OPTIONSTRING=hdf:sruwbSHmDCtF
+OPTIONSTRING=hdf:sruwbSHmDCtFM
 
 # specific locals
 CAM=
@@ -31,6 +32,7 @@ WEBSERVE=
 STOP=
 HALT=
 MAKEVID=
+MAKEALLVIDS=
 DF=
 CLEAR=
 TEMP=
@@ -61,6 +63,7 @@ do
     C)  CLEAR=yes ;;
     H)  HALT=yes ;;
     m)  MAKEVID=yes ;;
+    M)  MAKEALLVIDS=yes ;;
     t)  TEMP=yes ;;
     *)	usage 1 ;;
   esac
@@ -297,6 +300,17 @@ makevid() {
   return 0
 }
 
+# create all today's vids
+makeallvids() {
+  T=`date '+%Y-%m-%d'`
+  for d in /home/hamish/fishpics/f?/${T}
+  do
+    echo makevid $d ${d}/vid-`date '+%T' |sed 's,:,-,g'`.mp4
+    makevid $d ${d}/vid-`date '+%T' |sed 's,:,-,g'`.mp4
+    echo
+  done
+}
+
 # do summut
 cd
 if [ x$SIN              == xyes -a x"$CAM" != x ]       # ssh into the cam
@@ -326,6 +340,9 @@ then
 elif [ x$MAKEVID        == xyes ]                       # create a video
 then
   makevid $*
+elif [ x$MAKEALLVIDS    == xyes ]                       # create all videos
+then
+  makeallvids $*
 elif [ x$DF             == xyes ]                       # df
 then
   diskfree
