@@ -8,6 +8,7 @@
 
 # TODO
 # -p pause, with flashing LED
+# -B remote backup: cd ~/Pictures; rsync -avh fishpics /media/hamish/75d760c8-f766-4ba0-ae9f-cc870d6d11b9/fishy-backup
 
 # standard locals
 alias cd='builtin cd'
