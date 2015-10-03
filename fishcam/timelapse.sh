@@ -8,7 +8,6 @@
 
 # TODO
 # -p pause, with flashing LED
-# -B remote backup: cd ~/Pictures; rsync -avh fishpics /media/hamish/75d760c8-f766-4ba0-ae9f-cc870d6d11b9/fishy-backup
 
 # standard locals
 alias cd='builtin cd'
@@ -16,9 +15,9 @@ P="$0"
 USAGE="`basename ${P}` [-h(elp)] [-d(ebug)] [-r(sync)] [-s(sh)] [-f[123]] \
 [-u(pdate)] [-w(ebserve)] [-b(ackup)] [-S(top)] [-H(alt)] [-D(isk free)]\
 [-m(ake vid) indir [outname]] [-C(lear cams)] [-t(emperature)] [-F(ilm)]\
-[-M(ake all today's vids)]"
+[-M(ake all today's vids)] [-B(remote backup)]"
 DBG=:
-OPTIONSTRING=hdf:sruwbSHmDCtFM
+OPTIONSTRING=hdf:sruwbSHmDCtFMB
 
 # specific locals
 CAM=
@@ -29,6 +28,7 @@ SYNC=
 UPDATE=
 NUCIP=10.0.0.5
 BACKUP=
+REMOTEBACKUP=
 WEBSERVE=
 STOP=
 HALT=
@@ -59,6 +59,7 @@ do
     u)  UPDATE=yes ;;
     w)  WEBSERVE=yes ;;
     b)  BACKUP=yes ;;
+    B)  REMOTEBACKUP=yes ;;
     S)  STOP=yes ;;
     D)  DF=yes ;;
     C)  CLEAR=yes ;;
@@ -259,6 +260,14 @@ makebackup() {
   rsync -av --size-only /home/pi/fishpics /home/hamish/Pictures
 }
 
+# remote back up
+makeremotebackup() {
+  echo DRY RUN...
+  cd ~/Pictures
+  rsync --dry-run -avh fishpics \
+    /media/hamish/75d760c8-f766-4ba0-ae9f-cc870d6d11b9/fishy-backup
+}
+
 # update and reboot the cameras
 updatecams() {
   read -p "about to update cams; are you sure? (y/N) " -n 1 -r; echo
@@ -332,6 +341,9 @@ then
 elif [ x$BACKUP         == xyes ]                       # back up server copy
 then
   makebackup
+elif [ x$REMOTEBACKUP   == xyes ]                       # remote back up
+then
+  makeremotebackup
 elif [ x$TEMP           == xyes ]                       # cpu temp on cams
 then
   temperature
