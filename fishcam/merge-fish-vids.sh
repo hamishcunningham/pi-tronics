@@ -8,6 +8,9 @@ IN=/tmp/$$.in
 domerge() {
   ffmpeg -f concat -i $IN -c copy $1
 }
+dospeedy() {
+  ffmpeg -i $1 -r 25 -filter:v "setpts=(1/8)*PTS" $2
+}
 
 cd $INDIR
 
@@ -19,6 +22,7 @@ do
 done
 
 domerge $OUTDIR/cam1.mp4
+dospeedy $OUTDIR/cam1.mp4 $OUTDIR/cam1-fast.mp4
 
 >$IN
 for f in \
@@ -28,6 +32,7 @@ do
 done
 
 domerge $OUTDIR/cam2.mp4
+dospeedy $OUTDIR/cam2.mp4 $OUTDIR/cam2-fast.mp4
 
 >$IN
 for f in \
@@ -37,5 +42,6 @@ do
 done
 
 domerge $OUTDIR/cam3.mp4
+dospeedy $OUTDIR/cam3.mp4 $OUTDIR/cam3-fast.mp4
 
 rm $IN
