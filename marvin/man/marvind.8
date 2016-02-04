@@ -1,0 +1,82 @@
+.TH marvin 8 "May 30, 2014" "" "System Manager's Manual"
+.SH NAME
+\fBmarvin \fP- a Simple Battery Monitor daemon
+.SH SYNOPSIS
+.nf
+.fam C
+\fBmarvin\fP [\fB-d\fP] [\fB-h\fP] [\fB-s\fP]
+\fBservice\fP \fImarvind\fP [{start [\fB-d\fP][\fB-h\fP][\fB-s\fP]|stop|status|restart [\fB-d\fP][\fB-h\fP][\fB-s\fP]}]
+.fam T
+.fi
+.SH DESCRIPTION
+Battery monitoring for the Raspberry Pi\.\.\.
+.PP
+marvin is an open source Linux daemon for
+.RS
+.IP \(bu 3
+monitoring battery levels
+.IP \(bu 3
+sending warning messages to the user if the battery is low
+.IP \(bu 3
+shutting down cleanly at critical battery levels
+.IP \(bu 3
+managing a power supply on/off switch
+.IP \(bu 3
+writing relevant data to the system logs
+.RE
+.PP
+You can find the source code on GitHub:
+.PP
+.nf
+.fam C
+    https://github.com/hamishcunningham/pi-tronics/tree/master/marvin
+
+.fam T
+.fi
+The core of the daemon is defined in three files:
+.RS
+.IP \(bu 3
+/etc/default/\fImarvind\fP - configuration data
+.IP \(bu 3
+/usr/sbin/\fBmarvin\fP - the daemon itself
+.IP \(bu 3
+/etc/init.d/\fImarvind\fP - an interface to the init subsystem that
+Linux uses to manage daemons (amongst other things)
+.RE
+.PP
+The last of these, \fImarvind\fP, is used by the operating system to start and
+stop marvin at boot or shutdown time, and can be used to control the daemon
+manually when required. For example this command will stop the daemon:
+.PP
+.nf
+.fam C
+    sudo service marvin stop
+
+.fam T
+.fi
+The mopi utility is provided for easy user configuration.
+.PP
+For more details see http://pi.gate.ac.uk/pages/mopi.html#\fBmarvin\fP
+.SH OPTIONS
+.TP
+.B
+\fB-d\fP
+Turn on debug mode.
+.TP
+.B
+\fB-h\fP
+The option \fB-h\fP displays help.
+.SH EXAMPLE
+Restart the daemon with debugging on:
+.PP
+.nf
+.fam C
+    $ sudo service marvind restart -d
+.fam T
+.fi
+.SH SEE ALSO
+\fBmopi\fP(8) \fBmopicli\fP(8) \fBservice\fP(8)
+.SH BUGS
+Almost certainly!
+.SH AUTHOR
+Hamish Cunningham <http://pi.gate.ac.uk/>

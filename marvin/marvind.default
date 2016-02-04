@@ -1,0 +1,234 @@
+# marvin.default
+#
+# Configuration variables for The Marvelous Marvin.
+# This code is copyright Hamish Cunningham and the University of Sheffield
+# and is licenced under GPL 3 or any later version.
+
+#############################################################################
+# monitor configuration...
+
+# version (DON'T EDIT: it is set by "make package" or "make snapshot")
+VERSION="0.1"
+
+# how long to pause between (non-critical) warnings? (in seconds, approximately)
+WARNING_INTERVAL=60
+
+# how often should we log a routine message? (in multiples of
+# MONITOR_FREQUENCY)
+LOG_INTERVAL=1000
+
+# how long to wait before starting work after boot? (in seconds)
+BOOT_DELAY=2
+
+# file used as indicator that we are running for the first time after boot
+PREVIOUSLY_RUN_INDICATOR=/tmp/${NAME}-previously-run.txt
+
+# debug mode: 
+# don't actually call shutdown;
+# set logging and delay levels short
+if [ "$DEBUG" = on ]
+then
+  MONITOR_FREQUENCY=1
+  LOG_INTERVAL=3
+  WARNING_INTERVAL=10
+  SHUTDOWN='echo "not halting, in debug mode"'
+fi
+
+# highest safe operating voltage
+OPERATING_CEILING=25.0
+
+# lowest safe operating voltage
+OPERATING_FLOOR=6.2
+
+#############################################################################
+# functions to decode the MoPi status word (16 bits)...
+#
+# bit 0:  power source #1 is live
+# bit 1:  power source #2 is live
+# bit 2:  battery is full; corresponds to blue on main LED
+# bit 3:  battery level is good; green
+# bit 4:  battery level is low; red
+# bit 5:  battery level is critical; flashing red: entering shutdown 
+# bit 6:  jumper on/off
+# bit 7:  forced shutdown; power switch pressed longer than 3 seconds 
+# bit 8:  a power on delay has been set by I2C command
+# bit 9:  a power on delay is in progress
+# bit 10: a shutdown delay has been set by I2C command
+# bit 11: a shutdown delay is in progress
+# bit 12: source 1 good
+# bit 13: source 2 good
+# bit 14: unused
+#
+s_supply1_active()         { [ $((     1 & $1 )) -eq     1 ]; }  # bit  0
+s_supply2_active()         { [ $((     2 & $1 )) -eq     2 ]; }  # bit  1
+s_bat_full()               { [ $((     4 & $1 )) -eq     4 ]; }  # bit  2
+s_bat_good()               { [ $((     8 & $1 )) -eq     8 ]; }  # bit  3
+s_bat_low()                { [ $((    16 & $1 )) -eq    16 ]; }  # bit  4
+s_bat_critical()           { [ $((    32 & $1 )) -eq    32 ]; }  # bit  5
+s_jumper_on()              { [ $((    64 & $1 )) -eq    64 ]; }  # bit  6
+s_forced_shutdown()        { [ $((   128 & $1 )) -eq   128 ]; }  # bit  7
+s_power_on_delay_set()     { [ $((   256 & $1 )) -eq   256 ]; }  # bit  8
+s_power_on_delay_running() { [ $((   512 & $1 )) -eq   512 ]; }  # bit  9
+s_shutdown_delay_set()     { [ $((  1024 & $1 )) -eq  1024 ]; }  # bit 10
+s_shutdown_delay_running() { [ $((  2048 & $1 )) -eq  2048 ]; }  # bit 11
+s_check_supply1()          { [ $((  4096 & $1 )) -eq  4096 ]; }  # bit 12
+s_check_supply2()          { [ $((  8192 & $1 )) -eq  8192 ]; }  # bit 13
+s_user_configured()        { [ $(( 16384 & $1 )) -eq 16384 ]; }  # bit 14
+s_unused()                 { [ $(( 32768 & $1 )) -eq 32768 ]; }  # bit 15
+
+#############################################################################
+# supply configuration data...
+
+# the set of supply types (note escaping of elements with spaces)
+SUPPLY_TYPE=1  # the default
+SUPPLY_TYPE_A=(
+# n=description================================================default
+  1 '"Rechargeable batteries"'                                  on
+  2 '"Non-rechargeable batteries"'                             off
+  3 '"Other (e.g. mains, solar, biomass, rubber band, ...)"'   off
+)
+# get the description given the tag index
+supply_type() { echo ${SUPPLY_TYPE_A[$(( 1 + (($1 - 1) * 3) ))]}; }
+# get the max tag index (the min is 0)
+supply_type_max() { echo $(( ${#SUPPLY_TYPE_A[*]} / 3 )); }
+
+# the number of (in series) cells in a battery supply
+NUM_CELLS=8  # the default
+PAD="                       "  # for whiptail formatting
+NUM_CELLS_A=(
+#  n=desciption=========================================default
+   1 "\"One cell (or one non-battery)${PAD}\""          off
+   2 '"Two cells (e.g. double 3.6V LiPo)"'              off
+   3 '"Three cells"'                                    off
+   4 '"Four cells"'                                     off
+   5 '"Five cells"'                                     off
+   6 '"Six cells (e.g. a 9V PP3, or 12V car)"'          off
+   7 '"Seven cells (e.g. 8.4 volt NiCd)"'               off
+   8 '"Eight cells (e.g. eight AAs)"'                    on
+   9 '"Nine cells"'                                     off
+  10 '"Ten cells"'                                      off
+  11 '"Eleven cells"'                                   off
+  12 '"Twelve cells (e.g. 14.4V NiCd)"'                 off
+  13 '"Thirteen cells"'                                 off
+  14 '"Fourteen cells"'                                 off
+  15 '"Fifteen cells"'                                  off
+  16 '"Lots and lots (are you sure?!)"'                 off
+)
+#
+# get the description given the tag index
+num_cells() { echo ${NUM_CELLS_A[$(( 1 + (($1 - 1) * 3) ))]}; }
+#
+# get the max tag index (the min is 0)
+num_cells_max() { echo $(( ${#NUM_CELLS_A[*]} / 3 )); }
+
+# battery chemistries -- notes on CUTOFFs:
+# - Vlow is the mid-point between the "under load" and "unloaded" values;
+#   exceeding Vlow will often improve battery life / charge cycles
+# - if Vlow is 0 then we use the microcontroller min operating voltage
+# - NiCd has a quite steady discharge voltage even when approaching empty :-(
+# - http://batteryuniversity.com/learn/article/secondary_batteries
+#   http://www.rcgroups.com/forums/showthread.php?t=209187
+#
+CHEMISTRY=1  # the default
+PAD='                                    '
+#
+# NOTE: the entries in the two arrays (for the chemistries and for the
+# cutoffs) must match
+#
+BAT_CHEMISTRY_A=(
+# n=chem===============default
+  1 "\"N/A (non-battery)${PAD}\"" off
+  2 '"NiMH"'                       on
+  3 '"Alkaline"'                  off
+  4 '"Lead Acid"'                 off
+  5 '"Lithium Ion"'               off
+  6 '"LiPo"'                      off
+  7 '"NiCd"'                      off
+)
+BAT_CUTOFF_A=(
+# n=====Vhigh===Vlow
+  1     9.0     $OPERATING_FLOOR
+  2     1.4     1.0
+  3     1.6     0.8
+  4     2.0     1.58
+  5     3.7     3.0
+  6     4.2     3.0
+  7     1.2     1.1
+)
+#
+# get the description given the tag index
+bat_chemistry() { echo ${BAT_CHEMISTRY_A[ $(( 1 + (($1 - 1) * 3) )) ]}; }
+#
+# get the max tag index (the min is 0)
+bat_chemistry_max() { echo $(( ${#BAT_CHEMISTRY_A[*]} / 3 )); }
+#
+# get the nominal voltage of a cell for a chemistry (Vhigh)
+bat_nominal_volts() { echo ${BAT_CUTOFF_A[ $(( 1 + (($1 - 1) * 3) )) ]}; }
+#
+# get the safe depth of discharge (dod) floor for a chemistry (Vlow)
+bat_dod_floor() { echo ${BAT_CUTOFF_A[ $(( 2 + (($1 - 1) * 3) )) ]}; }
+
+# given a spec (type/num cells/chemistry), calculate config data
+# (for non-battery supplies NUM_CELLS and CHEMISTRY will be 0 [will they?!])
+calculate_config() {
+  [ -z "$1" -o -z "$2" -o -z "$3" ] && {
+    echo 'fubar in calculate_config, $* is '$* >&2
+    exit 5
+  }
+  SUPPLY_TYPE=$1
+  NUM_CELLS=$2
+  CHEMISTRY=$3
+
+  BAT_FLOOR=$( echo "`bat_dod_floor ${CHEMISTRY}`*${NUM_CELLS}"       |bc )
+  BAT_LOW=$(   echo "${BAT_FLOOR}*1.1"                                |bc )
+  BAT_FULL=$(  echo "`bat_nominal_volts ${CHEMISTRY}`*${NUM_CELLS}"   |bc )
+  BAT_GOOD=$(  echo "scale=3;((${BAT_FULL}-${BAT_LOW})/2)+${BAT_LOW}" |bc )
+}
+
+#############################################################################
+# local config i/o
+#
+ME=${BASH_SOURCE[0]}
+#
+# save a configuration command to local store
+save_local_config() {
+  S_FLAG=$1
+  FLAGS=$2
+  LINE_START="# ${S_FLAG}:"
+
+  # Delete any existing config with this flag, and then write the new config at the end
+  # (this ensures the most recently configured option will be written to MoPi last)
+  sed -r -i -e "/^${LINE_START}.*/d" -e  "/^# end of local config - DON'T/i ${LINE_START} $FLAGS" $ME
+}
+#
+# get local configuration
+get_local_config() {
+  sed -n "/^# local config - DON'T/,/^# end of local config - DON'T/p" $ME \
+    | sed -n '2,$p' |sed '$d'
+}
+#
+# delete local configuration
+delete_local_config() {
+  TMPF=`mktemp`
+  sed -n -e '/^# end of local config - DON/,$p' $ME >$TMPF
+  sed -i -n "1,/^# local config - DON'T/p" $ME
+  cat $TMPF >>$ME
+  rm $TMPF
+}
+#
+# check a local configuration command pattern
+check_local_config() {
+  echo "$1" |grep -q \
+    ' -wc[12]* [123] [0-9][0-9]* [0-9][0-9]* [0-9][0-9]* [0-9][0-9]*$'
+}
+
+#############################################################################
+# convert between volts, centivolts and milivolts
+v2mv() { echo "scale=0;${1}*1000/1" |bc; }
+mv2v() { echo "scale=0;${1}/1000/1" |bc; }
+v2cv() { echo "scale=0;${1}*100/1"  |bc; }
+cv2v() { echo "scale=0;${1}/100/1"  |bc; }
+
+#############################################################################
+# local config - DON'T EDIT THIS LINE!
+# end of local config - DON'T EDIT THIS LINE EITHER!

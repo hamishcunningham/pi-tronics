@@ -1,0 +1,108 @@
+marvind (4.1) unstable; urgency=low
+
+  * Fix i2c under device tree (issue 36); Firmware 3.10, API 0.3, CLI 0.5
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Tue, 17 Feb 2015 16:09:35 +0000
+
+marvind (4.0) unstable; urgency=low
+
+  * First KickStarter shipment release, for Firmware 3.10, API 0.3, CLI 0.5
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Wed, 25 Jun 2014 19:03:12 +0100
+
+marvind (3.6) unstable; urgency=low
+
+  * Final test release prior to 4.0
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Wed, 25 Jun 2014 08:51:38 +0100
+
+marvind (3.5) unstable; urgency=low
+
+  * Version 3.5, 3rd-party test release, for firmware version 3.08
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Fri, 30 May 2014 22:11:06 +0100
+
+marvind (3.4) unstable; urgency=low
+
+  * Snapshots 3.4+1...
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Fri, 30 May 2014 11:03:59 +0100
+
+marvind (3.4) unstable; urgency=low
+
+  * Version 3.4, for firmware 3.08
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Fri, 30 May 2014 08:03:12 +0100
+
+marvind (3.3) unstable; urgency=low
+
+  * Snapshot releases in the 3.3+1 series
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Tue, 27 May 2014 10:06:36 +0100
+
+marvind (3.2+9) unstable; urgency=low
+
+  *  Snapshot releases in the 3.2+1 series
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Tue, 20 May 2014 11:57:52 +0200
+
+marvind (3.1) unstable; urgency=low
+
+  * Snapshot releases in the 3.1+1 series
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Tue, 06 May 2014 21:27:02 +0100
+
+marvind (3.0) unstable; urgency=low
+
+  * Snapshot releases in the 3.0+1 series
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Mon, 14 Apr 2014 11:08:22 +0100
+
+marvind (2.0) unstable; urgency=low
+
+  * Version 2.0 matches the 2nd series of MoPi prototype boards. (Note new physical pin mappings.)
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Wed, 13 Nov 2013 12:26:53 +0000
+
+marvind (1.3) unstable; urgency=low
+
+  * Snapshot releases in the 1.3+4 series.
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Tue, 17 Sep 2013 13:44:00 +0100
+
+marvind (1.3) unstable; urgency=low
+
+  * Final testing of second proto. In state BAT_WARNING keep checking for changed levels.
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Tue, 17 Sep 2013 13:38:00 +0100
+
+marvind (1.2) unstable; urgency=low
+
+  * Snapshot releases in the 1.2+3 series.
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Mon, 26 Aug 2013 14:49:57 +0300
+
+marvind (1.2) unstable; urgency=low
+
+  * Second iteration of prototype MoPi boards.
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Sun, 25 Aug 2013 18:49:27 +0300
+
+marvind (1.1) unstable; urgency=low
+
+  * Snapshot releases in the 1.1+2 series.
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Tue, 20 Aug 2013 16:40:03 +0300
+
+marvind (1.1) unstable; urgency=low
+
+  * Maintenance Release -- see github for details:
+    https://github.com/hamishcunningham/pi-tronics/tree/master/marvin
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Sat, 17 Aug 2013 10:49:15 +0300
+
+marvind (1.0) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Hamish Cunningham (http://gate.ac.uk/hamish/) <hamish@gate.ac.uk>  Wed, 14 Aug 2013 10:25:02 +0300

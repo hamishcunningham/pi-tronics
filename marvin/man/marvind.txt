@@ -1,0 +1,48 @@
+NAME
+  marvin - a Simple Battery Monitor daemon
+SYNOPSIS
+  marvin [-d] [-h] [-s]
+  service marvind [{start [-d][-h][-s]|stop|status|restart [-d][-h][-s]}]
+DESCRIPTION
+  Battery monitoring for the Raspberry Pi...
+
+  marvin is an open source Linux daemon for
+
+    - monitoring battery levels
+    - sending warning messages to the user if the battery is low
+    - shutting down cleanly at critical battery levels
+    - managing a power supply on/off switch
+    - writing relevant data to the system logs
+
+  You can find the source code on GitHub:
+
+    https://github.com/hamishcunningham/pi-tronics/tree/master/marvin
+
+  The core of the daemon is defined in three files:
+    - /etc/default/marvind - configuration data
+    - /usr/sbin/marvin - the daemon itself
+    - /etc/init.d/marvind - an interface to the init subsystem that
+      Linux uses to manage daemons (amongst other things)
+
+  The last of these, marvind, is used by the operating system to start and
+  stop marvin at boot or shutdown time, and can be used to control the daemon
+  manually when required. For example this command will stop the daemon:
+
+    sudo service marvin stop
+
+  The mopi utility is provided for easy user configuration.
+
+  For more details see http://pi.gate.ac.uk/pages/mopi.html#marvin
+OPTIONS
+  -d          Turn on debug mode.
+  -h          The option -h displays help.
+EXAMPLE
+  Restart the daemon with debugging on:
+
+    $ sudo service marvind restart -d
+SEE ALSO
+  mopi(8) mopicli(8) service(8)
+BUGS
+  Almost certainly!
+AUTHOR
+  Hamish Cunningham <http://pi.gate.ac.uk/>

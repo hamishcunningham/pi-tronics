@@ -1,0 +1,181 @@
+#!/bin/bash
+#
+# marvind -- init interface to marvin, a simple battery monitor
+#
+# Author: Hamish Cunningham <hamish@gate.ac.uk>
+# Derived from Ubuntu 12.04 /etc/init.d/skeleton, July 2013.
+# This code is copyright Hamish Cunningham and the University of Sheffield
+# and is licenced under GPL 3 or any later version.
+#
+### BEGIN INIT INFO
+# Provides:    marvind
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: marvind: a simple battery monitor daemon
+# Description:       This script is the init interface to marvin
+#                    (a simple battery monitor)
+### END INIT INFO
+
+# Defaults
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DESC="marvind: a simple battery monitor daemon"
+NAME=marvin
+DNAME=marvind
+DAEMON=/usr/sbin/$NAME
+PIDFILE=/var/run/$DNAME.pid
+SCRIPTNAME=/etc/init.d/$DNAME
+START_STOP_ARGS="--pidfile ${PIDFILE} --startas ${DAEMON} --name ${NAME}"
+
+# Exit if the package is not installed
+[ -x "$DAEMON" ] || exit 0
+
+# Needs to be run as root
+if [ $(id -u) -ne 0 ]
+then
+  case "$1" in
+    help|status|"")
+    ;;
+    *)
+    echo "${DAEMON} $1 must be run as root; try 'sudo service marvind ...'?"
+    exit 1
+  esac
+fi
+
+# Read configuration variable file if it is present
+[ -r /etc/default/$DNAME ] && . /etc/default/$DNAME
+
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
+
+# Define LSB log_* functions.
+. /lib/lsb/init-functions
+
+# Pass on command options
+get-daemon-args() { shift; DAEMON_ARGS=$*; }
+get-daemon-args $*
+
+# Function that starts the daemon/service
+do_start()
+{
+  logger ${NAME}: starting...
+  # Return
+  #   0 if daemon has been started
+  #   1 if daemon was already running
+  #   2 if daemon could not be started
+  start-stop-daemon --start $START_STOP_ARGS --test > /dev/null \
+    || return 1
+  start-stop-daemon --start $START_STOP_ARGS -- $DAEMON_ARGS \
+    || return 2
+
+  log_success_msg Started $NAME
+}
+
+# Function that stops the daemon/service
+# Returns:
+#   0 if daemon has been stopped
+#   1 if daemon was already stopped
+#   2 if daemon could not be stopped
+#   other if a failure occurred
+do_stop()
+{
+  logger ${NAME}: stopping...
+  log_daemon_msg ${NAME}: stopping...
+
+  # If there's no PIDFILE then either daemon hasn't been started, or 
+  # it has killed itself (which it will do when MoPi triggers shutdown)
+  [ -f $PIDFILE ] || {
+    return 1
+  }
+
+  start-stop-daemon --stop $START_STOP_ARGS --retry=TERM/30/KILL/5
+  RETVAL="$?"
+  [ "$RETVAL" = 2 ] && return 2
+
+  # Wait for children to finish too if this is a daemon that forks
+  # and if the daemon is only ever run from this initscript.
+  # If the above conditions are not satisfied then add some other code
+  # that waits for the process to drop all resources that could be
+  # needed by services started subsequently.  A last resort is to
+  # sleep for some time.
+  start-stop-daemon --stop $START_STOP_ARGS --quiet --oknodo --retry=0/30/KILL/5
+  [ "$?" = 2 ] && return 2
+
+  # Many daemons don't delete their pidfiles when they exit.
+  rm -f $PIDFILE
+
+  log_success_msg $NAME stopped
+  return "$RETVAL"
+}
+
+# Function that sends a SIGHUP to the daemon/service
+do_reload() {
+  logger ${NAME}: reloading...
+  #
+  # If the daemon can reload its configuration without
+  # restarting (for example, when it is sent a SIGHUP),
+  # then implement that here.
+  #
+  # start-stop-daemon --stop --signal 1 --quiet --pidfile $PIDFILE --name $NAME
+
+  # we can't reload, do restart instead
+  return 1
+}
+
+# Do the work
+case "$1" in
+  start)
+    [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
+    do_start
+    case "$?" in
+      0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+      2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+    esac
+    ;;
+  stop)
+    [ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
+    do_stop
+    case "$?" in
+      0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+      2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+    esac
+    ;;
+  status)
+    status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
+    ;;
+  #reload|force-reload)
+  # If do_reload() is not implemented then leave this commented out
+  # and leave 'force-reload' as an alias for 'restart'.
+  #
+  #  log_daemon_msg "Reloading $DESC" "$NAME"
+  #  do_reload
+  #  log_end_msg $?
+  #  ;;
+  restart|force-reload)
+    # If the "reload" option is implemented then remove the
+    # 'force-reload' alias
+    log_daemon_msg "Restarting $DESC" "$NAME"
+    do_stop
+    case "$?" in
+      0|1)
+      do_start
+      case "$?" in
+        0) log_end_msg 0 ;;
+        1) log_end_msg 1 ;; # Old process is still running
+        *) log_end_msg 1 ;; # Failed to start
+      esac
+      ;;
+      *)
+      # Failed to stop
+      log_end_msg 1
+      ;;
+    esac
+    ;;
+  *)
+    echo "Usage: $SCRIPTNAME {start|stop|status|restart|force-reload}" >&2
+    exit 3
+    ;;
+esac
+
+:

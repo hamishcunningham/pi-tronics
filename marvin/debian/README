@@ -1,0 +1,9 @@
+The Debian Package marvind
+----------------------------
+
+Comments regarding the package:
+
+- seeded using dh_make -p=marvind_1.0 --native
+- adapted using instructions in the maint-guide package
+
+-- Hamish Cunningham <hamish@gate.ac.uk>  Sat, 10 Aug 2013 18:51:23 +0300
