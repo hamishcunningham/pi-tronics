@@ -1,0 +1,22 @@
+MarviNotes
+
+- the package should check for existence of marvin (or folk?) as a (non-admin,
+  non-sudo user) and create if not available
+- the daemon should
+  - wait for swipesecure events and do overlayfs as appropriate
+    http://askubuntu.com/questions/109413/how-do-i-use-overlayfs
+  - run mopidy as the folk user
+  - do sync between users (folk is also a user, the default) either "on
+    demand" or "always" (the latter collapsing to the former when disk is low)
+
+File systems:
+
+~/Music: symlink or overlayfs merging all signed-in profiles
+
+%<
+/home/folk -- autologin
+~/data/Moll/Music
+....../Nell
+....../Sue
+%>
+
