@@ -3,26 +3,26 @@
 # and is licenced under GPL 3 or any later version.
 
 # vars #######################################################################
-VERSION=4.1
-NEXT_SNAP=1
+VERSION=0.1
+NEXT_SNAP=2
 P=marvind
 D=marvin
-MOPI=mopi
-MOPICLI=mopicli
-MOPIAPI=mopiapi.py
+MARVIN=marvin
+MARVINCLI=marvincli
+MARVINAPI=marvinapi.py
 PD=package/$(VERSION)
 INSTALLED_FILES=\
   $(DESTDIR)/usr/sbin/$(D) \
-  $(DESTDIR)/usr/sbin/$(MOPI) \
-  $(DESTDIR)/usr/sbin/$(MOPICLI) \
-  $(DESTDIR)/usr/sbin/$(MOPIAPI) \
+  $(DESTDIR)/usr/sbin/$(MARVIN) \
+  $(DESTDIR)/usr/sbin/$(MARVINCLI) \
+  $(DESTDIR)/usr/sbin/$(MARVINAPI) \
   $(DESTDIR)/etc/init.d/$(P) \
   $(DESTDIR)/etc/default/$(P) \
   $(DESTDIR)/usr/share/man/man8/$(D).8.gz \
   $(DESTDIR)/usr/share/man/man8/$(P).8.gz \
-  $(DESTDIR)/usr/share/man/man8/$(MOPI).8.gz \
-  $(DESTDIR)/usr/share/man/man8/$(MOPICLI).8.gz \
-  $(DESTDIR)/usr/share/man/man8/$(MOPIAPI).8.gz
+  $(DESTDIR)/usr/share/man/man8/$(MARVIN).8.gz \
+  $(DESTDIR)/usr/share/man/man8/$(MARVINCLI).8.gz \
+  $(DESTDIR)/usr/share/man/man8/$(MARVINAPI).8.gz
 INIT_LINKS=\
   $(DESTDIR)/etc/rc?.d/*$(P)
 PACKAGE_FILES=\
@@ -74,14 +74,14 @@ install:
 	install $(P).default        $(DESTDIR)/etc/default/$(P)
 	install -m 755 $(D)         $(DESTDIR)/usr/sbin
 	install -m 755 $(P).init    $(DESTDIR)/etc/init.d/$(P)
-	install -m 755 $(MOPI)      $(DESTDIR)/usr/sbin
-	install -m 755 $(MOPICLI)   $(DESTDIR)/usr/sbin
-	install -m 644 $(MOPIAPI)   $(DESTDIR)/usr/sbin
+	install -m 755 $(MARVIN)      $(DESTDIR)/usr/sbin
+	install -m 755 $(MARVINCLI)   $(DESTDIR)/usr/sbin
+	install -m 644 $(MARVINAPI)   $(DESTDIR)/usr/sbin
 	install man/$(P).8.gz       $(DESTDIR)/usr/share/man/man8
 	install man/$(D).8.gz       $(DESTDIR)/usr/share/man/man8
-	install man/$(MOPI).8.gz    $(DESTDIR)/usr/share/man/man8
-	install man/$(MOPICLI).8.gz $(DESTDIR)/usr/share/man/man8
-	install man/$(MOPIAPI).8.gz $(DESTDIR)/usr/share/man/man8
+	install man/$(MARVIN).8.gz    $(DESTDIR)/usr/share/man/man8
+	install man/$(MARVINCLI).8.gz $(DESTDIR)/usr/share/man/man8
+	install man/$(MARVINAPI).8.gz $(DESTDIR)/usr/share/man/man8
 	[ -z "$(DESTDIR)" ] && update-rc.d $(P) defaults || :
 	@echo 'marvin installed: '
 	@$(do-listing)
@@ -95,24 +95,19 @@ uninstall:
 	@echo done
 
 # manpage ####################################################################
-man: man/$(P).txt man/$(MOPI).txt man/$(MOPICLI).txt
+man: man/$(P).txt man/$(MARVIN).txt
 	cd man; ../utils/txt2man -v "System Manager's Manual" -s 8 \
           -t '$(D)' $(P).txt >$(P).8; \
 	sed -i 1d $(P).8;  # fix error from lintian about ." macro \
 	cat $(P).8 |gzip >$(P).8.gz; cp $(P).8.gz $(D).8.gz
 	cd man; ../utils/txt2man -v "System Manager's Manual" -s 8 \
-          -t '$(MOPI)' $(MOPI).txt >$(MOPI).8; \
-	sed -i 1d $(MOPI).8;  # fix error from lintian about ." macro \
-	cat $(MOPI).8 |gzip >$(MOPI).8.gz;
-	cd man; ../utils/txt2man -v "System Manager's Manual" -s 8 \
-          -t '$(MOPICLI)' $(MOPICLI).txt >$(MOPICLI).8; \
-	sed -i 1d $(MOPICLI).8;  # fix error from lintian about ." macro \
-	cat $(MOPICLI).8 |gzip >$(MOPICLI).8.gz; \
-	cp $(MOPICLI).8.gz $(MOPIAPI).8.gz
+          -t '$(MARVIN)' $(MARVIN).txt >$(MARVIN).8; \
+	sed -i 1d $(MARVIN).8;  # fix error from lintian about ." macro \
+	cat $(MARVIN).8 |gzip >$(MARVIN).8.gz;
 
 # package ####################################################################
 version:
-	@for f in marvind.default mopicli mopiapi.py; do \
+	@for f in marvind.default marvincli marvinapi.py; do \
           sed -i 's,^VERSION=.*,VERSION=\"'$(VERSION)'\",' $$f; done
 package: version man package-unstable package-precise
 	@echo "\nunstable:"
@@ -141,7 +136,7 @@ package-precise:
 	cd .. && for f in $(PACKAGE_FILES); do \
           [ -f $$f ] && mv $$f $(D)/$(PD)/precise || :; done
 snapshot-version:
-	@for f in marvind.default mopicli mopiapi.py; do \
+	@for f in marvind.default marvincli marvinapi.py; do \
           sed -i 's,^VERSION=.*,VERSION=\"'$(SNAPSHOT_VERSION)'\",' $$f; done
 	sed -i 's,^NEXT_SNAP=.*,NEXT_SNAP='$$(($(NEXT_SNAP) + 1))',' Makefile
 snapshot: snapshot-version

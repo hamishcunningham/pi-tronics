@@ -1,8 +1,7 @@
 The Marvelous Marvin: Paranoia for Normal People
 
 -----------------------------------------------------------------------------
-This tree contains the code for a simple battery monitor daemon for projects
-like Mobile Pi (MoPi) -- http://pi.gate.ac.uk/mopi
+This tree contains the code for Marvelous Marvin, a simple secure comms box.
 
 The target operating system is the Raspian distribution of Debian, for the
 Raspberry Pi. (It can also work in debug mode on Ubuntu and is intended to be

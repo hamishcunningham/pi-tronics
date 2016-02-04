@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# marvin -- a simple battery monitor
+# marvin -- paranoia for normal people
 #
 # Author: Hamish Cunningham <hamish@gate.ac.uk>
 # This code is copyright Hamish Cunningham and the University of Sheffield
@@ -8,9 +8,8 @@
 #
 ### BEGIN INIT INFO
 # Provides:          marvin
-# Short-Description: marvin: a simple battery monitor daemon
-# Description:       This script checks battery level and
-#                    reports it
+# Short-Description: marvin: paranoia for normal people
+# Description:       secure comms and this and that
 ### END INIT INFO
 
 # standard locals
@@ -26,16 +25,12 @@ usage() { log_action_msg Usage: $USAGE; [ ! -z "$1" ] && exit $1; }
 
 # defaults
 PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin
-DESC="marvin: a simple battery monitor daemon"
+DESC="marvin: paranoia for normal people"
 NAME=marvin
 DNAME=marvind
 DAEMON=/usr/sbin/$NAME
 PIDFILE=/var/run/$DNAME.pid
-LMESS='status word'
-SHUTDOWN="rm $PIDFILE && halt && exit 0"
 INST_DIR=`dirname ${P}`
-CLI=${INST_DIR}/mopicli
-STATUS_LOG_NEEDED=true
 
 # options defaults
 DEBUG=off
@@ -70,112 +65,7 @@ pdate() { date +%b-%d-%Y-%T; }
 
 # tell the world
 logger "$0: version $VERSION running at `pdate`"
-logger "${NAME}: monitor frequency is ${MONITOR_FREQUENCY} seconds"
 [ "${DEBUG}" = on ] && logger "${NAME}: DEBUG is ${DEBUG}"
-
-# check mopicli installed and working
-${CLI} -s >/dev/null || {
-  COUT=`${CLI} -s 2>&1`
-  echo "${P}: ${CLI} not working; MoPi not attached or powered? (${COUT})" >&2
-  logger "${P}: ${CLI} not working; MoPi not attached or powered? (${COUT})"
-}
-
-# how many loops to wait between warnings when battery is low
-WAIT_LOOPS=$(( $WARNING_INTERVAL / $MONITOR_FREQUENCY ))
-PREV_WARNING=0
-
-# i and j index loop iterations for controlling logging and messages
-i=0; j=0
-
-# infinite loop (backgrounded)
-while :
-do
-  i=$(( ${i} + 1 )); j=$(( ${j} + 1 ))
-
-  # on first boot ...
-  [ -z "$PREVIOUSLY_RUN" -a ! -f "$PREVIOUSLY_RUN_INDICATOR" ] && {
-    date > $PREVIOUSLY_RUN_INDICATOR
-
-    # ...take a short break
-    logger "${NAME}: first run after boot, sleeping for ${BOOT_DELAY}..."
-    sleep $BOOT_DELAY
-    logger "${NAME}: ...boot delay done"
-  }
-
-  # on first loop after start...
-  [ -z "$PREVIOUSLY_RUN" ] && {
-    PREVIOUSLY_RUN=true
-
-    # ...push local config up to the board
-    OIFS="$IFS"
-    IFS='
-'
-    for l in `get_local_config`
-    do
-      IFS="${OIFS}"
-      COM="${CLI} `echo \"${l}\" |sed 's/# wc[12]*: //'`"
-      if check_local_config "$COM"
-      then
-        logger "${NAME}: writing local config ${COM}"
-        OUT=`$COM` || { logger "${NAME}: error writing config: ${OUT}"; }
-      else
-        logger "${NAME}: ignoring badly constructed local config ($COM)"
-        echo "${NAME}: ignoring badly constructed local config ($COM)" >&2
-      fi
-      IFS='
-'
-    done
-    IFS="${OIFS}"
-  }
-
-  # get MoPi status
-  MOPI_STATUS="`${CLI} -nl -s`"
-  [ "$STATUS_LOG_NEEDED" = true ] && {
-    logger "${NAME}: MOPI_STATUS is ${MOPI_STATUS}"
-    STATUS_LOG_NEEDED=false
-  }
-
-  # the status word must be an integer
-  echo "$MOPI_STATUS" |grep -q '^[0-9][0-9]*$' || {
-    logger "${NAME}: invalid MOPI_STATUS (${MOPI_STATUS}): will pause/retry..."
-    sleep $WARNING_INTERVAL
-    continue
-  }
-
-  # log low levels (approx. once every 5 minutes unless debugging)
-  [ "$DEBUG" = on -o $(( $i % 150 )) -eq 0 ] && {
-    ( s_bat_low "$MOPI_STATUS" || s_bat_critical "$MOPI_STATUS" ) && \
-      logger "${NAME}: ${LMESS} is at or below warning level (${MOPI_STATUS})"
-  }
-
-  # action states (shutdown or warn)
-  if s_forced_shutdown "$MOPI_STATUS"
-  then
-    wall <<< "${NAME}: power off requested: shutting down now!!!"
-    logger "${NAME}: shutting down (POWER_OFF; ${MOPI_STATUS})"
-    eval "$SHUTDOWN"
-  elif s_bat_critical "$MOPI_STATUS"
-  then
-    wall <<< "${NAME}: battery empty: shutting down now!!!"
-    logger "${NAME}: shutting down (BAT_SHUTDOWN; ${MOPI_STATUS})"
-    eval "$SHUTDOWN"
-  elif s_bat_low "$MOPI_STATUS"
-  then
-    if [ $PREV_WARNING -eq 0 -o $(( $i - $PREV_WARNING )) -ge $WAIT_LOOPS ]
-    then
-      PREV_WARNING=$i
-      wall <<< "${NAME}: ${LMESS} is low! connect new battery or shut down"
-      logger "${NAME}: BAT_WARNING (${MOPI_STATUS})"
-    fi
-  fi
-
-  # routine log messages
-  [ "$DEBUG" = on -o ${j} -eq ${LOG_INTERVAL} ] && \
-    logger "${NAME}: ${LMESS} is ${MOPI_STATUS} (i=${i})" && j=0
-
-  # take a break
-  sleep ${MONITOR_FREQUENCY}
-done &
 
 # create PIDFILE
 echo $! >${PIDFILE}

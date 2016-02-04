@@ -1,26 +1,25 @@
 #!/bin/bash
 #
-# marvind -- init interface to marvin, a simple battery monitor
+# marvind -- init interface to marvin, paranoia for normal people
 #
 # Author: Hamish Cunningham <hamish@gate.ac.uk>
-# Derived from Ubuntu 12.04 /etc/init.d/skeleton, July 2013.
+# Derived from SimBaMond, February 2016
 # This code is copyright Hamish Cunningham and the University of Sheffield
 # and is licenced under GPL 3 or any later version.
 #
 ### BEGIN INIT INFO
-# Provides:    marvind
+# Provides:          marvind
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: marvind: a simple battery monitor daemon
+# Short-Description: marvind: paranoia for normal people
 # Description:       This script is the init interface to marvin
-#                    (a simple battery monitor)
 ### END INIT INFO
 
 # Defaults
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-DESC="marvind: a simple battery monitor daemon"
+DESC="marvind: paranoia for normal people"
 NAME=marvin
 DNAME=marvind
 DAEMON=/usr/sbin/$NAME
@@ -84,7 +83,7 @@ do_stop()
   log_daemon_msg ${NAME}: stopping...
 
   # If there's no PIDFILE then either daemon hasn't been started, or 
-  # it has killed itself (which it will do when MoPi triggers shutdown)
+  # it has killed itself
   [ -f $PIDFILE ] || {
     return 1
   }

@@ -1,0 +1,23 @@
+NAME
+  marvin - paranoia for normal people
+SYNOPSIS
+  marvin [-d] [-h] [-s]
+DESCRIPTION
+  The Marvelous Marvin!
+
+  You can find the source code on GitHub:
+
+    https://github.com/hamishcunningham/pi-tronics/tree/master/marvin
+
+  For more details see http://pi.gate.ac.uk/
+OPTIONS
+  -d          Turn on debug mode.
+  -h          The option -h displays help.
+EXAMPLE
+    $ marvin
+SEE ALSO
+  service(8)
+BUGS
+  Almost certainly!
+AUTHOR
+  Hamish Cunningham <http://pi.gate.ac.uk/>
