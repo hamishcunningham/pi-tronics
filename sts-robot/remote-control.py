@@ -76,6 +76,7 @@ class ControlHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s.end_headers()
         s.wfile.write("""
 <html><head><title>A simple, open robot</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body { font-size: xx-large; } h1 { } h3 { }
 p table { text-align: center; }
