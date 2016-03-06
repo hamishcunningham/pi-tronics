@@ -76,7 +76,7 @@ class ControlHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s.end_headers()
         s.wfile.write("""
 <html><head><title>A simple, open robot</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=0.8">
 <style>
 body { font-size: xx-large; } h1 { } h3 { }
 p table { text-align: center; }
@@ -124,8 +124,9 @@ p.control img { margin-left: 20px; }
             myip = s.request.getsockname();
             s.wfile.write(
               '<p class="control">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://' +
-              myip[0] + ':8080/t.mjpg" width="480" height="360"></p>'
+              myip[0] + ':8080/t.mjpg"></p>'
             )
+#             myip[0] + ':8080/t.mjpg" width="480" height="360"></p>'
 
         s.wfile.write("""
 
