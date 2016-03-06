@@ -111,17 +111,16 @@ p.control { padding: 3px; margin-bottom: 2.5em; text-align: center; }
 </tr>
 </table>
 
-        """)
+<p class="control">VIDEO: """)
 
         if dovideo == False:
-            s.wfile.write("""
-<p class="control">VIDEO: <a href="/video1">On</a></p>
+            s.wfile.write("""<a href="/video1">On</a></p>
 <iframe src="/blank" name="myframe" style="display: none"></iframe>
         """)
         else:
-            s.wfile.write('<p class="control"><a href="/video0">Turn Off</a></p>\n')
+            s.wfile.write('<a href="/video0">Off</a></p>\n')
             myip = s.request.getsockname();
-            s.wfile.write('<p><img src="http://' + myip[0] + ':8080/t.mjpg" width="480" height="360"></p>')
+            s.wfile.write('<p class="control"><img src="http://' + myip[0] + ':8080/t.mjpg" width="480" height="360"></p>')
 
         s.wfile.write("""
 
