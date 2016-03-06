@@ -121,7 +121,11 @@ p.control img { display: block; margin: 0 auto; }
         else:
             s.wfile.write('<a href="/video0">Off</a></p>\n')
             myip = s.request.getsockname();
-            s.wfile.write('<p class="control"><img src="http://' + myip[0] + ':8080/t.mjpg" width="480" height="360"></p>')
+            s.wfile.write(
+              '<p class="control"><img style="{ display: block; margin: 0 auto; }" src="http://' +
+              myip[0] +
+              ':8080/t.mjpg" width="480" height="360"></p>'
+            )
 
         s.wfile.write("""
 
