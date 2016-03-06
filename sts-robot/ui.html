@@ -1,41 +1,40 @@
 <html><head><title>A simple, open robot</title>
 <style>
 body { font-size: xx-large; } h1 { } h3 { }
+p table { text-align: center; }
 table.control a { color: black; border: 3px solid black; padding: 1em; text-decoration: none !important; }
-table.control { padding: 3px; margin-bottom: 2.5em; font-size: xx-large; }
+table.control { padding: 3px; margin-bottom: 2.5em; font-size: xx-large; margin-left:auto; margin-right:auto; }
 p.control a { color: black; border: 3px solid black; padding: 1em; text-decoration: none !important; }
-p.control { padding: 3px; margin-bottom: 2.5em; }
+p.control { padding: 3px; margin-bottom: 2.5em; text-align: center; }
 </style>
 </head><body>
 
 <p><br/></p>
 
-<table class="control">
+<p><table class="control">
 <tr>
 <td>NUDGE:</td>
 <td><a href="/left" target="myframe">&lArr;</a></td>
 <td><a href="/forward" target="myframe">&uArr;</a></td>
 <td><a href="/right" target="myframe">&rArr;</a></td>
 </tr>
+<tr><td>&nbsp;<br/><br/></td></tr>
+<tr>
+<td>GO:</td>
+<td><a href="/leftstart" target="myframe">&lArr;</a></td>
+<td><a href="/forwardstart" target="myframe">&uArr;</a></td>
+<td><a href="/rightstart" target="myframe">&rArr;</a></td>
+</tr>
+<tr><td>&nbsp;<br/><br/></td></tr>
+<tr>
+<td>STOP:</td>
+<td><a href="/leftstop" target="myframe">&lArr;</a></td>
+<td><a href="/forwardstop" target="myframe">&uArr;</a></td>
+<td><a href="/rightstop" target="myframe">&rArr;</a></td>
+</tr>
 </table>
 
-<p class="control">NUDGE:<br/><br/>
-<a href="/left" target="myframe">&lArr;</a> 
-<a href="/forward" target="myframe">&uArr;</a> 
-<a href="/right" target="myframe">&rArr;</a></p>
-
-<p class="control">GO:<br/><br/>
-<a href="/leftstart" target="myframe">&lArr;</a> 
-<a href="/forwardstart" target="myframe">&uArr;</a> 
-<a href="/rightstart" target="myframe">&rArr;</a></p>
-
-<p class="control">STOP:<br/><br/>
-<a href="/leftstop" target="myframe">&lArr;</a> 
-<a href="/forwardstop" target="myframe">&uArr;</a>
-<a href="/rightstop" target="myframe">&rArr;</a></p>
-
-<p class="control">VIDEO:<br/><br/>
-<a href="/video1">On</a></p>
+<p class="control">VIDEO: <a href="/video1">On</a></p>
 <iframe src="/blank" name="myframe" style="display: none"></iframe>
 
 </body></html>

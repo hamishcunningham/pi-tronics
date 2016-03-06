@@ -72,6 +72,64 @@ class ControlHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             s.wfile.write("done");
             return
 
+        s.send_response(200)
+        s.end_headers()
+        s.wfile.write("""
+<html><head><title>A simple, open robot</title>
+<style>
+body { font-size: xx-large; } h1 { } h3 { }
+p table { text-align: center; }
+table.control a { color: black; border: 3px solid black; padding: 1em; text-decoration: none !important; }
+table.control { padding: 3px; margin-bottom: 2.5em; font-size: xx-large; margin-left:auto; margin-right:auto; }
+p.control a { color: black; border: 3px solid black; padding: 1em; text-decoration: none !important; }
+p.control { padding: 3px; margin-bottom: 2.5em; text-align: center; }
+</style>
+</head><body>
+
+<p><br/></p>
+
+<p><table class="control">
+<tr>
+<td>NUDGE:</td>
+<td><a href="/left" target="myframe">&lArr;</a></td>
+<td><a href="/forward" target="myframe">&uArr;</a></td>
+<td><a href="/right" target="myframe">&rArr;</a></td>
+</tr>
+<tr><td>&nbsp;<br/><br/></td></tr>
+<tr>
+<td>GO:</td>
+<td><a href="/leftstart" target="myframe">&lArr;</a></td>
+<td><a href="/forwardstart" target="myframe">&uArr;</a></td>
+<td><a href="/rightstart" target="myframe">&rArr;</a></td>
+</tr>
+<tr><td>&nbsp;<br/><br/></td></tr>
+<tr>
+<td>STOP:</td>
+<td><a href="/leftstop" target="myframe">&lArr;</a></td>
+<td><a href="/forwardstop" target="myframe">&uArr;</a></td>
+<td><a href="/rightstop" target="myframe">&rArr;</a></td>
+</tr>
+</table>
+
+        """)
+
+        if dovideo == False:
+            s.wfile.write("""
+<p class="control">VIDEO: <a href="/video1">On</a></p>
+<iframe src="/blank" name="myframe" style="display: none"></iframe>
+        """)
+        else:
+            s.wfile.write('<p class="control"><a href="/video0">Turn Off</a></p>\n')
+            myip = s.request.getsockname();
+            s.wfile.write('<p><img src="http://' + myip[0] + ':8080/t.mjpg" width="480" height="360"></p>')
+
+        s.wfile.write("""
+
+</body></html>
+        """)
+
+
+'''
 #       otherwise s.path == "/"...
         s.send_response(200)
         s.end_headers()
@@ -107,6 +165,7 @@ class ControlHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 #        s.wfile.write('<p><br/><p align="center"><iframe src="/test.html" width="680" height="520"></iframe></p>')
         s.wfile.write('<iframe src="/blank" name="myframe" style="display: none"></iframe>\n')
         s.wfile.write('</body></html>\n')
+'''
 
 
 class ServerThread(threading.Thread):
