@@ -83,6 +83,7 @@ table.control a { color: black; border: 3px solid black; padding: 1em; text-deco
 table.control { padding: 3px; margin-bottom: 2.5em; font-size: xx-large; margin-left:auto; margin-right:auto; }
 p.control a { color: black; border: 3px solid black; padding: 1em; text-decoration: none !important; }
 p.control { padding: 3px; margin-bottom: 2.5em; text-align: center; }
+p.control img { display: block; margin: 0 auto; }
 </style>
 </head><body>
 
@@ -126,45 +127,6 @@ p.control { padding: 3px; margin-bottom: 2.5em; text-align: center; }
 
 </body></html>
         """)
-
-
-'''
-#       otherwise s.path == "/"...
-        s.send_response(200)
-        s.end_headers()
-        s.wfile.write('<html><head>\n')
-        s.wfile.write('<style>body { font-size: x-large; } h1 { text-align: center } h3 { text-align: center }\n')
-        s.wfile.write('p.control a { color: black; border: 3px solid black; padding: 1em; }\n')
-        s.wfile.write('p { text-align:center; }\n')
-        s.wfile.write('p.control { padding: 3px; margin-bottom: 2.5em; }</style>\n')
-        s.wfile.write('</head><body><h1>A simple, open robot</h1>\n')
-
-        s.wfile.write('<h3>Video Feed</h3>')
-        if dovideo == False:
-            s.wfile.write('<p class="control"><a href="/video1">Turn On</a></p>\n')
-        else:
-            s.wfile.write('<p class="control"><a href="/video0">Turn Off</a></p>\n')
-            myip = s.request.getsockname();
-            s.wfile.write('<p><img src="http://' + myip[0] + ':8080/t.mjpg" width="480" height="360"></p>')
-
-        s.wfile.write('<h3>Quick Control</h3>')
-        s.wfile.write('<p class="control"><a href="/left" target="myframe">Left</a> \n')
-        s.wfile.write('<a href="/forward" target="myframe">Forward</a> \n')
-        s.wfile.write('<a href="/right" target="myframe">Right</a></p>\n')
-
-        s.wfile.write('<h3>Full Control</h3>')
-        s.wfile.write('<p class="control"><a href="/leftstart" target="myframe">Go Left</a> \n')
-        s.wfile.write('<a href="/forwardstart" target="myframe">Go Forward</a> \n')
-        s.wfile.write('<a href="/rightstart" target="myframe">Go Right</a></p>\n')
-
-        s.wfile.write('<p class="control"><a href="/leftstop" target="myframe">Stop Left</a> \n')
-        s.wfile.write('<a href="/forwardstop" target="myframe">Stop Forward</a>\n')
-        s.wfile.write('<a href="/rightstop" target="myframe">Stop Right</a></p>\n')
-
-#        s.wfile.write('<p><br/><p align="center"><iframe src="/test.html" width="680" height="520"></iframe></p>')
-        s.wfile.write('<iframe src="/blank" name="myframe" style="display: none"></iframe>\n')
-        s.wfile.write('</body></html>\n')
-'''
 
 
 class ServerThread(threading.Thread):
