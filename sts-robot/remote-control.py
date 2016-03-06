@@ -113,17 +113,17 @@ p.control img { margin-left: 20px; }
 </tr>
 </table>
 
-<p class="control">VIDEO: """)
+""")
 
         if dovideo == False:
-            s.wfile.write('<a href="/video1">On</a></p>\n')
+            s.wfile.write('<p class="control">VIDEO: <a href="/video1">On</a></p>\n')
         else:
-            s.wfile.write('<a href="/video0">Off</a></p>\n')
             myip = s.request.getsockname();
             s.wfile.write(
-              '<p class="control">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://' +
+              '<p class="control">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://' +
               myip[0] + ':8080/t.mjpg"></p>\n'
             )
+            s.wfile.write('<p class="control">VIDEO: <a href="/video0">Off</a></p>\n')
 
         s.wfile.write("""
 
