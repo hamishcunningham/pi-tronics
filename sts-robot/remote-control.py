@@ -116,20 +116,18 @@ p.control img { margin-left: 20px; }
 <p class="control">VIDEO: """)
 
         if dovideo == False:
-            s.wfile.write("""<a href="/video1">On</a></p>
-<iframe src="/blank" name="myframe" style="display: none"></iframe>
-        """)
+            s.wfile.write('<a href="/video1">On</a></p>\n')
         else:
             s.wfile.write('<a href="/video0">Off</a></p>\n')
             myip = s.request.getsockname();
             s.wfile.write(
               '<p class="control">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://' +
-              myip[0] + ':8080/t.mjpg"></p>'
+              myip[0] + ':8080/t.mjpg"></p>\n'
             )
-#             myip[0] + ':8080/t.mjpg" width="480" height="360"></p>'
 
         s.wfile.write("""
 
+<iframe src="/blank" name="myframe" style="display: none"></iframe>
 </body></html>
         """)
 
