@@ -83,7 +83,7 @@ table.control a { color: black; border: 3px solid black; padding: 1em; text-deco
 table.control { padding: 3px; margin-bottom: 2.5em; font-size: xx-large; margin-left:auto; margin-right:auto; }
 p.control a { color: black; border: 3px solid black; padding: 1em; text-decoration: none !important; }
 p.control { padding: 3px; margin-bottom: 2.5em; text-align: center; }
-p.control img { display: block; margin: 0 auto; }
+p.control img { margin-left: 20px; }
 </style>
 </head><body>
 
