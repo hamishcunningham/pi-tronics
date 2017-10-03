@@ -31,7 +31,6 @@ NAME=simbamon
 DNAME=simbamond
 DAEMON=/usr/sbin/$NAME
 PIDFILE=/var/run/$DNAME.pid
-LMESS='status word'
 SHUTDOWN="rm $PIDFILE && halt && exit 0"
 INST_DIR=`dirname ${P}`
 CLI=${INST_DIR}/mopicli
@@ -145,7 +144,7 @@ do
   # log low levels (approx. once every 5 minutes unless debugging)
   [ "$DEBUG" = on -o $(( $i % 150 )) -eq 0 ] && {
     ( s_bat_low "$MOPI_STATUS" || s_bat_critical "$MOPI_STATUS" ) && \
-      logger "${NAME}: ${LMESS} is at or below warning level (${MOPI_STATUS})"
+      logger "${NAME}: power is at or below warning level (${MOPI_STATUS})"
   }
 
   # action states (shutdown or warn)
@@ -164,14 +163,14 @@ do
     if [ $PREV_WARNING -eq 0 -o $(( $i - $PREV_WARNING )) -ge $WAIT_LOOPS ]
     then
       PREV_WARNING=$i
-      wall <<< "${NAME}: ${LMESS} is low! connect new battery or shut down"
+      wall <<< "${NAME}: power is low! connect new battery or shut down"
       logger "${NAME}: BAT_WARNING (${MOPI_STATUS})"
     fi
   fi
 
   # routine log messages
   [ "$DEBUG" = on -o ${j} -eq ${LOG_INTERVAL} ] && \
-    logger "${NAME}: ${LMESS} is ${MOPI_STATUS} (i=${i})" && j=0
+    logger "${NAME}: status is ${MOPI_STATUS} (i=${i})" && j=0
 
   # take a break
   sleep ${MONITOR_FREQUENCY}
