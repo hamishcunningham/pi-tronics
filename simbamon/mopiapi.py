@@ -2,6 +2,50 @@
 # mopiapi. Python interface to the MoPi battery power add-on board for the
 #   Raspberry Pi. (http://pi.gate.ac.uk/mopi)
 
+# TODO
+# 
+# bit 15: was low; now high: use it to determine type of board, and add a way
+# to query that
+#
+# add logic about firmware version: for the old board, expect <= 3.5; for the
+# new one, >= 4.0; change the version error to a warning
+#
+# add 2 bytes to the board number read: "MoPi-2 is using a unique 32-bit laser
+# burned code into the microcontroller as serial number. The syntax of that
+# command is the same, please only extend it to read 4, instead of 2 bytes
+# from MoPi."
+#
+# test the charging controller:
+# - For proper functioning it is assumed that both, Input #1 and external
+#   charger, are powered by one common source. Handling of different sources
+#   is rising the hardware complexity. 
+# - In fact no charging functionality. Responsibility of the process is
+#   transferred to the external charger connected to the 2-pin screw terminal.
+#   MoPi-2 only enables this input (green LED on) when there is an input power
+#   at input #1, a battery pack is connected to the input #2 and charger
+#   voltage is applied. Then the firmware disables the charging gate in case
+#   the input #1 voltage disappears (switching RPi powering to the battery on
+#   input #2) or charging voltage disappears. Time of charging, algorithm,
+#   limits etc. are functions of the external charger. 
+# - Charging starts only after the power button is pressed. 
+# - Charging stops when MoPi goes off. If however MoPi is in idle mode,
+#   counting power up delay, the charging continuous. Not sure the last is
+#   working in the prototypes, but if not, will be fixed soon. 
+#
+# investigate possibility of propagating power reading:
+# - There is a possibility to get info about the applied load (current
+#   consumption). The firmware can measure the voltage drop on the splitting
+#   MoPi-2 and RasPi MOSFET transistor. The measurement however will be rough
+#   as the transistor's resistance in saturation differs from item to item.
+#   But we can put a limit, e.g. around 2.5A load, and light/flash a special
+#   red LED. The accuracy will be around 15%. Do you think this will be useful
+#   for the customer?
+# - Unfortunately we do not have spare bits in the status word right now to
+#   propagate this signal to the driver. Is it difficult to add one additional
+#   byte or word to MoPi status? In that case we will be able to give a little
+#   more info to the user, e.g. 2-bit field giving 4 ranges of load. The LED
+#   we can keep only one signaling the high-current load state.
+
 import smbus
 import errno
 import RPi.GPIO
